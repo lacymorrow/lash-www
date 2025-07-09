@@ -300,8 +300,6 @@ export const fetchConfiguredLemonSqueezyProducts = async () => {
 					productKey,
 					attributes: {
 						...variant.attributes,
-						// Generate the buy URL using our site config
-						buy_now_url: siteConfig.store.format.buyUrl(productKey as any),
 					},
 				};
 			});

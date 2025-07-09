@@ -1,4 +1,4 @@
-import { BuyButton } from "@/components/buttons/buy-button";
+import { BuyButton } from "@/components/buttons/lemonsqueezy-buy-button";
 import { GitHubConnectButton } from "@/components/buttons/github-connect-button";
 import { GitHubConnectDialog } from "@/components/buttons/github-connect-dialog";
 import { LoginButton } from "@/components/buttons/sign-in-button";

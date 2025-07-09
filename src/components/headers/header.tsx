@@ -17,7 +17,7 @@ import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { cva } from "class-variance-authority";
 import { useSession } from "next-auth/react";
 import type React from "react";
-import { BuyButton } from "../buttons/buy-button";
+import { BuyButton } from "../buttons/lemonsqueezy-buy-button";
 
 interface HeaderProps {
 	navLinks?: NavLink[];

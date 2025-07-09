@@ -184,11 +184,11 @@ export const routes = {
 
 	// External links
 	external: {
-		shipkit: `https://${siteConfig.branding.domain}`,
-		bones: `https://${siteConfig.branding.productNames.bones.toLowerCase()}.${siteConfig.branding.domain}`,
-		log: `https://log.${siteConfig.branding.productNames.bones.toLowerCase()}.${siteConfig.branding.domain}`,
-		ui: `https://ui.${siteConfig.branding.productNames.bones.toLowerCase()}.${siteConfig.branding.domain}`,
-		buy: siteConfig.store.format.buyUrl("shipkit"),
+		shipkit: `https://shipkit.io`,
+		bones: `https://bones.sh`,
+		log: `https://log.bones.sh`,
+		ui: `https://ui.bones.sh`,
+		buy: `https://shipkit.lemonsqueezy.com/checkout/buy/20b5b59e-b4c4-43b0-9979-545f90c76f28`,
 		discord: "https://discord.gg/XxKrKNvEje",
 		twitter: siteConfig.links.twitter,
 		twitter_follow: siteConfig.links.twitter_follow,

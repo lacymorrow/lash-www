@@ -52,7 +52,7 @@ export function PricingSectionSingle() {
 						</div>
 
 						<div className="pt-4">
-							<Link href={siteConfig.store.format.buyUrl("shipkit")} className={cn(buttonVariants({ variant: "default" }), "w-full bg-purple-500 text-lg text-white hover:bg-purple-600")}>
+							<Link href={routes.external.buy} className={cn(buttonVariants({ variant: "default" }), "w-full bg-purple-500 text-lg text-white hover:bg-purple-600")}>
 								Get Shipkit Now
 							</Link>
 						</div>

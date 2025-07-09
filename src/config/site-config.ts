@@ -116,12 +116,9 @@ interface SiteConfig {
 
 	// E-commerce store configuration
 	store: {
-		domain: string;
+		storeId: string;
 		products: {
 			[key: string]: string;
-		};
-		format: {
-			buyUrl: (product: keyof SiteConfig["store"]["products"]) => string;
 		};
 	};
 
@@ -242,20 +239,16 @@ export const siteConfig: SiteConfig = {
 	},
 
 	store: {
-		domain: "shipkit.lemonsqueezy.com",
+		storeId: "shipkit",
 		products: {
 			// LemonSqueezy Checkout URLs use Variant IDs (not Product IDs)
 			// Format: variant UUID from LemonSqueezy dashboard
-			bones: "eb159dba-96a3-40f2-a97b-7b9117e635a1", // variant ID
-			muscles: "4d259175-0a79-486a-b0f8-b77404ee68df", // variant ID
-			brains: "7935a386-7cd0-47fe-83c8-cab101323591", // variant ID
-			shipkit: "20b5b59e-b4c4-43b0-9979-545f90c76f28", // variant ID
-			// shipkit: "411883",
-		},
-		format: {
-			// Placeholder format function - assigned below
-			buyUrl: (product) => "",
-		},
+			shipkit: "411883",
+			// Examples:
+			bones: "411883",
+			muscles: "411883",
+			brains: "411883",
+		}
 	},
 
 	metadata: {
@@ -358,11 +351,6 @@ siteConfig.repo.format = {
 siteConfig.email.format = (type: Exclude<keyof SiteConfig["email"], "format">) =>
 	siteConfig.email[type];
 
-siteConfig.store.format = {
-	buyUrl: (product: keyof SiteConfig["store"]["products"]) =>
-		`https://${siteConfig.store.domain}/checkout/buy/${siteConfig.store.products[product]}`,
-};
-
 siteConfig.payload.adminTitleSuffix = ` - ${siteConfig.title} CMS`;
 
 // siteConfig.manifest.startUrl = routes.home; // Uncomment and import routes if needed
@@ -401,14 +389,3 @@ siteConfig.metadata.blogPath = `${siteConfig.url}/blog`;
 
 // Freeze the object to prevent accidental modifications later (optional)
 // Object.freeze(siteConfig);
-
-// Update store format functions after the main object is defined
-siteConfig.store.format.buyUrl = (productKey) => {
-	const productId = siteConfig.store.products[productKey];
-	if (!productId) {
-		console.error(`Product with key '${productKey}' not found in siteConfig.`);
-		return `https://${siteConfig.store.domain}`; // Fallback URL
-	}
-	// Use the documented /checkout/buy/ path
-	return `https://${siteConfig.store.domain}/checkout/buy/${productId}`;
-};

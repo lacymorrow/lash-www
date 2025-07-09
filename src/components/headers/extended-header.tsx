@@ -23,7 +23,7 @@ import { cva } from "class-variance-authority";
 import { useSession } from "next-auth/react";
 import type React from "react";
 import { useMemo } from "react";
-import { BuyButton } from "../buttons/buy-button";
+import { BuyButton } from "../buttons/lemonsqueezy-buy-button";
 
 import styles from "@/styles/header.module.css";
 import { AnimatePresence, motion } from "framer-motion";

@@ -20,7 +20,7 @@ export const singlePlan: PricingPlan = {
 	title: "Shipkit",
 	description: "Production-ready, for teams that need advanced features",
 	price: { oneTime: 49 },
-	href: siteConfig.store.format.buyUrl("shipkit"),
+	href: routes.external.buy,
 	features: [
 		"Next.js 15 App Router",
 		"Authentication (NextAuth v5)",
@@ -40,7 +40,7 @@ export const oneTimePlans: PricingPlan[] = [
 		title: "Shipkit Bones",
 		description: "Perfect for indie developers and small projects",
 		price: { oneTime: 0 },
-		href: siteConfig.store.format.buyUrl("bones"),
+		href: routes.external.buy,
 		features: [
 			"Next.js 15 App Router Setup",
 			"Authentication (NextAuth v5)",
@@ -55,7 +55,7 @@ export const oneTimePlans: PricingPlan[] = [
 		title: "Shipkit Muscles",
 		description: "Production-ready, for teams that need advanced features",
 		price: { oneTime: 99 },
-		href: siteConfig.store.format.buyUrl("muscles"),
+		href: routes.external.buy,
 		features: [
 			// "Everything in Bones +",
 			"Database Integration (Postgres)",
@@ -72,7 +72,7 @@ export const oneTimePlans: PricingPlan[] = [
 		title: "Brains",
 		description: "Enterprise-grade with custom features",
 		price: { oneTime: 149 },
-		href: siteConfig.store.format.buyUrl("brains"),
+		href: routes.external.buy,
 		features: ["Everything in Muscles +", "Custom Integrations", "Advanced AI Tools"],
 		isComingSoon: true,
 	},

@@ -90,18 +90,22 @@ const toggleBodyScroll = (disable: boolean) => {
 
 interface BuyButtonProps {
 	className?: string;
+	checkoutId: string;
+	storeId: string;
 }
 
-export const BuyButton = ({ className }: BuyButtonProps) => {
+export const BuyButton = ({ className, ...props }: BuyButtonProps) => {
+	const checkoutId = props.checkoutId ?? "20b5b59e-b4c4-43b0-9979-545f90c76f28";
+	const storeId = props.storeId ?? siteConfig.store.id;
+
 	const { data: session } = useSession();
 	const router = useRouter();
-	const checkoutId = crypto.randomUUID(); // Unique ID for tracking this checkout flow
 
 	useEffect(() => {
 		// Load Lemon.js script
 		const script = document.createElement("script");
-		script.src = "/assets/vendor/lemonsqueezy.js";
-		// script.src = "https://app.lemonsqueezy.com/js/lemon.js";
+		// script.src = "/assets/vendor/lemonsqueezy.js";
+		script.src = "https://app.lemonsqueezy.com/js/lemon.js";
 		script.defer = true;
 		document.body.appendChild(script);
 
@@ -265,10 +269,12 @@ export const BuyButton = ({ className }: BuyButtonProps) => {
 
 		// Use the configured checkout URL from site config
 		// This ensures we're using the correct variant ID for checkout
-		const checkoutUrl = new URL(routes.external.buy);
+		const checkoutUrl = new URL(
+			`https://${storeId}.lemonsqueezy.com/checkout/buy/${checkoutId}`
+		);
 
 		// Add success page URL
-		const successUrl = new URL("/checkout/success", window.location.origin);
+		const successUrl = new URL(routes.checkoutSuccess, window.location.origin);
 		checkoutUrl.searchParams.set(
 			"checkout[success_url]",
 			successUrl.toString()
