@@ -1,6 +1,7 @@
 import { vercel } from "@t3-oss/env-core/presets-zod";
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
+import { BASE_URL } from "./config/base-url";
 // Helper function for boolean feature flags defined at build time
 const zBooleanFeatureFlag = z
 	.enum(["true", "false"])
@@ -52,7 +53,10 @@ export const env = createEnv({
 
 		// ======== Authentication ========
 		AUTH_SECRET: z.string().optional(),
-		AUTH_URL: z.string().url().optional(),
+		AUTH_URL: z.preprocess(
+			(str) => BASE_URL ?? str,
+			BASE_URL ? z.string().optional() : z.string().url().optional()
+		),
 		// ======== Credentials (requires DB) ========
 		AUTH_CREDENTIALS_ENABLED: z.string().optional(),
 
@@ -160,6 +164,9 @@ export const env = createEnv({
 		NEXT_PUBLIC_SUPABASE_URL: z.string().url().optional(),
 		NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().optional(),
 
+		NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string().optional(),
+
+
 		// ======== Build-Time Feature Flags (Derived in next.config.ts) ========
 		NEXT_PUBLIC_FEATURE_DATABASE_ENABLED: zBooleanFeatureFlag,
 		NEXT_PUBLIC_FEATURE_PAYLOAD_ENABLED: zBooleanFeatureFlag,
@@ -208,8 +215,8 @@ export const env = createEnv({
 	},
 
 	/**
-	 * Runtime environment mapping
-	 * Maps schema variables to actual process.env values
+	 * You can't destruct `process.env` as a regular object in the Next.js edge runtimes (e.g.
+	 * middlewares) or client-side so we need to destruct manually.
 	 */
 	runtimeEnv: {
 		// Core Environment
@@ -292,6 +299,8 @@ export const env = createEnv({
 		// Consent Manager
 		NEXT_PUBLIC_C15T_URL: process.env.NEXT_PUBLIC_C15T_URL,
 
+		NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+
 		// Client-side variables (Original)
 		NEXT_PUBLIC_BUILDER_API_KEY: process.env.NEXT_PUBLIC_BUILDER_API_KEY,
 		NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
@@ -357,8 +366,13 @@ export const env = createEnv({
 	},
 
 	/**
-	 * Configuration options
+	 * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
+	 * useful for Docker builds.
 	 */
 	skipValidation: !!process.env.SKIP_ENV_VALIDATION,
+	/**
+	 * Makes it so that empty strings are treated as undefined. `SOME_VAR: z.string()` and
+	 * `SOME_VAR=''` will throw an error.
+	 */
 	emptyStringAsUndefined: true,
 });

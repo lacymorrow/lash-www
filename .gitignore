@@ -52,6 +52,7 @@ build/
 env/*
 *.env*
 !.env.example
+!.env.dev
 
 # # Logs
 # logs
