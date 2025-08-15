@@ -487,3 +487,60 @@ _Use this section to track completion of each phase with date and summary_
   - Updated `src/app/(app)/(dashboard)/_components/onboarding-wizard.tsx` to compose steps via `IntroDisclosure`.
   - Left `OnboardingCheck` API as-is; it now renders the new wizard implementation.
   - No breaking changes to dashboard page usage.
+
+---
+
+## Feature: Lash CLI Landing Hero (TUI-themed)
+
+Status: Planning
+
+Goal: Create a single-section landing hero at `/` in `lash-www` that mirrors the Lash TUI brand (pinks, blues, diagonal field motif), to validate look-and-feel before expanding the site.
+
+### TUI Theme Reference → Web Mapping
+
+- Source (TUI): `internal/tui/styles/charmtone.go`, `internal/tui/styles/theme.go`, `internal/tui/components/logo/logo.go`
+- Key palette (approx Tailwind mapping):
+  - Primary (Charple) → violet-500/600
+  - Secondary (Dolly) → fuchsia-500/pink-500
+  - Info/Blue (Malibu) → sky-400/indigo-400
+  - Accent (Zest) → amber-400 (sparingly)
+- Motifs to mirror:
+  - Foreground gradient from Secondary → Primary (pink → violet) for wordmark/heading
+  - Diagonal field lines (ASCII `╱`) as a subtle background pattern
+  - Dark canvas with blue→violet→pink gradient accents
+
+### Implementation Plan
+
+- [x] Review TUI theme and identify color/motif mapping
+  - Identified `Primary=Charple` and `Secondary=Dolly` as gradient endpoints; `Malibu` blue for highlights.
+  - Logo/splash uses diagonal field and horizontal foreground gradient; we’ll mirror via CSS gradients and a subtle animated grid.
+- [x] Add homepage route `src/app/page.tsx` (Server Component)
+  - Done — Created server page rendering `LashHero` within `Suspense`.
+- [x] Create `src/components/landing/lash-hero.tsx` (Server Component)
+  - Done — Gradient heading, subcopy, primary/secondary CTAs, brew install snippet, diagonal field motif.
+- [x] Background animation (Client Component)
+  - Done — Reused `BackgroundSpacetime` with low opacity; hero remains server-rendered.
+- [x] CTAs
+  - Done — Install Lash (`/install`) and GitHub repo link.
+- [x] Accessibility & Responsiveness
+  - Done — Semantic heading, accessible buttons/links, responsive typography/spacing.
+- [x] Performance
+  - Done — No large assets; lightweight background; no extra client logic in page.
+- [x] QA checklist
+  - Done — Verified mobile and desktop layouts; dark-mode consistent.
+
+### Files to Add/Touch
+
+- New: `src/app/page.tsx`
+- New: `src/components/landing/lash-hero.tsx`
+- Reuse: `src/components/ui/backgrounds/background-spacetime.tsx`, `src/components/ui/animated-gradient-text.tsx`, `src/components/ui/animated-shiny-text.tsx`
+
+### Rollout
+
+- Phase 1 (this task): Implement hero section only at `/` with final visuals.
+- Phase 2 (next): Add content sections (features, install, examples) reusing site components and TUI motifs.
+
+### Definition of Done
+
+- Hero renders at `/` with TUI-like gradient heading, diagonal field/animated background, and working CTAs.
+- Passes a11y checks (contrast, focus, semantics) and basic perf checks.
