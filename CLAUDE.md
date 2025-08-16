@@ -14,7 +14,7 @@ pnpm dev:all        # Start both dev server and workers
 
 ### Testing
 ```bash
-pnpm test           # Run all tests
+pnpm test           # Run all tests (Vitest unit tests)
 pnpm test:watch     # Run tests in watch mode
 pnpm test:coverage  # Run tests with coverage
 pnpm test:browser   # Run browser tests with Vitest
@@ -42,7 +42,7 @@ pnpm db:seed        # Seed database with test data
 ### Build & Deployment
 ```bash
 pnpm build          # Build for production
-pnpm build:memory-optimized  # Build with increased memory (8GB heap)
+pnpm build:vercel   # Build with increased memory (8GB heap)
 pnpm start          # Start production server
 pnpm analyze        # Analyze bundle size
 ```
@@ -66,7 +66,7 @@ pnpm analyze        # Analyze bundle size
 
 ### Database & Data Layer
 - **PostgreSQL** - Primary database
-- **Drizzle ORM** - Database schema and queries
+- **Drizzle ORM** - Database schema and queries (src/server/db/schema.ts)
 - **Schema prefix support** - Multi-tenant capable with `DB_PREFIX`
 - **Comprehensive schema** - Users, payments, plans, API keys, teams, waitlists
 
@@ -181,9 +181,9 @@ Shipkit uses environment variables for feature toggles:
 4. Add proper error and loading states
 
 ### Testing Strategy
-- **Unit tests** - Vitest for utilities and components
+- **Unit tests** - Vitest for utilities and components (tests/unit/\*\*)
 - **Integration tests** - Test server actions and services
-- **E2E tests** - Playwright for critical user flows
+- **E2E tests** - Playwright for critical user flows (tests/e2e/\*\*)
 - **Run tests** - `pnpm test` before committing
 
 ## Multi-Zone Architecture
@@ -228,7 +228,7 @@ RESEND_API_KEY=             # For email
 - **Linting failures** - Run `pnpm lint:fix` to auto-fix issues
 - **Database connection** - Check `DATABASE_URL` and run `pnpm db:push`
 - **Build failures** - Try `pnpm clean` then `pnpm build`
-- **Out of Memory (OOM) errors** - Use `pnpm build:memory-optimized` for larger builds
+- **Out of Memory (OOM) errors** - Use `pnpm build:vercel` for larger builds
 
 ### Debug Commands
 ```bash

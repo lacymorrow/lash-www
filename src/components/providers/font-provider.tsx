@@ -5,10 +5,10 @@
  */
 
 import type { HTMLAttributes } from "react";
-import { fontSans, fontSerif } from "@/config/fonts";
+import { fontSans, fontSerif, fontMono } from "@/config/fonts";
 import { cn } from "@/lib/utils";
 
-interface FontProviderProps extends HTMLAttributes<HTMLDivElement> {}
+interface FontProviderProps extends HTMLAttributes<HTMLDivElement> { }
 
 export function FontProvider({ children, className, ...props }: FontProviderProps) {
 	return (
@@ -19,6 +19,7 @@ export function FontProvider({ children, className, ...props }: FontProviderProp
 				"font-sans font-normal leading-relaxed",
 				fontSans.variable,
 				fontSerif.variable,
+				fontMono.variable,
 				className
 			)}
 			{...props}

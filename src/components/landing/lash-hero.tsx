@@ -5,11 +5,13 @@ import AnimatedShinyText from "@/components/ui/animated-shiny-text";
 import { BackgroundSpacetime } from "@/components/ui/backgrounds/background-spacetime";
 import { cn } from "@/lib/utils";
 import { LashTuiHeaderSvg } from "@/components/landing/lash-tui-header-svg";
+import { LashTuiHeaderText } from "@/components/landing/lash-tui-header-text";
+import { LashTuiHeader } from "@/components/landing/lash-tui-header";
 
 export const LashHero = () => {
     return (
         <section className={cn(
-            "relative overflow-hidden",
+            "container relative overflow-hidden",
             "bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900",
             "py-24 md:py-36"
         )}>
@@ -36,7 +38,7 @@ export const LashHero = () => {
                     </AnimatedGradientText>
 
                     <div className="mt-4 flex w-full justify-center" aria-hidden>
-                        <LashTuiHeaderSvg className="max-w-[1100px]" />
+                        <LashTuiHeaderText />
                     </div>
 
                     <p className="mx-auto mt-6 max-w-2xl text-pretty text-base text-slate-300 sm:text-lg">

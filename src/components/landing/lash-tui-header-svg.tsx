@@ -3,6 +3,8 @@ import { cn } from "@/lib/utils";
 interface Props {
     className?: string;
     scale?: number;
+    brandText?: string;
+    showBrand?: boolean;
 }
 
 /*
@@ -13,52 +15,28 @@ interface Props {
  *
  * Chosen over Unicode half-block glyphs to prevent cross-platform width issues.
  */
-export const LashTuiHeaderSvg = ({ className, scale = 14 }: Props) => {
+export const LashTuiHeaderSvg = ({ className, scale = 14, brandText = "Lacy™ Shell", showBrand = true }: Props) => {
     const u = scale; // unit size per grid cell
-    const g = Math.max(2, Math.round(scale * 0.2)); // small gap for visual crispness
 
-    // Letter grid positions (x, y, w, h) in grid units
-    // Coordinates are tuned to resemble the TUI layout while remaining readable.
-    const L: Array<[number, number, number, number]> = [
-        [0, 0, 1, 5], // vertical
-        [0, 4, 3, 1], // baseline
-    ];
-    const A: Array<[number, number, number, number]> = [
-        [5, 0, 5, 1], // top
-        [5, 1, 1, 4], // left
-        [9, 1, 1, 4], // right
-        [5, 2, 5, 1], // crossbar
-    ];
-    const S: Array<[number, number, number, number]> = [
-        [12, 0, 5, 1], // top
-        [12, 1, 1, 1], // upper-left nub
-        [12, 2, 5, 1], // middle
-        [16, 3, 1, 1], // lower-right nub
-        [12, 4, 5, 1], // bottom
-    ];
-    const H: Array<[number, number, number, number]> = [
-        [19, 0, 1, 5], // left
-        [23, 0, 1, 5], // right
-        [19, 2, 5, 1], // crossbar
-    ];
-
-    const letters = [...L, ...A, ...S, ...H];
+    // Text-based logo rows
+    const row1 = "█   ▄▀▀▀▄ ▄▀▀▀▀▀ █   █";
+    const row2 = "█   █▀▀▀█ ▀▀▀▀▀█ █▀▀▀█";
+    const row3 = "▀▀▀  ▀   ▀ ▀▀▀▀▀▀ ▀   ▀";
 
     // Compute overall SVG size
-    const cols = 24; // max x + widths
-    const rows = 5;
-    const innerW = cols * u;
-    const innerH = rows * u;
+    const textWidth = row1.length * u * 0.6; // approximate character width
+    const textHeight = u * 3.5; // 3 rows with spacing
     const pad = u; // padding around
 
     // Diagonal fields configuration
     const leftFieldWidth = u * 6;
     const rightFieldWidth = u * 28;
-    const height = innerH + pad * 2;
-    const totalWidth = leftFieldWidth + pad + innerW + pad + rightFieldWidth;
+    const height = textHeight + pad * 3; // extra space for brand
+    const totalWidth = leftFieldWidth + pad + textWidth + pad + rightFieldWidth;
 
     // Helpers
-    const toPx = (n: number) => n * u;
+    const stripeSpacing = u * 0.9;
+    const stripeWidth = u * 0.12;
 
     return (
         <svg
@@ -77,53 +55,47 @@ export const LashTuiHeaderSvg = ({ className, scale = 14 }: Props) => {
                     <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.85" />
                     <stop offset="100%" stopColor="#6366f1" stopOpacity="0.85" />
                 </linearGradient>
+                <pattern id="field-stripes" patternUnits="userSpaceOnUse" width={stripeSpacing} height={stripeSpacing} patternTransform="rotate(60)">
+                    <rect x="0" y="0" width={stripeWidth} height={stripeSpacing} fill="url(#field-grad)" />
+                </pattern>
             </defs>
 
-            {/* Left field */}
-            <g transform={`translate(0, ${pad})`}>
-                {Array.from({ length: Math.floor(leftFieldWidth / (u * 0.9)) }).map((_, i) => (
-                    <rect
-                        key={i}
-                        x={i * (u * 0.9)}
-                        y={-pad * 0.4}
-                        width={u * 0.12}
-                        height={innerH + pad * 0.8}
-                        fill="url(#field-grad)"
-                        transform={`rotate(-60 ${i * (u * 0.9)} ${innerH / 2})`}
-                        opacity={0.8}
-                    />
-                ))}
+            {showBrand && (
+                <text
+                    x={leftFieldWidth}
+                    y={pad * 0.9}
+                    fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+                    fontSize={Math.max(10, Math.round(u * 0.8))}
+                    fill="#d946ef"
+                >
+                    {brandText}
+                </text>
+            )}
+
+            {/* Left field (pattern filled, clipped to region) */}
+            <g transform={`translate(0, ${pad * 1.4})`}>
+                <rect x={0} y={0} width={leftFieldWidth} height={textHeight} fill="url(#field-stripes)" opacity={0.85} />
             </g>
 
-            {/* Title letters */}
-            <g transform={`translate(${leftFieldWidth + pad}, ${pad})`}>
-                {letters.map(([x, y, w, h], idx) => (
-                    <rect
-                        key={idx}
-                        x={toPx(x) + g}
-                        y={toPx(y) + g}
-                        width={toPx(w) - g * 2}
-                        height={toPx(h) - g * 2}
-                        rx={Math.max(2, Math.round(u * 0.2))}
-                        fill="url(#lash-grad)"
-                    />
-                ))}
+            {/* Text-based logo */}
+            <g transform={`translate(${leftFieldWidth + pad}, ${pad * 2.5})`}>
+                <text
+                    x={0}
+                    y={0}
+                    fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, 'Courier New', monospace"
+                    fontSize={u * 0.85}
+                    fill="url(#lash-grad)"
+                    dominantBaseline="text-before-edge"
+                >
+                    <tspan x={0} dy={0}>{row1}</tspan>
+                    <tspan x={0} dy={u * 1.1}>{row2}</tspan>
+                    <tspan x={0} dy={u * 1.1}>{row3}</tspan>
+                </text>
             </g>
 
-            {/* Right field */}
-            <g transform={`translate(${leftFieldWidth + pad + innerW + pad}, ${pad})`}>
-                {Array.from({ length: Math.floor(rightFieldWidth / (u * 0.9)) }).map((_, i) => (
-                    <rect
-                        key={i}
-                        x={i * (u * 0.9)}
-                        y={-pad * 0.6}
-                        width={u * 0.12}
-                        height={innerH + pad}
-                        fill="url(#field-grad)"
-                        transform={`rotate(-60 ${i * (u * 0.9)} ${innerH / 2})`}
-                        opacity={0.8}
-                    />
-                ))}
+            {/* Right field (pattern filled, clipped to region) */}
+            <g transform={`translate(${leftFieldWidth + pad + textWidth + pad}, ${pad * 1.4})`}>
+                <rect x={0} y={0} width={rightFieldWidth} height={textHeight} fill="url(#field-stripes)" opacity={0.85} />
             </g>
         </svg>
     );
