@@ -7,6 +7,7 @@ import AnimatedShinyText from "@/components/ui/animated-shiny-text";
 import { BackgroundSpacetime } from "@/components/ui/backgrounds/background-spacetime";
 import { cn } from "@/lib/utils";
 import { LashTuiHeaderText } from "@/components/landing/lash-tui-header-text";
+import { GithubVersion } from "@/components/landing/github-version";
 import { useState } from "react";
 
 export const LashHero = () => {
@@ -34,8 +35,9 @@ export const LashHero = () => {
                     {/* Accessible heading for screen readers */}
                     <h1 className="sr-only">Lash — a beautiful AI terminal for your code</h1>
                     <AnimatedGradientText className="mb-6 bg-black/30 text-xs text-white/80 dark:text-white/80">
-                        <AnimatedShinyText className="text-[11px] tracking-wide">
-                            The AI Shell for your terminal
+                        <AnimatedShinyText className="flex items-center gap-2 text-[11px] tracking-wide">
+                            <span>The AI Shell for your terminal</span>
+                            <GithubVersion />
                         </AnimatedShinyText>
                     </AnimatedGradientText>
 
