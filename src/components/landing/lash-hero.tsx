@@ -1,30 +1,32 @@
+"use client";
+
 import { Link } from "@/components/primitives/link-with-transition";
 import { Button } from "@/components/ui/button";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 import AnimatedShinyText from "@/components/ui/animated-shiny-text";
 import { BackgroundSpacetime } from "@/components/ui/backgrounds/background-spacetime";
 import { cn } from "@/lib/utils";
-import { LashTuiHeaderSvg } from "@/components/landing/lash-tui-header-svg";
 import { LashTuiHeaderText } from "@/components/landing/lash-tui-header-text";
-import { LashTuiHeader } from "@/components/landing/lash-tui-header";
+import { useState } from "react";
 
 export const LashHero = () => {
+    const [selectedInstall, setSelectedInstall] = useState("brew");
+    
+    const installCommands = {
+        brew: "brew install lacymorrow/tap/lash",
+        go: "go install github.com/lacymorrow/lash@latest",
+        npm: "npm install -g lash-cli"
+    };
+    
     return (
         <section className={cn(
+            "h-screen",
             "container relative overflow-hidden",
             "bg-gradient-to-b from-slate-950/20 via-slate-950/50 to-slate-900/30",
             "py-24 md:py-36"
         )}>
             <div className="pointer-events-none absolute inset-0 -z-10 opacity-20">
                 <BackgroundSpacetime />
-            </div>
-
-            {/* Diagonal field motif */}
-            <div aria-hidden className="absolute inset-0 z-10">
-                <div className="absolute left-0 top-0 h-full w-full bg-[radial-gradient(circle_at_20%_10%,rgba(99,102,241,0.15),transparent_40%),radial-gradient(circle_at_80%_20%,rgba(236,72,153,0.15),transparent_45%),radial-gradient(circle_at_50%_80%,rgba(37,99,235,0.12),transparent_45%)]" />
-                <div className="absolute inset-0 opacity-15 [mask-image:linear-gradient(to_bottom,black,transparent_80%)]">
-                    <div className="h-full w-full [background:repeating-linear-gradient(135deg,transparent_0_10px,rgba(255,255,255,0.05)_10px_11px)]" />
-                </div>
             </div>
 
             <div className="container mx-auto px-4">
@@ -58,8 +60,52 @@ export const LashHero = () => {
                         </Button>
                     </div>
 
-                    <div className="mx-auto mt-6 max-w-fit rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-slate-300 shadow-sm backdrop-blur">
-                        <code className="select-all">brew install lacymorrow/tap/lash</code>
+                    <div className="group mx-auto mt-6 max-w-fit cursor-copy rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-slate-300 shadow-sm backdrop-blur transition-all duration-300 hover:border-white/20 hover:bg-white/[0.07] hover:shadow-lg">
+                        <code className="select-all transition-colors duration-300 group-hover:text-white">{installCommands[selectedInstall as keyof typeof installCommands]}</code>
+                    </div>
+                    
+                    <div className="mx-auto mt-3 flex items-center justify-center gap-2">
+                        <button
+                            onClick={() => setSelectedInstall("brew")}
+                            className={cn(
+                                "rounded-full border px-3 py-1 text-[10px] font-medium transition-all duration-200 ease-out",
+                                selectedInstall === "brew" 
+                                    ? "scale-105 border-white/20 bg-white/10 text-white shadow-md" 
+                                    : "scale-100 border-white/5 bg-white/5 text-slate-400 hover:scale-[1.02] hover:border-white/10 hover:bg-white/[0.07] hover:text-slate-300 hover:shadow-sm active:scale-95"
+                            )}
+                        >
+                            brew
+                        </button>
+                        <button
+                            onClick={() => setSelectedInstall("go")}
+                            className={cn(
+                                "rounded-full border px-3 py-1 text-[10px] font-medium transition-all duration-200 ease-out",
+                                selectedInstall === "go" 
+                                    ? "scale-105 border-white/20 bg-white/10 text-white shadow-md" 
+                                    : "scale-100 border-white/5 bg-white/5 text-slate-400 hover:scale-[1.02] hover:border-white/10 hover:bg-white/[0.07] hover:text-slate-300 hover:shadow-sm active:scale-95"
+                            )}
+                        >
+                            go
+                        </button>
+                        <button
+                            onClick={() => setSelectedInstall("npm")}
+                            className={cn(
+                                "rounded-full border px-3 py-1 text-[10px] font-medium transition-all duration-200 ease-out",
+                                selectedInstall === "npm" 
+                                    ? "scale-105 border-white/20 bg-white/10 text-white shadow-md" 
+                                    : "scale-100 border-white/5 bg-white/5 text-slate-400 hover:scale-[1.02] hover:border-white/10 hover:bg-white/[0.07] hover:text-slate-300 hover:shadow-sm active:scale-95"
+                            )}
+                        >
+                            npm
+                        </button>
+                        <Link
+                            href="https://github.com/lacymorrow/lash/releases"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="scale-100 rounded-full border border-white/5 bg-white/5 px-3 py-1 text-[10px] font-medium text-slate-500 transition-all duration-200 ease-out hover:scale-[1.02] hover:border-white/10 hover:bg-white/[0.07] hover:text-slate-400 hover:shadow-sm active:scale-95"
+                        >
+                            download
+                        </Link>
                     </div>
                 </div>
             </div>
