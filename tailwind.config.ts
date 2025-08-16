@@ -250,6 +250,11 @@ const config = {
 						transform: "translateY(0)",
 					},
 				},
+				shimmer: {
+					"100%": {
+						transform: "translateX(100%)",
+					},
+				},
 			},
 			animation: {
 				"accordion-down": "accordion-down 0.2s ease-out",
@@ -270,6 +275,7 @@ const config = {
 				"galaxy-shimmer": "galaxy-shimmer 20s ease-in-out infinite 3s",
 				aurora: "aurora 60s linear infinite",
 				fadeDown: "fadeDown 0.2s ease-out",
+				shimmer: "shimmer 2s linear infinite",
 			},
 			spacing: {
 				"2xs": "0.25rem",
