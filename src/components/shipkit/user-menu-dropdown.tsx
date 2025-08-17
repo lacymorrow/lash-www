@@ -12,7 +12,6 @@ import { Sparkles } from "lucide-react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import type * as React from "react";
-import { RestartOnboardingButton } from "@/app/(app)/(dashboard)/_components/onboarding-check";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -147,15 +146,6 @@ export function UserMenuDropdown({
               <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
-
-          {showOnboarding && (
-            <DropdownMenuItem asChild>
-              <RestartOnboardingButton
-                user={user}
-                className="w-full justify-start"
-              />
-            </DropdownMenuItem>
-          )}
 
           {additionalMenuItems.map((item) => (
             <DropdownMenuItem
