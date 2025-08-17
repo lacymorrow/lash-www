@@ -12,21 +12,21 @@ import { useState } from "react";
 
 export const LashHero = () => {
     const [selectedInstall, setSelectedInstall] = useState("brew");
-    
+
     const installCommands = {
         brew: "brew install lacymorrow/tap/lash",
         go: "go install github.com/lacymorrow/lash@latest",
         npm: "npm install -g lash-cli"
     };
-    
+
     return (
         <section className={cn(
             "h-screen",
-            "container relative overflow-hidden",
+            "relative overflow-hidden",
             "bg-gradient-to-b from-slate-950/20 via-slate-950/50 to-slate-900/30",
             "py-24 md:py-36"
         )}>
-            <div className="pointer-events-none absolute inset-0 -z-10 opacity-20">
+            <div className="pointer-events-none absolute inset-0 -z-10 opacity-25">
                 <BackgroundSpacetime />
             </div>
 
@@ -65,14 +65,14 @@ export const LashHero = () => {
                     <div className="group mx-auto mt-6 max-w-fit cursor-copy rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-slate-300 shadow-sm backdrop-blur transition-all duration-300 hover:border-white/20 hover:bg-white/[0.07] hover:shadow-lg">
                         <code className="select-all transition-colors duration-300 group-hover:text-white">{installCommands[selectedInstall as keyof typeof installCommands]}</code>
                     </div>
-                    
+
                     <div className="mx-auto mt-3 flex items-center justify-center gap-2">
                         <button
                             onClick={() => setSelectedInstall("brew")}
                             className={cn(
                                 "rounded-full border px-3 py-1 text-[10px] font-medium transition-all duration-200 ease-out",
-                                selectedInstall === "brew" 
-                                    ? "scale-105 border-white/20 bg-white/10 text-white shadow-md" 
+                                selectedInstall === "brew"
+                                    ? "scale-105 border-white/20 bg-white/10 text-white shadow-md"
                                     : "scale-100 border-white/5 bg-white/5 text-slate-400 hover:scale-[1.02] hover:border-white/10 hover:bg-white/[0.07] hover:text-slate-300 hover:shadow-sm active:scale-95"
                             )}
                         >
@@ -82,8 +82,8 @@ export const LashHero = () => {
                             onClick={() => setSelectedInstall("go")}
                             className={cn(
                                 "rounded-full border px-3 py-1 text-[10px] font-medium transition-all duration-200 ease-out",
-                                selectedInstall === "go" 
-                                    ? "scale-105 border-white/20 bg-white/10 text-white shadow-md" 
+                                selectedInstall === "go"
+                                    ? "scale-105 border-white/20 bg-white/10 text-white shadow-md"
                                     : "scale-100 border-white/5 bg-white/5 text-slate-400 hover:scale-[1.02] hover:border-white/10 hover:bg-white/[0.07] hover:text-slate-300 hover:shadow-sm active:scale-95"
                             )}
                         >
@@ -93,8 +93,8 @@ export const LashHero = () => {
                             onClick={() => setSelectedInstall("npm")}
                             className={cn(
                                 "rounded-full border px-3 py-1 text-[10px] font-medium transition-all duration-200 ease-out",
-                                selectedInstall === "npm" 
-                                    ? "scale-105 border-white/20 bg-white/10 text-white shadow-md" 
+                                selectedInstall === "npm"
+                                    ? "scale-105 border-white/20 bg-white/10 text-white shadow-md"
                                     : "scale-100 border-white/5 bg-white/5 text-slate-400 hover:scale-[1.02] hover:border-white/10 hover:bg-white/[0.07] hover:text-slate-300 hover:shadow-sm active:scale-95"
                             )}
                         >

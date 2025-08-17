@@ -25,14 +25,12 @@ export function AppRouterLayout({
 			<PageTracker />
 
 			{/* ThemeProvider should wrap providers that might need theme context */}
-			<ThemeProviderWrapper attribute="class" defaultTheme="system">
-				{/* ShipkitProvider - Manage all core providers */}
-				<ShipkitProvider>
-					<NuqsAdapter>
-						<TeamProvider initialTeams={DEFAULT_TEAMS}>{children}</TeamProvider>
-					</NuqsAdapter>
-				</ShipkitProvider>
-			</ThemeProviderWrapper>
+			{/* ShipkitProvider - Manage all core providers */}
+			<ShipkitProvider>
+				<NuqsAdapter>
+					<TeamProvider initialTeams={DEFAULT_TEAMS}>{children}</TeamProvider>
+				</NuqsAdapter>
+			</ShipkitProvider>
 		</ViewTransitions>
 	);
 }
