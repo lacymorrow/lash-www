@@ -36,7 +36,7 @@ export const LashHero = () => {
                     <h1 className="sr-only">Lash — a beautiful AI terminal for your code</h1>
                     <AnimatedGradientText className="mb-6 bg-black/30 text-xs text-white/80 dark:text-white/80">
                         <AnimatedShinyText className="flex items-center gap-2 text-[11px] tracking-wide">
-                            <span>The AI Shell for your terminal</span>
+                            <span className="text-white/80">The AI Shell for your terminal</span>
                             <GithubVersion />
                         </AnimatedShinyText>
                     </AnimatedGradientText>
