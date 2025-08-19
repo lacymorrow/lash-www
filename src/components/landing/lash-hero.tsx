@@ -45,16 +45,16 @@ export const LashHero = () => {
                         <LashTuiHeaderText />
                     </div>
 
-                    <p className="mx-auto mt-6 max-w-2xl text-pretty text-base text-slate-300 sm:text-lg">
-                        Shell first, AI second. Type shell commands or chat naturally with your command line. Crafted with the Charm ecosystem.
+                    <p className="mx-auto mt-6 max-w-xl text-pretty text-base text-slate-300 sm:text-lg">
+                        The AI Shell for any terminal. Type shell commands or chat naturally with your command line anywhere.
                     </p>
 
                     <div className="mx-auto mt-8 flex w-full flex-col items-center justify-center gap-3 sm:flex-row">
-                        <Button asChild size="lg" className="h-11 px-6">
+                        {/* <Button asChild size="lg" className="h-11 px-6">
                             <Link href="#docs">
                                 Docs
                             </Link>
-                        </Button>
+                        </Button> */}
                         <Button asChild variant="secondary" size="lg" className="h-11 px-6">
                             <Link href="https://github.com/lacymorrow/lash" target="_blank" rel="noopener noreferrer">
                                 View on GitHub
