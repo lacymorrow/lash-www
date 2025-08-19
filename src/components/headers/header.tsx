@@ -144,7 +144,7 @@ export const Header: React.FC<HeaderProps> = ({
 														"w-full justify-center"
 													)}
 												>
-													Get Shipkit
+													Get Lash
 												</Link>
 												<Link
 													href={signInRedirectUrl}

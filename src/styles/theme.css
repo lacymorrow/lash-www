@@ -5,43 +5,43 @@
 
 @layer base {
 	:root {
-		--background: 0 0% 3.9%;
+		--background: 222 47% 6%;
 		--foreground: 0 0% 98%;
-		--card: 0 0% 3.9%;
+		--card: 222 47% 6%;
 		--card-foreground: 0 0% 98%;
-		--popover: 0 0% 3.9%;
+		--popover: 222 47% 6%;
 		--popover-foreground: 0 0% 98%;
-		--primary: 0 0% 98%;
-		--primary-foreground: 0 0% 9%;
-		--secondary: 0 0% 14.9%;
+		--primary: 258 90% 66%;
+		--primary-foreground: 0 0% 10%;
+		--secondary: 316 87% 65%;
 		--secondary-foreground: 0 0% 98%;
-		--muted: 0 0% 14.9%;
-		--muted-foreground: 0 0% 63.9%;
-		--accent: 0 0% 14.9%;
+		--muted: 222 14% 20%;
+		--muted-foreground: 0 0% 80%;
+		--accent: 204 88% 60%;
 		--accent-foreground: 0 0% 98%;
-		--destructive: 0 62.8% 30.6%;
+		--destructive: 0 72% 50%;
 		--destructive-foreground: 0 0% 98%;
-		--border: 0 0% 14.9%;
-		--input: 0 0% 14.9%;
-		--ring: 0 0% 83.1%;
-		--chart-1: 220 70% 50%;
-		--chart-2: 160 60% 45%;
-		--chart-3: 30 80% 55%;
-		--chart-4: 280 65% 60%;
-		--chart-5: 340 75% 55%;
-		--sidebar-background: 240 5.9% 10%;
-		--sidebar-foreground: 240 4.8% 95.9%;
-		--sidebar-primary: 224.3 76.3% 48%;
+		--border: 222 14% 20%;
+		--input: 222 14% 20%;
+		--ring: 258 90% 66%;
+		--chart-1: 258 90% 66%;
+		--chart-2: 316 87% 65%;
+		--chart-3: 204 88% 60%;
+		--chart-4: 50 98% 60%;
+		--chart-5: 160 85% 55%;
+		--sidebar-background: 225 6% 10%;
+		--sidebar-foreground: 0 0% 96%;
+		--sidebar-primary: 258 90% 66%;
 		--sidebar-primary-foreground: 0 0% 100%;
-		--sidebar-accent: 240 3.7% 15.9%;
-		--sidebar-accent-foreground: 240 4.8% 95.9%;
-		--sidebar-border: 240 3.7% 15.9%;
-		--sidebar-ring: 217.2 91.2% 59.8%;
-		--color-1: 0 100% 63%;
-		--color-2: 270 100% 63%;
-		--color-3: 210 100% 63%;
+		--sidebar-accent: 225 7% 16%;
+		--sidebar-accent-foreground: 0 0% 96%;
+		--sidebar-border: 225 7% 16%;
+		--sidebar-ring: 258 90% 66%;
+		--color-1: 316 100% 63%;
+		--color-2: 258 100% 63%;
+		--color-3: 204 100% 63%;
 		--color-4: 195 100% 63%;
-		--color-5: 90 100% 63%;
+		--color-5: 50 100% 63%;
 	}
 }
 

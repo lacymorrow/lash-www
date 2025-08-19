@@ -544,3 +544,22 @@ Goal: Create a single-section landing hero at `/` in `lash-www` that mirrors the
 
 - Hero renders at `/` with TUI-like gradient heading, diagonal field/animated background, and working CTAs.
 - Passes a11y checks (contrast, focus, semantics) and basic perf checks.
+
+## Feature: Rebrand to Lash
+
+- [x] Update `src/config/site-config.ts` (name, title, tagline, url, ogImage, description, links, repo, email, creator, metadata.keywords)
+  - Set core brand values to Lash domain and repository.
+- [x] Swap icon component to Lash (`src/components/assets/icon.tsx` -> `LashIcon`)
+  - Added `src/components/assets/lash-icon.tsx` using Tabler Terminal icon for now.
+- [x] Header CTA label update (`Get Shipkit` → `Get Lash`) in `src/components/headers/header.tsx`.
+- [x] Adjust brand colors in `src/styles/theme.css` to Lash violet/pink/blue palette.
+- [x] Update external links in `src/config/routes.ts` to Lash URLs for site and Vercel deploy templates.
+- [ ] Replace icons/assets in `public/` and `public/app/` (favicon, 192/512 app icons, `logo.png`, `og-image.png`, `og-logo.png`).
+- [x] Replace icons/assets in `public/` and `public/app/` (favicon, 192/512 app icons, `logo.png`, `og-image.png`, `og-logo.png`).
+  - Generated icons and OG assets from `public/logo.png` and `public/wide.png` using `sips`.
+- [ ] Configure analytics envs for Lash (PostHog/Umami) and update `.env*`.
+- [ ] Grep and update any remaining “Shipkit” strings in marketing copy or tests where appropriate.
+
+Notes:
+- Metadata derives from `siteConfig` so updates cascade to OG/Twitter tags.
+- Placeholder buy link left as `lash.lemonsqueezy.com/...` to be finalized.

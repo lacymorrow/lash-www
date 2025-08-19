@@ -170,29 +170,29 @@ export const siteConfig: SiteConfig = {
 		pageTransitions: true,
 	},
 
-	name: "Shipkit",
-	title: "Shipkit",
-	tagline: "Launch your app at light speed.",
-	url: "https://shipkit.io",
-	ogImage: "https://shipkit.io/app/og-image.png",
+	name: "Lash",
+	title: "Lash",
+	tagline: "The AI shell for your terminal.",
+	url: "https://lash.sh",
+	ogImage: "https://lash.sh/app/og-image.png",
 	description:
-		"Launch your app at light speed. Fast, flexible, and feature-packed for the modern web.",
+		"A beautiful AI terminal for your code. Shell first, AI second.",
 
 	branding: {
-		projectName: "Shipkit",
-		projectSlug: "shipkit",
+		projectName: "Lash",
+		projectSlug: "lash",
 		productNames: {
 			bones: "Bones",
 			muscles: "Muscles",
 			brains: "Brains",
-			main: "Shipkit",
+			main: "Lash",
 		},
-		domain: "shipkit.io",
-		protocol: "web+shipkit",
-		githubOrg: "shipkit-io",
-		githubRepo: "shipkit",
-		vercelProjectName: "shipkit-app",
-		databaseName: "shipkit",
+		domain: "lash.sh",
+		protocol: "web+lash",
+		githubOrg: "lacymorrow",
+		githubRepo: "lash",
+		vercelProjectName: "lash-www",
+		databaseName: "lash",
 	},
 
 	links: {
@@ -200,13 +200,13 @@ export const siteConfig: SiteConfig = {
 		twitter_follow: "https://twitter.com/intent/follow?screen_name=lacybuilds",
 		x: "https://x.com/lacybuilds",
 		x_follow: "https://x.com/intent/follow?screen_name=lacybuilds",
-		github: "https://github.com/lacymorrow/shipkit",
+		github: "https://github.com/lacymorrow/lash",
 	},
 
 	repo: {
 		owner: "lacymorrow",
-		name: "shipkit",
-		url: "https://github.com/lacymorrow/shipkit",
+		name: "lash",
+		url: "https://github.com/lacymorrow/lash",
 		format: {
 			// Placeholder format functions - assigned below
 			clone: () => "",
@@ -215,19 +215,19 @@ export const siteConfig: SiteConfig = {
 	},
 
 	email: {
-		support: "feedback@shipkit.io",
-		team: "team@shipkit.io",
-		noreply: "noreply@shipkit.io",
-		domain: "shipkit.io",
-		legal: "legal@shipkit.io",
-		privacy: "privacy@shipkit.io",
+		support: "support@lash.sh",
+		team: "team@lash.sh",
+		noreply: "noreply@lash.sh",
+		domain: "lash.sh",
+		legal: "legal@lash.sh",
+		privacy: "privacy@lash.sh",
 		// Placeholder format function - assigned below
 		format: (type) => "",
 	},
 
 	creator: {
 		name: "lacymorrow",
-		email: "lacy@shipkit.io",
+		email: "lacy@lash.sh",
 		url: "https://lacymorrow.com",
 		twitter: "@lacybuilds",
 		twitter_handle: "lacybuilds",
@@ -258,7 +258,7 @@ export const siteConfig: SiteConfig = {
 			"React",
 			"Tailwind CSS",
 			"Server Components",
-			"Shipkit",
+			"Lash",
 			"Shadcn",
 			"UI Components",
 		],
