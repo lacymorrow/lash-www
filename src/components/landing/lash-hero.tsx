@@ -89,7 +89,7 @@ export const LashHero = () => {
                         >
                             go
                         </button>
-                        <button
+                        {/* <button
                             onClick={() => setSelectedInstall("npm")}
                             className={cn(
                                 "rounded-full border px-3 py-1 text-[10px] font-medium transition-all duration-200 ease-out",
@@ -99,7 +99,7 @@ export const LashHero = () => {
                             )}
                         >
                             npm
-                        </button>
+                        </button> */}
                         <Link
                             href="https://github.com/lacymorrow/lash/releases"
                             target="_blank"
