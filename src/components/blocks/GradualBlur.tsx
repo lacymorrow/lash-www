@@ -54,27 +54,28 @@ const getGradientDirection = (position: string) =>
 		right: "to right",
 	})[position] || "to bottom";
 
-const debounce = (fn, wait) => {
-	let t;
-	return (...a) => {
+const debounce = (fn: (...args: any[]) => void, wait: number) => {
+	let t: NodeJS.Timeout;
+	return (...a: any[]) => {
 		clearTimeout(t);
 		t = setTimeout(() => fn(...a), wait);
 	};
 };
 
-const useResponsiveDimension = (responsive, config, key) => {
+const useResponsiveDimension = (responsive: any, config: any, key: string) => {
 	const [value, setValue] = useState(config[key]);
 	useEffect(() => {
 		if (!responsive) return;
 		const calc = () => {
 			const w = window.innerWidth;
-			let v = config[key];
-			if (w <= 480 && config[`mobile${key[0].toUpperCase() + key.slice(1)}`])
-				v = config[`mobile${key[0].toUpperCase() + key.slice(1)}`];
-			else if (w <= 768 && config[`tablet${key[0].toUpperCase() + key.slice(1)}`])
-				v = config[`tablet${key[0].toUpperCase() + key.slice(1)}`];
-			else if (w <= 1024 && config[`desktop${key[0].toUpperCase() + key.slice(1)}`])
-				v = config[`desktop${key[0].toUpperCase() + key.slice(1)}`];
+			let v = (config as any)[key];
+			const capitalizedKey = key && key.length > 0 ? key[0]!.toUpperCase() + key.slice(1) : key;
+			if (w <= 480 && (config as any)[`mobile${capitalizedKey}`])
+				v = (config as any)[`mobile${capitalizedKey}`];
+			else if (w <= 768 && (config as any)[`tablet${capitalizedKey}`])
+				v = (config as any)[`tablet${capitalizedKey}`];
+			else if (w <= 1024 && (config as any)[`desktop${capitalizedKey}`])
+				v = (config as any)[`desktop${capitalizedKey}`];
 			setValue(v);
 		};
 		const debounced = debounce(calc, 100);
@@ -82,16 +83,16 @@ const useResponsiveDimension = (responsive, config, key) => {
 		window.addEventListener("resize", debounced);
 		return () => window.removeEventListener("resize", debounced);
 	}, [responsive, config, key]);
-	return responsive ? value : config[key];
+	return responsive ? value : (config as any)[key];
 };
 
-const useIntersectionObserver = (ref, shouldObserve = false) => {
+const useIntersectionObserver = (ref: any, shouldObserve = false) => {
 	const [isVisible, setIsVisible] = useState(!shouldObserve);
 
 	useEffect(() => {
 		if (!shouldObserve || !ref.current) return;
 
-		const observer = new IntersectionObserver(([entry]) => setIsVisible(entry.isIntersecting), {
+		const observer = new IntersectionObserver(([entry]) => setIsVisible(entry?.isIntersecting || false), {
 			threshold: 0.1,
 		});
 
@@ -102,12 +103,12 @@ const useIntersectionObserver = (ref, shouldObserve = false) => {
 	return isVisible;
 };
 
-function GradualBlur(props) {
+function GradualBlur(props: any) {
 	const containerRef = useRef(null);
 	const [isHovered, setIsHovered] = useState(false);
 
 	const config = useMemo(() => {
-		const presetConfig = props.preset && PRESETS[props.preset] ? PRESETS[props.preset] : {};
+		const presetConfig = props.preset && (PRESETS as any)[props.preset] ? (PRESETS as any)[props.preset] : {};
 		return mergeConfigs(DEFAULT_CONFIG, presetConfig, props);
 	}, [props]);
 
@@ -124,7 +125,7 @@ function GradualBlur(props) {
 				? config.strength * config.hoverIntensity
 				: config.strength;
 
-		const curveFunc = CURVE_FUNCTIONS[config.curve] || CURVE_FUNCTIONS.linear;
+		const curveFunc = (CURVE_FUNCTIONS as any)[config.curve] || CURVE_FUNCTIONS.linear;
 
 		for (let i = 1; i <= config.divCount; i++) {
 			let progress = i / config.divCount;
@@ -132,7 +133,7 @@ function GradualBlur(props) {
 
 			let blurValue;
 			if (config.exponential) {
-				blurValue = math.pow(2, progress * 4) * 0.0625 * currentStrength;
+				blurValue = (Math.pow(2, progress * 4) as number) * 0.0625 * currentStrength;
 			} else {
 				blurValue = 0.0625 * (progress * config.divCount + 1) * currentStrength;
 			}
@@ -160,7 +161,7 @@ function GradualBlur(props) {
 					config.animated && config.animated !== "scroll"
 						? `backdrop-filter ${config.duration} ${config.easing}`
 						: undefined,
-			};
+			} as any;
 
 			divs.push(<div key={i} style={divStyle} />);
 		}
@@ -233,8 +234,10 @@ function GradualBlur(props) {
 
 const GradualBlurMemo = React.memo(GradualBlur);
 GradualBlurMemo.displayName = "GradualBlur";
-GradualBlurMemo.PRESETS = PRESETS;
-GradualBlurMemo.CURVE_FUNCTIONS = CURVE_FUNCTIONS;
+
+// Add static properties
+(GradualBlurMemo as any).PRESETS = PRESETS;
+(GradualBlurMemo as any).CURVE_FUNCTIONS = CURVE_FUNCTIONS;
 export default GradualBlurMemo;
 
 const injectStyles = () => {
