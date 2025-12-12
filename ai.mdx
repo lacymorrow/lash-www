@@ -560,6 +560,14 @@ Goal: Create a single-section landing hero at `/` in `lash-www` that mirrors the
 - [ ] Configure analytics envs for Lash (PostHog/Umami) and update `.env*`.
 - [ ] Grep and update any remaining “Shipkit” strings in marketing copy or tests where appropriate.
 
+---
+
+### Bug: Install command copy (homepage hero)
+
+- [x] Instrumented install command click + selection logging in `src/components/landing/lash-hero.tsx` (runId `pre-fix`) to capture interactions.
+- [ ] Analyze logs to confirm missing copy behavior and root cause.
+- [ ] Implement auto-copy for selected install command and verify with post-fix logs, then remove instrumentation after confirmation.
+
 Notes:
 - Metadata derives from `siteConfig` so updates cascade to OG/Twitter tags.
 - Placeholder buy link left as `lash.lemonsqueezy.com/...` to be finalized.

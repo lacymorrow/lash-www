@@ -8,15 +8,68 @@ import { BackgroundSpacetime } from "@/components/ui/backgrounds/background-spac
 import { cn } from "@/lib/utils";
 import { LashTuiHeaderText } from "@/components/landing/lash-tui-header-text";
 import { GithubVersion } from "@/components/landing/github-version";
+import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import { Check } from "lucide-react";
 import { useState } from "react";
 
 export const LashHero = () => {
     const [selectedInstall, setSelectedInstall] = useState("brew");
+    const { isCopied, copyToClipboard } = useCopyToClipboard();
 
     const installCommands = {
         brew: "brew install lacymorrow/tap/lash",
         go: "go install github.com/lacymorrow/lash@latest",
         npm: "npm install -g lash-cli"
+    };
+
+    const handleSelectInstall = (installKey: keyof typeof installCommands) => {
+        setSelectedInstall(installKey);
+
+        // #region agent log
+        void fetch("http://127.0.0.1:7242/ingest/a184f37b-d283-49ed-9107-d1b87c6acc55", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                sessionId: "debug-session",
+                runId: "pre-fix",
+                hypothesisId: "H2",
+                location: "src/components/landing/lash-hero.tsx:handleSelectInstall",
+                message: "Install option selected",
+                data: {
+                    installKey
+                },
+                timestamp: Date.now()
+            })
+        }).catch(() => {
+            /* agent log best-effort */
+        });
+        // #endregion
+    };
+
+    const handleInstallCommandClick = () => {
+        const command = installCommands[selectedInstall as keyof typeof installCommands];
+        void copyToClipboard(command);
+
+        // #region agent log
+        void fetch("http://127.0.0.1:7242/ingest/a184f37b-d283-49ed-9107-d1b87c6acc55", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                sessionId: "debug-session",
+                runId: "pre-fix",
+                hypothesisId: "H1",
+                location: "src/components/landing/lash-hero.tsx:handleInstallCommandClick",
+                message: "Install command clicked",
+                data: {
+                    selectedInstall,
+                    command
+                },
+                timestamp: Date.now()
+            })
+        }).catch(() => {
+            /* agent log best-effort */
+        });
+        // #endregion
     };
 
     return (
@@ -62,13 +115,32 @@ export const LashHero = () => {
                         </Button>
                     </div>
 
-                    <div className="group mx-auto mt-6 max-w-fit cursor-copy rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-slate-300 shadow-sm backdrop-blur transition-all duration-300 hover:border-white/20 hover:bg-white/[0.07] hover:shadow-lg">
-                        <code className="select-all transition-colors duration-300 group-hover:text-white">{installCommands[selectedInstall as keyof typeof installCommands]}</code>
-                    </div>
+                    <button
+                        type="button"
+                        onClick={handleInstallCommandClick}
+                        className="group mx-auto mt-6 flex max-w-fit items-center gap-2 cursor-copy rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-slate-300 shadow-sm backdrop-blur transition-all duration-300 hover:border-white/20 hover:bg-white/[0.07] hover:shadow-lg"
+                        aria-label="Copy install command"
+                    >
+                        <code className="select-all transition-colors duration-300 group-hover:text-white">
+                            {installCommands[selectedInstall as keyof typeof installCommands]}
+                        </code>
+                        <span
+                            className={cn(
+                                "flex h-4 w-4 items-center justify-center rounded-full border border-emerald-300/40 bg-emerald-500/10 text-emerald-200 transition-all duration-300",
+                                isCopied
+                                    ? "scale-100 opacity-100"
+                                    : "scale-75 opacity-0"
+                            )}
+                            aria-live="polite"
+                        >
+                            <Check className="h-3 w-3" />
+                        </span>
+                    </button>
 
                     <div className="mx-auto mt-3 flex items-center justify-center gap-2">
                         <button
-                            onClick={() => setSelectedInstall("brew")}
+                            type="button"
+                            onClick={() => handleSelectInstall("brew")}
                             className={cn(
                                 "rounded-full border px-3 py-1 text-[10px] font-medium transition-all duration-200 ease-out",
                                 selectedInstall === "brew"
@@ -79,7 +151,8 @@ export const LashHero = () => {
                             brew
                         </button>
                         <button
-                            onClick={() => setSelectedInstall("go")}
+                            type="button"
+                            onClick={() => handleSelectInstall("go")}
                             className={cn(
                                 "rounded-full border px-3 py-1 text-[10px] font-medium transition-all duration-200 ease-out",
                                 selectedInstall === "go"
