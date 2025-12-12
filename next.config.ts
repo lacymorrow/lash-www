@@ -145,15 +145,9 @@ const nextConfig: NextConfig = {
 
 	/*
 	 * Lint configuration
+	 * Note: eslint config in next.config.ts is deprecated in Next.js 16+
+	 * ESLint is now configured via eslint.config.js
 	 */
-	eslint: {
-		/*
-	  !! WARNING !!
-	  * This allows production builds to successfully complete even if
-	  * your project has ESLint errors.
-	*/
-		ignoreDuringBuilds: true,
-	},
 	typescript: {
 		/*
 	  !! WARNING !!
@@ -185,9 +179,6 @@ const nextConfig: NextConfig = {
 		// @see: https://nextjs.org/docs/app/api-reference/next-config-js/viewTransition
 		viewTransition: true,
 		webVitalsAttribution: ["CLS", "LCP", "TTFB", "FCP", "FID"],
-
-		// Enhanced client-side router cache
-		clientSegmentCache: true,
 
 		// Optimized prefetching
 		optimisticClientCache: true,
@@ -297,6 +288,7 @@ const nextConfig: NextConfig = {
 	/*
 	 * Turbopack configuration
 	 * @see https://nextjs.org/docs/app/api-reference/next-config-js/turbo
+	 * Note: Turbopack is used in development, webpack is used in production builds
 	 */
 	turbopack: {
 		rules: {
@@ -352,12 +344,58 @@ const nextConfig: NextConfig = {
 			];
 		}
 
-		// Completely ignore ONNX runtime packages
+		// Handle optional dependencies that may not be installed
+		// These are optional peer dependencies from drizzle-kit and other packages
 		config.resolve.alias = {
 			...config.resolve.alias,
 			// "onnxruntime-node": false,
 			// "onnxruntime-common": false,
+			// Optional database drivers that may not be installed
+			"@aws-sdk/client-rds-data": false,
+			"@electric-sql/pglite": false,
+			"@libsql/client": false,
+			"@neondatabase/serverless": false,
+			"@planetscale/database": false,
+			"@vercel/postgres": false,
+			"better-sqlite3": false,
+			"mysql2": false,
+			"mysql2/promise": false,
+			// Test dependencies
+			desm: false,
+			fastbench: false,
+			tap: false,
+			"pino-elasticsearch": false,
 		};
+
+		// Use webpack's NormalModuleReplacementPlugin to handle missing optional dependencies
+		// This helps when webpack is used (production builds without --turbo flag)
+		if (!process.env.NEXT_TURBO) {
+			const webpack = require("webpack");
+			config.plugins = config.plugins || [];
+			const optionalDependencies = [
+				"@aws-sdk/client-rds-data",
+				"@electric-sql/pglite",
+				"@libsql/client",
+				"@neondatabase/serverless",
+				"@planetscale/database",
+				"@vercel/postgres",
+				"better-sqlite3",
+				"mysql2",
+				"desm",
+				"fastbench",
+				"tap",
+				"pino-elasticsearch",
+			];
+
+			optionalDependencies.forEach((dep) => {
+				config.plugins.push(
+					new webpack.NormalModuleReplacementPlugin(
+						new RegExp(`^${dep.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`),
+						require.resolve("./src/lib/webpack-empty-module.js")
+					)
+				);
+			});
+		}
 
 		return config;
 	},
