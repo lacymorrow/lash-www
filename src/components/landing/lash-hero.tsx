@@ -9,7 +9,8 @@ import { cn } from "@/lib/utils";
 import { LashTuiHeaderText } from "@/components/landing/lash-tui-header-text";
 import { GithubVersion } from "@/components/landing/github-version";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
-import { Check } from "lucide-react";
+import { Check, Copy } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
 export const LashHero = () => {
@@ -73,12 +74,15 @@ export const LashHero = () => {
     };
 
     return (
-        <section className={cn(
-            "h-screen",
-            "relative overflow-hidden",
-            "bg-gradient-to-b from-slate-950/20 via-slate-950/50 to-slate-900/30",
-            "py-24 md:py-36"
-        )}>
+        <section
+            className={cn(
+                "h-screen",
+                "relative overflow-hidden",
+                "bg-gradient-to-b from-slate-950/20 via-slate-950/50 to-slate-900/30",
+                "py-24 md:py-36"
+            )}
+            aria-label="Lash hero section"
+        >
             <div className="pointer-events-none absolute inset-0 -z-10 opacity-25">
                 <BackgroundSpacetime />
             </div>
@@ -109,38 +113,78 @@ export const LashHero = () => {
                             </Link>
                         </Button> */}
                         <Button asChild variant="secondary" size="lg" className="h-11 px-6">
-                            <Link href="https://github.com/lacymorrow/lash" target="_blank" rel="noopener noreferrer">
+                            <Link
+                                href="https://github.com/lacymorrow/lash"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="View Lash on GitHub (opens in new tab)"
+                            >
                                 View on GitHub
                             </Link>
                         </Button>
                     </div>
 
-                    <button
-                        type="button"
-                        onClick={handleInstallCommandClick}
-                        className="group mx-auto mt-6 flex max-w-fit items-center gap-2 cursor-copy rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-slate-300 shadow-sm backdrop-blur transition-all duration-300 hover:border-white/20 hover:bg-white/[0.07] hover:shadow-lg"
-                        aria-label="Copy install command"
-                    >
-                        <code className="select-all transition-colors duration-300 group-hover:text-white">
-                            {installCommands[selectedInstall as keyof typeof installCommands]}
-                        </code>
-                        <span
-                            className={cn(
-                                "flex h-4 w-4 items-center justify-center rounded-full border border-emerald-300/40 bg-emerald-500/10 text-emerald-200 transition-all duration-300",
+                    <div className="mx-auto mt-6 flex max-w-fit items-center gap-2">
+                        <button
+                            type="button"
+                            onClick={handleInstallCommandClick}
+                            className="group flex items-center gap-2 cursor-copy rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-slate-300 shadow-sm backdrop-blur transition-all duration-300 hover:border-white/20 hover:bg-white/[0.07] hover:shadow-lg"
+                            aria-label={
                                 isCopied
-                                    ? "scale-100 opacity-100"
-                                    : "scale-75 opacity-0"
-                            )}
-                            aria-live="polite"
+                                    ? `Copied: ${installCommands[selectedInstall as keyof typeof installCommands]}`
+                                    : `Copy install command: ${installCommands[selectedInstall as keyof typeof installCommands]}`
+                            }
                         >
-                            <Check className="h-3 w-3" />
+                            <code className="select-all transition-colors duration-300 group-hover:text-white">
+                                {installCommands[selectedInstall as keyof typeof installCommands]}
+                            </code>
+                            <span
+                                className="flex h-4 w-4 items-center justify-center"
+                                aria-hidden="true"
+                            >
+                                <AnimatePresence mode="wait" initial={false}>
+                                    <motion.div
+                                        key={isCopied ? "check" : "copy"}
+                                        initial={{ opacity: 0, scale: 0.8, y: -2 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                        exit={{ opacity: 0, scale: 0.8, y: 2 }}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 500,
+                                            damping: 30,
+                                            mass: 0.5,
+                                        }}
+                                        className={cn(
+                                            "flex items-center justify-center",
+                                            isCopied ? "text-emerald-200" : "text-slate-200 opacity-80"
+                                        )}
+                                    >
+                                        {isCopied ? (
+                                            <Check className="h-3 w-3" aria-hidden="true" />
+                                        ) : (
+                                            <Copy className="h-3 w-3" aria-hidden="true" />
+                                        )}
+                                    </motion.div>
+                                </AnimatePresence>
+                            </span>
+                        </button>
+                        <span className="sr-only" aria-live="polite" aria-atomic="true">
+                            {isCopied
+                                ? `Copied ${installCommands[selectedInstall as keyof typeof installCommands]} to clipboard`
+                                : ""}
                         </span>
-                    </button>
+                    </div>
 
-                    <div className="mx-auto mt-3 flex items-center justify-center gap-2">
+                    <div
+                        className="mx-auto mt-3 flex items-center justify-center gap-2"
+                        role="group"
+                        aria-label="Installation method"
+                    >
                         <button
                             type="button"
                             onClick={() => handleSelectInstall("brew")}
+                            aria-pressed={selectedInstall === "brew"}
+                            aria-label={`Install via Homebrew: ${installCommands.brew}`}
                             className={cn(
                                 "rounded-full border px-3 py-1 text-[10px] font-medium transition-all duration-200 ease-out",
                                 selectedInstall === "brew"
@@ -153,6 +197,8 @@ export const LashHero = () => {
                         <button
                             type="button"
                             onClick={() => handleSelectInstall("go")}
+                            aria-pressed={selectedInstall === "go"}
+                            aria-label={`Install via Go: ${installCommands.go}`}
                             className={cn(
                                 "rounded-full border px-3 py-1 text-[10px] font-medium transition-all duration-200 ease-out",
                                 selectedInstall === "go"
@@ -164,6 +210,8 @@ export const LashHero = () => {
                         </button>
                         {/* <button
                             onClick={() => setSelectedInstall("npm")}
+                            aria-pressed={selectedInstall === "npm"}
+                            aria-label={`Install via npm: ${installCommands.npm}`}
                             className={cn(
                                 "rounded-full border px-3 py-1 text-[10px] font-medium transition-all duration-200 ease-out",
                                 selectedInstall === "npm"
@@ -177,6 +225,7 @@ export const LashHero = () => {
                             href="https://github.com/lacymorrow/lash/releases"
                             target="_blank"
                             rel="noopener noreferrer"
+                            aria-label="Download Lash from GitHub releases (opens in new tab)"
                             className="scale-100 rounded-full border border-white/5 bg-white/5 px-3 py-1 text-[10px] font-medium text-slate-500 transition-all duration-200 ease-out hover:scale-[1.02] hover:border-white/10 hover:bg-white/[0.07] hover:text-slate-400 hover:shadow-sm active:scale-95"
                         >
                             download
