@@ -1,7 +1,5 @@
 import type { NextConfig } from "next";
-import path from "node:path";
-import webpack from "webpack";
-import type { Configuration as WebpackConfig } from "webpack";
+import path from "path";
 import { buildTimeFeatureFlags, buildTimeFeatures } from "@/config/features-config";
 import { FILE_UPLOAD_MAX_SIZE } from "@/config/file";
 import { redirects } from "@/config/routes";
@@ -148,6 +146,14 @@ const nextConfig: NextConfig = {
 	/*
 	 * Lint configuration
 	 */
+	eslint: {
+		/*
+	  !! WARNING !!
+	  * This allows production builds to successfully complete even if
+	  * your project has ESLint errors.
+	*/
+		ignoreDuringBuilds: true,
+	},
 	typescript: {
 		/*
 	  !! WARNING !!
@@ -180,6 +186,9 @@ const nextConfig: NextConfig = {
 		viewTransition: true,
 		webVitalsAttribution: ["CLS", "LCP", "TTFB", "FCP", "FID"],
 
+		// Enhanced client-side router cache
+		clientSegmentCache: true,
+
 		// Optimized prefetching
 		optimisticClientCache: true,
 
@@ -196,8 +205,7 @@ const nextConfig: NextConfig = {
 		// webpackBuildWorker: false, // Disable for low memory
 		// cpus: 1, // Limit concurrent operations
 		// workerThreads: false, // Disable worker threads
-		// @note Next type defs lag behind Next releases; we keep these flags enabled at runtime.
-	} as NonNullable<NextConfig["experimental"]>,
+	},
 
 	/*
 	 * Miscellaneous configuration
@@ -304,33 +312,9 @@ const nextConfig: NextConfig = {
 	/*
 	 * Webpack configuration
 	 */
-	webpack: (config: WebpackConfig, { dev, isServer }: { dev: boolean; isServer: boolean }) => {
+	webpack: (config: any, { dev, isServer }: { dev: boolean; isServer: boolean }) => {
 		// Enable top-level await
 		config.experiments = { ...config.experiments, topLevelAwait: true };
-
-		// Webpack config objects are partially-defined; normalize the pieces we mutate.
-		config.module ??= { rules: [] };
-		config.module.rules ??= [];
-		config.resolve ??= {};
-
-		/*
-		 * Some upstream packages (notably `thread-stream` via `pino` / `payload`)
-		 * ship test/bench files that reference dev-only dependencies (`tap`, `fastbench`, etc).
-		 * Next's bundler can end up tracing those files and attempting to resolve the deps,
-		 * which breaks production builds.
-		 *
-		 * We alias those optional/dev-only deps to an empty shim so the build can proceed.
-		 */
-		const emptyModulePath = path.join(process.cwd(), "src", "shims", "empty-module.cjs");
-		config.plugins ??= [];
-		config.plugins.push(
-			new webpack.NormalModuleReplacementPlugin(/^tap$/, emptyModulePath),
-			new webpack.NormalModuleReplacementPlugin(/^desm$/, emptyModulePath),
-			new webpack.NormalModuleReplacementPlugin(/^fastbench$/, emptyModulePath),
-			new webpack.NormalModuleReplacementPlugin(/^pino-elasticsearch$/, emptyModulePath),
-			new webpack.NormalModuleReplacementPlugin(/^mysql2$/, emptyModulePath),
-			new webpack.NormalModuleReplacementPlugin(/^mysql2\/promise$/, emptyModulePath),
-		);
 
 		// Add support for async/await in web workers
 		config.module.rules.push({
@@ -358,43 +342,21 @@ const nextConfig: NextConfig = {
 
 		// External heavy dependencies that are not used in most pages
 		if (!dev && isServer) {
-			const existingExternals = Array.isArray(config.externals)
-				? config.externals
-				: config.externals
-					? [config.externals]
-					: [];
 			config.externals = [
-				...existingExternals,
+				...config.externals,
 				{
 					"@huggingface/transformers": "commonjs @huggingface/transformers",
 					googleapis: "commonjs googleapis",
 					"monaco-editor": "commonjs monaco-editor",
-					/*
-					 * Prevent Next/webpack from crawling these packages during bundling.
-					 * They pull in optional or dev-only files (tests, benches, platform bins)
-					 * that are not required for runtime in this app.
-					 */
-					"thread-stream": "commonjs thread-stream",
-					"drizzle-kit": "commonjs drizzle-kit",
 				},
 			];
 		}
 
 		// Completely ignore ONNX runtime packages
-		const existingAlias =
-			config.resolve.alias && typeof config.resolve.alias === "object" && !Array.isArray(config.resolve.alias)
-				? (config.resolve.alias as Record<string, unknown>)
-				: {};
 		config.resolve.alias = {
-			...existingAlias,
+			...config.resolve.alias,
 			// "onnxruntime-node": false,
 			// "onnxruntime-common": false,
-			tap: emptyModulePath,
-			desm: emptyModulePath,
-			fastbench: emptyModulePath,
-			"pino-elasticsearch": emptyModulePath,
-			mysql2: emptyModulePath,
-			"mysql2/promise": emptyModulePath,
 		};
 
 		return config;

@@ -1,10 +1,4 @@
-/*
- * `tw-animate-css` uses package.json `exports` with the non-standard `style` condition.
- * Next.js' CSS resolver doesn't currently honor that, so a bare package import fails.
- *
- * Import the concrete file via a relative filesystem path instead.
- */
-@import "../../node_modules/tw-animate-css/dist/tw-animate.css";
+@import "tw-animate-css";
 
 /* ! Shadcn UI Default Styles - Uncomment to use */
 @import "./theme.css";
