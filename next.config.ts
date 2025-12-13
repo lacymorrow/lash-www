@@ -143,17 +143,6 @@ const nextConfig: NextConfig = {
 	 */
 	productionBrowserSourceMaps: false,
 
-	/*
-	 * Lint configuration
-	 */
-	eslint: {
-		/*
-	  !! WARNING !!
-	  * This allows production builds to successfully complete even if
-	  * your project has ESLint errors.
-	*/
-		ignoreDuringBuilds: true,
-	},
 	typescript: {
 		/*
 	  !! WARNING !!
@@ -185,9 +174,6 @@ const nextConfig: NextConfig = {
 		// @see: https://nextjs.org/docs/app/api-reference/next-config-js/viewTransition
 		viewTransition: true,
 		webVitalsAttribution: ["CLS", "LCP", "TTFB", "FCP", "FID"],
-
-		// Enhanced client-side router cache
-		clientSegmentCache: true,
 
 		// Optimized prefetching
 		optimisticClientCache: true,

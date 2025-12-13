@@ -11,17 +11,27 @@ export const fetchCache = "default-cache";
 
 await initializePaymentProviders();
 
-export default async function Layout({
-	children,
-	...slots
-}: {
+type LayoutSlotValue = React.ReactNode | Promise<React.ReactNode>;
+type LayoutParams = Record<string, string | string[] | undefined>;
+type LayoutParamsOrPromise = LayoutParams | Promise<LayoutParams>;
+type AppLayoutProps = {
 	children: React.ReactNode;
-	[key: string]: React.ReactNode;
-}) {
+	params: LayoutParamsOrPromise;
+} & {
+	[key: string]: LayoutSlotValue | LayoutParamsOrPromise | undefined;
+};
+
+export default async function Layout(props: AppLayoutProps) {
 	// Intercepting routes
+	const { children } = props;
+
+	const slotEntries = Object.entries(props).filter(
+		([key]) => key !== "children" && key !== "params"
+	) as [string, React.ReactNode][];
+
 	const resolvedSlots = (
 		await Promise.all(
-			Object.entries(slots).map(async ([key, slot]) => {
+			slotEntries.map(async ([key, slot]) => {
 				const resolvedSlot = slot instanceof Promise ? await slot : slot;
 				if (
 					!resolvedSlot ||

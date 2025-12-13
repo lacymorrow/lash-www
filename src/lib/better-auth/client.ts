@@ -58,7 +58,14 @@ export const emailAuth = {
 			name,
 		}),
 
-	forgotPassword: (email: string) => authClient.forgetPassword({ email }),
+	/**
+	 * Initiate a password reset email via Better Auth.
+	 */
+	requestPasswordReset: (email: string, redirectTo?: string) =>
+		authClient.requestPasswordReset({
+			email,
+			redirectTo,
+		}),
 
 	resetPassword: (token: string, newPassword: string) =>
 		authClient.resetPassword({ token, newPassword }),

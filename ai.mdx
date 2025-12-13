@@ -227,6 +227,16 @@ _Use this section to track completion of each phase with date and summary_
 
 ---
 
+### Hotfix: Layout build error
+
+- [x] Adjusted `src/app/(app)/layout.tsx` to rely on `LayoutProps` and filter out `params` before resolving intercepting slots so the signature matches Next's expectations and async slot handling stays intact.
+- [x] Kept payment provider initialization and slot rendering behavior unchanged while ensuring no slot attempts to render non-React values.
+
+### Hotfix: Next.js 16 build passes
+
+- [x] Removed unsupported Next config keys (`eslint`, `clientSegmentCache`) and aligned Better Auth config with current type definitions so the runtime config matches Next 16 requirements.
+- [x] Updated `revalidateTag` usage, `trpc` headers, `better-auth` helpers, and Vitest browser config to satisfy stricter TypeScript signatures introduced in the new Next/Vitest releases.
+
 ### Bugfix: NextAuth credential flows
 
 - [x] Fixed logic in `src/server/services/auth-service.ts` for `signInWithCredentials` and `signUpWithCredentials` to properly handle NextAuth `signIn` behavior.

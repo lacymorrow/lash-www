@@ -14,10 +14,5 @@ export default defineConfig({
 		include: ["tests/browser/**/*.test.{ts,tsx}"],
 		watch: false,
 		setupFiles: ["./tests/setup-env.ts", "./tests/setup.ts"],
-		browser: {
-			enabled: true,
-			name: "chromium",
-			provider: "playwright",
-		},
 	},
 });
