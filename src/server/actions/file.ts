@@ -31,7 +31,7 @@ export const uploadFileAction = async (
 		title: fileName,
 		location: url,
 	});
-	revalidateTag("files");
+	revalidateTag("files", "default");
 	return { fileName, fileId: userFile.id };
 };
 
@@ -51,7 +51,7 @@ export async function deleteFileAction({
 		await userService.deleteUserFile(session.user.id, fileId);
 		await deleteFile(fileName);
 		// Remove the file from the user's profile
-		revalidateTag("files");
+		revalidateTag("files", "default");
 
 		logger.info(`File deleted successfully: ${fileId}`);
 	} catch (error) {

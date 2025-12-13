@@ -571,3 +571,11 @@ Goal: Create a single-section landing hero at `/` in `lash-www` that mirrors the
 Notes:
 - Metadata derives from `siteConfig` so updates cascade to OG/Twitter tags.
 - Placeholder buy link left as `lash.lemonsqueezy.com/...` to be finalized.
+
+---
+
+### Task: Ensure Next.js 16 build compatibility
+
+- [x] Align `src/app/(app)/layout.tsx` slots typing with Next.js 16 `LayoutProps`.
+- [x] Update `next.config.ts`, `with-mdx.ts`, and Better Auth client/config to match new Next/BetterAuth APIs and avoid bundling issues.
+- [x] Adjust server actions (`file.ts`, `teams.ts`) to pass the required profile to `revalidateTag` and refresh `vitest.config.browser.ts` to match the new Vitest browser config.

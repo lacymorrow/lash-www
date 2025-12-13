@@ -146,14 +146,6 @@ const nextConfig: NextConfig = {
 	/*
 	 * Lint configuration
 	 */
-	eslint: {
-		/*
-	  !! WARNING !!
-	  * This allows production builds to successfully complete even if
-	  * your project has ESLint errors.
-	*/
-		ignoreDuringBuilds: true,
-	},
 	typescript: {
 		/*
 	  !! WARNING !!
@@ -165,6 +157,22 @@ const nextConfig: NextConfig = {
 
 	// Configure `pageExtensions` to include markdown and MDX files
 	pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+
+	/*
+	 * Turbopack/Next.js server bundling
+	 * Keep these packages external so Turbopack doesn't try to parse binaries/docs files in node_modules.
+	 */
+	serverExternalPackages: [
+		"payload",
+		"pino",
+		"thread-stream",
+		"esbuild",
+		"esbuild-register",
+		"drizzle-kit",
+		"@payloadcms/db-postgres",
+		"@payloadcms/drizzle",
+		"@esbuild/darwin-arm64",
+	],
 
 	/*
 	 * Experimental configuration
@@ -185,9 +193,6 @@ const nextConfig: NextConfig = {
 		// @see: https://nextjs.org/docs/app/api-reference/next-config-js/viewTransition
 		viewTransition: true,
 		webVitalsAttribution: ["CLS", "LCP", "TTFB", "FCP", "FID"],
-
-		// Enhanced client-side router cache
-		clientSegmentCache: true,
 
 		// Optimized prefetching
 		optimisticClientCache: true,
@@ -329,6 +334,11 @@ const nextConfig: NextConfig = {
 		});
 
 		if (isServer) {
+			// Ignore the ThreadStream test helpers completely to avoid bundling optional deps like tap/mysql2
+			config.module.rules.unshift({
+				test: /node_modules[\\/]thread-stream[\\/]test[\\/].*\.(js|mjs|ts)$/,
+				use: require.resolve("null-loader"),
+			});
 			// Ensure docs directory is included in the bundle for dynamic imports
 			config.module.rules.push({
 				test: /\.(md|mdx)$/,
@@ -338,6 +348,20 @@ const nextConfig: NextConfig = {
 				],
 				use: "raw-loader",
 			});
+			// Keep ThreadStream (and its test helpers) external so the bundler never parses its test/bench entry points.
+			const threadStreamExternal = (_context: string, request: string, callback: (error?: Error | null, result?: string | boolean) => void) => {
+				if (request === "thread-stream" || request.includes("thread-stream")) {
+					return callback(null, `commonjs ${request}`);
+				}
+				callback();
+			};
+			const resolvedExternals = Array.isArray(config.externals)
+				? [...config.externals]
+				: config.externals
+					? [config.externals]
+					: [];
+			resolvedExternals.push(threadStreamExternal);
+			config.externals = resolvedExternals;
 		}
 
 		// External heavy dependencies that are not used in most pages
