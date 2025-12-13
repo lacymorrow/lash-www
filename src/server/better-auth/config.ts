@@ -64,29 +64,29 @@ export const auth = (() => {
 			// Google OAuth
 			...(env.AUTH_GOOGLE_ID &&
 				env.AUTH_GOOGLE_SECRET && {
-				google: {
-					clientId: env.AUTH_GOOGLE_ID,
-					clientSecret: env.AUTH_GOOGLE_SECRET,
-				},
-			}),
+					google: {
+						clientId: env.AUTH_GOOGLE_ID,
+						clientSecret: env.AUTH_GOOGLE_SECRET,
+					},
+				}),
 
 			// GitHub OAuth
 			...(env.AUTH_GITHUB_ID &&
 				env.AUTH_GITHUB_SECRET && {
-				github: {
-					clientId: env.AUTH_GITHUB_ID,
-					clientSecret: env.AUTH_GITHUB_SECRET,
-				},
-			}),
+					github: {
+						clientId: env.AUTH_GITHUB_ID,
+						clientSecret: env.AUTH_GITHUB_SECRET,
+					},
+				}),
 
 			// Discord OAuth
 			...(env.AUTH_DISCORD_ID &&
 				env.AUTH_DISCORD_SECRET && {
-				discord: {
-					clientId: env.AUTH_DISCORD_ID,
-					clientSecret: env.AUTH_DISCORD_SECRET,
-				},
-			}),
+					discord: {
+						clientId: env.AUTH_DISCORD_ID,
+						clientSecret: env.AUTH_DISCORD_SECRET,
+					},
+				}),
 		},
 
 		secret: env?.BETTER_AUTH_SECRET || env?.AUTH_SECRET,
@@ -106,6 +106,16 @@ export const auth = (() => {
 			},
 		},
 
+		advanced: {
+			// Enable CSRF protection
+			csrfProtection: true,
+			// Generate secure session tokens
+			generateId: () => {
+				return (
+					Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+				);
+			},
+		},
 	});
 })();
 

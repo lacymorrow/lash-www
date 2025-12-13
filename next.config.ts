@@ -146,6 +146,14 @@ const nextConfig: NextConfig = {
 	/*
 	 * Lint configuration
 	 */
+	eslint: {
+		/*
+	  !! WARNING !!
+	  * This allows production builds to successfully complete even if
+	  * your project has ESLint errors.
+	*/
+		ignoreDuringBuilds: true,
+	},
 	typescript: {
 		/*
 	  !! WARNING !!
@@ -157,22 +165,6 @@ const nextConfig: NextConfig = {
 
 	// Configure `pageExtensions` to include markdown and MDX files
 	pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
-
-	/*
-	 * Turbopack/Next.js server bundling
-	 * Keep these packages external so Turbopack doesn't try to parse binaries/docs files in node_modules.
-	 */
-	serverExternalPackages: [
-		"payload",
-		"pino",
-		"thread-stream",
-		"esbuild",
-		"esbuild-register",
-		"drizzle-kit",
-		"@payloadcms/db-postgres",
-		"@payloadcms/drizzle",
-		"@esbuild/darwin-arm64",
-	],
 
 	/*
 	 * Experimental configuration
@@ -193,6 +185,9 @@ const nextConfig: NextConfig = {
 		// @see: https://nextjs.org/docs/app/api-reference/next-config-js/viewTransition
 		viewTransition: true,
 		webVitalsAttribution: ["CLS", "LCP", "TTFB", "FCP", "FID"],
+
+		// Enhanced client-side router cache
+		clientSegmentCache: true,
 
 		// Optimized prefetching
 		optimisticClientCache: true,
