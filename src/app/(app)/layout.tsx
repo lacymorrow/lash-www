@@ -11,25 +11,36 @@ export const fetchCache = "default-cache";
 
 await initializePaymentProviders();
 
+function isPromiseLike(value: unknown): value is Promise<unknown> {
+	return (
+		typeof value === "object" &&
+		value !== null &&
+		"then" in value &&
+		typeof (value as { then?: unknown }).then === "function"
+	);
+}
+
 export default async function Layout({
 	children,
+	params: _params,
 	...slots
 }: {
 	children: React.ReactNode;
-	[key: string]: React.ReactNode;
+	params: Promise<Record<string, never>>;
+	[key: string]: unknown;
 }) {
 	// Intercepting routes
 	const resolvedSlots = (
 		await Promise.all(
 			Object.entries(slots).map(async ([key, slot]) => {
-				const resolvedSlot = slot instanceof Promise ? await slot : slot;
+				const resolvedSlot = isPromiseLike(slot) ? await slot : slot;
 				if (
 					!resolvedSlot ||
 					(typeof resolvedSlot === "object" && Object.keys(resolvedSlot).length === 0)
 				) {
 					return null;
 				}
-				return [key, resolvedSlot] as [string, React.ReactNode];
+				return [key, resolvedSlot as React.ReactNode] as [string, React.ReactNode];
 			})
 		)
 	).filter((item): item is [string, React.ReactNode] => item !== null);

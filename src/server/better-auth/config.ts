@@ -105,17 +105,6 @@ export const auth = (() => {
 				return { user, account };
 			},
 		},
-
-		advanced: {
-			// Enable CSRF protection
-			csrfProtection: true,
-			// Generate secure session tokens
-			generateId: () => {
-				return (
-					Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-				);
-			},
-		},
 	});
 })();
 

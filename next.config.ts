@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
-import path from "path";
+import path from "node:path";
+import webpack from "webpack";
+import type { Configuration as WebpackConfig } from "webpack";
 import { buildTimeFeatureFlags, buildTimeFeatures } from "@/config/features-config";
 import { FILE_UPLOAD_MAX_SIZE } from "@/config/file";
 import { redirects } from "@/config/routes";
@@ -145,8 +147,6 @@ const nextConfig: NextConfig = {
 
 	/*
 	 * Lint configuration
-	 * Note: eslint config in next.config.ts is deprecated in Next.js 16+
-	 * ESLint is now configured via eslint.config.js
 	 */
 	typescript: {
 		/*
@@ -196,7 +196,8 @@ const nextConfig: NextConfig = {
 		// webpackBuildWorker: false, // Disable for low memory
 		// cpus: 1, // Limit concurrent operations
 		// workerThreads: false, // Disable worker threads
-	},
+		// @note Next type defs lag behind Next releases; we keep these flags enabled at runtime.
+	} as NonNullable<NextConfig["experimental"]>,
 
 	/*
 	 * Miscellaneous configuration
@@ -288,7 +289,6 @@ const nextConfig: NextConfig = {
 	/*
 	 * Turbopack configuration
 	 * @see https://nextjs.org/docs/app/api-reference/next-config-js/turbo
-	 * Note: Turbopack is used in development, webpack is used in production builds
 	 */
 	turbopack: {
 		rules: {
@@ -304,9 +304,33 @@ const nextConfig: NextConfig = {
 	/*
 	 * Webpack configuration
 	 */
-	webpack: (config: any, { dev, isServer }: { dev: boolean; isServer: boolean }) => {
+	webpack: (config: WebpackConfig, { dev, isServer }: { dev: boolean; isServer: boolean }) => {
 		// Enable top-level await
 		config.experiments = { ...config.experiments, topLevelAwait: true };
+
+		// Webpack config objects are partially-defined; normalize the pieces we mutate.
+		config.module ??= { rules: [] };
+		config.module.rules ??= [];
+		config.resolve ??= {};
+
+		/*
+		 * Some upstream packages (notably `thread-stream` via `pino` / `payload`)
+		 * ship test/bench files that reference dev-only dependencies (`tap`, `fastbench`, etc).
+		 * Next's bundler can end up tracing those files and attempting to resolve the deps,
+		 * which breaks production builds.
+		 *
+		 * We alias those optional/dev-only deps to an empty shim so the build can proceed.
+		 */
+		const emptyModulePath = path.join(process.cwd(), "src", "shims", "empty-module.cjs");
+		config.plugins ??= [];
+		config.plugins.push(
+			new webpack.NormalModuleReplacementPlugin(/^tap$/, emptyModulePath),
+			new webpack.NormalModuleReplacementPlugin(/^desm$/, emptyModulePath),
+			new webpack.NormalModuleReplacementPlugin(/^fastbench$/, emptyModulePath),
+			new webpack.NormalModuleReplacementPlugin(/^pino-elasticsearch$/, emptyModulePath),
+			new webpack.NormalModuleReplacementPlugin(/^mysql2$/, emptyModulePath),
+			new webpack.NormalModuleReplacementPlugin(/^mysql2\/promise$/, emptyModulePath),
+		);
 
 		// Add support for async/await in web workers
 		config.module.rules.push({
@@ -334,68 +358,44 @@ const nextConfig: NextConfig = {
 
 		// External heavy dependencies that are not used in most pages
 		if (!dev && isServer) {
+			const existingExternals = Array.isArray(config.externals)
+				? config.externals
+				: config.externals
+					? [config.externals]
+					: [];
 			config.externals = [
-				...config.externals,
+				...existingExternals,
 				{
 					"@huggingface/transformers": "commonjs @huggingface/transformers",
 					googleapis: "commonjs googleapis",
 					"monaco-editor": "commonjs monaco-editor",
+					/*
+					 * Prevent Next/webpack from crawling these packages during bundling.
+					 * They pull in optional or dev-only files (tests, benches, platform bins)
+					 * that are not required for runtime in this app.
+					 */
+					"thread-stream": "commonjs thread-stream",
+					"drizzle-kit": "commonjs drizzle-kit",
 				},
 			];
 		}
 
-		// Handle optional dependencies that may not be installed
-		// These are optional peer dependencies from drizzle-kit and other packages
+		// Completely ignore ONNX runtime packages
+		const existingAlias =
+			config.resolve.alias && typeof config.resolve.alias === "object" && !Array.isArray(config.resolve.alias)
+				? (config.resolve.alias as Record<string, unknown>)
+				: {};
 		config.resolve.alias = {
-			...config.resolve.alias,
+			...existingAlias,
 			// "onnxruntime-node": false,
 			// "onnxruntime-common": false,
-			// Optional database drivers that may not be installed
-			"@aws-sdk/client-rds-data": false,
-			"@electric-sql/pglite": false,
-			"@libsql/client": false,
-			"@neondatabase/serverless": false,
-			"@planetscale/database": false,
-			"@vercel/postgres": false,
-			"better-sqlite3": false,
-			"mysql2": false,
-			"mysql2/promise": false,
-			// Test dependencies
-			desm: false,
-			fastbench: false,
-			tap: false,
-			"pino-elasticsearch": false,
+			tap: emptyModulePath,
+			desm: emptyModulePath,
+			fastbench: emptyModulePath,
+			"pino-elasticsearch": emptyModulePath,
+			mysql2: emptyModulePath,
+			"mysql2/promise": emptyModulePath,
 		};
-
-		// Use webpack's NormalModuleReplacementPlugin to handle missing optional dependencies
-		// This helps when webpack is used (production builds without --turbo flag)
-		if (!process.env.NEXT_TURBO) {
-			const webpack = require("webpack");
-			config.plugins = config.plugins || [];
-			const optionalDependencies = [
-				"@aws-sdk/client-rds-data",
-				"@electric-sql/pglite",
-				"@libsql/client",
-				"@neondatabase/serverless",
-				"@planetscale/database",
-				"@vercel/postgres",
-				"better-sqlite3",
-				"mysql2",
-				"desm",
-				"fastbench",
-				"tap",
-				"pino-elasticsearch",
-			];
-
-			optionalDependencies.forEach((dep) => {
-				config.plugins.push(
-					new webpack.NormalModuleReplacementPlugin(
-						new RegExp(`^${dep.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`),
-						require.resolve("./src/lib/webpack-empty-module.js")
-					)
-				);
-			});
-		}
 
 		return config;
 	},
