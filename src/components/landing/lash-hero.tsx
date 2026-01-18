@@ -19,7 +19,6 @@ export const LashHero = () => {
 
     const installCommands = {
         brew: "brew install lacymorrow/tap/lash",
-        go: "go install github.com/lacymorrow/lash@latest",
         npm: "npm install -g lash-cli"
     };
 
@@ -196,17 +195,17 @@ export const LashHero = () => {
                         </button>
                         <button
                             type="button"
-                            onClick={() => handleSelectInstall("go")}
-                            aria-pressed={selectedInstall === "go"}
-                            aria-label={`Install via Go: ${installCommands.go}`}
+                            onClick={() => handleSelectInstall("npm")}
+                            aria-pressed={selectedInstall === "npm"}
+                            aria-label={`Install via npm: ${installCommands.npm}`}
                             className={cn(
                                 "rounded-full border px-3 py-1 text-[10px] font-medium transition-all duration-200 ease-out",
-                                selectedInstall === "go"
+                                selectedInstall === "npm"
                                     ? "scale-105 border-white/20 bg-white/10 text-white shadow-md"
                                     : "scale-100 border-white/5 bg-white/5 text-slate-400 hover:scale-[1.02] hover:border-white/10 hover:bg-white/[0.07] hover:text-slate-300 hover:shadow-sm active:scale-95"
                             )}
                         >
-                            go
+                            npm
                         </button>
                         {/* <button
                             onClick={() => setSelectedInstall("npm")}
