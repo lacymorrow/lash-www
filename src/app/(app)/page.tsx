@@ -26,12 +26,28 @@ export const metadata: Metadata = {
         siteName: siteConfig.title,
         locale: "en_US",
         type: "website",
+        images: [
+            {
+                url: `${siteConfig.url}/opengraph-image`,
+                width: 1200,
+                height: 630,
+                alt: siteConfig.description,
+            },
+        ],
     },
     twitter: {
         card: "summary_large_image",
         title: `${siteConfig.title} — ${siteConfig.tagline}`,
         description: siteConfig.description,
         creator: siteConfig.creator.twitter,
+        images: [
+            {
+                url: `${siteConfig.url}/twitter-image`,
+                width: 1200,
+                height: 630,
+                alt: siteConfig.description,
+            },
+        ],
     },
     alternates: {
         canonical: siteConfig.url,
