@@ -172,11 +172,11 @@ export const siteConfig: SiteConfig = {
 
 	name: "Lash",
 	title: "Lash",
-	tagline: "The AI shell for your terminal.",
+	tagline: "The AI-Powered Shell for Developers | Code Smarter",
 	url: "https://lash.lacy.sh",
 	ogImage: "https://lash.lacy.sh/app/og-image.png",
 	description:
-		"A beautiful AI terminal for your code. Shell first, AI second.",
+		"A beautiful AI terminal that blends shell commands with natural language. Code smarter with intelligent assistance. Available for macOS, Linux, and Windows.",
 
 	branding: {
 		projectName: "Lash",
