@@ -28,7 +28,7 @@ export const metadata: Metadata = {
         type: "website",
         images: [
             {
-                url: siteConfig.ogImage,
+                url: `${siteConfig.url}/opengraph-image`,
                 width: 1200,
                 height: 630,
                 alt: siteConfig.description,
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
         creator: siteConfig.creator.twitter,
         images: [
             {
-                url: siteConfig.ogImage,
+                url: `${siteConfig.url}/twitter-image`,
                 width: 1200,
                 height: 630,
                 alt: siteConfig.description,
