@@ -28,12 +28,12 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
 	const defaultMetadata = constructMetadata({
-		title: "Documentation - Build Better Apps Faster | Shipkit",
+		title: "Documentation | Lash - The AI Shell for your terminal",
 		description:
-			"Master app development with Shipkit's comprehensive documentation. Step-by-step guides, API references, and best practices for building production-ready applications.",
+			"Learn how to use Lash, the AI shell for your terminal. Installation guides, configuration options, and usage examples for natural language shell commands.",
 		openGraph: {
 			type: "article",
-			siteName: "Shipkit Documentation",
+			siteName: "Lash Documentation",
 			locale: "en_US",
 		},
 	});
@@ -46,13 +46,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 		}
 
 		return constructMetadata({
-			title: `${doc.title} - Shipkit Documentation`,
+			title: `${doc.title} | Lash Documentation`,
 			description:
 				doc.description ||
-				"Learn how to implement Shipkit features and best practices in your app development workflow. Detailed guides and examples included.",
+				"Learn how to use Lash features for AI-powered terminal commands. Detailed guides and examples for shell-first AI coding.",
 			openGraph: {
 				type: "article",
-				siteName: "Shipkit Documentation",
+				siteName: "Lash Documentation",
 				title: doc.title,
 				description: doc.description,
 				locale: "en_US",

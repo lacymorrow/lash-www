@@ -254,13 +254,21 @@ export const siteConfig: SiteConfig = {
 
 	metadata: {
 		keywords: [
-			"Next.js",
-			"React",
-			"Tailwind CSS",
-			"Server Components",
 			"Lash",
-			"Shadcn",
-			"UI Components",
+			"AI shell",
+			"AI terminal",
+			"command line AI",
+			"CLI tool",
+			"terminal assistant",
+			"coding assistant",
+			"AI coding agent",
+			"shell AI",
+			"natural language terminal",
+			"developer tools",
+			"AI developer tools",
+			"terminal emulator",
+			"AI command line",
+			"programming assistant",
 		],
 		themeColor: {
 			light: "white",
