@@ -200,7 +200,7 @@ export default async function Image() {
 					}}
 				>
 					<span style={{ color: "#a855f7" }}>→</span>
-					<span>lash.sh</span>
+					<span>lash.lacy.sh</span>
 				</div>
 			</div>
 		),

@@ -173,8 +173,8 @@ export const siteConfig: SiteConfig = {
 	name: "Lash",
 	title: "Lash",
 	tagline: "The AI shell for your terminal.",
-	url: "https://lash.sh",
-	ogImage: "https://lash.sh/app/og-image.png",
+	url: "https://lash.lacy.sh",
+	ogImage: "https://lash.lacy.sh/app/og-image.png",
 	description:
 		"A beautiful AI terminal for your code. Shell first, AI second.",
 
@@ -187,7 +187,7 @@ export const siteConfig: SiteConfig = {
 			brains: "Brains",
 			main: "Lash",
 		},
-		domain: "lash.sh",
+		domain: "lash.lacy.sh",
 		protocol: "web+lash",
 		githubOrg: "lacymorrow",
 		githubRepo: "lash",
@@ -215,19 +215,19 @@ export const siteConfig: SiteConfig = {
 	},
 
 	email: {
-		support: "support@lash.sh",
-		team: "team@lash.sh",
-		noreply: "noreply@lash.sh",
-		domain: "lash.sh",
-		legal: "legal@lash.sh",
-		privacy: "privacy@lash.sh",
+		support: "support@lacy.sh",
+		team: "team@lacy.sh",
+		noreply: "noreply@lacy.sh",
+		domain: "lacy.sh",
+		legal: "legal@lacy.sh",
+		privacy: "privacy@lacy.sh",
 		// Placeholder format function - assigned below
 		format: (type) => "",
 	},
 
 	creator: {
 		name: "lacymorrow",
-		email: "lacy@lash.sh",
+		email: "lacy@lacy.sh",
 		url: "https://lacymorrow.com",
 		twitter: "@lacybuilds",
 		twitter_handle: "lacybuilds",
