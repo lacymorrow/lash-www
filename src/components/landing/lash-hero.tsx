@@ -232,6 +232,11 @@ export const LashHero = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Footer */}
+            <footer className="absolute bottom-0 left-0 right-0 py-6 text-center">
+                <p className="text-sm text-slate-400">hey Eddie how are you?</p>
+            </footer>
         </section>
     );
 };
