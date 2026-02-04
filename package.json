@@ -1,6 +1,14 @@
 {
-  "name": "ship-kit",
+  "name": "lash-www",
   "version": "0.2.0",
+  "homepage": "https://lash.lacy.sh",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lacymorrow/lash-www"
+  },
+  "shipkit": {
+    "bones": "0.2.0"
+  },
   "private": true,
   "type": "module",
   "scripts": {
