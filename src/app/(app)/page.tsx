@@ -1,14 +1,5 @@
-import { Suspense } from "react";
-import { LashHero } from "@/components/landing/lash-hero";
+import { LashLanding } from "@/components/landing/lash-landing";
 
 export default function Home() {
-    return (
-        <main className="relative isolate">
-            <Suspense>
-                <LashHero />
-            </Suspense>
-        </main>
-    );
+  return <LashLanding />;
 }
-
-
