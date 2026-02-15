@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { SignIn } from "@/app/(app)/(authentication)/sign-in/_components/sign-in";
+import { SignUp } from "@/app/(app)/(authentication)/sign-up/_components/sign-up";
 import { Modal } from "@/components/primitives/modal";
 import { routes } from "@/config/routes";
 
@@ -24,15 +24,15 @@ export default function Page() {
 		return null;
 	}
 
-	// Only render the modal if we're actually on the sign-in route
+	// Only render the modal if we're actually on the sign-up route
 	// This prevents the modal from persisting when navigating to other routes
-	if (pathname !== routes.auth.signIn) {
+	if (pathname !== routes.auth.signUp) {
 		return null;
 	}
 
 	return (
 		<Modal routeBack open>
-			<SignIn />
+			<SignUp />
 		</Modal>
 	);
 }
