@@ -128,10 +128,10 @@ export const DashboardVercelDeploy = ({
 				<DialogHeader>
 					<DialogTitle className="flex items-center gap-2">
 						<VercelIcon className="h-5 w-5" />
-						Deploy Shipkit to Vercel
+						Deploy Lash to Vercel
 					</DialogTitle>
 					<DialogDescription>
-						Create your own instance of Shipkit on GitHub and deploy it to Vercel instantly.
+						Create your own instance of Lash on GitHub and deploy it to Vercel instantly.
 					</DialogDescription>
 				</DialogHeader>
 
@@ -140,7 +140,7 @@ export const DashboardVercelDeploy = ({
 						<Label htmlFor="projectName">Project Name</Label>
 						<Input
 							id="projectName"
-							placeholder="my-shipkit-app"
+							placeholder="my-lash-app"
 							value={projectName}
 							onChange={(e) => setProjectName(e.target.value)}
 							disabled={isDeploying}

@@ -165,7 +165,7 @@
     "motion": "^12.23.26",
     "next": "16.1.0",
     "next-auth": "5.0.0-beta.29",
-    "next-mdx-remote": "^5.0.0",
+    "next-mdx-remote": "^6.0.0",
     "next-pwa": "^5.6.0",
     "next-themes": "0.4.6",
     "next-view-transitions": "0.3.5",
@@ -269,9 +269,6 @@
     "vitest-browser-react": "^2.0.2",
     "webdriverio": "9.21.0",
     "worker-loader": "^3.0.8"
-  },
-  "shipkit": {
-    "bones": "0.2.0"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

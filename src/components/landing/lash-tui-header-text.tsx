@@ -10,7 +10,7 @@ interface Props {
  * block-drawing characters. This more closely mirrors the terminal output
  * when rendered with consistent font metrics.
  */
-export const LashTuiHeaderText = ({ className, brandText = "Lacy™ Shell" }: Props) => {
+export const LashTuiHeaderText = ({ className, brandText = "the AI coding agent" }: Props) => {
     // 3-row stylized L A S H using block glyphs
     const row1 = "█   ▄▀▀▀▄ ▄▀▀▀▀▀ █   █";
     const row2 = "█   █▀▀▀█ ▀▀▀▀▀█ █▀▀▀█";

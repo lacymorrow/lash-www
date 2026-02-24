@@ -1,170 +1,105 @@
 ---
-title: "Getting Real with Shipkit: A Developer's Journey"
-publishedAt: 2024-12-27
-description: "An honest look at how Shipkit helps small teams ship faster - warts and all"
-authorIds: ["lacy-morrow", "shipkit-team"]
+title: "Getting Started with Lash: Your AI Coding Agent"
+publishedAt: 2025-06-01
+description: "A quick guide to installing and using Lash, the open source AI coding agent for your terminal"
+authorIds: ["lacy-morrow"]
 categories: ["Guides", "Development"]
 badge: "1.01"
-image: "https://shipkit.io/app/og-image.png"
+image: "https://lash.lacy.sh/app/og-image.png"
 authors:
   - name: "Lacy Morrow"
     avatar: "https://avatars.githubusercontent.com/u/1311301?v=4"
-  - name: "Shipkit Team"
-    avatar: "https://avatars.githubusercontent.com/u/191630682?v=4"
 ---
 
-# The Real Story Behind Shipkit
+# Getting Started with Lash
 
-After 18 months of nights and weekends, our small team of developers built Shipkit to solve our own frustrations. Here's the unvarnished truth about what it does well and where we're still growing.
+Lash is an open source AI coding agent built for the terminal. It supports 15+ AI providers, MCP tools, and a beautiful TUI — all from your command line.
 
-## Getting Started Overview
+## Install
 
-Shipkit is designed to get you from zero to production as quickly as possible. Whether you're a solo developer or part of a team, the goal is the same: ship faster, ship better.
-
-![Shipkit Dashboard](https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=300&fit=crop&crop=center)
-
-## Where Shipkit Shines
-
-### Immediate Deployment
-
-Start now, immediately, and add features as you need:
-
-- Deploy immediately, with no setup required. No environment variables, no database, no configuration or code changes.
-- Once you are ready, you can add these features as needed.
-
-### Modern Technology Stack
-
-Shipkit is built with the latest tech:
-- **Next.js 15 App Router** - battle-tested with 10k+ pageviews/month
-- **Authentication with AuthJS v5** - Supports 92(!) authentication providers
-- **Content Management** (Payload & Builder) - Manage your content without code
-- **Email Infrastructure** (Resend) - handling 500+ monthly transactional emails with pre-built templates
-- **AI-Powered Component generation** - Generate components with AI
-- **MDX Documentation + Blogging** - Write documentation in Markdown
-- **Checkout and Billing** - Built-in checkout and billing with Lemon Squeezy
-- **Role-Based Access Control** - Full user management with roles
-
-![Technology Stack](https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=600&h=300&fit=crop&crop=center)
-
-### Developer Experience
-
-#### Code Quality
-- TypeScript-first development
-- Comprehensive ESLint and Prettier configuration
-- Pre-commit hooks for code quality
-
-#### Testing & Deployment
-- Automated testing pipelines
-- One-click Vercel deployment
-- Environment management
-
-## Where We're Still Growing
-
-### Performance Optimization
-
-While Shipkit is fast out of the box, we're continuously working on:
-
-#### Bundle Size
-- Tree-shaking improvements
-- Dynamic imports optimization
-- Asset optimization
-
-#### Runtime Performance
-- Server-side rendering enhancements
-- Client-side hydration optimization
-- Database query optimization
-
-### Feature Completeness
-
-#### Upcoming Features
-- Advanced analytics dashboard
-- Multi-tenant architecture
-- Advanced AI integrations
-
-## Architecture Deep Dive
-
-### Frontend Architecture
-
-The frontend is built with modern React patterns and Next.js best practices.
-
-![Component Architecture](https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=300&fit=crop&crop=center)
-
-#### Component Structure
-- Atomic design principles
-- Reusable component library
-- Consistent design system
-
-### Backend Services
-
-#### Authentication Flow
-- NextAuth.js integration
-- Multiple provider support
-- Session management
-
-#### Data Management
-- Type-safe database queries
-- Migration management
-- Backup strategies
-
-## Conclusion
-
-Shipkit represents our commitment to developer productivity. While we're proud of what we've built, we're even more excited about what's coming next.
-
-### Features Under Active Development:
-- Mobile responsiveness (currently at 85% Lighthouse score)
-- Documentation (contributions welcome!)
-- Analytics uses PostHog, Vercel Analytics, and Google Analytics
-- Comprehensive internationalization and localization support
-
-## Hard-Earned Lessons
-
-### 3 Things We Wish We Knew Sooner:
-1. Start with TypeScript strict mode (our migration took 3 painful weeks!)
-2. Use Drizzle ORM instead of raw SQL queries for optimization and type safety
-3. Implement error tracking early (we're building our own logging platform, Ship Log)
-
-## Your First Hour with Shipkit
-
-### Three ways to get started with Shipkit:
-
-1. Deploy the site directly to Vercel without ever touching a line of code. This will create a copy of Shipkit and a brand new GitHub repository with all of the code.
-
-2. If you are a developer, you can clone the repository yourself and deploy it anywhere you like. We also include a Docker setup for standardizing deployments across hardware.
+Pick your preferred method:
 
 ```bash
-git clone https://github.com/lacymorrow/shipkit.git
-pnpm install
+# Homebrew (recommended)
+brew install lacymorrow/tap/lash
+
+# npm
+npm install -g lashcode
+
+# curl
+curl -fsSL https://lash.lacy.sh/install | bash
 ```
 
-3. Download the Shipkit source code and deploy it anywhere you like.
+## First Run
 
-### Explore pre-built flows:
+After installation, run `lash` to start an interactive session:
 
-- Authentication: `app/auth/`
-- Content Management: `app/admin/`
-- Billing: `app/billing/`
-
-## Join Our Journey
-
-We're building in public and would love your input:
-- Weekly progress updates
-- Open roadmap
-- Developer Q&A sessions
-
-[Follow our GitHub](https://github.com/lacymorrow/shipkit) | [Join Discord](https://discord.gg/XxKrKNvEje) | [Read our docs](https://shipkit.io/docs)
-
-## Real-World Implementation
-
-Here's our actual auth configuration (src/server/auth.config.ts):
-
-```typescript
-export const authOptions: NextAuthConfig = {
-	debug: process.env.NODE_ENV !== "production",
-	providers,
-	pages: {
-		error: routes.auth.error,
-		signIn: routes.auth.signIn,
-		signOut: routes.auth.signOut,
-	},
-}
+```bash
+lash
 ```
+
+You'll see the TUI launch with a conversation interface. Type a question or task and Lash will use your configured AI provider to help.
+
+## Configure Your AI Provider
+
+Lash works with multiple AI providers. Set your preferred provider's API key:
+
+```bash
+# Anthropic (Claude)
+export ANTHROPIC_API_KEY=sk-ant-...
+
+# OpenAI (GPT)
+export OPENAI_API_KEY=sk-...
+
+# Google (Gemini)
+export GOOGLE_API_KEY=...
+```
+
+Lash auto-detects which keys are available and uses the first one it finds.
+
+## Non-Interactive Mode
+
+Run a single prompt without entering the TUI:
+
+```bash
+lash run -c "explain what this function does"
+```
+
+This is especially useful when paired with [Lacy Shell](https://lacy.sh), which can automatically route natural language input to Lash.
+
+## What Lash Can Do
+
+- **Code generation** — Ask it to write functions, components, or entire files
+- **Code review** — Paste code and ask for feedback
+- **Debugging** — Describe a bug and get suggestions
+- **Refactoring** — Ask it to improve existing code
+- **Documentation** — Generate docs from code
+- **Shell commands** — Ask for the right command when you can't remember syntax
+
+## MCP Tools
+
+Lash supports the Model Context Protocol (MCP), which lets the AI interact with your file system, run commands, and connect to external tools. This means the AI can:
+
+- Read and write files in your project
+- Run shell commands
+- Query databases
+- Interact with APIs
+
+## Pair with Lacy Shell
+
+For the best experience, install [Lacy Shell](https://lacy.sh) alongside Lash. Lacy Shell is a ZSH/Bash plugin that detects whether you're typing a command or a question:
+
+- `git status` → runs in your shell
+- `why is the build failing` → routes to Lash
+
+No mode switching, no prefixes. Just type naturally.
+
+```bash
+curl -fsSL https://lacy.sh/install | bash
+```
+
+## Learn More
+
+- [GitHub Repository](https://github.com/lacymorrow/lash)
+- [Lacy Shell](https://lacy.sh) — Natural language shell routing
+- [Follow @lacybuilds](https://twitter.com/lacybuilds) for updates

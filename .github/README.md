@@ -1,6 +1,6 @@
 # GitHub Workflows
 
-This directory contains GitHub Actions workflows for automating various tasks in the Shipkit repository.
+This directory contains GitHub Actions workflows for automating various tasks in the Lash repository.
 
 ## Run Codex Workflow
 

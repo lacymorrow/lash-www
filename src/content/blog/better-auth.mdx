@@ -1,37 +1,53 @@
 ---
-title: "Shipkit.io Now Supports `better-auth` 🎉"
+title: "Using Lash with Multiple AI Providers"
 publishedAt: 2025-06-07
-description: "We're excited to announce that Shipkit.io now supports `better-auth` — a modern authentication library focused on security, simplicity, and seamless integration."
+description: "How to configure and switch between AI providers in Lash — Claude, GPT, Gemini, Bedrock, and more."
 author: "Lacy Morrow"
-categories: ["Guides", "Development", "Authentication"]
+categories: ["Guides", "Development"]
 badge: "1.02"
-image: "https://better-auth.com/og.png"
+image: "https://lash.lacy.sh/app/og-image.png"
 authors:
   - name: "Lacy Morrow"
     avatar: "https://avatars.githubusercontent.com/u/1311301?v=4"
 ---
 
-# Shipkit.io Now Supports `better-auth` 🎉
+# Using Lash with Multiple AI Providers
 
-We're excited to announce that **Shipkit.io** now supports [`better-auth`](https://www.better-auth.com) — a modern authentication library focused on security, simplicity, and seamless integration.
+One of Lash's key strengths is provider flexibility. Unlike tools locked to a single AI vendor, Lash supports 15+ providers out of the box. Here's how to configure and switch between them.
 
-This update is in addition to our existing support for `auth.js`, giving developers the freedom to choose the solution that best fits their stack and workflow.
+## Supported Providers
 
-![Authentication Security](https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?w=600&h=300&fit=crop&crop=center)
+- **Anthropic** — Claude 3.5 Sonnet, Claude 3 Opus, and more
+- **OpenAI** — GPT-4o, GPT-4, and more
+- **Google** — Gemini Pro, Gemini Ultra
+- **AWS Bedrock** — Access multiple models through AWS
+- **And 10+ more** — See the full list in the docs
 
-## Why `better-auth`?
+## Configuration
 
-- 🔐 Built-in modern security features
-- ⚡️ Fast and lightweight
-- 🔧 Developer-friendly API
-- 🧩 Easy to integrate with existing Shipkit projects
+Set your API key for whichever provider you want to use:
 
-![Better Auth Features](https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=600&h=300&fit=crop&crop=center)
+```bash
+# Pick one (or set multiple for fallback)
+export ANTHROPIC_API_KEY=sk-ant-...
+export OPENAI_API_KEY=sk-...
+export GOOGLE_API_KEY=...
+```
 
-## Getting Started
+Lash auto-detects available providers and uses the first one it finds. You can also explicitly set your preferred provider in the config.
 
-To use `better-auth` with Shipkit, check out our updated [docs](https://shipkit.io/docs/authentication) and follow the integration guide.
+## Switching Providers
+
+Want to compare responses from different models? Set multiple API keys and switch between them during a session. This is useful for:
+
+- Testing how different models handle your codebase
+- Using specialized models for specific tasks
+- Having a fallback when one provider is down
+
+## No Vendor Lock-In
+
+Your conversations, tools, and workflow stay the same regardless of which AI provider you use. Switch providers without changing how you work.
 
 ---
 
-Whether you're starting a new project or improving an existing one, you now have more flexibility than ever with authentication on Shipkit. Happy shipping 🚀
+Lash is free, open source, and MIT licensed. [Get started](https://github.com/lacymorrow/lash) today.

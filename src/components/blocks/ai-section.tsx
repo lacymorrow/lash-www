@@ -26,7 +26,7 @@ export function AISection() {
 	};
 
 	const streamResponse = () => {
-		const fullResponse = ` // Generated @ shipkit.io \n
+		const fullResponse = ` // Generated @ lash.lacy.sh \n
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'\n

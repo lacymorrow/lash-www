@@ -10,7 +10,7 @@ interface VercelDeployButtonProps {
 }
 
 export const VercelDeployButton: FC<VercelDeployButtonProps> = ({
-	href = routes.external.vercelDeployShipkit,
+	href = routes.external.vercelDeployLash,
 	className,
 }) => {
 	return (

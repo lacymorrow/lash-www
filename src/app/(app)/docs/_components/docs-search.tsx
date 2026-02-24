@@ -29,7 +29,7 @@ const POPULAR_DOCS = [
 	{
 		title: "Introduction",
 		url: "/docs/introduction",
-		description: "Get started with Shipkit",
+		description: "Get started with Lash",
 	},
 	{
 		title: "Quickstart Guide",

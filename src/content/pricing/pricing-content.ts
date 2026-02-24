@@ -18,100 +18,40 @@ export interface PricingPlan {
 }
 
 export const singlePlan: PricingPlan = {
-	title: "Shipkit",
-	description: "Production-ready, for teams that need advanced features",
-	price: { oneTime: 49 },
-	href: routes.external.buy,
+	title: "Lash",
+	description: "Free and open source AI coding agent for your terminal",
+	price: { oneTime: 0 },
+	href: "https://github.com/lacymorrow/lash",
 	features: [
-		"Next.js 15 App Router",
-		"Authentication (NextAuth v5)",
-		"Cursor IDE Integration (Rules, Prompts, etc.)",
-		"Database Integration (Postgres)",
-		"Email Service (Resend)",
-		"Payment Processing (Lemonsqueezy)",
-		"CMS Integration (PayloadCMS)",
-		"Priority Support",
-		"AI Workflows + v0.dev Integration",
-		"100+ Components",
+		"Multi-provider AI support (Claude, GPT, Gemini, and more)",
+		"MCP tool integration",
+		"Beautiful terminal UI",
+		"Session management",
+		"Plugin system",
+		"Lacy Shell integration",
+		"Community support",
+		"MIT licensed",
 	],
+	noCardRequired: true,
 };
 
 export const oneTimePlans: PricingPlan[] = [
 	{
-		title: "Shipkit Bones",
-		description: "Perfect for indie developers and small projects",
+		title: "Lash",
+		description: "Free and open source — everything you need",
 		price: { oneTime: 0 },
-		href: routes.external.buy,
+		href: "https://github.com/lacymorrow/lash",
 		features: [
-			"Next.js 15 App Router Setup",
-			"Authentication (NextAuth v5)",
-			"TypeScript Configuration",
-			"Basic UI Components",
-			"Basic Testing Setup",
-			"Community Support",
+			"Multi-provider AI support",
+			"MCP tool integration",
+			"Beautiful terminal UI",
+			"Session management",
+			"Plugin system",
+			"Community support",
 		],
 		noCardRequired: true,
-	},
-	{
-		title: "Shipkit Muscles",
-		description: "Production-ready, for teams that need advanced features",
-		price: { oneTime: 99 },
-		href: routes.external.buy,
-		features: [
-			// "Everything in Bones +",
-			"Database Integration (Postgres)",
-			"Email Service (Resend)",
-			"Payment Processing",
-			"CMS Integration",
-			"Priority Support",
-			"AI Workflows",
-			"Advanced Components",
-		],
 		isBestValue: true,
-	},
-	{
-		title: "Brains",
-		description: "Enterprise-grade with custom features",
-		price: { oneTime: 149 },
-		href: routes.external.buy,
-		features: ["Everything in Muscles +", "Custom Integrations", "Advanced AI Tools"],
-		isComingSoon: true,
 	},
 ];
 
-export const subscriptionPlans: PricingPlan[] = [
-	{
-		title: "Shipkit Plus",
-		description: "For small teams",
-		price: {
-			monthly: 19,
-			annually: 9,
-		},
-		features: ["10 users included", "2 GB of storage", "Email support"],
-		infos: ["30 users included", "15 GB of storage", "Phone and email support"],
-		href: "#",
-	},
-	{
-		title: "Shipkit Pro",
-		description: "For medium-sized businesses",
-		price: {
-			monthly: 49,
-			annually: 39,
-		},
-		features: ["20 users included", "10 GB of storage", "Priority email support"],
-		infos: ["50 users included", "30 GB of storage", "Phone and email support"],
-		href: "#",
-		isBestValue: true,
-	},
-	{
-		title: "Enterprise",
-		description: "For large enterprises",
-		price: {
-			monthly: 99,
-			annually: 79,
-		},
-		features: ["50 users included", "30 GB of storage", "Phone & email support"],
-		infos: ["100 users included", "60 GB of storage", "24/7 support"],
-		href: "#",
-	},
-];
+export const subscriptionPlans: PricingPlan[] = [];

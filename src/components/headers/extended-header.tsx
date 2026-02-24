@@ -158,7 +158,7 @@ export const Header: React.FC<HeaderProps> = ({
 												"w-full justify-center"
 											)}
 										>
-											Get Shipkit
+											Get Lash
 										</Link>
 										<LoginButton
 											className={cn(buttonVariants({ variant: "ghost" }), "w-full justify-center")}
@@ -200,47 +200,44 @@ export const Header: React.FC<HeaderProps> = ({
 
 							<div className="flex items-center gap-2">
 								{!session && (
-									<AnimatePresence mode="wait">
-										{y && y > 700 ? (
-											<motion.div
-												key="compact"
-												initial={{ opacity: 0, scale: 0.9 }}
-												animate={{ opacity: 1, scale: 1 }}
-												exit={{ opacity: 0, scale: 0.9 }}
-												transition={{ duration: 0.1 }}
+								<AnimatePresence mode="wait">
+									{y && y > 700 ? (
+										<motion.div
+											key="compact"
+											initial={{ opacity: 0, scale: 0.9 }}
+											animate={{ opacity: 1, scale: 1 }}
+											exit={{ opacity: 0, scale: 0.9 }}
+											transition={{ duration: 0.1 }}
+										>
+											<Link
+												href="https://github.com/lacymorrow/lash"
+												target="_blank"
+												rel="noopener"
+												className={cn(buttonVariants({ variant: "default", size: "sm" }))}
 											>
-												<TooltipProvider delayDuration={0}>
-													<Tooltip>
-														<TooltipTrigger asChild>
-															<div className="relative -m-4 p-4">
-																<BuyButton />
-															</div>
-														</TooltipTrigger>
-														<TooltipContent
-															side="bottom"
-															sideOffset={3}
-															className="-mt-3 select-none border-none bg-transparent p-0 text-xs text-muted-foreground shadow-none data-[state=delayed-open]:animate-fadeDown"
-														>
-															<LoginButton className="hover:text-foreground">or Login</LoginButton>
-														</TooltipContent>
-													</Tooltip>
-												</TooltipProvider>
-											</motion.div>
-										) : (
-											<motion.div
-												key="full"
-												initial={{ opacity: 0, scale: 0.9 }}
-												animate={{ opacity: 1, scale: 1 }}
-												exit={{ opacity: 0, scale: 0.9 }}
-												transition={{ duration: 0.1 }}
+												GitHub
+											</Link>
+										</motion.div>
+									) : (
+										<motion.div
+											key="full"
+											initial={{ opacity: 0, scale: 0.9 }}
+											animate={{ opacity: 1, scale: 1 }}
+											exit={{ opacity: 0, scale: 0.9 }}
+											transition={{ duration: 0.1 }}
+										>
+											<Link
+												href="https://github.com/lacymorrow/lash"
+												target="_blank"
+												rel="noopener"
+												className={cn(buttonVariants({ variant: "outline" }))}
 											>
-												<LoginButton variant="outline" nextUrl={routes.app.dashboard}>
-													Dashboard
-												</LoginButton>
-											</motion.div>
-										)}
-									</AnimatePresence>
-								)}
+												View on GitHub
+											</Link>
+										</motion.div>
+									)}
+								</AnimatePresence>
+							)}
 							</div>
 						</div>
 					</div>

@@ -15,7 +15,7 @@ interface Props {
  *
  * Chosen over Unicode half-block glyphs to prevent cross-platform width issues.
  */
-export const LashTuiHeaderSvg = ({ className, scale = 14, brandText = "Lacy™ Shell", showBrand = true }: Props) => {
+export const LashTuiHeaderSvg = ({ className, scale = 14, brandText = "the AI coding agent", showBrand = true }: Props) => {
     const u = scale; // unit size per grid cell
 
     // Text-based logo rows
