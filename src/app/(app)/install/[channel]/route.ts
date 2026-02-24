@@ -30,9 +30,8 @@ export async function GET(
 
   const script = await res.text();
 
-  // Strip existing shebang (if present) and inject channel env var
-  const stripped = script.replace(/^#!\/usr\/bin\/env bash\s*\n?/, "");
-  const patched = `#!/usr/bin/env bash\nexport LASH_CHANNEL="${channel}"\n${stripped}`;
+  // Inject channel env var after the shebang line
+  const patched = script.replace(/\n/, `\nexport LASH_CHANNEL="${channel}"\n`);
 
   return new Response(patched, {
     headers: {
