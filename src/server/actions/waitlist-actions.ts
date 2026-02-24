@@ -73,7 +73,7 @@ export const addToWaitlist = async (formData: WaitlistFormData) => {
 				subject: "Welcome to the Lash Waitlist!",
 				html: `
 					<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-						<h1 style="color: #2563eb;">Welcome, ${formData.name.split(" ")[0]}!</h1>
+						<h1 style="color: #2563eb;">Welcome, ${formData.name.split(" ")[0].replace(/[<>&"']/g, "")}!</h1>
 						<p>Thanks for joining our waitlist. You're now part of an exclusive group of developers who will get early access to Lash.</p>
 
 						<h2>What's Next?</h2>
