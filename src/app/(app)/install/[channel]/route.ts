@@ -30,8 +30,7 @@ export async function GET(
 
   const script = await res.text();
 
-  // Inject channel env var after the shebang line
-  const patched = script.replace(/\n/, `\nexport LASH_CHANNEL="${channel}"\n`);
+  const patched = `export LASH_CHANNEL="${channel}"\n${script}`;
 
   return new Response(patched, {
     headers: {
