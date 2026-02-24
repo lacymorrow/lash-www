@@ -173,8 +173,8 @@ export const siteConfig: SiteConfig = {
   name: "Lash",
   title: "Lash",
   tagline: "The AI shell for your terminal.",
-  url: "https://lash.sh",
-  ogImage: "https://lash.sh/app/og-image.png",
+  url: "https://lash.lacy.sh",
+  ogImage: "https://lash.lacy.sh/app/og-image.png",
   description:
     "A beautiful AI terminal for your code. Shell first, AI second. Type commands or talk naturally — lash figures out the rest.",
 
@@ -187,7 +187,7 @@ export const siteConfig: SiteConfig = {
       brains: "Brains",
       main: "Lash",
     },
-    domain: "lash.sh",
+    domain: "lash.lacy.sh",
     protocol: "web+lash",
     githubOrg: "lacymorrow",
     githubRepo: "lash",
@@ -215,19 +215,19 @@ export const siteConfig: SiteConfig = {
   },
 
   email: {
-    support: "support@lash.sh",
-    team: "team@lash.sh",
-    noreply: "noreply@lash.sh",
-    domain: "lash.sh",
-    legal: "legal@lash.sh",
-    privacy: "privacy@lash.sh",
+    support: "support@lash.lacy.sh",
+    team: "team@lash.lacy.sh",
+    noreply: "noreply@lash.lacy.sh",
+    domain: "lash.lacy.sh",
+    legal: "legal@lash.lacy.sh",
+    privacy: "privacy@lash.lacy.sh",
     // Placeholder format function - assigned below
     format: (type) => "",
   },
 
   creator: {
     name: "lacymorrow",
-    email: "lacy@lash.sh",
+    email: "lacy@lash.lacy.sh",
     url: "https://lacymorrow.com",
     twitter: "@lacybuilds",
     twitter_handle: "lacybuilds",
@@ -240,15 +240,10 @@ export const siteConfig: SiteConfig = {
   },
 
   store: {
-    id: "shipkit",
+    id: "lash",
     products: {
-      // LemonSqueezy Checkout URLs use Variant IDs (not Product IDs)
-      // Format: variant UUID from LemonSqueezy dashboard
-      shipkit: "411883",
-      // Examples:
-      bones: "411883",
-      muscles: "411883",
-      brains: "411883",
+      // Lash is free and open source — no paid products
+      lash: "",
     },
   },
 

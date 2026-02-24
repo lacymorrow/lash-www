@@ -61,18 +61,18 @@ export function PricingSectionSingle() {
 									"w-full bg-purple-500 text-lg text-white hover:bg-purple-600"
 								)}
 							>
-								Get Shipkit Now
+								Get Lash
 							</Link>
 						</div>
 
 						<div className="mt-8 border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
 							<p>
-								Want to see what Shipkit can do?{" "}
+								Free and open source.{" "}
 								<a
-									href={routes.external.bones}
+									href="https://github.com/lacymorrow/lash"
 									className="inline-flex items-center gap-1 text-purple-400 hover:text-purple-300"
 								>
-									Start with Shipkit Bones
+									View on GitHub
 									<ArrowRight className="h-3 w-3" />
 								</a>
 							</p>

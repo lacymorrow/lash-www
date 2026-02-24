@@ -188,11 +188,11 @@ export const routes = {
 
 	// External links
 	external: {
-		shipkit: "https://lash.sh",
-		bones: "https://bones.sh",
-		log: "https://log.bones.sh",
-		ui: "https://ui.bones.sh",
-		buy: "https://lash.lemonsqueezy.com/checkout/buy/placeholder",
+		shipkit: "https://lash.lacy.sh",
+		bones: "https://github.com/lacymorrow/lash",
+		log: "https://github.com/lacymorrow/lash",
+		ui: "https://github.com/lacymorrow/lash",
+		buy: "https://github.com/lacymorrow/lash",
 		discord: "https://discord.gg/XxKrKNvEje",
 		twitter: siteConfig.links.twitter,
 		twitter_follow: siteConfig.links.twitter_follow,
@@ -202,13 +202,10 @@ export const routes = {
 		docs: "/docs",
 		email: `mailto:${siteConfig.creator.email}`,
 		github: siteConfig.repo.url,
-		vercelDeployShipkit:
-			"https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Flacymorrow%2Flash&project-name=lash-www&repository-name=lash-www&redirect-url=https://lash.sh/connect/vercel/deploy",
-		// &integration-ids=oac_KkY2TcPxIWTDtL46WGqwZ4BF
-		vercelImportShipkit:
-			"https://vercel.com/new/import?s=https%3A%2F%2Fgithub.com%2Flacymorrow%2Flash&project-name=lash-www&framework=nextjs&buildCommand=pnpm%20run%20build&installCommand=pnpm%20install&redirect-url=https://lash.sh/connect/vercel/deploy",
-		vercelDeployBones:
-			"https://vercel.com/new/clone?repository-url=https://github.com/shipkit-io/bones&env=ADMIN_EMAIL&envDescription=Set%20administrator%20access%20for%20your%20deployment&envLink=https%3A%2F%2Fshipkit.io%2Fdocs%2Fenv&project-name=bones-app&repository-name=bones-app&redirect-url=https://shipkit.io/connect/vercel/deploy&developer-id=oac_KkY2TcPxIWTDtL46WGqwZ4BF&production-deploy-hook=Shipkit%20Deploy&demo-title=Shipkit%20Preview&demo-description=The%20official%20Shipkit%20Preview.%20A%20full%20featured%20demo%20with%20dashboards,%20AI%20tools,%20and%20integrations%20with%20Docs,%20Payload,%20and%20Builder.io&demo-url=https://shipkit.io/demo&demo-image=//assets.vercel.com/image/upload/contentful/image/e5382hct74si/4JmubmYDJnFtstwHbaZPev/0c3576832aae5b1a4d98c8c9f98863c3/Vercel_Home_OG.png",
+		vercelDeployLash:
+			"https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Flacymorrow%2Flash&project-name=lash-www&repository-name=lash-www&redirect-url=https://lash.lacy.sh/connect/vercel/deploy",
+		vercelImportLash:
+			"https://vercel.com/new/import?s=https%3A%2F%2Fgithub.com%2Flacymorrow%2Flash&project-name=lash-www&framework=nextjs&buildCommand=pnpm%20run%20build&installCommand=pnpm%20install&redirect-url=https://lash.lacy.sh/connect/vercel/deploy",
 	},
 };
 

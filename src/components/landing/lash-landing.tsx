@@ -31,29 +31,13 @@ const installTabs = [
           { text: "$ ", cls: "ll-p" },
           { text: "npm install", cls: "ll-cmd" },
           { text: " -g", cls: "ll-flag" },
-          { text: " lash-cli", cls: "ll-url" },
+          { text: " lashcode", cls: "ll-url" },
         ],
-        copy: "npm install -g lash-cli",
+        copy: "npm install -g lashcode",
       },
     ],
   },
-  {
-    id: "curl",
-    label: "curl",
-    lines: [
-      {
-        parts: [
-          { text: "$ ", cls: "ll-p" },
-          { text: "curl", cls: "ll-cmd" },
-          { text: " -fsSL", cls: "ll-flag" },
-          { text: " https://lash.sh/install", cls: "ll-url" },
-          { text: " |", cls: "ll-flag" },
-          { text: " bash", cls: "ll-cmd" },
-        ],
-        copy: "curl -fsSL https://lash.sh/install | bash",
-      },
-    ],
-  },
+
 ];
 
 const demoLines: DemoLine[] = [
@@ -101,34 +85,34 @@ type DemoLine =
 
 const features = [
   {
+    dot: "var(--ll-violet)",
+    title: "15+ AI providers",
+    desc: "Claude, GPT, Gemini, Bedrock, and more. Switch models without changing your workflow.",
+  },
+  {
+    dot: "var(--ll-blue)",
+    title: "MCP tools",
+    desc: "Read files, run commands, query databases. Your AI agent interacts with your full dev environment.",
+  },
+  {
     dot: "var(--ll-green)",
-    title: "Shell mode",
-    desc: "Everything goes to your shell. Normal terminal.",
+    title: "Beautiful TUI",
+    desc: "A polished terminal interface with syntax highlighting, conversation history, and responsive layout.",
   },
   {
     dot: "var(--ll-magenta)",
-    title: "Agent mode",
-    desc: "Everything goes to AI. Every line is a prompt.",
+    title: "Session management",
+    desc: "Persistent sessions that remember context. Resume where you left off or start fresh.",
   },
   {
     dot: "var(--ll-blue)",
-    title: "Auto mode",
-    desc: "Smart routing. Commands to shell, questions to AI.",
-  },
-  {
-    dot: "var(--ll-violet)",
-    title: "Smart reroute",
-    desc: "Ambiguous input? Shell tries first. If it fails, AI takes over automatically.",
+    title: "Plugin system",
+    desc: "Extend with custom tools, providers, and integrations. No core modifications needed.",
   },
   {
     dot: "var(--ll-green)",
-    title: "Live indicator",
-    desc: "A colored bar changes as you type. Green = shell. Magenta = AI.",
-  },
-  {
-    dot: "var(--ll-blue)",
-    title: "Preheated",
-    desc: "Background servers and session reuse eliminate cold-start latency.",
+    title: "Shell integration",
+    desc: "Pairs with Lacy Shell for seamless natural language routing. Type naturally, ship code.",
   },
 ];
 
@@ -227,10 +211,10 @@ export function LashLanding() {
               for your <em>code</em>
             </h1>
             <p className="ll-hero-desc ll-reveal ll-reveal-d2">
-              Shell first, AI second. Type commands or talk naturally.{" "}
-              <strong>Commands run in your shell.</strong>{" "}
-              <strong>Questions go to your AI agent.</strong> No prefixes. No
-              mode switching.
+              An open source AI coding agent that lives in your terminal.{" "}
+              <strong>15+ AI providers.</strong>{" "}
+              <strong>MCP tools built in.</strong> Free, fast, and
+              provider-agnostic.
             </p>
 
             <div className="ll-install ll-reveal ll-reveal-d3">
@@ -316,14 +300,15 @@ export function LashLanding() {
           <section className="ll-how" id="how">
             <div className="ll-label">How it works</div>
             <h2 className="ll-how-h2">
-              Commands run.
+              Ask anything.
               <br />
-              Questions route.
+              Ship faster.
             </h2>
             <p className="ll-how-desc">
-              Lash intercepts your input before the shell sees it. If the first
-              word is a valid command, it executes normally. If it looks like
-              natural language, it goes to your AI tool.
+              Lash is an open source AI coding agent that lives in your
+              terminal. Connect to any AI provider, use MCP tools to interact
+              with your codebase, and get work done without leaving the command
+              line.
             </p>
             <div className="ll-how-grid">
               {features.map((f) => (
@@ -359,8 +344,9 @@ export function LashLanding() {
               ))}
             </div>
             <p className="ll-tools-note">
-              Each tool handles its own authentication. Lash just routes &mdash;
-              nothing to configure beyond picking a tool.
+              Lash works alongside other AI CLI tools. Use it standalone, or
+              pair it with <a href="https://lacy.sh" className="ll-link">Lacy Shell</a> for
+              automatic routing.
             </p>
           </section>
 
@@ -393,7 +379,7 @@ export function LashLanding() {
       <footer className="ll-footer">
         <div className="ll-wrap">
           <div className="ll-foot">
-            <span className="ll-foot-left">lash.sh</span>
+            <span className="ll-foot-left">lash.lacy.sh</span>
             <div className="ll-foot-right">
               <a
                 href="https://github.com/lacymorrow/lash"

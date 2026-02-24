@@ -154,10 +154,10 @@ export const PrivateRepoDeployButton = () => {
 			<CardHeader>
 				<CardTitle className="flex items-center gap-2">
 					<Github className="h-5 w-5" />
-					Deploy Shipkit
+					Deploy Lash
 				</CardTitle>
 				<CardDescription>
-					Deploy your own instance of Shipkit to GitHub and Vercel. Make sure you have connected
+					Deploy your own instance of Lash to GitHub and Vercel. Make sure you have connected
 					both your GitHub and Vercel accounts in Settings first.
 				</CardDescription>
 			</CardHeader>
@@ -294,7 +294,7 @@ export const PrivateRepoDeployButton = () => {
 						<Alert>
 							<Github className="h-4 w-4" />
 							<AlertDescription>
-								This will create a copy of the Shipkit repository ({SHIPKIT_REPO}) in your GitHub
+								This will create a copy of the Lash repository ({SHIPKIT_REPO}) in your GitHub
 								account and deploy it to Vercel.
 							</AlertDescription>
 						</Alert>
@@ -303,13 +303,13 @@ export const PrivateRepoDeployButton = () => {
 							<Label htmlFor="projectName">Project Name *</Label>
 							<Input
 								id="projectName"
-								placeholder="my-shipkit-instance"
+								placeholder="my-lash-instance"
 								value={formData.projectName}
 								onChange={(e) => setFormData({ ...formData, projectName: e.target.value })}
 								onKeyDown={handleKeyDown}
 							/>
 							<p className="text-xs text-muted-foreground">
-								Name for your Shipkit instance (lowercase, numbers, hyphens only)
+								Name for your Lash instance (lowercase, numbers, hyphens only)
 							</p>
 						</div>
 
@@ -317,7 +317,7 @@ export const PrivateRepoDeployButton = () => {
 							<Label htmlFor="description">Description</Label>
 							<Input
 								id="description"
-								placeholder="My custom Shipkit deployment"
+								placeholder="My custom Lash deployment"
 								value={formData.description}
 								onChange={(e) => setFormData({ ...formData, description: e.target.value })}
 								onKeyDown={handleKeyDown}
@@ -326,7 +326,7 @@ export const PrivateRepoDeployButton = () => {
 
 						<div className="pt-4 space-y-3">
 							<Button onClick={handleDeploy} disabled={isDeploying} className="w-full">
-								{isDeploying ? "Deploying..." : "Deploy Shipkit"}
+								{isDeploying ? "Deploying..." : "Deploy Lash"}
 							</Button>
 							<p className="text-xs text-center text-muted-foreground">
 								Make sure you've connected your GitHub and Vercel accounts in{" "}
