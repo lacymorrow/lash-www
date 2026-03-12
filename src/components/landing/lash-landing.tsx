@@ -231,7 +231,7 @@ export function LashLanding() {
                     {t.label}
                   </button>
                 ))}
-                <GithubVersion />
+                <GithubVersion className="ml-auto mr-4" />
               </div>
               <div className="ll-install-body">
                 <button

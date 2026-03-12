@@ -153,7 +153,7 @@ const nextConfig: NextConfig = {
 	},
 
 	// Configure `pageExtensions` to include markdown and MDX files
-	pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+	pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
 
 	/*
 	 * Experimental configuration
@@ -288,7 +288,7 @@ const nextConfig: NextConfig = {
 		rules: {
 			// Add rules for raw-loader to handle specific file types
 			// This mirrors the webpack config for these extensions
-			"*.(node|bin|html)": {
+			"*.(node|bin|html|md)": {
 				loaders: ["raw-loader"],
 				as: "*.js",
 			},

@@ -280,13 +280,6 @@
     ]
   },
   "pnpm": {
-    "overrides": {
-      "react": "19.2.3",
-      "react-dom": "19.2.3",
-      "oauth4webapi": "3.6.2",
-      "@tanstack/react-query": "5.90.12",
-      "@tanstack/query-core": "5.83.0"
-    },
     "onlyBuiltDependencies": [
       "@clerk/shared",
       "@lvce-editor/ripgrep",
@@ -320,5 +313,12 @@
     "onnxruntime-node",
     "protobufjs",
     "unrs-resolver"
-  ]
+  ],
+  "overrides": {
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "oauth4webapi": "3.6.2",
+    "@tanstack/react-query": "5.90.12",
+    "@tanstack/query-core": "5.83.0"
+  }
 }

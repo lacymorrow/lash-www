@@ -8,7 +8,7 @@ import type { NextConfig } from "next";
  */
 export default function withMDXConfig(nextConfig: NextConfig): NextConfig {
 	const withMDX = createMDX({
-		extension: /\.mdx?$/,
+		extension: /\.mdx$/,
 		options: {
 			remarkPlugins: [
 				[
