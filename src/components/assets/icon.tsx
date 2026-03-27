@@ -1,6 +1,6 @@
 // Main site icon
-import { LashIcon } from "@/components/assets/lash-icon";
+import { KitIcon } from "@/components/assets/kit-icon";
 
-export const Icon = (props: React.ComponentProps<typeof LashIcon>) => {
-	return <LashIcon {...props} />;
+export const Icon = (props: React.ComponentProps<typeof KitIcon>) => {
+  return <KitIcon {...props} />;
 };

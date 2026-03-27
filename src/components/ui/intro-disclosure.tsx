@@ -1,112 +1,97 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Image from "next/image"
-import {
-  AnimatePresence,
-  motion,
-  useAnimation,
-  type PanInfo,
-  cubicBezier,
-} from "framer-motion"
-import { CheckIcon, ExternalLinkIcon } from "lucide-react"
-
-import { cn } from "@/lib/utils"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer"
-import { Progress } from "@/components/ui/progress"
+import { AnimatePresence, cubicBezier, motion, type PanInfo, useAnimation } from "framer-motion";
+import { CheckIcon, ExternalLinkIcon } from "lucide-react";
+import Image from "next/image";
+import * as React from "react";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
 
 function useMediaQuery(query: string) {
-  const [matches, setMatches] = React.useState<boolean | null>(null)
+  const [matches, setMatches] = React.useState<boolean | null>(null);
 
   React.useEffect(() => {
-    const media = window.matchMedia(query)
-    setMatches(media.matches)
+    const media = window.matchMedia(query);
+    setMatches(media.matches);
 
-    const listener = (e: MediaQueryListEvent) => setMatches(e.matches)
-    media.addEventListener("change", listener)
-    return () => media.removeEventListener("change", listener)
-  }, [query])
+    const listener = (e: MediaQueryListEvent) => setMatches(e.matches);
+    media.addEventListener("change", listener);
+    return () => media.removeEventListener("change", listener);
+  }, [query]);
 
-  return matches ?? false
+  return matches ?? false;
 }
 
 function useFeatureVisibility(featureId: string) {
-  const [isVisible, setIsVisible] = React.useState<boolean | null>(null)
+  const [isVisible, setIsVisible] = React.useState<boolean | null>(null);
 
   React.useEffect(() => {
-    const storedValue = localStorage.getItem(`feature_${featureId}`)
-    setIsVisible(storedValue ? JSON.parse(storedValue) : true)
-  }, [featureId])
+    const storedValue = localStorage.getItem(`feature_${featureId}`);
+    setIsVisible(storedValue ? JSON.parse(storedValue) : true);
+  }, [featureId]);
 
   const hideFeature = () => {
-    localStorage.setItem(`feature_${featureId}`, JSON.stringify(false))
-    setIsVisible(false)
-  }
+    localStorage.setItem(`feature_${featureId}`, JSON.stringify(false));
+    setIsVisible(false);
+  };
 
-  return { isVisible: isVisible === null ? false : isVisible, hideFeature }
+  const resetFeature = () => {
+    localStorage.removeItem(`feature_${featureId}`);
+    setIsVisible(true);
+  };
+
+  return { isVisible: isVisible === null ? false : isVisible, hideFeature, resetFeature };
 }
 
 function useSwipe(onSwipe: (direction: "left" | "right") => void) {
-  const handleDragEnd = (
-    event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
-  ) => {
+  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (info.offset.x > 100) {
-      onSwipe("right")
+      onSwipe("right");
     } else if (info.offset.x < -100) {
-      onSwipe("left")
+      onSwipe("left");
     }
-  }
+  };
 
-  return { handleDragEnd }
+  return { handleDragEnd };
 }
 
-const easeStandard = cubicBezier(0.25, 0.1, 0.25, 1)
+const easeStandard = cubicBezier(0.25, 0.1, 0.25, 1);
 
 const fadeInScale = {
   initial: { opacity: 0, scale: 0.95 },
   animate: { opacity: 1, scale: 1 },
   exit: { opacity: 0, scale: 0.95 },
   transition: { duration: 0.2, ease: easeStandard },
-}
+};
 
 const slideInOut = (direction: 1 | -1) => ({
   initial: { opacity: 0, x: 20 * direction },
   animate: { opacity: 1, x: 0 },
   exit: { opacity: 0, x: -20 * direction },
   transition: { duration: 0.3, ease: easeStandard },
-})
+});
 
 const hoverScale = {
   whileHover: { scale: 1.01 },
   whileTap: { scale: 0.95 },
   transition: { duration: 0.2 },
-}
+};
 
 function StepPreview({ step, direction }: { step: Step; direction: 1 | -1 }) {
-  const controls = useAnimation()
+  const controls = useAnimation();
 
   React.useEffect(() => {
     controls.start({
       opacity: 1,
       y: 0,
       transition: { delay: 0.2, duration: 0.3 },
-    })
-  }, [controls, step])
+    });
+  }, [controls, step]);
 
   return (
     <motion.div
@@ -128,11 +113,7 @@ function StepPreview({ step, direction }: { step: Step; direction: 1 | -1 }) {
                 className="object-cover"
               />
             ) : (
-              <video
-                src={step.media.src}
-                controls
-                className="h-full w-full object-cover"
-              />
+              <video src={step.media.src} controls className="h-full w-full object-cover" />
             )}
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
@@ -141,37 +122,27 @@ function StepPreview({ step, direction }: { step: Step; direction: 1 | -1 }) {
             animate={controls}
             className="absolute bottom-0 left-0 right-0 p-6"
           >
-            <h3 className="mb-2 text-2xl font-semibold text-white">
-              {step.title}
-            </h3>
-            <p className="text-white hidden md:block">
-              {step.full_description}
-            </p>
+            <h3 className="mb-2 text-2xl font-semibold text-white">{step.title}</h3>
+            <p className="text-white hidden md:block">{step.full_description}</p>
           </motion.div>
         </div>
       ) : (
         <div className="flex h-full items-center justify-center p-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={controls}
-            className="text-center"
-          >
-            <h3 className="mb-2 text-2xl font-semibold text-primary">
-              {step.title}
-            </h3>
-            <p className="text-muted-foreground">{step.full_description}</p>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={controls} className="text-center">
+            <h3 className="mb-2 text-2xl font-semibold text-primary">{step.title}</h3>
+            <div className="text-muted-foreground">{step.full_description}</div>
           </motion.div>
         </div>
       )}
     </motion.div>
-  )
+  );
 }
 
 interface StepTabProps {
-  step: Step
-  isActive: boolean
-  onClick: () => void
-  isCompleted: boolean
+  step: Step;
+  isActive: boolean;
+  onClick: () => void;
+  isCompleted: boolean;
 }
 
 function StepTab({ step, isActive, onClick, isCompleted }: StepTabProps) {
@@ -199,53 +170,55 @@ function StepTab({ step, isActive, onClick, isCompleted }: StepTabProps) {
         </motion.div>
       )}
     </motion.button>
-  )
+  );
 }
 
 interface Step {
-  title: string
-  short_description: string
-  full_description: string
+  title: string;
+  short_description: string;
+  full_description: string | React.ReactNode;
   action?: {
-    label: string
-    onClick?: () => void
-    href?: string
-  }
+    label: string;
+    onClick?: () => void;
+    href?: string;
+  };
   media?: {
-    type: "image" | "video"
-    src: string
-    alt?: string
-  }
+    type: "image" | "video";
+    src: string;
+    alt?: string;
+  };
   // Optional custom renderer for arbitrary UI controls/content per step
-  render?: React.ReactNode
+  render?: React.ReactNode;
 }
 
 interface FeatureDisclosureProps {
-  steps: Step[]
-  featureId: string
-  onComplete?: () => void
-  onSkip?: () => void
-  showProgressBar?: boolean
-  open: boolean
-  setOpen: (open: boolean) => void
-  forceVariant?: "mobile" | "desktop"
+  steps: Step[];
+  featureId: string;
+  onComplete?: () => void;
+  onSkip?: () => void;
+  showProgressBar?: boolean;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  forceVariant?: "mobile" | "desktop";
   // Optional initial step index
-  initialStep?: number
+  initialStep?: number;
   // Optional callback on step change
-  onStepChange?: (index: number) => void
+  onStepChange?: (index: number) => void;
+  // Optional array of step indices that should be initially marked as completed
+  initialCompletedSteps?: number[];
 }
 
 interface StepContentProps {
-  steps: Step[]
-  currentStep: number
-  onSkip: () => void
-  onNext: () => void
-  onPrevious: () => void
-  hideFeature: () => void
-  completedSteps: number[]
-  onStepSelect: (index: number) => void
-  direction: 1 | -1
-  isDesktop: boolean
+  steps: Step[];
+  currentStep: number;
+  onSkip: () => void;
+  onNext: () => void;
+  onPrevious: () => void;
+  hideFeature: () => void;
+  completedSteps: number[];
+  onStepSelect: (index: number) => void;
+  direction: 1 | -1;
+  isDesktop: boolean;
 }
 
 function StepContent({
@@ -261,10 +234,10 @@ function StepContent({
   isDesktop,
   stepRef,
 }: StepContentProps & { stepRef: React.RefObject<HTMLButtonElement | null> }) {
-  const [skipNextTime, setSkipNextTime] = React.useState(false)
+  const [skipNextTime, setSkipNextTime] = React.useState(false);
 
   const renderActionButton = (action: Step["action"]) => {
-    if (!action) return null
+    if (!action) return null;
 
     if (action.href) {
       return (
@@ -276,7 +249,7 @@ function StepContent({
             </span>
           </a>
         </Button>
-      )
+      );
     }
 
     return (
@@ -288,8 +261,8 @@ function StepContent({
       >
         {action.label}
       </Button>
-    )
-  }
+    );
+  };
 
   return (
     <div className="flex h-full flex-col max-w-3xl mx-auto">
@@ -314,16 +287,9 @@ function StepContent({
         </div>
       )}
       <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={currentStep}
-          {...slideInOut(direction)}
-          className="mt-6 space-y-4 "
-        >
+        <motion.div key={currentStep} {...slideInOut(direction)} className="mt-6 space-y-4 ">
           {!isDesktop && steps[currentStep]?.media && (
-            <AspectRatio
-              ratio={16 / 9}
-              className="lg:overflow-hidden rounded-lg bg-muted "
-            >
+            <AspectRatio ratio={16 / 9} className="lg:overflow-hidden rounded-lg bg-muted ">
               {steps[currentStep]?.media?.type === "image" ? (
                 <Image
                   src={steps[currentStep]?.media?.src || "/placeholder.svg"}
@@ -342,19 +308,13 @@ function StepContent({
           )}
 
           {steps[currentStep]?.action ? (
-            <div className=" px-2">
-              {renderActionButton(steps[currentStep]?.action)}
-            </div>
+            <div className=" px-2">{renderActionButton(steps[currentStep]?.action)}</div>
           ) : (
             <div className="h-10" />
           )}
 
           {/* Optional custom content renderer per step */}
-          {steps[currentStep]?.render && (
-            <div className="px-2">
-              {steps[currentStep]?.render}
-            </div>
-          )}
+          {steps[currentStep]?.render && <div className="px-2">{steps[currentStep]?.render}</div>}
 
           {/* Navigation buttons */}
           <div className="flex items-center justify-between pr-4">
@@ -379,9 +339,9 @@ function StepContent({
               <Button
                 onClick={() => {
                   if (skipNextTime) {
-                    hideFeature()
+                    hideFeature();
                   }
-                  onNext()
+                  onNext();
                 }}
                 size="sm"
                 ref={stepRef}
@@ -398,17 +358,14 @@ function StepContent({
               checked={skipNextTime}
               onCheckedChange={(checked) => setSkipNextTime(checked as boolean)}
             />
-            <label
-              htmlFor="skipNextTime"
-              className="text-sm text-muted-foreground"
-            >
+            <label htmlFor="skipNextTime" className="text-sm text-muted-foreground">
               Don't show this again
             </label>
           </div>
         </motion.div>
       </AnimatePresence>
     </div>
-  )
+  );
 }
 
 export function IntroDisclosure({
@@ -422,120 +379,125 @@ export function IntroDisclosure({
   forceVariant,
   initialStep,
   onStepChange,
+  initialCompletedSteps,
 }: FeatureDisclosureProps) {
-  const [currentStep, setCurrentStep] = React.useState(initialStep ?? 0)
-  const [completedSteps, setCompletedSteps] = React.useState<number[]>([0])
-  const [direction, setDirection] = React.useState<1 | -1>(1)
-  const isDesktopQuery = useMediaQuery("(min-width: 768px)")
-  const isDesktop = forceVariant ? forceVariant === "desktop" : isDesktopQuery
-  const { isVisible, hideFeature } = useFeatureVisibility(featureId)
-  const stepRef = React.useRef<HTMLButtonElement>(null)
+  const [currentStep, setCurrentStep] = React.useState(initialStep ?? 0);
+  const [completedSteps, setCompletedSteps] = React.useState<number[]>(
+    initialCompletedSteps ?? [0]
+  );
+  const [direction, setDirection] = React.useState<1 | -1>(1);
+  const isDesktopQuery = useMediaQuery("(min-width: 768px)");
+  const isDesktop = forceVariant ? forceVariant === "desktop" : isDesktopQuery;
+  const { isVisible, hideFeature } = useFeatureVisibility(featureId);
+  const stepRef = React.useRef<HTMLButtonElement>(null);
 
   // Close the dialog if feature is hidden
   React.useEffect(() => {
     if (!isVisible) {
-      setOpen(false)
+      setOpen(false);
     }
-  }, [isVisible, setOpen])
+  }, [isVisible, setOpen]);
 
   // Focus management
   React.useEffect(() => {
     if (open && stepRef.current) {
-      stepRef.current.focus()
+      stepRef.current.focus();
     }
-  }, [open, currentStep])
+  }, [open, currentStep]);
 
   // Keep currentStep in sync with an external initialStep when opening
   React.useEffect(() => {
     if (open && typeof initialStep === "number") {
-      setCurrentStep(initialStep)
+      setCurrentStep(initialStep);
     }
-  }, [open, initialStep])
+  }, [open, initialStep]);
+
+  // Keep completedSteps in sync with initialCompletedSteps
+  React.useEffect(() => {
+    if (initialCompletedSteps && initialCompletedSteps.length > 0) {
+      setCompletedSteps((prev) => {
+        const merged = new Set([...prev, ...initialCompletedSteps]);
+        return Array.from(merged);
+      });
+    }
+  }, [initialCompletedSteps]);
 
   // Early return if feature should be hidden
   if (!isVisible || !open) {
-    return null
+    return null;
   }
 
   const handleNext = () => {
-    setDirection(1)
-    setCompletedSteps((prev) =>
-      prev.includes(currentStep) ? prev : [...prev, currentStep]
-    )
+    setDirection(1);
+    setCompletedSteps((prev) => (prev.includes(currentStep) ? prev : [...prev, currentStep]));
     if (currentStep < steps.length - 1) {
-      const next = currentStep + 1
-      setCurrentStep(next)
-      onStepChange?.(next)
+      const next = currentStep + 1;
+      setCurrentStep(next);
+      onStepChange?.(next);
     } else {
-      setOpen(false)
-      onComplete?.()
+      setOpen(false);
+      onComplete?.();
     }
-  }
+  };
 
   const handlePrevious = () => {
-    setDirection(-1)
+    setDirection(-1);
     if (currentStep > 0) {
-      const prev = currentStep - 1
-      setCurrentStep(prev)
-      onStepChange?.(prev)
+      const prev = currentStep - 1;
+      setCurrentStep(prev);
+      onStepChange?.(prev);
     }
-  }
+  };
 
   const handleSkip = () => {
-    setOpen(false)
-    onSkip?.()
-  }
+    setOpen(false);
+    onSkip?.();
+  };
 
   const handleStepSelect = (index: number) => {
-    setDirection(index > currentStep ? 1 : -1)
+    setDirection(index > currentStep ? 1 : -1);
     // Mark all steps up to and including the selected step as completed
     setCompletedSteps((prev) => {
-      const newCompletedSteps = new Set(prev)
+      const newCompletedSteps = new Set(prev);
       // If moving forward, mark all steps up to the selected one as completed
       if (index > currentStep) {
         for (let i = currentStep; i <= index; i++) {
-          newCompletedSteps.add(i)
+          newCompletedSteps.add(i);
         }
       }
-      return Array.from(newCompletedSteps)
-    })
-    setCurrentStep(index)
-    onStepChange?.(index)
-  }
+      return Array.from(newCompletedSteps);
+    });
+    setCurrentStep(index);
+    onStepChange?.(index);
+  };
 
   const handleSwipe = (swipeDirection: "left" | "right") => {
     if (swipeDirection === "left") {
-      handleNext()
+      handleNext();
     } else {
-      handlePrevious()
+      handlePrevious();
     }
-  }
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "ArrowRight" || event.key === "ArrowDown") {
-      handleNext()
+      handleNext();
     } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
-      handlePrevious()
+      handlePrevious();
     }
-  }
+  };
 
-  const { handleDragEnd } = useSwipe(handleSwipe)
+  const { handleDragEnd } = useSwipe(handleSwipe);
 
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent
-          className="max-w-5xl p-0 gap-0 overflow-hidden "
-          onKeyDown={handleKeyDown}
-        >
+        <DialogContent className="max-w-5xl p-0 gap-0 overflow-hidden " onKeyDown={handleKeyDown}>
           <DialogHeader className="p-6 space-y-2 bg-muted border-b border-border">
             <DialogTitle>Feature Tour</DialogTitle>
             {showProgressBar && (
               <div className="flex mt-2 w-full justify-center  ">
-                <Progress
-                  value={((currentStep + 1) / steps.length) * 100}
-                  className="  h-1 "
-                />
+                <Progress value={((currentStep + 1) / steps.length) * 100} className="  h-1 " />
               </div>
             )}
           </DialogHeader>
@@ -557,16 +519,14 @@ export function IntroDisclosure({
               />
             </div>
             <AnimatePresence mode="wait" initial={false}>
-              <StepPreview
-                key={currentStep}
-                step={steps[currentStep]}
-                direction={direction}
-              />
+              {steps[currentStep] && (
+                <StepPreview key={currentStep} step={steps[currentStep]} direction={direction} />
+              )}
             </AnimatePresence>
           </div>
         </DialogContent>
       </Dialog>
-    )
+    );
   }
 
   return (
@@ -581,10 +541,7 @@ export function IntroDisclosure({
         >
           <DrawerHeader className="text-left  pb-4 space-y-4">
             {showProgressBar && (
-              <Progress
-                value={((currentStep + 1) / steps.length) * 100}
-                className="mb-4"
-              />
+              <Progress value={((currentStep + 1) / steps.length) * 100} className="mb-4" />
             )}
             <DrawerTitle>{steps[currentStep]?.title}</DrawerTitle>
           </DrawerHeader>
@@ -605,21 +562,19 @@ export function IntroDisclosure({
               </div>
               {/* Preview */}
               <div className="relative aspect-[16/9] ring-2 ring-border ring-offset-8 ring-offset-background rounded-lg overflow-hidden">
-                <StepPreview step={steps[currentStep]} direction={direction} />
+                {steps[currentStep] && (
+                  <StepPreview step={steps[currentStep]} direction={direction} />
+                )}
               </div>
 
               {/* Step content */}
               <div className="space-y-4 border border-border p-3 rounded-lg">
-                <p className="text-muted-foreground">
-                  {steps[currentStep]?.short_description}
-                </p>
+                <p className="text-muted-foreground">{steps[currentStep]?.short_description}</p>
                 {steps[currentStep]?.action && (
                   <Button
                     asChild
                     className="w-full"
-                    variant={
-                      steps[currentStep]?.action?.href ? "outline" : "default"
-                    }
+                    variant={steps[currentStep]?.action?.href ? "outline" : "default"}
                   >
                     {steps[currentStep]?.action?.href ? (
                       <a
@@ -666,7 +621,7 @@ export function IntroDisclosure({
                   )}
                   <Button
                     onClick={() => {
-                      handleNext()
+                      handleNext();
                     }}
                     size="sm"
                     ref={stepRef}
@@ -679,14 +634,11 @@ export function IntroDisclosure({
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="skipNextTime"
-                  onCheckedChange={(checked) => {
-                    hideFeature()
+                  onCheckedChange={() => {
+                    hideFeature();
                   }}
                 />
-                <label
-                  htmlFor="skipNextTime"
-                  className="text-sm text-muted-foreground"
-                >
+                <label htmlFor="skipNextTime" className="text-sm text-muted-foreground">
                   Don't show this again
                 </label>
               </div>
@@ -695,7 +647,7 @@ export function IntroDisclosure({
         </motion.div>
       </DrawerContent>
     </Drawer>
-  )
+  );
 }
 
-export default IntroDisclosure
+export default IntroDisclosure;

@@ -4,6 +4,8 @@ import { eq } from "drizzle-orm";
 import { routes } from "@/config/routes";
 import { SEARCH_PARAM_KEYS } from "@/config/search-param-keys";
 import { STATUS_CODES } from "@/config/status-codes";
+// This service can be imported by Node scripts; avoid importing "server-only" here
+import { env } from "@/env";
 import { logger } from "@/lib/logger";
 import { getPayloadClient, payload } from "@/lib/payload/payload";
 import { signInSchema } from "@/lib/schemas/auth";
@@ -12,8 +14,6 @@ import { db } from "@/server/db";
 import { users } from "@/server/db/schema";
 import { userService } from "@/server/services/user-service";
 import type { User, UserRole } from "@/types/user";
-import "server-only";
-import { env } from "@/env";
 
 // Define a simplified type for Payload User to avoid import issues
 interface PayloadUser {
@@ -42,13 +42,9 @@ const SCRYPT_OPTIONS = {
 } as const;
 
 // Promisify scrypt
-const scrypt = promisify<
-  string | Buffer,
-  Buffer,
-  number,
-  crypto.ScryptOptions,
-  Buffer
->(crypto.scrypt);
+const scrypt = promisify<string | Buffer, Buffer, number, crypto.ScryptOptions, Buffer>(
+  crypto.scrypt
+);
 
 /**
  * Hash a password using scrypt
@@ -67,17 +63,14 @@ async function hashPassword(password: string): Promise<string> {
  * @param hash The hash to verify against (in format salt:hash)
  * @returns True if the password matches, false otherwise
  */
-async function verifyPassword(
-  password: string,
-  storedHash: string,
-): Promise<boolean> {
+async function verifyPassword(password: string, storedHash: string): Promise<boolean> {
   try {
     const parts = storedHash.split(":");
     if (parts.length !== 2) return false;
 
     // Explicitly type the parts to ensure they are strings
-    const saltHex: string = parts[0];
-    const hashHex: string = parts[1];
+    const saltHex: string = parts[0] ?? "";
+    const hashHex: string = parts[1] ?? "";
 
     // Create buffers from the hex strings
     const salt = Buffer.from(saltHex, "hex");
@@ -198,9 +191,7 @@ export const AuthService = {
           logger.debug(`Cleaned up user ${userId} from Payload CMS`);
         } catch (error) {
           // Ignore if user doesn't exist
-          logger.debug(
-            `User ${userId} not found in Payload CMS during cleanup`,
-          );
+          logger.debug(`User ${userId} not found in Payload CMS during cleanup`);
         }
       }
 
@@ -212,20 +203,10 @@ export const AuthService = {
         }
       } catch (error) {
         // Ignore if user doesn't exist
-        if (
-          !(
-            error instanceof Error &&
-            error.message.includes("Record to delete not found")
-          )
-        ) {
-          logger.warn(
-            `Error cleaning up user ${userId} from Shipkit database:`,
-            error,
-          );
+        if (!(error instanceof Error && error.message.includes("Record to delete not found"))) {
+          logger.warn(`Error cleaning up user ${userId} from Shipkit database:`, error);
         } else {
-          logger.debug(
-            `User ${userId} not found in Shipkit database during cleanup`,
-          );
+          logger.debug(`User ${userId} not found in Shipkit database during cleanup`);
         }
       }
     } catch (error) {
@@ -245,7 +226,7 @@ export const AuthService = {
       email?: string;
       name?: string;
       image?: string;
-    },
+    }
   ): Promise<{ id: string; email?: string }> {
     try {
       // Update in Payload CMS
@@ -283,10 +264,7 @@ export const AuthService = {
             .where(eq(users.id, userId));
           // logger.info(`Updated user ${userId} in Shipkit database`);
         } catch (error) {
-          logger.error(
-            `Failed to update user ${userId} in Shipkit database:`,
-            error,
-          );
+          logger.error(`Failed to update user ${userId} in Shipkit database:`, error);
           throw new Error("Failed to update user in Shipkit database");
         }
       }
@@ -328,7 +306,7 @@ export const AuthService = {
 
         if (shipkitUser) {
           logger.warn(
-            `User ${userId} still exists in Shipkit after Payload deletion, forcing delete`,
+            `User ${userId} still exists in Shipkit after Payload deletion, forcing delete`
           );
           await db.delete(users).where(eq(users.id, userId));
         }
@@ -353,7 +331,7 @@ export const AuthService = {
       },
       providerId === "resend" && options?.email
         ? { email: options.email }
-        : { prompt: "select_account" },
+        : { prompt: "select_account" }
     );
     return { ok: true, message: STATUS_CODES.LOGIN.message };
   },
@@ -411,7 +389,16 @@ export const AuthService = {
 
       return { ok: true, url: result.url ?? redirectTo };
     } catch (error) {
-      logger.error("Error in signInWithCredentials:", error);
+      // Only log unexpected errors; credential/auth errors are already logged at origin
+      if (
+        !(
+          error instanceof Error &&
+          (error.message === STATUS_CODES.CREDENTIALS.message ||
+            error.message === STATUS_CODES.AUTH_ERROR.message)
+        )
+      ) {
+        logger.error("Error in signInWithCredentials:", error);
+      }
       throw error;
     }
   },
@@ -512,7 +499,7 @@ export const AuthService = {
       logger.error("Sign up error:", error);
       // If we have a userId, attempt cleanup
       if (error instanceof Error && error.message.includes("ID")) {
-        const match = error.message.match(/ID\s+(\S+)/);
+        const match = /ID\s+(\S+)/.exec(error.message);
         if (match?.[1]) {
           // Use optional chaining
           await this.cleanupPartialUserCreation(match[1]);
@@ -541,13 +528,7 @@ export const AuthService = {
    * @param options Options for updating the session
    * @returns The updated session
    */
-  async updateSession({
-    userId,
-    data,
-  }: {
-    userId: string;
-    data: Record<string, any>;
-  }) {
+  async updateSession({ userId, data }: { userId: string; data: Record<string, any> }) {
     try {
       // Import the update function from auth.ts
       const { update } = await import("@/server/auth");
@@ -619,10 +600,7 @@ export const AuthService = {
    * @param password New password
    * @returns Success object or throws an error
    */
-  async resetPassword(
-    token: string,
-    password: string,
-  ): Promise<{ ok: true }> {
+  async resetPassword(token: string, password: string): Promise<{ ok: true }> {
     try {
       if (!payload) {
         logger.error("Payload CMS is not initialized");
@@ -731,30 +709,31 @@ export const AuthService = {
           // logger.info("User authenticated successfully:", user.id);
           return user;
         } catch (loginError) {
-          logger.warn(`Login failed for existing user: ${email}`, loginError);
           throw new Error(STATUS_CODES.CREDENTIALS.message);
         }
       } catch (error) {
-        logger.error("Authentication error:", error);
-        // Re-throw the error if it's already a specific error message
-        if (
-          error instanceof Error &&
-          error.message === STATUS_CODES.CREDENTIALS.message
-        ) {
+        // Re-throw credential errors as-is, wrap unexpected errors
+        if (error instanceof Error && error.message === STATUS_CODES.CREDENTIALS.message) {
           throw error;
         }
+        logger.error("Authentication error:", error);
         throw new Error(STATUS_CODES.AUTH_ERROR.message);
       }
     } catch (error) {
-      logger.error("Auth error:", error);
-      // Re-throw the error instead of returning null
+      // Re-throw known auth errors without logging again
+      if (
+        error instanceof Error &&
+        (error.message === STATUS_CODES.CREDENTIALS.message ||
+          error.message === STATUS_CODES.AUTH_ERROR.message)
+      ) {
+        throw error;
+      }
+      logger.error("Unexpected auth error:", error);
       throw error;
     }
   },
 
-  async verifyEmail(
-    token: string,
-  ): Promise<{ ok: boolean; message: string }> {
+  async verifyEmail(token: string): Promise<{ ok: boolean; message: string }> {
     if (!env.NEXT_PUBLIC_FEATURE_PAYLOAD_ENABLED) {
       return { ok: false, message: "Email verification not available" };
     }
@@ -780,7 +759,7 @@ export const AuthService = {
 
   async resetPasswordViaCMS(
     token: string,
-    password: string,
+    password: string
   ): Promise<{ ok: boolean; message: string }> {
     if (!env.NEXT_PUBLIC_FEATURE_PAYLOAD_ENABLED) {
       return { ok: false, message: "Password reset not available" };
@@ -808,7 +787,7 @@ export const AuthService = {
 
   async updateUserProfile(
     userId: string,
-    updates: Partial<User>,
+    updates: Partial<User>
   ): Promise<{ ok: boolean; message?: string; user?: User }> {
     try {
       // Get the current user data
@@ -870,9 +849,7 @@ export const AuthService = {
     }
   },
 
-  async deleteUserAccount(
-    userId: string,
-  ): Promise<{ ok: boolean; message?: string }> {
+  async deleteUserAccount(userId: string): Promise<{ ok: boolean; message?: string }> {
     try {
       // Check if the user exists
       const user = await db?.query.users.findFirst({
@@ -961,9 +938,7 @@ export const AuthService = {
     }
   },
 
-  async forgotPasswordViaCMS(
-    email: string,
-  ): Promise<{ ok: boolean; message: string }> {
+  async forgotPasswordViaCMS(email: string): Promise<{ ok: boolean; message: string }> {
     const payload = await getPayloadClient();
     if (!payload) {
       return { ok: false, message: "Password reset not available" };
@@ -1000,7 +975,7 @@ export const AuthService = {
 
   async resetPasswordViaCMS2(
     token: string,
-    password: string,
+    password: string
   ): Promise<{ ok: boolean; message: string }> {
     const payload = await getPayloadClient();
     if (!payload) {
@@ -1021,10 +996,7 @@ export const AuthService = {
     }
   },
 
-  async signInViaCMS(
-    email: string,
-    password: string,
-  ): Promise<{ user?: any; error?: string }> {
+  async signInViaCMS(email: string, password: string): Promise<{ user?: any; error?: string }> {
     const payload = await getPayloadClient();
     if (!payload) {
       return { error: "Authentication not available" };
@@ -1048,6 +1020,10 @@ export const AuthService = {
           collection: "users",
           data: { email, password },
         });
+
+        if (!result.user || !result.token) {
+          return { error: "Invalid credentials" };
+        }
 
         // Create a user object to return
         const user = {
