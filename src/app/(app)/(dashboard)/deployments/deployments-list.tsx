@@ -112,12 +112,12 @@ export function DeploymentsList({ deployments: initialDeployments }: Deployments
       if (previous?.status === "deploying" && deployment.status !== "deploying") {
         if (deployment.status === "completed") {
           toast.success(`Deployment "${deployment.projectName}" completed successfully!`);
-        } else if (deployment.status === "failed") {
+        } else if ((deployment.status as string) === "failed") {
           toast.error(
             `Deployment "${deployment.projectName}" failed: ${deployment.error || "Unknown error"}`,
             { duration: 10000 }
           );
-        } else if (deployment.status === "timeout") {
+        } else if ((deployment.status as string) === "timeout") {
           toast.error(
             `Deployment "${deployment.projectName}" timed out: ${deployment.error || "No response received"}`,
             { duration: 10000 }
@@ -173,7 +173,7 @@ export function DeploymentsList({ deployments: initialDeployments }: Deployments
             <span className="text-muted-foreground">
               {row.original.description ?? "No description"}
             </span>
-            {(row.original.status === "failed" || row.original.status === "timeout") &&
+            {((row.original.status as string) === "failed" || (row.original.status as string) === "timeout") &&
               row.original.error && (
                 <div className="mt-1">
                   <span className="text-xs text-red-600 dark:text-red-400">

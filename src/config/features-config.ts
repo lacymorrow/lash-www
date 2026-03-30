@@ -161,6 +161,26 @@ buildTimeFeatures.CONSENT_MANAGER_ENABLED =
 buildTimeFeatures.FILE_UPLOAD_ENABLED =
 	buildTimeFeatures.S3_ENABLED || buildTimeFeatures.VERCEL_BLOB_ENABLED;
 
+// Devtools
+buildTimeFeatures.DEVTOOLS_REACT_GRAB_ENABLED =
+	!envIsTrue("DISABLE_REACT_GRAB") && process.env.NODE_ENV !== "production";
+
+// ======== AI Provider Detection (for React Grab) =========
+
+type AiProviderMeta = { id: "claude-code" | "codex" | "gemini"; env: string };
+
+const AI_PROVIDER_CANDIDATES: AiProviderMeta[] = [
+	{ id: "claude-code", env: "ANTHROPIC_API_KEY" },
+	{ id: "codex", env: "OPENAI_API_KEY" },
+	{ id: "gemini", env: "GOOGLE_AI_API_KEY" },
+];
+
+/**
+ * First AI provider whose env key is set, or `undefined`.
+ */
+export const preferredAiProvider: AiProviderMeta | undefined =
+	AI_PROVIDER_CANDIDATES.find((p) => hasEnv(p.env));
+
 // ======== Generate Feature Flags =========
 
 export { buildTimeFeatures };

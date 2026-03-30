@@ -37,6 +37,14 @@ export const STATUS_CODES = {
 		message: "GitHub connected successfully.",
 	},
 
+	CONNECT_VERCEL: {
+		code: "CONNECT_VERCEL",
+		message: "Vercel account connected successfully.",
+	},
+	CONNECT_VERCEL_ERROR: {
+		code: "CONNECT_VERCEL_ERROR",
+		message: "Failed to connect Vercel account, please try again.",
+	},
 	UNKNOWN: {
 		code: "UNKNOWN",
 		message: "Something went wrong, please try again.",

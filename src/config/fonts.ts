@@ -21,9 +21,11 @@ export const fontMono = FontMono({
 	variable: "--font-mono",
 });
 
+export type FontCategory = "sans-serif" | "serif" | "display" | "handwriting" | "monospace";
+
 export interface GoogleFont {
 	family: string;
-	// Add other properties if needed, e.g., category, variants
+	category?: FontCategory;
 }
 
 // A curated list of popular Google Fonts

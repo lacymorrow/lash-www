@@ -74,7 +74,7 @@ function MobileTocErrorFallback({
 	error,
 	resetErrorBoundary,
 }: {
-	error: Error;
+	error: unknown;
 	resetErrorBoundary: () => void;
 }) {
 	return (

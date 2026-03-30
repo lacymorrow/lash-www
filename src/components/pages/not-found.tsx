@@ -26,7 +26,7 @@ interface NotFoundPageProps {
 	descriptionClassName?: string;
 }
 
-const NoOpProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+const NoOpProvider = ({ children }: { children?: React.ReactNode }) => <>{children}</>;
 
 export const NotFoundPage = ({ containerClassName, descriptionClassName }: NotFoundPageProps) => {
 	return (

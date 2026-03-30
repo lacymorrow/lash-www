@@ -69,6 +69,9 @@ interface SiteConfig {
     databaseName: string;
   };
 
+  // Social media profiles
+  social?: Partial<Record<string, string>>;
+
   // External links
   links: {
     twitter: string;

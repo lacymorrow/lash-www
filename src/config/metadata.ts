@@ -138,6 +138,19 @@ export const constructMetadata = ({
   };
 };
 
+// ======== Head Link Hints (preconnect / dns-prefetch) =========
+
+export type HeadLinkHint = {
+  rel: "preconnect" | "dns-prefetch";
+  href: string;
+  crossOrigin?: "" | "anonymous" | "use-credentials";
+};
+
+export const headLinkHints: HeadLinkHint[] = [
+  { rel: "preconnect", href: "https://fonts.googleapis.com" },
+  { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+];
+
 // Route-specific metadata for better CTR
 export const routeMetadata = {
   home: {

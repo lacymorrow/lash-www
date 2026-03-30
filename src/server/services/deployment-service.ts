@@ -64,7 +64,7 @@ interface TokenValidationResult {
 }
 
 export function resolveDeploymentStatusFromVercelState(state?: string): {
-  status: "deploying" | "completed" | "failed";
+  status: "deploying" | "completed" | "failed" | "timeout";
   isTerminal: boolean;
   error?: string;
 } {

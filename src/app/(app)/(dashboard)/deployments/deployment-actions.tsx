@@ -122,10 +122,10 @@ export function DeploymentActions({ deployment }: DeploymentActionsProps) {
             </DropdownMenuItem>
           )}
 
-          {deployment.vercelProjectUrl && deployment.vercelDeploymentId && (
+          {deployment.vercelDeploymentUrl && (
             <DropdownMenuItem asChild data-testid="deployment-actions-view-vercel-deployment">
               <a
-                href={`${deployment.vercelProjectUrl}/${deployment.vercelDeploymentId}`}
+                href={deployment.vercelDeploymentUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2"

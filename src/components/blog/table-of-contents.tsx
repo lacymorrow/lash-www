@@ -135,7 +135,7 @@ function TOCErrorFallback({
 	error,
 	resetErrorBoundary,
 }: {
-	error: Error;
+	error: unknown;
 	resetErrorBoundary: () => void;
 }) {
 	return (

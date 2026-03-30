@@ -655,9 +655,10 @@ export const deployments = createTable(
 		githubRepoName: text("github_repo_name"),
 		vercelProjectId: text("vercel_project_id"),
 		vercelProjectUrl: text("vercel_project_url"),
+		vercelDeploymentId: text("vercel_deployment_id"),
 		vercelDeploymentUrl: text("vercel_deployment_url"),
 		status: text("status", {
-			enum: ["deploying", "completed", "failed"],
+			enum: ["deploying", "completed", "failed", "timeout"],
 		})
 			.notNull()
 			.default("deploying"),

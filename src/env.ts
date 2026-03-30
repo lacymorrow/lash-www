@@ -138,6 +138,7 @@ const serverSchema = {
   VERCEL_INTEGRATION_SLUG: z.string().optional(),
   VERCEL_CLIENT_ID: z.string().optional(),
   VERCEL_CLIENT_SECRET: z.string().optional(),
+  VERCEL_ACCESS_TOKEN: z.string().optional(),
   VERCEL_BLOB_READ_WRITE_TOKEN: z.string().optional(),
 };
 
@@ -256,6 +257,7 @@ export const env = createEnv({
     NEXT_PUBLIC_FEATURE_DEVTOOLS_REACT_GRAB_ENABLED: zBooleanFeatureFlag,
     NEXT_PUBLIC_FEATURE_FILE_UPLOAD_ENABLED: zBooleanFeatureFlag,
     NEXT_PUBLIC_FEATURE_TURNSTILE_ENABLED: zBooleanFeatureFlag,
+    NEXT_PUBLIC_SHIPKIT_REPO: z.string().optional(),
   },
 
   /**
@@ -364,6 +366,7 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_FEATURE_DEVTOOLS_REACT_GRAB_ENABLED,
     NEXT_PUBLIC_FEATURE_FILE_UPLOAD_ENABLED: process.env.NEXT_PUBLIC_FEATURE_FILE_UPLOAD_ENABLED,
     NEXT_PUBLIC_FEATURE_TURNSTILE_ENABLED: process.env.NEXT_PUBLIC_FEATURE_TURNSTILE_ENABLED,
+    NEXT_PUBLIC_SHIPKIT_REPO: process.env.NEXT_PUBLIC_SHIPKIT_REPO,
   },
 
   /**

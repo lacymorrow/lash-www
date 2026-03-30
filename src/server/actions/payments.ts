@@ -535,3 +535,13 @@ export async function getUserPaymentStatus(): Promise<boolean> {
   if (!session?.user?.id) return false;
   return await PaymentService.getUserPaymentStatus(session.user.id);
 }
+
+export async function checkUserPurchasedProduct(
+  productId: string,
+  provider?: string,
+): Promise<{ success: boolean; purchased: boolean; message?: string }> {
+  const session = await getSession();
+  if (!session?.user?.id) return { success: false, purchased: false };
+  const hasPaid = await PaymentService.getUserPaymentStatus(session.user.id);
+  return { success: true, purchased: hasPaid };
+}

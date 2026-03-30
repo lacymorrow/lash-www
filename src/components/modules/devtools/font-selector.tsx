@@ -150,7 +150,7 @@ export function FontSelector() {
         setInitialError(errorMsg);
         setBrowseError(errorMsg);
         // Fall back to curated list categories
-        registerCategories(GOOGLE_FONTS);
+        registerCategories(GOOGLE_FONTS as FontWithCategory[]);
       } finally {
         setInitialLoading(false);
         setBrowseLoading(false);
