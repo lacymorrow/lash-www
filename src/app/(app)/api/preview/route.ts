@@ -1,5 +1,6 @@
 import { timingSafeEqual } from "node:crypto";
 import { type NextRequest, NextResponse } from "next/server";
+import { env } from "@/env";
 import {
   PREVIEW_COOKIE,
   parseOverridesFromParams,
@@ -24,12 +25,14 @@ function secretsMatch(a: string, b: string): boolean {
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
-  const previewSecret = process.env.PREVIEW_SECRET;
+  const previewSecret = env.PREVIEW_SECRET;
   if (previewSecret) {
     const token = searchParams.get("token") ?? "";
     if (!secretsMatch(token, previewSecret)) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
+  } else if (process.env.NODE_ENV === "production") {
+    console.warn("[preview-flags] PREVIEW_SECRET is not set — endpoint is unauthenticated in production");
   }
 
   if (parseTruthy(searchParams.get("clear") ?? "") === true) {

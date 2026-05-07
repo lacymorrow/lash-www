@@ -28,12 +28,14 @@ export function parseTruthy(value: string): boolean | undefined {
   return undefined;
 }
 
+const validFlagNames = new Set(featureFlagNames);
+
 function parseOverridesCookie(raw: string): FeatureFlagOverrides {
   const parsed: unknown = JSON.parse(raw);
   if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) return {};
   const result: FeatureFlagOverrides = {};
   for (const [key, value] of Object.entries(parsed as Record<string, unknown>)) {
-    if (typeof value === "boolean") result[key] = value;
+    if (typeof value === "boolean" && validFlagNames.has(key)) result[key] = value;
   }
   return result;
 }
