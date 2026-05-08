@@ -9,12 +9,12 @@ commitCount: 3
 
 ## Feature Flag Query-Param Overrides
 
-You can now toggle any feature flag at runtime without redeploying by hitting the new `/api/preview` route.
+You can now toggle any feature flag at runtime without redeploying by hitting the new `/api/flags` route.
 
 ### Usage
 
 ```
-/api/preview?feature_flag_database=1&feature_flag_mdx=0
+/api/flags?feature_flag_database=1&feature_flag_mdx=0
 ```
 
 Overrides are stored in a short-lived cookie (`_shipkit_preview`, 8 hours) and merged with your existing flags on every request.

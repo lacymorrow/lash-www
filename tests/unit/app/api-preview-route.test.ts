@@ -90,7 +90,7 @@ vi.mock("next/server", () => {
   };
 });
 
-import { GET } from "@/app/(app)/api/preview/route";
+import { GET } from "@/app/(app)/api/flags/route";
 import type { NextRequest } from "next/server";
 import { NextRequest as MockNextRequest } from "next/server";
 
@@ -98,7 +98,7 @@ function makeRequest(url: string): NextRequest {
   return new (MockNextRequest as any)(url) as NextRequest;
 }
 
-describe("/api/preview route", () => {
+describe("/api/flags route", () => {
   beforeEach(() => {
     mockPreviewSecret = undefined;
     mockCookieStore = {};
@@ -114,7 +114,7 @@ describe("/api/preview route", () => {
     it("allows open access when PREVIEW_SECRET is unset", async () => {
       mockPreviewSecret = undefined;
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?feature_flag_database=1",
+        "http://localhost:3000/api/flags?feature_flag_database=1",
       );
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
@@ -123,7 +123,7 @@ describe("/api/preview route", () => {
     it("returns 401 when PREVIEW_SECRET is set and no token provided", async () => {
       mockPreviewSecret = "my-secret-token";
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?feature_flag_database=1",
+        "http://localhost:3000/api/flags?feature_flag_database=1",
       );
       const res = (await GET(req)) as any;
       expect(res.status).toBe(401);
@@ -133,7 +133,7 @@ describe("/api/preview route", () => {
     it("returns 401 when PREVIEW_SECRET is set and wrong token provided", async () => {
       mockPreviewSecret = "my-secret-token";
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?token=wrong-token&feature_flag_database=1",
+        "http://localhost:3000/api/flags?token=wrong-token&feature_flag_database=1",
       );
       const res = (await GET(req)) as any;
       expect(res.status).toBe(401);
@@ -143,7 +143,7 @@ describe("/api/preview route", () => {
     it("allows access when correct token is provided", async () => {
       mockPreviewSecret = "my-secret-token";
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?token=my-secret-token&feature_flag_database=1",
+        "http://localhost:3000/api/flags?token=my-secret-token&feature_flag_database=1",
       );
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
@@ -153,7 +153,7 @@ describe("/api/preview route", () => {
   describe("setting flags", () => {
     it("sets cookie with correct JSON for feature_flag_database=1&feature_flag_mdx=0", async () => {
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?feature_flag_database=1&feature_flag_mdx=0",
+        "http://localhost:3000/api/flags?feature_flag_database=1&feature_flag_mdx=0",
       );
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
@@ -169,7 +169,7 @@ describe("/api/preview route", () => {
 
     it("sets cookie with httpOnly, sameSite lax, path /", async () => {
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?feature_flag_database=1",
+        "http://localhost:3000/api/flags?feature_flag_database=1",
       );
       const res = (await GET(req)) as any;
       const cookie = setCookies[0];
@@ -183,7 +183,7 @@ describe("/api/preview route", () => {
   describe("clearing overrides", () => {
     it("deletes cookie when clear=1", async () => {
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?clear=1",
+        "http://localhost:3000/api/flags?clear=1",
       );
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
@@ -192,7 +192,7 @@ describe("/api/preview route", () => {
 
     it("deletes cookie with clear=true", async () => {
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?clear=true",
+        "http://localhost:3000/api/flags?clear=true",
       );
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
@@ -206,7 +206,7 @@ describe("/api/preview route", () => {
         DATABASE_ENABLED: true,
       });
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?feature_flag_mdx=0",
+        "http://localhost:3000/api/flags?feature_flag_mdx=0",
       );
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
@@ -223,7 +223,7 @@ describe("/api/preview route", () => {
         DATABASE_ENABLED: true,
       });
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?feature_flag_database=0",
+        "http://localhost:3000/api/flags?feature_flag_database=0",
       );
       const res = (await GET(req)) as any;
       const cookie = setCookies[0];
@@ -235,7 +235,7 @@ describe("/api/preview route", () => {
   describe("redirect parameter", () => {
     it("redirects to / by default", async () => {
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?feature_flag_database=1",
+        "http://localhost:3000/api/flags?feature_flag_database=1",
       );
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
@@ -244,7 +244,7 @@ describe("/api/preview route", () => {
 
     it("redirects to specified path", async () => {
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?feature_flag_database=1&redirect=/dashboard",
+        "http://localhost:3000/api/flags?feature_flag_database=1&redirect=/dashboard",
       );
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
@@ -253,7 +253,7 @@ describe("/api/preview route", () => {
 
     it("redirects to / when redirect param is an external URL (safety)", async () => {
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?feature_flag_database=1&redirect=https://evil.com",
+        "http://localhost:3000/api/flags?feature_flag_database=1&redirect=https://evil.com",
       );
       const res = (await GET(req)) as any;
       expect(new URL(res.url).pathname).toBe("/");
@@ -261,7 +261,7 @@ describe("/api/preview route", () => {
 
     it("redirects to / when redirect param starts with //", async () => {
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?feature_flag_database=1&redirect=//evil.com",
+        "http://localhost:3000/api/flags?feature_flag_database=1&redirect=//evil.com",
       );
       const res = (await GET(req)) as any;
       expect(new URL(res.url).pathname).toBe("/");
@@ -269,7 +269,7 @@ describe("/api/preview route", () => {
 
     it("redirect works with clear param", async () => {
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?clear=1&redirect=/settings",
+        "http://localhost:3000/api/flags?clear=1&redirect=/settings",
       );
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
@@ -284,7 +284,7 @@ describe("/api/preview route", () => {
         DATABASE_ENABLED: true,
         MDX_ENABLED: false,
       });
-      const req = await makeRequest("http://localhost:3000/api/preview");
+      const req = await makeRequest("http://localhost:3000/api/flags");
       const res = (await GET(req)) as any;
       expect(res.type).toBe("json");
       expect(res.body.overrides).toEqual({
@@ -295,7 +295,7 @@ describe("/api/preview route", () => {
     });
 
     it("returns empty overrides when no cookie and no params", async () => {
-      const req = await makeRequest("http://localhost:3000/api/preview");
+      const req = await makeRequest("http://localhost:3000/api/flags");
       const res = (await GET(req)) as any;
       expect(res.type).toBe("json");
       expect(res.body.overrides).toEqual({});
@@ -310,7 +310,7 @@ describe("/api/preview route", () => {
       }
       mockCookieStore["_shipkit_preview"] = JSON.stringify(bigOverrides);
       const req = await makeRequest(
-        "http://localhost:3000/api/preview?feature_flag_database=1",
+        "http://localhost:3000/api/flags?feature_flag_database=1",
       );
       const res = (await GET(req)) as any;
       expect(res.status).toBe(400);
