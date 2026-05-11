@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { buildInfo } from "@/config/build-info";
 import {
   buildTimeFeatureFlags,
   buildTimeFeatures,
@@ -41,7 +42,10 @@ const nextConfig: NextConfig = {
     // unless prefixed with NEXT_PUBLIC_. Consumers should read via process.env on server.
     ...getDerivedSecrets(),
 
-    // You can add other build-time env variables here if needed
+    // Build version info — baked in at build time, available via /api/version
+    NEXT_PUBLIC_BUILD_VERSION: buildInfo.version,
+    NEXT_PUBLIC_BUILD_COMMIT: buildInfo.commit,
+    NEXT_PUBLIC_BUILD_TIME: buildInfo.buildTime,
   },
 
   /*
