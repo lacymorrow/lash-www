@@ -1,5 +1,7 @@
+import fs from "fs/promises";
 import type { Metadata } from "next";
 import Link from "next/link";
+import path from "path";
 import { Badge } from "@/components/ui/badge";
 import { constructMetadata } from "@/config/metadata";
 import { siteConfig } from "@/config/site-config";
@@ -13,8 +15,28 @@ export const metadata: Metadata = constructMetadata({
   description: `See what's new in ${siteConfig.title}. Latest updates, features, and fixes.`,
 });
 
+async function getDebugInfo() {
+  const cwd = process.cwd();
+  const dir = path.join(cwd, "src/content/changelog");
+  let files: string[] = [];
+  let error = "";
+  try {
+    files = await fs.readdir(dir);
+  } catch (e: unknown) {
+    error = e instanceof Error ? e.message : String(e);
+  }
+  let contentDirs: string[] = [];
+  try {
+    contentDirs = await fs.readdir(path.join(cwd, "src/content"));
+  } catch {
+    contentDirs = ["src/content not found"];
+  }
+  return { cwd, dir, files, error, contentDirs };
+}
+
 export default async function ChangelogPage() {
   const entries = await getChangelogEntries();
+  const debug = await getDebugInfo();
 
   return (
     <div className="w-full max-w-3xl mx-auto">
@@ -22,6 +44,11 @@ export default async function ChangelogPage() {
         <h1 className="text-4xl font-bold tracking-tight">Changelog</h1>
         <p className="mt-2 text-lg text-muted-foreground">New updates, features, and fixes.</p>
       </header>
+
+      {/* TEMPORARY DEBUG — remove after fixing changelog */}
+      <pre className="text-xs bg-muted p-4 rounded mb-8 overflow-auto" data-debug>
+        {JSON.stringify({ entries: entries.length, ...debug }, null, 2)}
+      </pre>
 
       {entries.length === 0 && (
         <p className="text-muted-foreground">No changelog entries yet. Check back soon.</p>
