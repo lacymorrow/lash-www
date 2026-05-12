@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { constructMetadata } from "@/config/metadata";
 import { siteConfig } from "@/config/site-config";
-import { getChangelogEntries, getChangelogDebugInfo } from "@/lib/changelog";
+import { getChangelogEntries } from "@/lib/changelog";
 import { formatDate } from "@/lib/utils/format-date";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +18,6 @@ export const metadata: Metadata = constructMetadata({
 export default async function ChangelogPage() {
   await headers();
   const entries = await getChangelogEntries();
-  const debug = entries.length === 0 ? await getChangelogDebugInfo() : null;
 
   return (
     <div className="w-full max-w-3xl mx-auto">
@@ -28,14 +27,7 @@ export default async function ChangelogPage() {
       </header>
 
       {entries.length === 0 && (
-        <>
-          <p className="text-muted-foreground">No changelog entries yet. Check back soon.</p>
-          {debug && (
-            <pre className="mt-4 text-xs text-muted-foreground/50 overflow-auto max-h-40">
-              {JSON.stringify(debug, null, 2)}
-            </pre>
-          )}
-        </>
+        <p className="text-muted-foreground">No changelog entries yet. Check back soon.</p>
       )}
 
       <div className="relative space-y-0">

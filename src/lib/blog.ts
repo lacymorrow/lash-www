@@ -1,13 +1,12 @@
 import fs from "fs/promises";
-import matter from "gray-matter";
 import path from "path";
 import {
   type BlogAuthor,
   convertLegacyAuthor,
   defaultAuthor,
   getAuthorById,
-  getAuthorByName,
 } from "@/config/blog-authors";
+import { blogManifest } from "@/lib/generated/blog-manifest";
 
 export interface BlogPost {
   title: string;
@@ -29,67 +28,92 @@ export interface BlogCategory {
   posts: BlogPost[];
 }
 
+function resolveAuthors(data: Record<string, unknown>) {
+  let authorObject: BlogAuthor | undefined;
+  let authorObjects: BlogAuthor[] | undefined;
+
+  if (data.author) {
+    authorObject = convertLegacyAuthor(data.author as string);
+  }
+  if (data.authors && Array.isArray(data.authors)) {
+    authorObjects = (data.authors as Array<string | { name?: string }>).map(
+      (author) => {
+        if (typeof author === "string") return convertLegacyAuthor(author);
+        if (author.name) return convertLegacyAuthor(author.name);
+        return defaultAuthor;
+      }
+    );
+  }
+  if (data.authorId) {
+    authorObject = getAuthorById(data.authorId as string);
+  }
+  if (data.authorIds && Array.isArray(data.authorIds)) {
+    authorObjects = (data.authorIds as string[]).map((id) => getAuthorById(id));
+  }
+  return { authorObject, authorObjects };
+}
+
+function sortByDate(posts: BlogPost[]): BlogPost[] {
+  return posts.sort((a, b) => {
+    if (!a.publishedAt || !b.publishedAt) return 0;
+    return (
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    );
+  });
+}
+
 export async function getBlogPosts(): Promise<BlogPost[]> {
+  if (blogManifest.length > 0) {
+    const posts = blogManifest.map((entry) => {
+      const data = entry.frontmatter;
+      const { authorObject, authorObjects } = resolveAuthors(data);
+      return {
+        title: data.title as string,
+        slug: entry.filename.replace(/\.mdx?$/, ""),
+        content: entry.content,
+        description: data.description as string | undefined,
+        author: data.author as string | undefined,
+        authorObject,
+        publishedAt: data.publishedAt as string | undefined,
+        categories: (data.categories as string[]) || [],
+        badge: data.badge as string | undefined,
+        authors: data.authors as Array<{ name: string; avatar: string }> | undefined,
+        authorObjects,
+        image: data.image as string | undefined,
+      };
+    });
+    return sortByDate(posts);
+  }
+
   const postsDirectory = path.join(process.cwd(), "src/content/blog");
   const filenames = await fs.readdir(postsDirectory);
+  const { default: matter } = await import("gray-matter");
 
   const posts = await Promise.all(
     filenames.map(async (filename) => {
       const filePath = path.join(postsDirectory, filename);
       const fileContent = await fs.readFile(filePath, "utf-8");
       const { data, content } = matter(fileContent);
-
-      // Handle legacy author field
-      let authorObject: BlogAuthor | undefined;
-      if (data.author) {
-        authorObject = convertLegacyAuthor(data.author);
-      }
-
-      // Handle legacy authors array
-      let authorObjects: BlogAuthor[] | undefined;
-      if (data.authors && Array.isArray(data.authors)) {
-        authorObjects = data.authors.map((author: any) => {
-          if (typeof author === "string") {
-            return convertLegacyAuthor(author);
-          }
-          if (author.name) {
-            return convertLegacyAuthor(author.name);
-          }
-          return defaultAuthor;
-        });
-      }
-
-      // Handle new authorId field (if present)
-      if (data.authorId) {
-        authorObject = getAuthorById(data.authorId);
-      }
-
-      // Handle new authorIds array (if present)
-      if (data.authorIds && Array.isArray(data.authorIds)) {
-        authorObjects = data.authorIds.map((id: string) => getAuthorById(id));
-      }
+      const { authorObject, authorObjects } = resolveAuthors(data);
 
       return {
         title: data.title,
         slug: filename.replace(/\.mdx$/, ""),
         content,
         description: data.description,
-        author: data.author, // Keep for backward compatibility
+        author: data.author,
         authorObject,
         publishedAt: data.publishedAt,
         categories: data.categories || [],
         badge: data.badge,
-        authors: data.authors, // Keep for backward compatibility
+        authors: data.authors,
         authorObjects,
         image: data.image,
       };
     })
   );
 
-  return posts.sort((a, b) => {
-    if (!a.publishedAt || !b.publishedAt) return 0;
-    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
-  });
+  return sortByDate(posts);
 }
 
 export function getBlogCategories(posts: BlogPost[]): BlogCategory[] {
