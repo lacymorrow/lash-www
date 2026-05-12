@@ -86,7 +86,10 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
     })
   );
 
-  return posts;
+  return posts.sort((a, b) => {
+    if (!a.publishedAt || !b.publishedAt) return 0;
+    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+  });
 }
 
 export function getBlogCategories(posts: BlogPost[]): BlogCategory[] {
