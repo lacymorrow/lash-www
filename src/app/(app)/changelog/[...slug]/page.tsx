@@ -1,5 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
@@ -13,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { formatDate, formatDateTimeAttribute } from "@/lib/utils/format-date";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 interface Props {
   params: Promise<{ slug: string[] }>;
@@ -43,6 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ChangelogEntryPage({ params }: Props) {
+  await headers();
   const resolvedParams = await params;
   const slug = resolvedParams.slug.join("/");
   const entry = await getChangelogEntry(slug);

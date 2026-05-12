@@ -280,7 +280,8 @@ async function getMarkdownEntries(): Promise<ChangelogEntry[]> {
   let filenames: string[];
   try {
     filenames = await fs.readdir(CHANGELOG_DIR);
-  } catch {
+  } catch (err) {
+    console.warn("[changelog] Cannot read directory:", CHANGELOG_DIR, err instanceof Error ? err.message : err);
     return [];
   }
 

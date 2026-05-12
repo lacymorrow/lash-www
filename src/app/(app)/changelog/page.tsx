@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { constructMetadata } from "@/config/metadata";
@@ -7,6 +8,7 @@ import { getChangelogEntries } from "@/lib/changelog";
 import { formatDate } from "@/lib/utils/format-date";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = constructMetadata({
   title: `Changelog | ${siteConfig.title}`,
@@ -14,6 +16,7 @@ export const metadata: Metadata = constructMetadata({
 });
 
 export default async function ChangelogPage() {
+  await headers();
   const entries = await getChangelogEntries();
 
   return (
