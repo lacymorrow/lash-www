@@ -998,7 +998,7 @@
       "name": "changelog",
       "type": "registry:block",
       "title": "Changelog",
-      "description": "Auto-generated changelog from GitHub commits and tags with timeline view and individual entry pages.",
+      "description": "Changelog with markdown file support and GitHub commit fallback, timeline view, and individual entry pages.",
       "categories": [
         "shipkit",
         "changelog"
@@ -1006,7 +1006,8 @@
       "dependencies": [
         "react-markdown",
         "remark-gfm",
-        "lucide-react"
+        "lucide-react",
+        "gray-matter"
       ],
       "registryDependencies": [
         "@shipkit/cn",

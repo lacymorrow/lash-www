@@ -1,4 +1,7 @@
+import fs from "fs/promises";
+import matter from "gray-matter";
 import { unstable_cache } from "next/cache";
+import path from "path";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -270,17 +273,65 @@ function renderEntry(group: CommitGroup): ChangelogEntry {
 }
 
 // ---------------------------------------------------------------------------
+// Markdown file-based changelog (src/content/changelog/*.md)
+// ---------------------------------------------------------------------------
+const CHANGELOG_DIR = path.join(process.cwd(), "src/content/changelog");
+
+async function getMarkdownEntries(): Promise<ChangelogEntry[]> {
+  let filenames: string[];
+  try {
+    filenames = await fs.readdir(CHANGELOG_DIR);
+  } catch {
+    return [];
+  }
+
+  const mdFiles = filenames.filter((f) => f.endsWith(".md") || f.endsWith(".mdx"));
+  if (mdFiles.length === 0) return [];
+
+  const entries = await Promise.all(
+    mdFiles.map(async (filename) => {
+      const filePath = path.join(CHANGELOG_DIR, filename);
+      const fileContent = await fs.readFile(filePath, "utf-8");
+      const { data, content } = matter(fileContent);
+
+      const slug = data.slug ?? filename.replace(/\.mdx?$/, "");
+
+      return {
+        title: data.title ?? slug,
+        slug,
+        content: content.trim(),
+        description: data.description ?? "",
+        publishedAt: data.publishedAt ?? "",
+        badge: data.badge,
+        categories: data.categories ?? [],
+        commitCount: data.commitCount ?? 0,
+      } satisfies ChangelogEntry;
+    }),
+  );
+
+  return entries.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+}
+
+// ---------------------------------------------------------------------------
+// GitHub API-based changelog (fallback when no .md files exist)
+// ---------------------------------------------------------------------------
+async function getGitHubEntries(): Promise<ChangelogEntry[]> {
+  const [commits, tagMap] = await Promise.all([fetchCommits(), fetchTagMap()]);
+  const groups = groupCommits(commits, tagMap);
+  const entries = groups.map(renderEntry);
+  return entries.filter((e) => e.commitCount > 0);
+}
+
+// ---------------------------------------------------------------------------
 // Public API (cached for 1 hour via Next.js unstable_cache)
 // ---------------------------------------------------------------------------
 async function _getChangelogEntries(): Promise<ChangelogEntry[]> {
   try {
-    const [commits, tagMap] = await Promise.all([fetchCommits(), fetchTagMap()]);
-    const groups = groupCommits(commits, tagMap);
-    const entries = groups.map(renderEntry);
-    // Only filter out entries that have zero meaningful (non-noise) commits
-    return entries.filter((e) => e.commitCount > 0);
+    const mdEntries = await getMarkdownEntries();
+    if (mdEntries.length > 0) return mdEntries;
+    return await getGitHubEntries();
   } catch (err) {
-    console.error("[changelog] Failed to fetch from GitHub:", err);
+    console.error("[changelog] Failed to load changelog:", err);
     return [];
   }
 }

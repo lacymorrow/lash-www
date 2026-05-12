@@ -2,11 +2,12 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "changelog",
   "title": "Changelog",
-  "description": "Auto-generated changelog from GitHub commits and tags with timeline view and individual entry pages.",
+  "description": "Changelog with markdown file support and GitHub commit fallback, timeline view, and individual entry pages.",
   "dependencies": [
     "react-markdown",
     "remark-gfm",
-    "lucide-react"
+    "lucide-react",
+    "gray-matter"
   ],
   "registryDependencies": [
     "@shipkit/cn",
@@ -52,7 +53,7 @@
       "target": "~/src/lib/changelog.ts"
     }
   ],
-  "docs": "Auto-generated changelog from your GitHub repo's commits and tags. Set `GITHUB_REPO_OWNER` and `GITHUB_REPO_NAME` env vars (defaults to lacymorrow/shipkit). Optionally set `GITHUB_TOKEN` for higher API rate limits.",
+  "docs": "Changelog that reads from `src/content/changelog/*.md` files when present, falling back to auto-generation from GitHub commits and tags. Set `GITHUB_REPO_OWNER` and `GITHUB_REPO_NAME` env vars for the fallback (defaults to lacymorrow/shipkit). Optionally set `GITHUB_TOKEN` for higher API rate limits.",
   "categories": [
     "shipkit",
     "changelog"
