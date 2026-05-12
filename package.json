@@ -367,5 +367,6 @@
       "type": "individual",
       "url": "https://www.buymeacoffee.com/lm"
     }
-  ]
+  ],
+  "license": "FSL-1.1-MIT"
 }
