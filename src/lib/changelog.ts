@@ -340,3 +340,35 @@ export async function getChangelogEntry(slug: string): Promise<ChangelogEntry | 
   const entries = await getChangelogEntries();
   return entries.find((e) => e.slug === slug) ?? null;
 }
+
+export async function getChangelogDebugInfo(): Promise<Record<string, unknown>> {
+  const info: Record<string, unknown> = {
+    cwd: process.cwd(),
+    changelogDir: CHANGELOG_DIR,
+    nodeEnv: process.env.NODE_ENV,
+  };
+
+  try {
+    const files = await fs.readdir(CHANGELOG_DIR);
+    info.files = files;
+    info.fileCount = files.length;
+  } catch (err) {
+    info.readdirError = err instanceof Error ? `${err.code ?? ""}: ${err.message}` : String(err);
+  }
+
+  try {
+    const mdEntries = await getMarkdownEntries();
+    info.mdEntryCount = mdEntries.length;
+  } catch (err) {
+    info.mdError = err instanceof Error ? err.message : String(err);
+  }
+
+  try {
+    const ghEntries = await getGitHubEntries();
+    info.ghEntryCount = ghEntries.length;
+  } catch (err) {
+    info.ghError = err instanceof Error ? err.message : String(err);
+  }
+
+  return info;
+}
