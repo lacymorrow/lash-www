@@ -12,6 +12,7 @@ import { getChangelogEntries, getChangelogEntry } from "@/lib/changelog";
 import { cn } from "@/lib/utils";
 import { formatDate, formatDateTimeAttribute } from "@/lib/utils/format-date";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 3600;
 
 interface Props {
