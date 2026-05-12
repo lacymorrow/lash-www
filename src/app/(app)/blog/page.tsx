@@ -7,6 +7,8 @@ import { siteConfig } from "@/config/site-config";
 import { type BlogPost, getBlogPosts } from "@/lib/blog";
 import { formatDate } from "@/lib/utils/format-date";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = constructMetadata({
   title: "Blog - Latest Updates & Guides | Shipkit",
   description:

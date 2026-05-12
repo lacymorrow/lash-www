@@ -5,6 +5,8 @@ import { BlogHero } from "@/components/modules/blog/hero";
 import { getBlogPosts } from "@/lib/blog";
 import "@/styles/blog.css";
 
+export const dynamic = "force-dynamic";
+
 export default async function BlogLayout({ children }: { children: ReactNode }) {
   const posts = await getBlogPosts();
 
