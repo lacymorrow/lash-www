@@ -7,7 +7,6 @@ import { getChangelogEntries } from "@/lib/changelog";
 import { formatDate } from "@/lib/utils/format-date";
 
 export const dynamic = "force-dynamic";
-export const revalidate = 3600;
 
 export const metadata: Metadata = constructMetadata({
   title: `Changelog | ${siteConfig.title}`,

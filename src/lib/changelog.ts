@@ -1,6 +1,5 @@
 import fs from "fs/promises";
 import matter from "gray-matter";
-import { unstable_cache } from "next/cache";
 import path from "path";
 
 // ---------------------------------------------------------------------------
@@ -323,9 +322,9 @@ async function getGitHubEntries(): Promise<ChangelogEntry[]> {
 }
 
 // ---------------------------------------------------------------------------
-// Public API (cached for 1 hour via Next.js unstable_cache)
+// Public API
 // ---------------------------------------------------------------------------
-async function _getChangelogEntries(): Promise<ChangelogEntry[]> {
+export async function getChangelogEntries(): Promise<ChangelogEntry[]> {
   try {
     const mdEntries = await getMarkdownEntries();
     if (mdEntries.length > 0) return mdEntries;
@@ -335,12 +334,6 @@ async function _getChangelogEntries(): Promise<ChangelogEntry[]> {
     return [];
   }
 }
-
-export const getChangelogEntries = unstable_cache(
-  _getChangelogEntries,
-  ["changelog-entries"],
-  { revalidate: 3600 } // 1 hour
-);
 
 export async function getChangelogEntry(slug: string): Promise<ChangelogEntry | null> {
   const entries = await getChangelogEntries();
