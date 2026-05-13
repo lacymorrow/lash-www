@@ -22,9 +22,11 @@ interface EnhancedBlogPost extends BlogPost {
 }
 
 const BlogPage = async () => {
-  const posts: BlogPost[] = await getBlogPosts();
+  const posts: BlogPost[] = (await getBlogPosts()).sort((a, b) => {
+    if (!a.publishedAt || !b.publishedAt) return 0;
+    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+  });
 
-  // Transform posts to LogSpot format with demo data
   const logSpotPosts: EnhancedBlogPost[] = posts.map((post, index) => ({
     ...post,
     badge: post.badge || `v1.${index.toString().padStart(2, "0")}`,
