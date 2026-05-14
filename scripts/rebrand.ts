@@ -354,7 +354,8 @@ async function main() {
     console.log("\nNext steps:");
     console.log("1. Review the changes in src/config/site-config.ts");
     console.log("2. Update your .env file with the new database name");
-    console.log("3. Restart your development server");
+    console.log("3. Customize theme colors in src/styles/theme.css (--color-1 through --color-5 also control the page loader)");
+    console.log("4. Restart your development server");
   } else {
     console.log("\nTo apply these changes, run the script without the --dry-run flag.");
   }

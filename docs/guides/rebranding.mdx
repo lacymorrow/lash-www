@@ -89,10 +89,20 @@ Without `--creator-name`, the creator fields default to your project name/domain
 The rebrand script handles config values. You'll still want to update:
 
 - **Logo/favicon**: Replace files in `public/`
-- **Colors/theme**: Edit `tailwind.config.ts` or your CSS variables
+- **Colors/theme**: Edit the CSS variables in `src/styles/theme.css` — the `--color-1` through `--color-5` variables control accent colors across the site, and the page-loading progress bar (HolyLoader) automatically uses these via `--loader-color`
 - **Content**: Update landing page copy, footer text, etc.
 - **Social links**: Fill in the empty fields in `siteConfig.social`
 - **Store products**: Add your LemonSqueezy variant IDs
+
+## Feature Configuration
+
+Features are controlled entirely by environment variables — **do not manually set `FEATURE_*_ENABLED` variables**. The features config (`src/config/features-config.ts`) auto-detects which features are available based on whether their required env vars are set:
+
+- Set `AUTH_GITHUB_ID` + `AUTH_GITHUB_SECRET` → GitHub OAuth auto-enables
+- Set `STRIPE_SECRET_KEY` + `STRIPE_PUBLISHABLE_KEY` → Stripe payments auto-enables
+- Remove an env var → the feature disables cleanly
+
+See `src/config/features-config.ts` for the full list of feature detection rules.
 
 ## Troubleshooting
 
