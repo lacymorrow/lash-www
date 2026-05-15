@@ -97,18 +97,6 @@ export default async function sitemap({ id }: { id: number }): Promise<MetadataR
     },
   ];
 
-  // Example pages (medium priority)
-  const exampleRoutes = Object.values(routes.examples)
-    .filter(
-      (route): route is string => typeof route === "string" && route !== routes.examples.index
-    )
-    .map((route) => ({
-      url: `${siteConfig.url}${route}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.7,
-    }));
-
   // Changelog index
   const changelogRoute = {
     url: `${siteConfig.url}/changelog`,
@@ -144,7 +132,7 @@ export default async function sitemap({ id }: { id: number }): Promise<MetadataR
   switch (id) {
     case 0:
       // Main sitemap with static routes
-      return [...marketingRoutes, ...docRoutes, ...exampleRoutes, changelogRoute, ...supportRoutes];
+      return [...marketingRoutes, ...docRoutes, changelogRoute, ...supportRoutes];
     case 1: {
       // Blog posts sitemap (only when blog is enabled)
       if (process.env.NEXT_PUBLIC_HAS_BLOG !== "true") {
