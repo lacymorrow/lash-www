@@ -74,7 +74,9 @@ export function AuthForm({
 
           {!showAuthUnavailable && (
             <>
-              <OAuthButtons collapsible variant="icons" />
+              <Suspense fallback={<SuspenseFallback />}>
+                <OAuthButtons collapsible variant="icons" />
+              </Suspense>
               <Suspense fallback={<SuspenseFallback />}>{children}</Suspense>
             </>
           )}
