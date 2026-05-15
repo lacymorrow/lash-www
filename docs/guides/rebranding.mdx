@@ -89,7 +89,7 @@ Without `--creator-name`, the creator fields default to your project name/domain
 The rebrand script handles config values. You'll still want to update:
 
 - **Logo/favicon**: Replace files in `public/`
-- **Colors/theme**: Edit the CSS variables in `src/styles/theme.css` — update `--color-1` through `--color-5` for accent colors, and update `--loader-color` to match your brand (e.g. `linear-gradient(90deg, hsl(var(--color-1)), hsl(var(--color-2)), hsl(var(--color-3)), hsl(var(--color-1)))` to derive from your theme colors)
+- **Colors/theme**: Edit the CSS variables in `src/styles/theme.css` (`--color-1` through `--color-5` for accent colors). The page loader derives its gradient from these automatically. Clear or replace `src/styles/overrides.css` to remove Shipkit-specific brand overrides
 - **Content**: Update landing page copy, footer text, etc.
 - **Social links**: Fill in the empty fields in `siteConfig.social`
 - **Store products**: Add your LemonSqueezy variant IDs

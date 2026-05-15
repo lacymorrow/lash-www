@@ -305,6 +305,10 @@ async function main() {
   let packageJson = fs.readFileSync(packageJsonPath, "utf8");
   packageJson = packageJson.replace(/"name":\s*"([^"]+)"/, '"name": "' + projectSlug + '"');
 
+  // ── Clear overrides.css (remove Shipkit brand overrides) ──
+  const overridesPath = path.join(process.cwd(), "src", "styles", "overrides.css");
+  const overridesContent = "/* Brand overrides — add your custom CSS variable overrides here */\n";
+
   // ── Output ──
   if (isDryRun) {
     console.log("\nChanges that would be made:");
@@ -320,6 +324,9 @@ async function main() {
     console.log("\n3. package.json:");
     console.log("  - Package name: ship-kit -> " + projectSlug);
 
+    console.log("\n4. src/styles/overrides.css:");
+    console.log("  - Cleared Shipkit brand overrides (loader gradient will use theme colors)");
+
     console.log("\nNo files were modified (dry run)");
   } else {
     fs.writeFileSync(siteConfigPath, siteConfig);
@@ -330,6 +337,11 @@ async function main() {
 
     fs.writeFileSync(packageJsonPath, packageJson);
     console.log("Updated package.json");
+
+    if (fs.existsSync(overridesPath)) {
+      fs.writeFileSync(overridesPath, overridesContent);
+      console.log("Cleared src/styles/overrides.css (Shipkit brand overrides removed)");
+    }
 
     console.log("\nFormatting files...");
     try {
@@ -355,7 +367,8 @@ async function main() {
     console.log("1. Review the changes in src/config/site-config.ts");
     console.log("2. Update your .env file with the new database name");
     console.log("3. Customize theme colors in src/styles/theme.css (--color-1 through --color-5 also control the page loader)");
-    console.log("4. Restart your development server");
+    console.log("4. Add any brand-specific CSS overrides in src/styles/overrides.css");
+    console.log("5. Restart your development server");
   } else {
     console.log("\nTo apply these changes, run the script without the --dry-run flag.");
   }
