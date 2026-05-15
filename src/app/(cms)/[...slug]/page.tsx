@@ -65,12 +65,12 @@ async function getPageData(
   { source: "payload"; data: PayloadPage } | { source: "builder"; data: BuilderContent } | null
 > {
   if (!env.NEXT_PUBLIC_FEATURE_PAYLOAD_ENABLED && !env.NEXT_PUBLIC_FEATURE_BUILDER_ENABLED) {
-    return notFound();
+    return null;
   }
 
   const slugString = slug.join("/");
   if (shouldSkip(slugString)) {
-    return notFound();
+    return null;
   }
 
   if (env.NEXT_PUBLIC_FEATURE_PAYLOAD_ENABLED) {
@@ -143,7 +143,11 @@ export async function generateMetadata({
 
   const pageData = await getPageData(params.slug, 1);
   if (!pageData) {
-    return notFound();
+    // Return empty metadata — do NOT call notFound() here.
+    // Calling notFound() in generateMetadata causes Next.js to inject
+    // robots:noindex automatically, which leaks onto /docs pages due to
+    // the (cms)/[...slug] catch-all overlapping with (app)/docs/[[...slug]].
+    return {};
   }
 
   if (pageData.source === "builder") {
@@ -176,7 +180,7 @@ export async function generateMetadata({
     };
   }
 
-  notFound();
+  return {};
 }
 
 export default async function Page({ params: paramsPromise }: PageProps) {
