@@ -4,6 +4,8 @@ Launch your app at light speed. Fast, flexible, and feature-packed for the moder
 
 Made with ❤️ by [Lacy](https://lacy.sh)
 
+[![Shipkit Hero](./public/images/hero.png)](https://shipkit.io)
+
 ## Deploy in 30 Seconds
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fshipkit-io%2Fshipkit&project-name=shipkit-app&repository-name=shipkit-app&redirect-url=https%3A%2F%2Fshipkit.io%2Fx%2Fvercel%2Fdeploy&developer-id=oac_KkY2TcPxIWTDtL46WGqwZ4BF&production-deploy-hook=Shipkit%20Deploy&demo-title=Shipkit%20Preview&demo-description=The%20official%20Shipkit%20Preview.%20A%20full%20featured%20demo%20with%20dashboards%2C%20AI%20tools%2C%20and%20integrations%20with%20Docs%2C%20Payload%2C%20and%20Builder.io&demo-url=https%3A%2F%2Fshipkit.io%2Fdemo&demo-image=%2F%2Fshipkit.io%2Fimages%2Fdemo.png)
@@ -11,6 +13,19 @@ Made with ❤️ by [Lacy](https://lacy.sh)
 [![Open in Codeflow](https://developer.stackblitz.com/img/open_in_codeflow.svg)](https://pr.new/lacymorrow/shipkit)
 
 No environment variables needed to start! The setup wizard guides you through configuration after deployment.
+
+## Screenshots
+
+<table>
+  <tr>
+    <td><a href="https://shipkit.io/features"><img src="./public/images/features.png" alt="Features comparison" /></a></td>
+    <td><a href="https://shipkit.io/pricing"><img src="./public/images/pricing.png" alt="Pricing" /></a></td>
+  </tr>
+  <tr>
+    <td><a href="https://shipkit.io/sign-in"><img src="./public/images/sign-in.png" alt="Authentication" /></a></td>
+    <td><a href="https://shipkit.io/blog"><img src="./public/images/blog.png" alt="Blog / CMS" /></a></td>
+  </tr>
+</table>
 
 ## What's Included
 
