@@ -1,4 +1,4 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, lt } from "drizzle-orm";
 import { siteConfig } from "@/config/site-config";
 import { createGitHubTemplateService } from "@/lib/github-template";
 import { logger } from "@/lib/logger";
@@ -151,6 +151,24 @@ class DeploymentService {
     if (!db) {
       throw new Error("Database not available");
     }
+
+    // Mark any deployment stuck in "deploying" longer than the stale threshold
+    // as timed out. This is a safety net that works even when the Vercel token
+    // is unavailable or the Vercel API is unreachable.
+    await db
+      .update(deployments)
+      .set({
+        status: "timeout",
+        error: "Deployment timed out — exceeded maximum expected duration",
+        updatedAt: new Date(),
+      })
+      .where(
+        and(
+          eq(deployments.userId, userId),
+          eq(deployments.status, "deploying"),
+          lt(deployments.createdAt, new Date(Date.now() - STALE_DEPLOYMENT_MS))
+        )
+      );
 
     // Refresh deployment statuses from Vercel before returning results.
     await this.syncDeploymentStatuses(userId);
