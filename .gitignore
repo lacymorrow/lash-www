@@ -9,6 +9,7 @@ node_modules
 
 # testing
 /testing-results
+/test-results
 /coverage
 
 # next.js
