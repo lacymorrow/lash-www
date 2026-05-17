@@ -4,7 +4,6 @@ import { hasCredentialsForm, login, STORAGE_STATE, TEST_USER } from "./fixtures"
 test.describe("Login", () => {
   test("sign-in page loads", async ({ page }) => {
     await page.goto("/sign-in");
-    await page.waitForLoadState("networkidle");
 
     const heading = page.getByRole("heading", { name: /sign in/i });
     await expect(heading).toBeVisible({ timeout: 15000 });
@@ -27,7 +26,6 @@ test.describe("Login", () => {
 
   test("login with invalid credentials shows error", async ({ page }) => {
     await page.goto("/sign-in");
-    await page.waitForLoadState("networkidle");
 
     const hasForm = await hasCredentialsForm(page);
     test.skip(!hasForm, "Credentials auth not enabled");
@@ -36,19 +34,19 @@ test.describe("Login", () => {
     await page.getByLabel("Password").fill("wrongpassword");
     await page.getByRole("button", { name: /sign in/i }).click();
 
-    // Should stay on sign-in page or show an error
+    await expect(page).toHaveURL(/\/sign-in/, { timeout: 10000 });
+
     const errorToast = page.locator('[data-sonner-toast][data-type="error"]');
-    const stayedOnSignIn = await page
-      .waitForURL(/\/sign-in/, { timeout: 5000 })
-      .then(() => true)
-      .catch(() => false);
-
-    const hasError = await errorToast.isVisible().catch(() => false);
-
-    expect(stayedOnSignIn || hasError).toBe(true);
+    await expect(errorToast).toBeVisible({ timeout: 10000 });
   });
 
-  test("authenticated user can access dashboard", async ({ page }) => {
+  test("authenticated user can access dashboard", async ({ page, context }) => {
+    const hasForm = await hasCredentialsForm(page);
+    if (!hasForm) {
+      test.skip(true, "Credentials auth not enabled — cannot test authenticated access");
+      return;
+    }
+
     const loggedIn = await login(page, TEST_USER.email, TEST_USER.password);
     test.skip(!loggedIn, "Login failed — cannot test authenticated access");
 
