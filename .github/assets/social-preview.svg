@@ -1,22 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280" height="640" viewBox="0 0 1280 640">
 	<defs>
-		<radialGradient id="g1" cx="100%" cy="0%" r="85%">
-			<stop offset="0%" stop-color="#5b6cff" stop-opacity="0.14"/>
-			<stop offset="60%" stop-color="#5b6cff" stop-opacity="0.03"/>
-			<stop offset="100%" stop-color="#5b6cff" stop-opacity="0"/>
+		<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+			<stop offset="0%" stop-color="#0c1424"/>
+			<stop offset="100%" stop-color="#141d33"/>
+		</linearGradient>
+		<radialGradient id="g1" cx="100%" cy="0%" r="90%">
+			<stop offset="0%" stop-color="#6c8aff" stop-opacity="0.22"/>
+			<stop offset="55%" stop-color="#6c8aff" stop-opacity="0.05"/>
+			<stop offset="100%" stop-color="#6c8aff" stop-opacity="0"/>
 		</radialGradient>
-		<radialGradient id="g2" cx="0%" cy="100%" r="75%">
-			<stop offset="0%" stop-color="#e25a4a" stop-opacity="0.10"/>
-			<stop offset="100%" stop-color="#e25a4a" stop-opacity="0"/>
+		<radialGradient id="g2" cx="0%" cy="100%" r="80%">
+			<stop offset="0%" stop-color="#ff7a59" stop-opacity="0.18"/>
+			<stop offset="100%" stop-color="#ff7a59" stop-opacity="0"/>
 		</radialGradient>
 		<linearGradient id="rule" x1="0" y1="0" x2="1" y2="0">
-			<stop offset="0%" stop-color="#1a2235" stop-opacity="0"/>
-			<stop offset="50%" stop-color="#1a2235" stop-opacity="0.18"/>
-			<stop offset="100%" stop-color="#1a2235" stop-opacity="0"/>
+			<stop offset="0%" stop-color="#f4f5fa" stop-opacity="0"/>
+			<stop offset="50%" stop-color="#f4f5fa" stop-opacity="0.20"/>
+			<stop offset="100%" stop-color="#f4f5fa" stop-opacity="0"/>
 		</linearGradient>
 	</defs>
 
-	<rect width="100%" height="100%" fill="#f9f7f2"/>
+	<rect width="100%" height="100%" fill="url(#bg)"/>
 	<rect width="100%" height="100%" fill="url(#g1)"/>
 	<rect width="100%" height="100%" fill="url(#g2)"/>
 
@@ -29,35 +33,31 @@
 
 	<!-- Wordmark -->
 	<text x="440" y="290"
-		font-family="Inter" font-size="92" font-weight="800"
-		fill="#1a2235" letter-spacing="-3.5">Shipkit <tspan fill="#e25a4a">Bones</tspan></text>
+		font-family="Inter" font-size="116" font-weight="800"
+		fill="#f4f5fa" letter-spacing="-4.5">Shipkit</text>
 
 	<!-- Tagline -->
 	<text x="444" y="346"
 		font-family="Inter" font-size="32" font-weight="500"
-		fill="#5a6478">Launch your app at light speed.</text>
+		fill="#9aa3b8">The premium Next.js framework. Ship apps fast.</text>
 
-	<!-- Feature pill row -->
+	<!-- Feature chips -->
 	<g transform="translate(440, 396)" font-family="Inter" font-size="20" font-weight="600">
 		<g>
-			<rect x="0" y="0" width="118" height="44" rx="22" fill="#f0ecdf" stroke="#1a2235" stroke-opacity="0.08"/>
-			<text x="59" y="29" text-anchor="middle" fill="#1a2235">Next.js 15</text>
+			<rect x="0" y="0" width="118" height="44" rx="22" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.10)"/>
+			<text x="59" y="29" text-anchor="middle" fill="#f4f5fa">Next.js 16</text>
 		</g>
 		<g transform="translate(130, 0)">
-			<rect x="0" y="0" width="84" height="44" rx="22" fill="#f0ecdf" stroke="#1a2235" stroke-opacity="0.08"/>
-			<text x="42" y="29" text-anchor="middle" fill="#1a2235">Auth</text>
+			<rect x="0" y="0" width="100" height="44" rx="22" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.10)"/>
+			<text x="50" y="29" text-anchor="middle" fill="#f4f5fa">Drizzle</text>
 		</g>
-		<g transform="translate(226, 0)">
-			<rect x="0" y="0" width="116" height="44" rx="22" fill="#f0ecdf" stroke="#1a2235" stroke-opacity="0.08"/>
-			<text x="58" y="29" text-anchor="middle" fill="#1a2235">Payments</text>
+		<g transform="translate(242, 0)">
+			<rect x="0" y="0" width="106" height="44" rx="22" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.10)"/>
+			<text x="53" y="29" text-anchor="middle" fill="#f4f5fa">Payload</text>
 		</g>
-		<g transform="translate(354, 0)">
-			<rect x="0" y="0" width="74" height="44" rx="22" fill="#f0ecdf" stroke="#1a2235" stroke-opacity="0.08"/>
-			<text x="37" y="29" text-anchor="middle" fill="#1a2235">CMS</text>
-		</g>
-		<g transform="translate(440, 0)">
-			<rect x="0" y="0" width="58" height="44" rx="22" fill="#f0ecdf" stroke="#1a2235" stroke-opacity="0.08"/>
-			<text x="29" y="29" text-anchor="middle" fill="#1a2235">AI</text>
+		<g transform="translate(360, 0)">
+			<rect x="0" y="0" width="118" height="44" rx="22" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.10)"/>
+			<text x="59" y="29" text-anchor="middle" fill="#f4f5fa">Shadcn/UI</text>
 		</g>
 	</g>
 
@@ -67,10 +67,10 @@
 	<!-- Footer left -->
 	<text x="108" y="560"
 		font-family="Inter" font-size="22" font-weight="500"
-		fill="#5a6478">Free · Open source (AGPL-3.0) · Deploy in 30 seconds</text>
+		fill="#9aa3b8">Auth · Payments · CMS · AI · 100+ components · Deploy in 30s</text>
 
 	<!-- Footer right -->
 	<text x="1172" y="560" text-anchor="end"
 		font-family="Inter" font-size="22" font-weight="700"
-		fill="#1a2235">bones.sh</text>
+		fill="#6c8aff">shipkit.io</text>
 </svg>

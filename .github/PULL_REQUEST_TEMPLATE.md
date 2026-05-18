@@ -3,7 +3,7 @@ Thanks for the contribution! A few things that make review faster:
 - Keep the PR focused on one logical change
 - Use Conventional Commits in the title (feat: / fix: / chore: / docs: / refactor: / perf: / test:)
 - Fill in the test plan — that's the part reviewers actually depend on
-- If your change ripples to downstream Shipkit consumers, flag it in Reviewer notes
+- If your change ripples to downstream sites that sync from Shipkit (shipkit-sink, lash-www, etc.), flag it in Reviewer notes
 -->
 
 ## Summary
@@ -34,7 +34,8 @@ Thanks for the contribution! A few things that make review faster:
 
 ## Downstream impact
 
-<!-- Does this break the upstream API consumed by `shipkit` or downstream sites?
+<!-- Does this break anything for downstream sites that sync from Shipkit
+     (shipkit-sink, lash-www, TOH-new, client deployments)?
      If yes, list migration notes. Delete this section if N/A. -->
 
 ## Reviewer notes

@@ -6,7 +6,7 @@ Please **do not** open public GitHub issues for security vulnerabilities.
 
 Use one of these private channels instead:
 
-1. **GitHub Security Advisory** (preferred) — [open a private advisory](https://github.com/shipkit-io/bones/security/advisories/new).
+1. **GitHub Security Advisory** (preferred) — [open a private advisory](https://github.com/lacymorrow/shipkit/security/advisories/new).
 2. **Email** — `security@shipkit.io`.
 
 You should expect:
@@ -17,7 +17,7 @@ You should expect:
 
 ## In scope
 
-Bones is a self-deployable Next.js boilerplate. Issues that affect any deployment derived from this repo are in scope:
+Shipkit is the premium Next.js framework that derives from [Shipkit Bones](https://github.com/shipkit-io/bones) and is deployed across `shipkit.io` and several downstream sites. Issues affecting any of those deployments — or any fresh deployment derived from this repo — are in scope:
 
 - Authentication and session handling (NextAuth, Better Auth, Payload credentials)
 - Authorization / role escalation (admin endpoints, ownership boundaries)
@@ -26,6 +26,7 @@ Bones is a self-deployable Next.js boilerplate. Issues that affect any deploymen
 - Payment / billing flows (Lemon Squeezy, Stripe, Polar) that bypass authorization or leak data
 - Secret or PII exposure in API responses, logs, or error pages
 - Misconfigured defaults that would compromise a fresh deployment (e.g., dev secrets accepted in production, permissive CORS, missing rate limits on auth)
+- Premium-only surface (paid licensing checks, license-validated features) that can be bypassed in ways that affect commercial integrity
 
 ## Out of scope
 
@@ -33,10 +34,11 @@ Bones is a self-deployable Next.js boilerplate. Issues that affect any deploymen
 - Best-practice findings without a working PoC (missing headers, outdated lib versions with no exploit) — file as normal issues
 - Volumetric denial of service
 - Issues in third-party services (Auth.js, Payload, Drizzle, etc.) — report those upstream
+- Issues that originate upstream in [bones](https://github.com/shipkit-io/bones) — please file those against bones directly; we'll sync the fix
 
 ## Downstream deployments
 
-Bones is the upstream for [`shipkit`](https://github.com/lacymorrow/shipkit) and a number of derived sites. If you find an issue in a deployed downstream site (e.g., `shipkit.io`), please report it to that site's security contact instead — we'll backport the fix to bones if it's upstream-relevant.
+Shipkit is the upstream for several deployed sites (`shipkit-sink` powering `shipkit.io`, `lash-www`, `TOH-new`, and client deployments). If you find an issue in one of those specific deployments, please report it to that site's security contact first — fixes that are framework-level will be backported here.
 
 ## Supported versions
 

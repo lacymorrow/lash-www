@@ -1,18 +1,18 @@
-# Contributing to Shipkit Bones
+# Contributing to Shipkit
 
-Thanks for your interest. **Shipkit Bones** is the free, source-available (FSL-1.1-MIT) boilerplate that the rest of the Shipkit ecosystem builds on. It's a Next.js 15 (App Router + TypeScript) starter with Tailwind, Shadcn/UI, Drizzle ORM, Payload CMS, and integrations across auth, payments, email, and AI providers.
+Thanks for your interest. **Shipkit** is the premium Next.js framework downstream of [Shipkit Bones](https://github.com/shipkit-io/bones) — a Next.js 15 (App Router + TypeScript) stack with Tailwind, Shadcn/UI, Drizzle ORM on PostgreSQL, Payload CMS, and integrations across auth (NextAuth + Better Auth + Payload credentials), payments (Lemon Squeezy, Stripe, Polar), email (Resend), and AI providers. Shipkit lives at [shipkit.io](https://shipkit.io).
 
 ## Quick start
 
 Prerequisites: **Bun**, **PostgreSQL** (or a hosted Postgres URL), Node 20+.
 
 ```bash
-git clone https://github.com/shipkit-io/bones.git
-cd bones
+git clone https://github.com/lacymorrow/shipkit.git
+cd shipkit
 bun install
-cp .env.example .env       # only DATABASE_URL is required to boot
+cp .env.example .env       # DATABASE_URL is the minimum to boot
 
-bun dev                    # Next dev server with Turbo
+bun dev                    # Next dev server
 bun run db:migrate         # apply migrations once .env is set
 ```
 
@@ -26,7 +26,7 @@ Open an issue using the **Bug Report** template. Include the URL or page, exact 
 
 For non-trivial work — new routes, schema changes, auth/permission changes, new integrations — open an issue first to align on the approach. Small fixes (typos, dead links, single-file bugs) can go straight to a PR.
 
-Because Bones is the upstream for `shipkit` and several downstream sites, changes here ripple. Be conservative about renames and breaking refactors; flag them in the PR description.
+Because Shipkit is the upstream for a number of downstream sites (e.g., `shipkit-sink` powering shipkit.io itself, `lash-www`, `TOH-new`, and other client deployments), changes here ripple. Flag breaking changes or schema migrations explicitly in the PR description so downstream maintainers can sequence their syncs.
 
 ## Pull requests
 
@@ -51,12 +51,12 @@ Run before pushing:
 ```bash
 bun run lint:fix       # Biome + ESLint + Prettier auto-fix
 bun run typecheck      # tsc --noEmit
-bun test               # Vitest
+bun run test           # Vitest
 ```
 
-## Downstream impact
+## Upstream sync
 
-Bones is the upstream for [`shipkit`](https://github.com/lacymorrow/shipkit) and several deployed sites. Downstream repos track their bones version via the `shipkit.bones` key in `package.json` and sync via `scripts/git-sync-upstream.ts`. When making changes here, consider whether downstream consumers will need migration notes — call those out in the PR description.
+Shipkit tracks [Shipkit Bones](https://github.com/shipkit-io/bones) as its upstream. The bones version is pinned in `package.json` under the `shipkit.bones` key, and `scripts/git-sync-upstream.ts` automates the pull. If you're adding something that genuinely belongs upstream (e.g., a fix to a free feature, a new shadcn component), consider opening it against bones first so all downstream sites benefit.
 
 ## Security
 
@@ -64,4 +64,4 @@ Please **do not open public issues for security vulnerabilities**. See [SECURITY
 
 ## License
 
-Bones is licensed under [FSL-1.1-MIT](../LICENSE) — the Functional Source License with an MIT future grant. By contributing, you agree that your contributions will be licensed under the same terms. FSL is source-available: free to use, modify, and create derivative works for any Permitted Purpose (internal use, education, research, professional services). It excludes Competing Use, then converts to standard MIT two years after each release. If you want commercial support or the premium downstream framework, see [Shipkit](https://shipkit.io).
+Shipkit is licensed under [FSL-1.1-MIT](../LICENSE) — the Functional Source License with an MIT future grant. Source-available, free for any Permitted Purpose (internal use, education, research, professional services), excludes Competing Use, and converts to standard MIT two years after each release. By contributing, you agree your contributions will be licensed under the same terms.
