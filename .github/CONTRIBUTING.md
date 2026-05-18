@@ -1,6 +1,6 @@
 # Contributing to Shipkit
 
-Thanks for your interest. **Shipkit** is the premium Next.js framework downstream of [Shipkit Bones](https://github.com/shipkit-io/bones) — a Next.js 15 (App Router + TypeScript) stack with Tailwind, Shadcn/UI, Drizzle ORM on PostgreSQL, Payload CMS, and integrations across auth (NextAuth + Better Auth + Payload credentials), payments (Lemon Squeezy, Stripe, Polar), email (Resend), and AI providers. Shipkit lives at [shipkit.io](https://shipkit.io).
+Thanks for your interest. **Shipkit** is the premium Next.js framework downstream of [Shipkit Bones](https://github.com/shipkit-io/bones) — a Next.js 16 + React 19 (App Router + TypeScript) stack with Tailwind, Shadcn/UI, Drizzle ORM on PostgreSQL, Payload CMS, and integrations across auth (NextAuth + Better Auth + Payload credentials), payments (Lemon Squeezy, Stripe, Polar), email (Resend), and AI providers. Shipkit lives at [shipkit.io](https://shipkit.io).
 
 ## Quick start
 
