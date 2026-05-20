@@ -74,7 +74,7 @@ export async function LaunchPageContent() {
           </Section>
 
           <div className="container relative z-10 mx-auto flex flex-col items-center justify-center gap-4 text-center mt-header">
-            <h1 className="bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl lg:text-6xl">
+            <h1 className="bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-balance text-4xl font-bold tracking-tight text-transparent sm:text-5xl lg:text-6xl">
               Launch Your App Today
             </h1>
             <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">

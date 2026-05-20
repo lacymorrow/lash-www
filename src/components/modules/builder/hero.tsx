@@ -28,7 +28,7 @@ export const Hero = ({ title, subtitle, buttonText, buttonLink, backgroundImage 
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">{title}</h1>
+        <h1 className="text-balance text-4xl md:text-6xl font-bold mb-6 text-white">{title}</h1>
         <p className="text-xl md:text-2xl mb-8 text-gray-200 max-w-2xl mx-auto">{subtitle}</p>
         <Button size="lg" asChild className="bg-primary hover:bg-primary/90">
           <a href={buttonLink}>{buttonText}</a>

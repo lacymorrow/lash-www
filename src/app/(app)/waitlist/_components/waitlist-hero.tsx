@@ -82,7 +82,7 @@ export function WaitlistHero() {
           </div>
 
           {/* Main Headline */}
-          <h1 className="mb-6 text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+          <h1 className="mb-6 text-balance text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
             <span className="block bg-gradient-to-r from-violet-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
               Ship in Days
             </span>
