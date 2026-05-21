@@ -4,7 +4,7 @@
   "homepage": "https://lash.lacy.sh",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lacymorrow/lash-www"
+    "url": "git+https://github.com/lacymorrow/lash-www.git"
   },
   "shipkit": {
     "bones": "0.2.0"
