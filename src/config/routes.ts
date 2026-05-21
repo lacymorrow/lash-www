@@ -211,6 +211,7 @@ export const routes = {
   external: {
     shipkit: "https://shipkit.io",
     bones: "https://bones.sh",
+    bones_github: "https://github.com/shipkit-io/bones",
     log: "https://log.bones.sh",
     ui: "https://ui.bones.sh",
     buy: "https://shipkit.lemonsqueezy.com/checkout/buy/20b5b59e-b4c4-43b0-9979-545f90c76f28",
