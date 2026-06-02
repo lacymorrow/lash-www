@@ -27,7 +27,7 @@ I keep getting the question of why this lives in the shell at all when you could
 
 Lacy Shell solves that by making the AI a first-class peer to your existing commands. The plugin watches what you type, and if it looks like a natural language query rather than a shell command, it routes it through your configured model and prints the response inline. If it looks like a normal command, it gets out of the way and lets your shell handle it like nothing's installed. That routing decision is what every release iterates on.
 
-The v1.8.20 cycle didn't add new model providers or new shell integrations, but it did continue to sand down edge cases in that detection logic. Things like commands that start with a verb that could be either a CLI tool or an English imperative, or pipelines where the first segment looks like prose but the rest is clearly bash. Those are the kinds of cases where a naive heuristic gets it wrong in a way that's actively annoying, and where the plugin has to be a little smarter than a regex.
+The v1.8.20 cycle didn't add new model providers or new shell integrations, but it did continue to sand down edge cases in that detection logic. Things like commands that start with a verb that could be either a CLI tool or an English imperative, or pipelines where the first segment looks like prose but the rest is clearly Bash. Those are the kinds of cases where a naive heuristic gets it wrong in a way that's actively annoying, and where the plugin has to be a little smarter than a regex.
 
 ## Living With the Plugin Day to Day
 
