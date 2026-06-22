@@ -31,24 +31,35 @@ jobs:
         if: env.OPENAI_API_KEY != ''
         run: npm install -g @openai/codex
 
-      # Extract a prompt from the issue
+      # Extract a prompt from the issue.
+      # Pass untrusted fields via env: (never interpolate ${{ … }} into the shell
+      # — that would allow an issue opener to execute arbitrary code with
+      # contents:write + OPENAI_API_KEY). Use a heredoc to handle multi-line bodies
+      # without corrupting $GITHUB_OUTPUT.
       - name: Extract prompt
         id: extract_prompt
         if: env.OPENAI_API_KEY != ''
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
-          ISSUE_BODY="${{ github.event.issue.body }}"
-          ISSUE_TITLE="${{ github.event.issue.title }}"
-          # Combine title and body for better context
-          PROMPT="fix issue #${{ github.event.issue.number }} - $ISSUE_TITLE: $ISSUE_BODY"
-          echo "prompt=$PROMPT" >> $GITHUB_OUTPUT
+          {
+            echo "prompt<<CODEX_PROMPT_EOF"
+            printf 'fix issue #%s - %s: %s\n' "$ISSUE_NUMBER" "$ISSUE_TITLE" "$ISSUE_BODY"
+            echo "CODEX_PROMPT_EOF"
+          } >> "$GITHUB_OUTPUT"
 
-      # Run Codex with the extracted prompt
+      # Run Codex with the extracted prompt.
+      # Pass the prompt via env: rather than ${{ … }} so attacker-controlled
+      # content cannot break out of the shell argument.
       - name: Run Codex
         if: env.OPENAI_API_KEY != ''
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           CODEX_QUIET_MODE: '1'
-        run: codex --approval-mode auto-edit --quiet "${{ steps.extract_prompt.outputs.prompt }}"
+          CODEX_PROMPT: ${{ steps.extract_prompt.outputs.prompt }}
+        run: codex --approval-mode auto-edit --quiet "$CODEX_PROMPT"
 
       # Commit changes, create a PR, and mention the issue
       - name: Create PR
