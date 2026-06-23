@@ -26,10 +26,10 @@ jobs:
         run: |
           echo 'Skipping Run Codex: OPENAI_API_KEY not set'
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '22'
 
@@ -37,12 +37,22 @@ jobs:
         if: env.OPENAI_API_KEY != ''
         run: npm install -g @openai/codex
 
+      # Pass workflow_dispatch inputs via env: rather than ${{ … }} interpolation
+      # to prevent shell injection via the prompt or approvalMode fields.
       - name: Run Codex
         if: env.OPENAI_API_KEY != ''
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           CODEX_QUIET_MODE: '1'
-        run: codex --approval-mode ${{ inputs.approvalMode }} --quiet "${{ inputs.prompt }}"
+          CODEX_APPROVAL_MODE: ${{ inputs.approvalMode }}
+          CODEX_PROMPT: ${{ inputs.prompt }}
+        run: |
+          # Whitelist approval mode (codex accepts: suggest, auto-edit, full-auto).
+          case "$CODEX_APPROVAL_MODE" in
+            suggest|auto-edit|full-auto) ;;
+            *) echo "Invalid approvalMode: $CODEX_APPROVAL_MODE" >&2; exit 1 ;;
+          esac
+          codex --approval-mode "$CODEX_APPROVAL_MODE" --quiet "$CODEX_PROMPT"
 
       - name: Commit changes
         if: env.OPENAI_API_KEY != ''
