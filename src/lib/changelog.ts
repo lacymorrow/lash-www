@@ -110,7 +110,7 @@ interface ParsedCommit {
 }
 
 function parseConventional(message: string): ParsedCommit | null {
-  const match = message.match(/^(\w+)(?:\(([^)]+)\))?(!?):\s*(.+)/);
+  const match = /^(\w+)(?:\(([^)]+)\))?(!?):\s*(.+)/.exec(message);
   if (!match) return null;
   // Regex above guarantees groups 1 and 4 exist on a successful match.
   const type = match[1];

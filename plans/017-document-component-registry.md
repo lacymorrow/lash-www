@@ -17,6 +17,7 @@
 ## Why this matters
 
 Shipkit ships a shadcn-style registry:
+
 - `registry.json` at the repo root (40+ component entries).
 - `bun run build:registry` produces JSON bundles in `public/r/`.
 - `public/r/` already contains ~35 pre-built JSON files (`admin.json`,
@@ -24,6 +25,7 @@ Shipkit ships a shadcn-style registry:
 
 This is a real, working distribution channel. Forks of shipkit could
 `npx shadcn add @shipkit/admin` to install whole bundles. But:
+
 - README does not mention it.
 - `docs/features/registry.mdx` exists (CLAUDE.md mentions it) — verify if
   it's accurate and discoverable.
@@ -45,20 +47,22 @@ This is a docs + integration plan, not a code-change plan.
 
 ## Commands you will need
 
-| Purpose         | Command                                                | Expected |
-|-----------------|--------------------------------------------------------|----------|
-| Build registry  | `bun run build:registry`                              | populates public/r |
-| Test usage      | (in a throwaway dir) `npx shadcn add <url-to-bundle>` | bundle adds successfully |
+| Purpose        | Command                                               | Expected                 |
+| -------------- | ----------------------------------------------------- | ------------------------ |
+| Build registry | `bun run build:registry`                              | populates public/r       |
+| Test usage     | (in a throwaway dir) `npx shadcn add <url-to-bundle>` | bundle adds successfully |
 
 ## Scope
 
 **In scope:**
+
 - A new docs page or update to `docs/features/registry.mdx`: how to use, what's in each bundle, how it interacts with the rest of shipkit.
 - One section in `README.md` under "Features" or "Getting Started" pointing to the registry docs.
 - A small section in CLAUDE.md (the workspace one or the shipkit one) noting the registry as a distribution channel.
 - (Optional) a sample `npx shadcn add` command verifying a bundle works end-to-end.
 
 **Out of scope:**
+
 - Adding new components to the registry (separate effort).
 - Refactoring `registry.json` schema.
 - Publishing the registry as a hosted service or npm package (a bigger
@@ -106,7 +110,7 @@ Content outline:
    `registry.json` — if there's an authoritative description per entry,
    surface it.
 3. **How to install a bundle.** Concrete example: `npx shadcn add
-   https://shipkit.io/r/admin.json` (or whatever the deployed URL
+https://shipkit.io/r/admin.json` (or whatever the deployed URL
    pattern is). If the URL is uncertain, document the locally-served
    shape: `npx shadcn add http://localhost:3000/r/admin.json`.
 4. **Dependencies and assumptions.** Some bundles assume specific
@@ -127,12 +131,13 @@ this is a wayfinder.
 ### Step 5: Add a CLAUDE.md note
 
 A one-line addition to the "Registry" section of CLAUDE.md:
-*Registry bundles are the premium distribution channel — see
-`docs/features/registry.mdx` for the catalog and integration steps.*
+_Registry bundles are the premium distribution channel — see
+`docs/features/registry.mdx` for the catalog and integration steps._
 
 ### Step 6: End-to-end smoke test (manual)
 
 In a throwaway directory (NOT this repo):
+
 1. `npx create-next-app@latest test-app`
 2. `cd test-app && npx shadcn init`
 3. `npx shadcn add http://localhost:3000/r/admin.json` (with `bun dev` running in shipkit).
@@ -146,6 +151,7 @@ plausible.
 No new automated tests (docs).
 
 Verification:
+
 - `bun run build:registry` succeeds.
 - Step 6 smoke test (if performed) succeeds.
 

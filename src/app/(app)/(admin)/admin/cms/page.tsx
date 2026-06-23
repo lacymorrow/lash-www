@@ -102,7 +102,7 @@ export default function CMSPage() {
   };
 
   return (
-    <div className="container mx-auto max-w-3xl py-10 space-y-8">
+    <div className="container mx-auto max-w-3xl space-y-8 py-10">
       <h1 className="text-3xl font-bold tracking-tight">CMS Management</h1>
 
       <Card>

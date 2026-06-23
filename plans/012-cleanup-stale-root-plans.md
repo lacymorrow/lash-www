@@ -22,15 +22,15 @@
 Seven (or so) markdown files at the repo root are mid-flight or completed
 planning artifacts:
 
-| File | Last touched | Status |
-|------|-------------|--------|
-| `plan.md` | 2026-02-15 | "Refactor & Optimization Plan (Console Debug Instrumentation)" — Phase 0 unfinished, no follow-through commits |
-| `REFACTOR_SERVER_ACTIONS_PLAN.md` | 2026-02-15 | 5 critical items listed, none addressed in `git log` |
-| `validation-improvements.md` | 2025-11-02 | Claims "Applied" — unclear if accurate |
-| `audit-progress.md` | 2025-11-02 | Phase 2.1 in-progress, no further commits |
-| `ai.mdx` | 2026-03-07 | unclear purpose at root (looks like a docs page that escaped `docs/`) |
-| `SYNC_UPSTREAM.md` | 2026-02-15 | Reference doc — may still be current; verify against `cli/` workflow |
-| `WORKFLOW.md` | 2026-03-17 | Reference doc — possibly current |
+| File                              | Last touched | Status                                                                                                         |
+| --------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
+| `plan.md`                         | 2026-02-15   | "Refactor & Optimization Plan (Console Debug Instrumentation)" — Phase 0 unfinished, no follow-through commits |
+| `REFACTOR_SERVER_ACTIONS_PLAN.md` | 2026-02-15   | 5 critical items listed, none addressed in `git log`                                                           |
+| `validation-improvements.md`      | 2025-11-02   | Claims "Applied" — unclear if accurate                                                                         |
+| `audit-progress.md`               | 2025-11-02   | Phase 2.1 in-progress, no further commits                                                                      |
+| `ai.mdx`                          | 2026-03-07   | unclear purpose at root (looks like a docs page that escaped `docs/`)                                          |
+| `SYNC_UPSTREAM.md`                | 2026-02-15   | Reference doc — may still be current; verify against `cli/` workflow                                           |
+| `WORKFLOW.md`                     | 2026-03-17   | Reference doc — possibly current                                                                               |
 
 The first four are clearly stale. The last three need a quick read to
 classify. Stale planning docs at root mislead contributors (and other
@@ -39,8 +39,9 @@ agents) into re-executing finished work or trusting incomplete claims.
 ## Current state
 
 `ls -la` showed the files above at the repo root. Their purposes:
+
 - `plan.md` and `REFACTOR_SERVER_ACTIONS_PLAN.md` and
-  `validation-improvements.md` and `audit-progress.md` are *advisory* — they
+  `validation-improvements.md` and `audit-progress.md` are _advisory_ — they
   describe work, they don't describe how to do it currently.
 - `SYNC_UPSTREAM.md` and `WORKFLOW.md` look like project SOPs — possibly
   current.
@@ -51,15 +52,16 @@ agents) into re-executing finished work or trusting incomplete claims.
 
 ## Commands you will need
 
-| Purpose         | Command                                                | Expected |
-|-----------------|--------------------------------------------------------|----------|
-| —               | `git log --oneline -- <file>` (per file)                | judge staleness |
-| Move            | `git mv <file> docs/archive/<file>`                    | files relocated |
-| Lint            | `bun run lint:prettier`                                | exit 0 (changing markdown locations may matter to lint scope) |
+| Purpose | Command                                  | Expected                                                      |
+| ------- | ---------------------------------------- | ------------------------------------------------------------- |
+| —       | `git log --oneline -- <file>` (per file) | judge staleness                                               |
+| Move    | `git mv <file> docs/archive/<file>`      | files relocated                                               |
+| Lint    | `bun run lint:prettier`                  | exit 0 (changing markdown locations may matter to lint scope) |
 
 ## Scope
 
 **In scope:**
+
 - `plan.md`
 - `REFACTOR_SERVER_ACTIONS_PLAN.md`
 - `validation-improvements.md`
@@ -70,6 +72,7 @@ agents) into re-executing finished work or trusting incomplete claims.
 - New directory: `docs/archive/` (or `docs/plans-archive/`).
 
 **Out of scope:**
+
 - `README.md`, `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `CHANGELOG.md`, `LICENSE`, `SECURITY-AUDIT-2026-06-03*.md` (on `origin/security` only — if it lands on `main`, also archive or move to `docs/` later).
 - Any markdown under `docs/` — separate housekeeping.
 - The new `plans/` directory created by this advisor — leave it.
@@ -84,6 +87,7 @@ agents) into re-executing finished work or trusting incomplete claims.
 ### Step 1: Confirm "stale" with git log per file
 
 For each candidate:
+
 ```
 git log --oneline -5 -- <file>
 ```
@@ -98,7 +102,7 @@ recent commit that says "update progress" is being maintained — keep.
 grep -nE "plan\\.md|REFACTOR_SERVER_ACTIONS|validation-improvements|audit-progress|ai\\.mdx|SYNC_UPSTREAM|WORKFLOW\\.md" README.md CLAUDE.md AGENTS.md
 ```
 
-If any of the candidates is *linked from* CLAUDE.md or README, it's
+If any of the candidates is _linked from_ CLAUDE.md or README, it's
 load-bearing. Don't move it without also updating the reference. Two
 options: update the reference to the new path, or leave the file in
 place.
@@ -106,11 +110,13 @@ place.
 ### Step 3: Classify and decide for each
 
 For each file:
+
 - **Archive** (move to `docs/archive/<file>`) if it's a stale plan or audit log.
 - **Move to `docs/`** if it's evergreen reference (likely `SYNC_UPSTREAM.md`, `WORKFLOW.md`, and possibly `ai.mdx` → `docs/features/ai.mdx`).
 - **Delete** only if truly dead (no informational value, no historical link). Prefer archive over delete — git history doesn't tell you what you don't know to look for.
 
 Specifically:
+
 - `plan.md` → `docs/archive/plan-2026-02-15.md` (rename with date so future
   archives don't collide).
 - `REFACTOR_SERVER_ACTIONS_PLAN.md` → keep if plan 016 hasn't been written
@@ -129,6 +135,7 @@ file's history.
 ### Step 5: Update references
 
 If Step 2 found references, update each one. Search again after the moves:
+
 ```
 grep -rnE "plan\\.md|REFACTOR_SERVER_ACTIONS|validation-improvements|audit-progress|ai\\.mdx" --include="*.md" --include="*.mdx" --include="*.tsx" --include="*.ts"
 ```
@@ -148,6 +155,7 @@ This protects future contributors who land on the file via grep.
 ## Test plan
 
 No new tests. Verification:
+
 - `ls plans/ docs/archive/` shows the moved files.
 - `grep -r "plan\\.md" CLAUDE.md README.md` returns no broken references.
 - `bun run lint` exits 0 (the move shouldn't disturb lint, but verify).

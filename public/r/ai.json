@@ -3,18 +3,8 @@
   "name": "ai",
   "title": "AI",
   "description": "Browser-based AI with SmolLM via WebGPU and cloud AI with OpenAI — demo components, utilities, and worker scripts.",
-  "dependencies": [
-    "openai",
-    "@anthropic-ai/sdk"
-  ],
-  "registryDependencies": [
-    "@shipkit/cn",
-    "button",
-    "card",
-    "input",
-    "textarea",
-    "scroll-area"
-  ],
+  "dependencies": ["openai", "@anthropic-ai/sdk"],
+  "registryDependencies": ["@shipkit/cn", "button", "card", "input", "textarea", "scroll-area"],
   "files": [
     {
       "path": "src/lib/ai/ai-analyzer.ts",
@@ -108,9 +98,6 @@
     }
   ],
   "docs": "AI integration with browser-based SmolLM (WebGPU, no server) and cloud AI (OpenAI, Anthropic). Set `OPENAI_API_KEY` for cloud AI. SmolLM runs entirely in-browser with no API key needed. Includes demo components and WebGPU detection utility.",
-  "categories": [
-    "shipkit",
-    "ai"
-  ],
+  "categories": ["shipkit", "ai"],
   "type": "registry:block"
 }

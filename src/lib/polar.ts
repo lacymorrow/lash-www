@@ -404,7 +404,7 @@ export const getPolarPaymentStatus = async (userId: string): Promise<boolean> =>
     });
 
     // If we have a payment record with Polar as the processor, return true
-    if (payment && payment.processor === "polar" && payment.status === "completed") {
+    if (payment?.processor === "polar" && payment.status === "completed") {
       return true;
     }
 

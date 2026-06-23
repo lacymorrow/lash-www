@@ -3,12 +3,7 @@
   "name": "contact",
   "title": "Contact",
   "description": "Contact page with animated background, email card, and contact form with Resend email integration and newsletter opt-in.",
-  "dependencies": [
-    "zod",
-    "react-hook-form",
-    "@hookform/resolvers",
-    "lucide-react"
-  ],
+  "dependencies": ["zod", "react-hook-form", "@hookform/resolvers", "lucide-react"],
   "registryDependencies": [
     "@shipkit/cn",
     "@shipkit/routes-config",
@@ -47,9 +42,6 @@
     }
   ],
   "docs": "Contact page with form that sends emails via Resend. Set `RESEND_API_KEY` to enable email delivery. The form includes name, contact info, message, and optional newsletter opt-in.",
-  "categories": [
-    "shipkit",
-    "contact"
-  ],
+  "categories": ["shipkit", "contact"],
   "type": "registry:block"
 }

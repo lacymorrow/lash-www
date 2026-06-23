@@ -20,7 +20,7 @@
 
 The CMS catch-all route at `src/app/(cms)/[...slug]/page.tsx`:
 
-1. Imports and *initializes* the Builder.io SDK at the top of the module —
+1. Imports and _initializes_ the Builder.io SDK at the top of the module —
    it loads even when `NEXT_PUBLIC_FEATURE_BUILDER_ENABLED` is false and
    even on routes that resolve entirely from Payload.
 2. Calls `getPageData(params.slug, 1)` once in `generateMetadata` and again
@@ -64,25 +64,27 @@ const data = await getPageData(params.slug, 1);
 
 ## Commands you will need
 
-| Purpose          | Command                                                            | Expected |
-|------------------|--------------------------------------------------------------------|----------|
-| Install          | `bun install`                                                      | exit 0   |
-| Typecheck        | `bun run typecheck`                                                | no new errors |
-| Tests            | `bun run test`                                                     | no regressions |
+| Purpose   | Command             | Expected       |
+| --------- | ------------------- | -------------- |
+| Install   | `bun install`       | exit 0         |
+| Typecheck | `bun run typecheck` | no new errors  |
+| Tests     | `bun run test`      | no regressions |
 
 ## Scope
 
 **In scope:**
+
 - `src/app/(cms)/[...slug]/page.tsx` — defer Builder import + dedupe getPageData with React `cache()`.
 
 **Out of scope:**
+
 - Refactoring `getPayloadClient()` (the underlying client init). If init is
   expensive that's its own plan.
 - Replacing the three-fallback search with a single Payload query — needs
   Payload schema understanding and search ranking; do as a separate
   plan if needed.
 - The Builder.io content-rendering code further down the file — only the
-  *initialization* moves.
+  _initialization_ moves.
 - Other CMS routes.
 
 ## Git workflow
@@ -95,11 +97,13 @@ const data = await getPageData(params.slug, 1);
 ### Step 1: Wrap `getPageData` in React `cache`
 
 At the top of the file:
+
 ```ts
 import { cache } from "react";
 ```
 
 Change the function declaration:
+
 ```ts
 // before
 async function getPageData(slug: string[], depth = 1) { … }
@@ -113,7 +117,7 @@ page component) now share a result for matching `(slug, depth)` within the
 same request. No call-site changes.
 
 Caveat: `cache()` uses argument identity for keys. `slug: string[]` is an
-array, two arrays with the same contents are *not* identity-equal. Wrap
+array, two arrays with the same contents are _not_ identity-equal. Wrap
 with a string-keyed version:
 
 ```ts

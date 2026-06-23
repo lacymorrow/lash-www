@@ -49,19 +49,21 @@ The plan does NOT prescribe exact line numbers — read the live code first.
 
 ## Commands you will need
 
-| Purpose          | Command                                                        | Expected |
-|------------------|----------------------------------------------------------------|----------|
-| Install          | `bun install`                                                  | exit 0   |
-| Typecheck        | `bun run typecheck`                                            | no new errors |
-| Tests            | `bun run test -- tests/unit/server/services/payment`           | all pass (incl. 008's suite) |
-| Benchmark (manual)| see Step 5 — populate a dev DB and time both functions before/after | < 1/10 the call count |
+| Purpose            | Command                                                             | Expected                     |
+| ------------------ | ------------------------------------------------------------------- | ---------------------------- |
+| Install            | `bun install`                                                       | exit 0                       |
+| Typecheck          | `bun run typecheck`                                                 | no new errors                |
+| Tests              | `bun run test -- tests/unit/server/services/payment`                | all pass (incl. 008's suite) |
+| Benchmark (manual) | see Step 5 — populate a dev DB and time both functions before/after | < 1/10 the call count        |
 
 ## Scope
 
 **In scope:**
+
 - `src/server/services/payment-service.ts` only — the two methods above.
 
 **Out of scope:**
+
 - Splitting `payment-service.ts` (it's >1k lines; `audit-progress.md`
   proposed a multi-file split). Do that in a follow-up. This plan keeps the
   file's structure.
@@ -83,6 +85,7 @@ The plan does NOT prescribe exact line numbers — read the live code first.
 ### Step 1: Fix `getPaymentsWithUsers` (O(N×M) → O(N+M))
 
 Before:
+
 ```ts
 const allUsers = await this.userService.getAllUsers();    // M users
 for (const payment of payments) {                          // N payments
@@ -92,6 +95,7 @@ for (const payment of payments) {                          // N payments
 ```
 
 After:
+
 ```ts
 const allUsers = await this.userService.getAllUsers();
 const usersById = new Map(allUsers.map((u) => [u.id, u]));
@@ -112,9 +116,10 @@ This is the harder one. Read the current logic carefully — there are a few
 escape hatches (free products, isInDatabase flag) that must be preserved.
 
 Strategy:
+
 1. Fetch the full payments table once at the start (one query).
 2. Group payments by `userId` into a `Map<userId, Payment[]>`.
-3. For each user, determine subscription status from the *local* payment
+3. For each user, determine subscription status from the _local_ payment
    records first. Only fall through to `provider.getPaymentStatus(userId)`
    if the local data is inconclusive (e.g., no record yet, or status is
    ambiguous and a provider call is genuinely necessary).
@@ -124,7 +129,7 @@ Strategy:
 Concrete shape (pseudocode; adapt to the actual locals in the function):
 
 ```ts
-const allPayments = await db?.query.payments.findMany({});   // single read
+const allPayments = await db?.query.payments.findMany({}); // single read
 const paymentsByUser = new Map<string, Payment[]>();
 for (const p of allPayments ?? []) {
   const list = paymentsByUser.get(p.userId) ?? [];
@@ -151,10 +156,14 @@ for (const user of users) {
         const status = await provider.getPaymentStatus(user.id);
         return status ? { provider, status } : null;
       } catch (e) {
-        logger.warn("provider.getPaymentStatus failed", { provider: provider.id, userId: user.id, error: e });
+        logger.warn("provider.getPaymentStatus failed", {
+          provider: provider.id,
+          userId: user.id,
+          error: e,
+        });
         return null;
       }
-    }),
+    })
   );
 
   const found = providerResults.find((r) => r?.status);
@@ -168,7 +177,7 @@ for (const user of users) {
 
 Two effects: (a) when local payments cover the question, zero provider
 calls; (b) when provider calls are necessary, the `Promise.all` runs
-providers in parallel for *that user*, not sequentially.
+providers in parallel for _that user_, not sequentially.
 
 Keep the existing return-shape, the existing `isInDatabase`/`isFreeProduct`
 flags, and the existing error handling. Do not change the function's
@@ -207,6 +216,7 @@ behaviors to lock in), this plan fills them in. Tests to add or extend:
 ### Step 5: Manual benchmark
 
 In a dev environment with `LEMONSQUEEZY_API_KEY` (or stubbed providers):
+
 1. Seed ~100 users with `bun run db:seed` (or manually).
 2. Run an admin route that triggers `getUsersWithPayments` (find it: it's likely the admin payments page).
 3. Note the response time and the number of provider call logs.

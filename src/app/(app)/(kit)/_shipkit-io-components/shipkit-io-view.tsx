@@ -64,7 +64,7 @@ export function ShipkitIoView() {
               }}
             />
           </div>
-          <div className="flex min-h-[calc(100vh-16rem)] flex-col items-center justify-center mt-header">
+          <div className="mt-header flex min-h-[calc(100vh-16rem)] flex-col items-center justify-center">
             <div className="relative mx-auto flex min-h-64 max-w-[80rem] flex-col items-center justify-center gap-4 px-6 text-center md:px-8">
               <BlurFade delay={1} duration={1}>
                 <div className="flex flex-col items-center gap-4">
@@ -81,7 +81,7 @@ export function ShipkitIoView() {
               </BlurFade>
 
               <BlurFade delay={0.5} duration={0.5}>
-                <h1 className="max-w-4xl mx-auto text-balance bg-gradient-to-br from-black from-30% to-black/40 bg-clip-text py-6 text-5xl font-medium leading-none tracking-tighter text-transparent dark:from-white dark:to-white/40 sm:text-6xl md:text-7xl lg:text-8xl">
+                <h1 className="mx-auto max-w-4xl text-balance bg-gradient-to-br from-black from-30% to-black/40 bg-clip-text py-6 text-5xl font-medium leading-none tracking-tighter text-transparent dark:from-white dark:to-white/40 sm:text-6xl md:text-7xl lg:text-8xl">
                   {headings[0]}
                 </h1>
               </BlurFade>
@@ -95,7 +95,7 @@ export function ShipkitIoView() {
 
               <BlurFade delay={2.5} duration={1}>
                 <div className="flex flex-col items-center gap-4">
-                  <div className="flex flex-col-reverse sm:flex-row justify-center flex-wrap gap-4">
+                  <div className="flex flex-col-reverse flex-wrap justify-center gap-4 sm:flex-row">
                     <PrimaryCta />
                   </div>
                 </div>
@@ -110,13 +110,13 @@ export function ShipkitIoView() {
           <BlurFade delay={0.5} duration={1} inView>
             <div className="flex items-center gap-2">
               <div className="flex -space-x-2">
-                <div className="h-8 w-8 rounded-full border-2 border-background bg-muted flex items-center justify-center">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-muted">
                   <IconBrandVercelFilled className="h-5 w-5" />
                 </div>
-                <div className="h-8 w-8 rounded-full border-2 border-background bg-muted flex items-center justify-center">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-muted">
                   <IconBrandDocker className="h-5 w-5" />
                 </div>
-                <div className="h-8 w-8 rounded-full border-2 border-background bg-muted flex items-center justify-center">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-muted">
                   <IconBrandOpenai className="h-5 w-5" />
                 </div>
               </div>
@@ -185,8 +185,8 @@ export function ShipkitIoView() {
             </SectionBadge>
             <SectionHeader>How long would this take to build yourself?</SectionHeader>
             <SectionContent>
-              <div className="max-w-4xl mx-auto">
-                <div className="text-center mb-8">
+              <div className="mx-auto max-w-4xl">
+                <div className="mb-8 text-center">
                   <p className="text-lg text-muted-foreground">
                     Auth setup, payment integration, CMS, email system, dashboard UI, AI hooks.
                     That's 2-3 months of plumbing before you write a single line of product code.
@@ -225,7 +225,7 @@ export function ShipkitIoView() {
 
             <BlurFade inView>
               <div className="mt-6 text-center">
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="mb-4 text-sm text-muted-foreground">
                   Everything included: Next.js 15, TypeScript, Authentication, Database, UI
                   Components, and more
                 </p>

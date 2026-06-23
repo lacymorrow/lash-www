@@ -58,7 +58,7 @@ export async function ProjectsList() {
         {/* Always visible projects */}
         {visibleProjects.map((project) => (
           <SidebarMenuItem key={project.id}>
-            <div className="flex items-center justify-between rounded-md hover:bg-accent gap-2">
+            <div className="flex items-center justify-between gap-2 rounded-md hover:bg-accent">
               <SidebarMenuButton asChild className="w-full">
                 <div className="flex items-center gap-2">
                   <FileIcon className="h-4 w-4" />

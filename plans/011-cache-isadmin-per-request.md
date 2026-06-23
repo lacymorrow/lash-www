@@ -20,11 +20,13 @@
 
 `isAdmin(...)` (in `src/server/services/admin-service.ts`) consults
 multiple sources per call:
+
 - The Drizzle `users` table.
 - The RBAC roles table.
 - Payload CMS (network I/O).
 
 It is called 3+ times per admin request from independent code paths:
+
 - `src/app/(app)/(dashboard)/_hooks/use-dashboard-data.ts:22`
 - `src/app/(app)/(admin)/layout.tsx:21`
 - `src/app/(app)/api/download/route.ts:54`
@@ -38,7 +40,13 @@ naturally scopes to the request lifetime.
 
 ```ts
 // src/server/services/admin-service.ts:24-95 (approximate)
-export async function isAdmin({ userId, email }: { userId?: string; email?: string }): Promise<boolean> {
+export async function isAdmin({
+  userId,
+  email,
+}: {
+  userId?: string;
+  email?: string;
+}): Promise<boolean> {
   // … reads users table
   // … reads roles table
   // … queries Payload CMS
@@ -48,6 +56,7 @@ export async function isAdmin({ userId, email }: { userId?: string; email?: stri
 (Read the actual file to confirm shape — line numbers may have shifted.)
 
 Call sites (from grep):
+
 ```
 src/app/(app)/(dashboard)/_hooks/use-dashboard-data.ts:22
 src/app/(app)/(admin)/layout.tsx:21
@@ -56,20 +65,22 @@ src/app/(app)/api/download/route.ts:54
 
 ## Commands you will need
 
-| Purpose         | Command                                              | Expected |
-|-----------------|------------------------------------------------------|----------|
-| Install         | `bun install`                                        | exit 0   |
-| Typecheck       | `bun run typecheck`                                  | no new errors |
-| Tests           | `bun run test`                                       | no regressions |
-| Lint            | `bun run lint:biome -- src/server/services/admin-service.ts` | exit 0 |
+| Purpose   | Command                                                      | Expected       |
+| --------- | ------------------------------------------------------------ | -------------- |
+| Install   | `bun install`                                                | exit 0         |
+| Typecheck | `bun run typecheck`                                          | no new errors  |
+| Tests     | `bun run test`                                               | no regressions |
+| Lint      | `bun run lint:biome -- src/server/services/admin-service.ts` | exit 0         |
 
 ## Scope
 
 **In scope:**
+
 - `src/server/services/admin-service.ts` — wrap `isAdmin` (and only this) in
   React `cache()`. Do not modify its signature or behavior.
 
 **Out of scope:**
+
 - Cross-request caching (Redis / cacheService). Different problem; not
   needed for this win.
 - Changing `isAdmin`'s data sources (consolidating roles vs Payload — a
@@ -89,7 +100,7 @@ src/app/(app)/api/download/route.ts:54
 In `src/server/services/admin-service.ts`:
 
 ```ts
-import { cache } from "react";   // add to imports
+import { cache } from "react"; // add to imports
 
 // existing implementation, rename to _isAdmin if exported as the public function name:
 async function _isAdmin({ userId, email }: { userId?: string; email?: string }): Promise<boolean> {
@@ -121,6 +132,7 @@ Pick Option B if the call sites are few (they are — three known). Option A if 
 ### Step 2: Update call sites (Option B only)
 
 If Option B chosen, update:
+
 - `src/app/(app)/(dashboard)/_hooks/use-dashboard-data.ts:22`
 - `src/app/(app)/(admin)/layout.tsx:21`
 - `src/app/(app)/api/download/route.ts:54`
@@ -175,7 +187,7 @@ show one "isAdmin invoked" line, not three.
 
 - This is request-scoped caching; it expires automatically. Don't bolt on
   manual invalidation.
-- If admin roles can change *during* a request (extremely unlikely), this
+- If admin roles can change _during_ a request (extremely unlikely), this
   caching is wrong. They cannot today; document the assumption in a code
   comment.
 - Reviewer should scrutinize: only `isAdmin` is wrapped, not unrelated

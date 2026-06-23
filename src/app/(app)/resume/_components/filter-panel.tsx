@@ -85,7 +85,7 @@ export function FilterPanel({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between px-4 pt-4 pb-2">
+      <div className="flex items-center justify-between px-4 pb-2 pt-4">
         <h2 className="text-sm font-semibold">Filters</h2>
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="icon" className="h-7 w-7" onClick={reset}>
@@ -106,7 +106,7 @@ export function FilterPanel({
 
       <Separator />
 
-      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-5">
+      <div className="flex-1 space-y-5 overflow-y-auto px-4 py-3">
         {/* Preset */}
         <div>
           <Label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
@@ -189,7 +189,7 @@ export function FilterPanel({
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-5 text-xs px-1"
+                className="h-5 px-1 text-xs"
                 onClick={() =>
                   onFiltersChange({
                     ...filters,

@@ -36,6 +36,7 @@ grep -nE "\"[^\"]+\":\\s*\"[^\"]*\\b(npm run|npx)\\b" package.json
 ```
 
 Approximate locations (verify in live file at commit `6358b2b2`):
+
 - `"clean"` — `rm next-env.d.ts ; rm package-lock.json ; …`
 - `"doctor"` — chained `npm run` invocations
 - `"lint"` — chains `npm run lint:biome && npm run lint:eslint && npm run lint:prettier`
@@ -52,18 +53,20 @@ Step 4.
 
 ## Commands you will need
 
-| Purpose          | Command                                              | Expected |
-|------------------|------------------------------------------------------|----------|
-| —                | `cat package.json`                                    | read |
+| Purpose                   | Command                                                        | Expected    |
+| ------------------------- | -------------------------------------------------------------- | ----------- |
+| —                         | `cat package.json`                                             | read        |
 | Test the affected scripts | `bun run lint`, `bun run db:reset` (if safe), `bun run doctor` | exit 0 each |
-| Lint             | `bun run lint:prettier -- package.json`              | exit 0   |
+| Lint                      | `bun run lint:prettier -- package.json`                        | exit 0      |
 
 ## Scope
 
 **In scope:**
+
 - `package.json` `scripts` block.
 
 **Out of scope:**
+
 - The `cli/` subdirectory's own `package.json` (separate scope; plan 018 may touch it).
 - Migration to `bun --bun` flags or any deeper Bun-specific feature.
 - CI configuration (`.github/workflows/*`) — if those use `npm run …`, that's a follow-up.
@@ -80,6 +83,7 @@ Step 4.
 `grep -nE "npm run|npx" package.json`
 
 Record every line. Decide per-line:
+
 - **`npm run X`** → `bun run X` (always safe).
 - **`npx tool`** → `bunx tool` (almost always safe; Bun resolves binaries the same way npx does).
 - **`npx tool@version`** → `bunx tool@version` (works).
@@ -91,6 +95,7 @@ Record every line. Decide per-line:
 The `postinstall` hook runs immediately after install. If a fork user runs
 `npm install` (because they haven't installed Bun), having `bunx` here
 makes the postinstall fail. Two options:
+
 - **Option A (safer for downstream forks):** Leave `npx next telemetry disable` in `postinstall`. The Bun convention applies inside scripts run by developers, not the install-time hook.
 - **Option B (consistent):** Change to `bunx next telemetry disable` and document in README that Bun is required.
 
@@ -154,7 +159,7 @@ No new tests. Verification by running the affected scripts (Step 4).
 
 ## Maintenance notes
 
-- Add a one-line note in CLAUDE.md if not present: *Scripts should use `bun run` / `bunx`. The one exception is `postinstall`, which keeps `npx` to support fork users on `npm install`.*
+- Add a one-line note in CLAUDE.md if not present: _Scripts should use `bun run` / `bunx`. The one exception is `postinstall`, which keeps `npx` to support fork users on `npm install`._
 - Future scripts: same convention.
 - Reviewer should scrutinize: chained `&&` ordering preserved; no script silently dropped.
 

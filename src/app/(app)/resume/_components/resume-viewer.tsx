@@ -54,7 +54,7 @@ export function ResumeViewer({ data }: { data: ResumeSchema }) {
     <div className="relative mx-auto max-w-7xl px-4 py-8">
       <div className="flex gap-8">
         {/* Desktop filter sidebar */}
-        <aside className="hidden lg:block w-72 shrink-0">
+        <aside className="hidden w-72 shrink-0 lg:block">
           <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-hidden rounded-lg border bg-card">
             <FilterPanel {...filterPanelProps} />
           </div>
@@ -104,7 +104,7 @@ export function ResumeViewer({ data }: { data: ResumeSchema }) {
       </div>
 
       {/* Mobile filter FAB */}
-      <div className="fixed bottom-6 right-6 lg:hidden print:hidden z-50">
+      <div className="fixed bottom-6 right-6 z-50 lg:hidden print:hidden">
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
           <SheetTrigger asChild>
             <Button size="lg" className="h-14 w-14 rounded-full shadow-lg">

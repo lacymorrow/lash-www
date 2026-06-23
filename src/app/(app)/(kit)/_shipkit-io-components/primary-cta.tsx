@@ -14,7 +14,7 @@ export default function PrimaryCta() {
         "h-11 rounded-xl px-8 font-medium",
         "bg-foreground text-background hover:bg-foreground/90",
         "transition-colors duration-200",
-        "w-full md:w-auto flex items-center gap-2"
+        "flex w-full items-center gap-2 md:w-auto"
       )}
     >
       <Icon className="size-5" /> Get {siteConfig.title}

@@ -3,10 +3,7 @@
   "name": "rbac",
   "title": "RBAC",
   "description": "Role-based access control with permission service, client-side hook, and API permission check endpoint.",
-  "registryDependencies": [
-    "@shipkit/cn",
-    "@shipkit/routes-config"
-  ],
+  "registryDependencies": ["@shipkit/cn", "@shipkit/routes-config"],
   "files": [
     {
       "path": "src/server/services/rbac.ts",
@@ -28,10 +25,6 @@
     }
   ],
   "docs": "Role-based access control. Provides `rbacService.hasPermission(userId, resource, action)` on the server and `usePermission()` hook on the client. Requires `auth` block and `DATABASE_URL` for permission storage.",
-  "categories": [
-    "shipkit",
-    "rbac",
-    "auth"
-  ],
+  "categories": ["shipkit", "rbac", "auth"],
   "type": "registry:block"
 }

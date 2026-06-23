@@ -256,7 +256,7 @@ export function groupItemsByType(items: RegistryItem[]): Record<string, Registry
  * Search and filter items
  */
 export function searchItems(
-  items: RegistryItem[] | { [key: string]: RegistryItem[] },
+  items: RegistryItem[] | Record<string, RegistryItem[]>,
   query = "",
   filters: RegistryFilters = {}
 ): RegistryItem[] {

@@ -10,7 +10,7 @@ export function OnboardingView() {
         <OnboardingHeader />
       </Suspense>
 
-      <div className="container mx-auto px-4 py-8 space-y-12 max-w-screen-md">
+      <div className="container mx-auto max-w-screen-md space-y-12 px-4 py-8">
         {/* <Suspense fallback={<SuspenseFallback />}>
 					<FeatureGrid />
 				</Suspense> */}

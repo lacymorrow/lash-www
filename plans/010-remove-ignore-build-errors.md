@@ -34,6 +34,7 @@ typescript: {
 ```
 
 What this means in practice:
+
 - `bun run build` silently green even when types broke.
 - Downstream forks inherit a template that builds despite type errors —
   bad signal hygiene becomes the default.
@@ -48,7 +49,7 @@ Fixing requires (a) seeing the current error count, (b) classifying each,
 
 - `next.config.ts:189` — `ignoreBuildErrors: true`.
 - `bun run typecheck` runs `tsc --noEmit` (per package.json) — that's the
-  source of truth for current error state, *independent* of the
+  source of truth for current error state, _independent_ of the
   build-time flag. The flag only affects `next build`.
 
 Before starting, capture a baseline:
@@ -63,20 +64,22 @@ is paranoia), or there may be hundreds. The plan branches on the count.
 
 ## Commands you will need
 
-| Purpose          | Command                            | Expected |
-|------------------|------------------------------------|----------|
-| Typecheck        | `bun run typecheck`                | targets exit 0 by end |
-| Build            | `bun run build`                    | exits 0 with the flag flipped |
-| Lint             | `bun run lint:biome -- next.config.ts` | exit 0 |
+| Purpose   | Command                                | Expected                      |
+| --------- | -------------------------------------- | ----------------------------- |
+| Typecheck | `bun run typecheck`                    | targets exit 0 by end         |
+| Build     | `bun run build`                        | exits 0 with the flag flipped |
+| Lint      | `bun run lint:biome -- next.config.ts` | exit 0                        |
 
 ## Scope
 
 **In scope:**
+
 - `next.config.ts` — set `ignoreBuildErrors: false`.
 - Whatever individual files have type errors — fix or annotate with a
   scoped `// @ts-expect-error: <reason>` comment.
 
 **Out of scope:**
+
 - The parallel `eslint.ignoreDuringBuilds` flag (if it exists in the
   config) — separate concern; only address if it's also set to `true` and
   you have spare cycles.
@@ -103,6 +106,7 @@ grep -E "error TS[0-9]+" /tmp/typecheck.log | awk '{print $NF}' | sort | uniq -c
 ```
 
 Branch on the count:
+
 - **0 errors** → jump to Step 5. The flag is paranoia; flip it.
 - **1–30 errors** → fix them all (Steps 2–4).
 - **>30 errors** → STOP. Report the count and the top error codes; the
@@ -113,6 +117,7 @@ Branch on the count:
 
 Group the errors by error code (`TS2xxx`, `TS7xxx`, etc.). For each group,
 note whether they're:
+
 - **Real bugs.** Fix the code. (E.g. a property accessed on `undefined`,
   a missing return type that hides a bug.)
 - **Unsafe but currently working.** Tighten the type or add a guard.
@@ -172,6 +177,7 @@ build time too — call it out in the PR description.
 ## Test plan
 
 No new application tests. The change is verified by:
+
 1. `bun run typecheck` exits 0.
 2. `bun run build` exits 0 with the flag flipped.
 3. `bun run test` exits 0 — no regressions.
@@ -198,7 +204,7 @@ No new application tests. The change is verified by:
 
 ## Maintenance notes
 
-- After this lands, the build is now a *real* type gate. Any new code that
+- After this lands, the build is now a _real_ type gate. Any new code that
   breaks typecheck breaks the build — that's the goal. Update CI to fail
   loudly on type errors (most likely already does, but verify).
 - Future template forks inherit a clean type baseline.

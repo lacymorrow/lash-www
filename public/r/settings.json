@@ -3,9 +3,7 @@
   "name": "settings",
   "title": "Settings",
   "description": "User settings pages with profile, appearance, account management, sidebar navigation, and server actions for profile/theme updates.",
-  "dependencies": [
-    "lucide-react"
-  ],
+  "dependencies": ["lucide-react"],
   "registryDependencies": [
     "@shipkit/cn",
     "@shipkit/routes-config",
@@ -91,9 +89,6 @@
     }
   ],
   "docs": "User settings with profile editing, appearance/theme picker, account deletion, and provider disconnect. Requires auth block for session management and database for persisting changes.",
-  "categories": [
-    "shipkit",
-    "settings"
-  ],
+  "categories": ["shipkit", "settings"],
   "type": "registry:block"
 }

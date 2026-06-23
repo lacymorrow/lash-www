@@ -22,7 +22,7 @@ export async function deploy(opts: DeployOptions): Promise<void> {
   }
 
   // Extract owner/repo from origin URL
-  const match = origin.match(/github\.com[:/]([a-zA-Z0-9._-]+\/[a-zA-Z0-9._-]+?)(?:\.git)?$/);
+  const match = /github\.com[:/]([a-zA-Z0-9._-]+\/[a-zA-Z0-9._-]+?)(?:\.git)?$/.exec(origin);
   if (!match) {
     p.log.error(`Could not parse GitHub repo from origin: ${origin}`);
     process.exit(1);

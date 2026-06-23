@@ -34,7 +34,7 @@ function MobileTocInner({ headings }: MobileTocProps) {
   }
 
   return (
-    <div className="xl:hidden mb-8" role="complementary" aria-label="Mobile table of contents">
+    <div className="mb-8 xl:hidden" role="complementary" aria-label="Mobile table of contents">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
           <Button
@@ -57,7 +57,7 @@ function MobileTocInner({ headings }: MobileTocProps) {
           </Button>
         </CollapsibleTrigger>
         <CollapsibleContent className="mt-4" id="mobile-toc-content" aria-hidden={!isOpen}>
-          <div className="border rounded-lg p-4 bg-muted/30">
+          <div className="rounded-lg border bg-muted/30 p-4">
             <TableOfContents headings={headings} />
           </div>
         </CollapsibleContent>
@@ -71,12 +71,12 @@ function MobileTocInner({ headings }: MobileTocProps) {
  */
 function MobileTocErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   return (
-    <div className="xl:hidden mb-8">
-      <div className="border rounded-lg p-4 bg-muted/30">
+    <div className="mb-8 xl:hidden">
+      <div className="rounded-lg border bg-muted/30 p-4">
         <div className="text-center">
-          <p className="text-sm text-muted-foreground mb-2">Failed to load table of contents</p>
+          <p className="mb-2 text-sm text-muted-foreground">Failed to load table of contents</p>
           {error instanceof Error && (
-            <p className="text-xs text-muted-foreground mb-3">{error.message}</p>
+            <p className="mb-3 text-xs text-muted-foreground">{error.message}</p>
           )}
           <button
             onClick={resetErrorBoundary}

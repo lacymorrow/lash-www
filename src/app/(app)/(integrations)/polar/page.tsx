@@ -65,15 +65,15 @@ export default async function SubscriptionsPage() {
   const tiers = [...subscriptionTiers, ...oneTimeTiers];
   return (
     <div className="container mx-auto py-12">
-      <h1 className="text-4xl font-bold text-center mb-12">Choose Your Plan</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <h1 className="mb-12 text-center text-4xl font-bold">Choose Your Plan</h1>
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
         {tiers.map((tier) => (
           <Card key={tier.id} className="flex flex-col">
             <CardHeader className="relative">
               <CardTitle>{tier.name}</CardTitle>
               <CardDescription>{tier.description}</CardDescription>
               {userId && purchasedProducts[tier.id] && (
-                <div className="absolute top-4 right-4">
+                <div className="absolute right-4 top-4">
                   {tier.id === process.env.NEXT_PUBLIC_POLAR_SUBSCRIPTION_PRICE_ID ? (
                     <Badge variant="default" className="bg-green-500">
                       Active

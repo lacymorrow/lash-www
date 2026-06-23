@@ -27,7 +27,7 @@ commented out with a `// TODO: RBAC`. Code in the repo passes `role` to
 `auth(…)` expecting enforcement (it's in the function signature and JSDoc).
 Three failure modes:
 
-1. Routes/pages that call `auth({ protect: true, role: "admin" })` get *only*
+1. Routes/pages that call `auth({ protect: true, role: "admin" })` get _only_
    the session check — any logged-in user passes.
 2. Downstream forks read CLAUDE.md (which advertises RBAC) and trust it.
 3. The `RBACService` exists (`src/server/services/rbac.ts`, ~340 lines) and
@@ -58,28 +58,31 @@ The `RBACService` exposes `hasPermission(userId, permissionKey, context?)`
 method (line 138).
 
 Callers of `auth({ role })` — find them with:
+
 ```
 grep -rnE "auth\\(\\s*\\{[^}]*role" src/
 ```
 
 ## Commands you will need
 
-| Purpose   | Command                                              | Expected      |
-|-----------|------------------------------------------------------|---------------|
-| Install   | `bun install`                                        | exit 0        |
-| Typecheck | `bun run typecheck`                                  | no new errors |
+| Purpose   | Command                                                                                    | Expected         |
+| --------- | ------------------------------------------------------------------------------------------ | ---------------- |
+| Install   | `bun install`                                                                              | exit 0           |
+| Typecheck | `bun run typecheck`                                                                        | no new errors    |
 | Tests     | `bun run test -- tests/unit/server/auth-providers.test.ts tests/unit/server/services/rbac` | pass + new tests |
-| Lint      | `bun run lint:biome -- src/server/auth.ts src/server/services/rbac.ts` | exit 0  |
+| Lint      | `bun run lint:biome -- src/server/auth.ts src/server/services/rbac.ts`                     | exit 0           |
 
 ## Scope
 
 **In scope:**
+
 - `src/server/auth.ts` (the `authWithOptions` function and exports).
 - `src/server/services/rbac.ts` only if you must add a `getUserRole` accessor (Step 2).
 - A new test file under `tests/unit/server/services/rbac.test.ts` if absent.
 - The callsites grep finds in Step 1 — to either confirm they expect enforcement (Path A) or to drop the `role` argument (Path B).
 
 **Out of scope:**
+
 - The broader RBAC redesign discussed in older planning docs.
 - Adding new permissions or roles to the schema.
 - Migrating from "role" string to a permission-key model.
@@ -88,7 +91,7 @@ grep -rnE "auth\\(\\s*\\{[^}]*role" src/
 ## Choose Path A or Path B at Step 1
 
 **Path A — Enforce.** If grep in Step 1 finds ≥1 callsite passing `role`
-that clearly *expects* admin gating (e.g. admin layouts, admin API routes),
+that clearly _expects_ admin gating (e.g. admin layouts, admin API routes),
 take Path A: implement the check.
 
 **Path B — Remove.** If no callsite passes `role` (or all of them already
@@ -127,6 +130,7 @@ or `null` if none. The role hierarchy lives in `src/server/services/rbac.ts`
 near the role definitions — read it carefully so the hierarchy is preserved.
 
 Pattern:
+
 ```ts
 async getUserRole(userId: string): Promise<string | null> {
   const roles = await this.getUserRoles(userId);
@@ -163,6 +167,7 @@ function in React `cache()`. The role check will be cached per
 ### Step 4 (Path B only): Remove the dead parameter and comments
 
 In `src/server/auth.ts`:
+
 1. Remove `role?: UserRole` from the props type.
 2. Remove the `// TODO: RBAC` block (lines 170-173 on `6358b2b2`).
 3. Remove unused `UserRole` import if no longer used (run typecheck to see).
@@ -172,6 +177,7 @@ In every callsite found in Step 1: drop the `role: …` property.
 ### Step 5: Tests
 
 Path A: Create `tests/unit/server/services/rbac.test.ts` (or extend if it exists). Tests:
+
 - `getUserRole` returns the highest-rank role for a multi-role user.
 - `getUserRole` returns `null` for a user with no roles.
 - `getUserRole` returns the only role when one is held.

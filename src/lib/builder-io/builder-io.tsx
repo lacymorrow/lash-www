@@ -24,10 +24,10 @@ export function RenderBuilderContent(props: BuilderPageProps) {
   return (
     <>
       <style jsx>{`
-				.next-error-h1 {
-					line-height: 49px;
-				}
-			`}</style>
+        .next-error-h1 {
+          line-height: 49px;
+        }
+      `}</style>
       <DefaultErrorPage statusCode={404} />
     </>
   );

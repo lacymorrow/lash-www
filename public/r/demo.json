@@ -598,9 +598,6 @@
     }
   ],
   "docs": "Demo showcase pages with 10+ UI examples: dashboard, mail client, music player, AI playground, forms, cards, file browser, authentication, pricing, landing page, and tRPC integration.",
-  "categories": [
-    "shipkit",
-    "demo"
-  ],
+  "categories": ["shipkit", "demo"],
   "type": "registry:block"
 }

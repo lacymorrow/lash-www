@@ -75,7 +75,7 @@ export const Content = ({ block, className }: ContentProps) => {
           "max-w-5xl": width === "default",
         })}
       >
-        <div className="prose prose-gray dark:prose-invert max-w-none">
+        <div className="prose prose-gray max-w-none dark:prose-invert">
           {nodes.map((node: LexicalNode, i: number) => renderLexicalNode(node, `node-${i}`))}
         </div>
       </div>

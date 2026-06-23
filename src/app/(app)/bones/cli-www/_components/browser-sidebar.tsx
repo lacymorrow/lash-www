@@ -73,13 +73,13 @@ export const BrowserSidebar = memo(
     return (
       <div
         className={cn(
-          "w-full md:w-72 border-r border-border p-4 flex flex-col",
+          "flex w-full flex-col border-r border-border p-4 md:w-72",
           currentStyle === "brutalist" && "border-r-2 border-primary"
         )}
       >
         <div className="space-y-6">
           <div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="mb-2 flex items-center justify-between">
               <Label htmlFor="search" className="text-sm font-medium">
                 Search
               </Label>
@@ -95,8 +95,8 @@ export const BrowserSidebar = memo(
                 className={cn(
                   "pl-8",
                   currentStyle === "brutalist"
-                    ? "border-2 border-primary rounded-none"
-                    : "border rounded-md"
+                    ? "rounded-none border-2 border-primary"
+                    : "rounded-md border"
                 )}
                 value={searchTerm}
                 onChange={(e) => {
@@ -119,7 +119,7 @@ export const BrowserSidebar = memo(
           <Separator className="my-2" />
 
           <div>
-            <Label htmlFor="type" className="text-sm font-medium mb-2 block">
+            <Label htmlFor="type" className="mb-2 block text-sm font-medium">
               Type
             </Label>
             <Select
@@ -132,8 +132,8 @@ export const BrowserSidebar = memo(
                 id="type"
                 className={cn(
                   currentStyle === "brutalist"
-                    ? "border-2 border-primary rounded-none"
-                    : "border rounded-md"
+                    ? "rounded-none border-2 border-primary"
+                    : "rounded-md border"
                 )}
               >
                 <SelectValue placeholder="Select type" />
@@ -157,7 +157,7 @@ export const BrowserSidebar = memo(
           </div>
 
           <div>
-            <Label htmlFor="category" className="text-sm font-medium mb-2 block">
+            <Label htmlFor="category" className="mb-2 block text-sm font-medium">
               Category
             </Label>
             <Select
@@ -168,14 +168,14 @@ export const BrowserSidebar = memo(
                 id="category"
                 className={cn(
                   currentStyle === "brutalist"
-                    ? "border-2 border-primary rounded-none"
-                    : "border rounded-md"
+                    ? "rounded-none border-2 border-primary"
+                    : "rounded-md border"
                 )}
               >
                 <div className="flex items-center gap-2">
                   {filters.category && filters.category !== "all" && (
                     <div
-                      className="w-2 h-2 rounded-full"
+                      className="h-2 w-2 rounded-full"
                       style={{ backgroundColor: getColor(filters.category) }}
                     />
                   )}
@@ -192,7 +192,7 @@ export const BrowserSidebar = memo(
                   >
                     <div className="flex items-center gap-2">
                       <div
-                        className="w-2 h-2 rounded-full"
+                        className="h-2 w-2 rounded-full"
                         style={{ backgroundColor: getColor(category) }}
                       />
                       {category}
@@ -208,7 +208,7 @@ export const BrowserSidebar = memo(
 
           <Separator className="my-4" />
 
-          <div className="text-sm text-muted-foreground space-y-2">
+          <div className="space-y-2 text-sm text-muted-foreground">
             <div className="flex items-center justify-between">
               <span>Total Components</span>
               <Badge variant="secondary" className="font-mono">

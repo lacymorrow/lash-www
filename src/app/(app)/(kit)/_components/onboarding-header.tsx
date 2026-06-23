@@ -7,7 +7,7 @@ import { routes } from "@/config/routes";
 export function OnboardingHeader() {
   return (
     <div className="relative overflow-hidden bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 py-16">
-      <div className="absolute inset-0 bg-grid-pattern opacity-5" />
+      <div className="bg-grid-pattern absolute inset-0 opacity-5" />
       <div className="container relative mx-auto px-4">
         <div className="mx-auto max-w-4xl text-center">
           <div className="mb-6 flex items-center justify-center gap-2">
@@ -30,7 +30,7 @@ export function OnboardingHeader() {
             configure your features and start shipping.
           </p>
 
-          <div className="flex gap-4 flex-row justify-center">
+          <div className="flex flex-row justify-center gap-4">
             <Link href={routes.docs} className="inline-flex">
               <RainbowButton>
                 <BookOpen className="mr-2 h-4 w-4" />
@@ -39,9 +39,9 @@ export function OnboardingHeader() {
             </Link>
           </div>
 
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground py-6">
+          <div className="flex items-center justify-center gap-2 py-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
-              <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+              <div className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
               <span>Ready</span>
             </div>
           </div>

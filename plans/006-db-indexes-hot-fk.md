@@ -60,16 +60,17 @@ If plan 004 lands first, it adds `uniqueIndex` on `(processor, processorOrderId)
 
 ## Commands you will need
 
-| Purpose          | Command                                                | Expected |
-|------------------|--------------------------------------------------------|----------|
-| Install          | `bun install`                                          | exit 0   |
-| Generate         | `bun run db:generate`                                  | new migration with `CREATE INDEX` |
-| Migrate          | `bun run db:migrate`                                   | exit 0   |
-| Typecheck        | `bun run typecheck`                                    | no new errors |
+| Purpose   | Command               | Expected                          |
+| --------- | --------------------- | --------------------------------- |
+| Install   | `bun install`         | exit 0                            |
+| Generate  | `bun run db:generate` | new migration with `CREATE INDEX` |
+| Migrate   | `bun run db:migrate`  | exit 0                            |
+| Typecheck | `bun run typecheck`   | no new errors                     |
 
 ## Scope
 
 **In scope:**
+
 - `src/server/db/schema.ts` — add `index()` declarations on:
   - `payments.userId`
   - `teamMembers.userId`
@@ -79,6 +80,7 @@ If plan 004 lands first, it adds `uniqueIndex` on `(processor, processorOrderId)
 - A new generated migration.
 
 **Out of scope:**
+
 - `apiKeys`, `feedback`, `deployments`, `temporaryLinks` columns — they
   may also be index candidates, but each needs its own query-pattern
   evidence. Don't add speculative indexes; they cost write throughput. Add
@@ -109,6 +111,7 @@ import { … , index } from "drizzle-orm/pg-core";
 Drizzle table definitions can pass a second callback returning an index map.
 
 For `payments`:
+
 ```ts
 export const payments = createTable(
   "payment",
@@ -120,6 +123,7 @@ export const payments = createTable(
 ```
 
 For `teamMembers`:
+
 ```ts
 export const teamMembers = createTable(
   "team_member",
@@ -132,6 +136,7 @@ export const teamMembers = createTable(
 ```
 
 For `projectMembers`:
+
 ```ts
 export const projectMembers = createTable(
   "project_member",
@@ -162,9 +167,11 @@ table-prefix applied if `DB_PREFIX` is set). No `DROP` statements, no
 ### Step 5: Smoke verification with EXPLAIN
 
 (Optional but recommended.) Connect with `psql` and run:
+
 ```sql
 EXPLAIN ANALYZE SELECT * FROM "payment" WHERE user_id = 'some-uuid';
 ```
+
 Expect `Index Scan using payment_user_id_idx`. Run for each new index.
 
 If a query still does a Seq Scan because the table is tiny, that's
@@ -172,7 +179,7 @@ Postgres correctly choosing the cheaper plan for small tables — fine.
 
 ### Step 6: Update or add a note in `CLAUDE.md`'s "Database Best Practices" section
 
-Add one bullet: *Index every foreign-key column declared with `.references(…)`.* This is a one-line convention add. (If a project-wide rule already says this and the codebase just drifted from it, skip.)
+Add one bullet: _Index every foreign-key column declared with `.references(…)`._ This is a one-line convention add. (If a project-wide rule already says this and the codebase just drifted from it, skip.)
 
 ## Test plan
 
@@ -196,7 +203,7 @@ For confidence, the existing test suite must continue to pass: `bun run test`.
 - Drizzle generate produces a migration that ALSO contains unexpected schema
   changes (drops, type alters). Something else drifted. Inspect, then
   report.
-- A table already has a *unique* index covering the column you're adding a
+- A table already has a _unique_ index covering the column you're adding a
   non-unique index for (e.g. `teamMember(userId, teamId)` unique elsewhere
   might cover `userId` for some queries but not all). Inspect: if the
   existing unique index does NOT have the column as its leftmost field, your

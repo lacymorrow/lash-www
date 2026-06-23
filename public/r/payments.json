@@ -209,9 +209,6 @@
     }
   ],
   "docs": "Unified payment system supporting Stripe, Lemon Squeezy, and Polar. Each provider auto-enables via env vars: `STRIPE_SECRET_KEY` + `STRIPE_PUBLISHABLE_KEY` (Stripe), `LEMONSQUEEZY_API_KEY` + `LEMONSQUEEZY_STORE_ID` (Lemon Squeezy), `POLAR_ACCESS_TOKEN` (Polar). Includes webhook handlers, checkout flows, and subscription management. Requires `DATABASE_URL` for storing payment records.",
-  "categories": [
-    "shipkit",
-    "payments"
-  ],
+  "categories": ["shipkit", "payments"],
   "type": "registry:block"
 }

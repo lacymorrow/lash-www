@@ -47,27 +47,19 @@ describe("preview-flags", () => {
   });
 
   describe("parseTruthy", () => {
-    it.each([
-      "1",
-      "true",
-      "on",
-      "yes",
-      "enable",
-      "enabled",
-    ])("returns true for truthy value '%s'", (value) => {
-      expect(parseTruthy(value)).toBe(true);
-    });
+    it.each(["1", "true", "on", "yes", "enable", "enabled"])(
+      "returns true for truthy value '%s'",
+      (value) => {
+        expect(parseTruthy(value)).toBe(true);
+      }
+    );
 
-    it.each([
-      "0",
-      "false",
-      "off",
-      "no",
-      "disable",
-      "disabled",
-    ])("returns false for falsy value '%s'", (value) => {
-      expect(parseTruthy(value)).toBe(false);
-    });
+    it.each(["0", "false", "off", "no", "disable", "disabled"])(
+      "returns false for falsy value '%s'",
+      (value) => {
+        expect(parseTruthy(value)).toBe(false);
+      }
+    );
 
     it("is case-insensitive", () => {
       expect(parseTruthy("TRUE")).toBe(true);

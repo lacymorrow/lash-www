@@ -17,26 +17,26 @@ fixes can land with confidence.
 
 ## Status table
 
-| # | Title | Priority | Effort | Category | Issue | Status |
-|---|---|---|---|---|---|---|
-| 008 | Characterization tests for `payment-service.ts` | P2 | M | tests | [#229](https://github.com/lacymorrow/shipkit/issues/229) | ⬜ todo |
-| 009 | Characterization tests for `auth-service.ts` | P2 | L | tests | [#230](https://github.com/lacymorrow/shipkit/issues/230) | ⬜ todo |
-| 001 | Enforce team membership on `GET /api/projects` | P1 | S | security (IDOR) | [#222](https://github.com/lacymorrow/shipkit/issues/222) | ⬜ todo |
-| 002 | LemonSqueezy webhook — reject untrusted `custom_data.user_id` | P1 | S | security (IDOR / payment) | [#223](https://github.com/lacymorrow/shipkit/issues/223) | ⬜ todo |
-| 003 | Resolve dangling RBAC role check in `auth.ts` | P1 | M | security | [#224](https://github.com/lacymorrow/shipkit/issues/224) | ⬜ todo |
-| 004 | Payment-webhook idempotency — unique constraint + tx | P1 | M | correctness (money) | [#225](https://github.com/lacymorrow/shipkit/issues/225) | ⬜ todo |
-| 005 | Temporary links — one-time use, stop extending expiry on read | P1 | S | security (replay) | [#226](https://github.com/lacymorrow/shipkit/issues/226) | ⬜ todo |
-| 006 | Add DB indexes on hot foreign-key columns | P2 | S | performance | [#227](https://github.com/lacymorrow/shipkit/issues/227) | ⬜ todo |
-| 007 | Payment service — fix N+1 in `getUsersWithPayments` / `getPaymentsWithUsers` | P2 | M | performance | [#228](https://github.com/lacymorrow/shipkit/issues/228) | ⬜ todo |
-| 010 | Remove `typescript.ignoreBuildErrors: true` from `next.config.ts` | P2 | M | dx / correctness | [#231](https://github.com/lacymorrow/shipkit/issues/231) | ⬜ todo |
-| 016 | Direction spike — finish or retire server-actions-for-data-fetching cleanup | P2 | L | direction | [#237](https://github.com/lacymorrow/shipkit/issues/237) | ⬜ todo |
-| 011 | Memoize `isAdmin()` per request | P3 | S | performance | [#232](https://github.com/lacymorrow/shipkit/issues/232) | ⬜ todo |
-| 012 | Retire or archive stale root planning artifacts | P3 | S | docs / tech-debt | [#233](https://github.com/lacymorrow/shipkit/issues/233) | ⬜ todo |
-| 013 | Replace `npm run` / `npx` in `package.json` scripts with `bun run` / `bunx` | P3 | S | dx | [#234](https://github.com/lacymorrow/shipkit/issues/234) | ⬜ todo |
-| 014 | Lazy-load Builder.io SDK and dedupe `getPageData` in CMS catch-all | P3 | M | performance | [#235](https://github.com/lacymorrow/shipkit/issues/235) | ⬜ todo |
-| 015 | Remove stale `.env.old` / `.env.local.disabled` from the working tree | P3 | S | dx / hygiene | [#236](https://github.com/lacymorrow/shipkit/issues/236) | ⬜ todo |
-| 017 | Direction — document the shadcn component registry as a distribution channel | P3 | S | direction | [#238](https://github.com/lacymorrow/shipkit/issues/238) | ⬜ todo |
-| 018 | Direction — publish the `cli/` scaffolder and link it from README | P3 | M | direction | [#239](https://github.com/lacymorrow/shipkit/issues/239) | ⬜ todo |
+| #   | Title                                                                        | Priority | Effort | Category                  | Issue                                                    | Status  |
+| --- | ---------------------------------------------------------------------------- | -------- | ------ | ------------------------- | -------------------------------------------------------- | ------- |
+| 008 | Characterization tests for `payment-service.ts`                              | P2       | M      | tests                     | [#229](https://github.com/lacymorrow/shipkit/issues/229) | ⬜ todo |
+| 009 | Characterization tests for `auth-service.ts`                                 | P2       | L      | tests                     | [#230](https://github.com/lacymorrow/shipkit/issues/230) | ⬜ todo |
+| 001 | Enforce team membership on `GET /api/projects`                               | P1       | S      | security (IDOR)           | [#222](https://github.com/lacymorrow/shipkit/issues/222) | ⬜ todo |
+| 002 | LemonSqueezy webhook — reject untrusted `custom_data.user_id`                | P1       | S      | security (IDOR / payment) | [#223](https://github.com/lacymorrow/shipkit/issues/223) | ⬜ todo |
+| 003 | Resolve dangling RBAC role check in `auth.ts`                                | P1       | M      | security                  | [#224](https://github.com/lacymorrow/shipkit/issues/224) | ⬜ todo |
+| 004 | Payment-webhook idempotency — unique constraint + tx                         | P1       | M      | correctness (money)       | [#225](https://github.com/lacymorrow/shipkit/issues/225) | ⬜ todo |
+| 005 | Temporary links — one-time use, stop extending expiry on read                | P1       | S      | security (replay)         | [#226](https://github.com/lacymorrow/shipkit/issues/226) | ⬜ todo |
+| 006 | Add DB indexes on hot foreign-key columns                                    | P2       | S      | performance               | [#227](https://github.com/lacymorrow/shipkit/issues/227) | ⬜ todo |
+| 007 | Payment service — fix N+1 in `getUsersWithPayments` / `getPaymentsWithUsers` | P2       | M      | performance               | [#228](https://github.com/lacymorrow/shipkit/issues/228) | ⬜ todo |
+| 010 | Remove `typescript.ignoreBuildErrors: true` from `next.config.ts`            | P2       | M      | dx / correctness          | [#231](https://github.com/lacymorrow/shipkit/issues/231) | ⬜ todo |
+| 016 | Direction spike — finish or retire server-actions-for-data-fetching cleanup  | P2       | L      | direction                 | [#237](https://github.com/lacymorrow/shipkit/issues/237) | ⬜ todo |
+| 011 | Memoize `isAdmin()` per request                                              | P3       | S      | performance               | [#232](https://github.com/lacymorrow/shipkit/issues/232) | ⬜ todo |
+| 012 | Retire or archive stale root planning artifacts                              | P3       | S      | docs / tech-debt          | [#233](https://github.com/lacymorrow/shipkit/issues/233) | ⬜ todo |
+| 013 | Replace `npm run` / `npx` in `package.json` scripts with `bun run` / `bunx`  | P3       | S      | dx                        | [#234](https://github.com/lacymorrow/shipkit/issues/234) | ⬜ todo |
+| 014 | Lazy-load Builder.io SDK and dedupe `getPageData` in CMS catch-all           | P3       | M      | performance               | [#235](https://github.com/lacymorrow/shipkit/issues/235) | ⬜ todo |
+| 015 | Remove stale `.env.old` / `.env.local.disabled` from the working tree        | P3       | S      | dx / hygiene              | [#236](https://github.com/lacymorrow/shipkit/issues/236) | ⬜ todo |
+| 017 | Direction — document the shadcn component registry as a distribution channel | P3       | S      | direction                 | [#238](https://github.com/lacymorrow/shipkit/issues/238) | ⬜ todo |
+| 018 | Direction — publish the `cli/` scaffolder and link it from README            | P3       | M      | direction                 | [#239](https://github.com/lacymorrow/shipkit/issues/239) | ⬜ todo |
 
 ## How to execute a plan
 

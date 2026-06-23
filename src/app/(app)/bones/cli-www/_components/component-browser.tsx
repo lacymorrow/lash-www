@@ -132,7 +132,7 @@ const ComponentCard = memo(
         key={component.name}
         className={cn(
           componentCardStyles({ style: currentStyle }),
-          "bg-card text-card-foreground relative min-h-[150px] overflow-hidden",
+          "relative min-h-[150px] overflow-hidden bg-card text-card-foreground",
           isInstalled &&
             (currentStyle === "brutalist"
               ? "border-2 border-emerald-500"
@@ -141,7 +141,7 @@ const ComponentCard = memo(
         onClick={() => onOpenSidebar(component)}
       >
         <div
-          className="absolute top-0 left-0 w-0 h-0 border-8 border-transparent"
+          className="absolute left-0 top-0 h-0 w-0 border-8 border-transparent"
           style={{ borderTopColor: registryColor, borderLeftColor: registryColor }}
         />
         {/* <div className="absolute top-0 right-0 w-0 h-0 border-8 border-transparent" style={{ borderTopColor: categoryColor, borderRightColor: categoryColor }} /> */}
@@ -149,7 +149,7 @@ const ComponentCard = memo(
           <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="absolute bottom-0 right-0 w-0 h-0 border-8 border-transparent border-b-emerald-500 border-r-emerald-500 cursor-help" />
+                <div className="absolute bottom-0 right-0 h-0 w-0 cursor-help border-8 border-transparent border-b-emerald-500 border-r-emerald-500" />
               </TooltipTrigger>
               <TooltipContent side="left">
                 <p className="text-xs">Installed</p>
@@ -158,7 +158,7 @@ const ComponentCard = memo(
           </TooltipProvider>
         )}
         <CardHeader className="pb-2">
-          <div className="flex justify-between items-start mb-2">
+          <div className="mb-2 flex items-start justify-between">
             <CardTitle className="text-base font-bold">{component.name}</CardTitle>
             <div className="flex items-center gap-2">
               <ActionButton
@@ -180,10 +180,10 @@ const ComponentCard = memo(
           <Badge
             variant="outline"
             className={cn(
-              "mt-1 hidden md:inline-flex w-auto self-start",
+              "mt-1 hidden w-auto self-start md:inline-flex",
               currentStyle === "brutalist"
-                ? "border-2 border-primary rounded-none"
-                : "border border-muted-foreground rounded-full text-xs"
+                ? "rounded-none border-2 border-primary"
+                : "rounded-full border border-muted-foreground text-xs"
             )}
             style={{ backgroundColor: `${categoryColor}70`, color: "#fff" }}
           >
@@ -345,7 +345,7 @@ export function ComponentBrowser({ currentStyle: initialStyle = "modern" }: Comp
       setInstallationProgress({ status: "installing" });
 
       // Extract the component URL or name from the command
-      const match = command.match(/"([^"]+)"/) || command.match(/add\s+(\S+)$/);
+      const match = /"([^"]+)"/.exec(command) || /add\s+(\S+)$/.exec(command);
       const componentUrl = match ? match[1] : null;
 
       if (!componentUrl) {
@@ -397,7 +397,7 @@ export function ComponentBrowser({ currentStyle: initialStyle = "modern" }: Comp
         <div
           className={cn(
             "p-4",
-            "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto"
+            "grid grid-cols-1 gap-4 overflow-auto sm:grid-cols-2 lg:grid-cols-3"
           )}
         >
           {allFilteredItems.map((component: RegistryItem) => (
@@ -420,9 +420,9 @@ export function ComponentBrowser({ currentStyle: initialStyle = "modern" }: Comp
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex h-full items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-destructive mb-2">Error</h2>
+          <h2 className="mb-2 text-2xl font-bold text-destructive">Error</h2>
           <p className="text-muted-foreground">{error.message}</p>
         </div>
       </div>
@@ -431,7 +431,7 @@ export function ComponentBrowser({ currentStyle: initialStyle = "modern" }: Comp
 
   return (
     <div
-      className={`${containerStyles({ style: currentStyle })} bg-background text-foreground relative h-full`}
+      className={`${containerStyles({ style: currentStyle })} relative h-full bg-background text-foreground`}
     >
       <BrowserHeader
         currentStyle={currentStyle}
@@ -476,7 +476,7 @@ export function ComponentBrowser({ currentStyle: initialStyle = "modern" }: Comp
         }}
         onStyleChange={toggleStyle}
       />
-      <div className="flex flex-1 overflow-hidden flex-col md:flex-row relative">
+      <div className="relative flex flex-1 flex-col overflow-hidden md:flex-row">
         <BrowserSidebar
           currentStyle={currentStyle}
           searchTerm={searchQuery}
@@ -491,8 +491,8 @@ export function ComponentBrowser({ currentStyle: initialStyle = "modern" }: Comp
         />
         <div className="flex-1 overflow-auto">
           {loading ? (
-            <div className="flex items-center justify-center h-full">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+            <div className="flex h-full items-center justify-center">
+              <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary" />
             </div>
           ) : (
             <div className="space-y-8">{renderComponentGrid("all")}</div>
@@ -506,30 +506,30 @@ export function ComponentBrowser({ currentStyle: initialStyle = "modern" }: Comp
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
-          className="fixed bottom-4 right-4 w-[500px] z-50"
+          className="fixed bottom-4 right-4 z-50 w-[500px]"
         >
-          <Card className="shadow-2xl border-black/10 bg-[#1E1E1E]">
+          <Card className="border-black/10 bg-[#1E1E1E] shadow-2xl">
             <div className="relative">
-              <div className="h-8 bg-[#323233] rounded-t-lg flex items-center justify-between px-3">
+              <div className="flex h-8 items-center justify-between rounded-t-lg bg-[#323233] px-3">
                 <div className="absolute left-3 flex items-center gap-2 text-xs">
                   {installationProgress.status === "installing" ? (
-                    <div className="flex items-center gap-2 px-2 py-1 bg-blue-500/10 text-blue-400 rounded-full">
+                    <div className="flex items-center gap-2 rounded-full bg-blue-500/10 px-2 py-1 text-blue-400">
                       <ReloadIcon className="h-3 w-3 animate-spin" />
                       Installing...
                     </div>
                   ) : installationProgress.status === "success" ? (
-                    <div className="flex items-center gap-2 px-2 py-1 bg-emerald-500/10 text-emerald-400 rounded-full">
+                    <div className="flex items-center gap-2 rounded-full bg-emerald-500/10 px-2 py-1 text-emerald-400">
                       <CheckIcon className="h-3 w-3" />
                       Complete
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2 px-2 py-1 bg-red-500/10 text-red-400 rounded-full">
+                    <div className="flex items-center gap-2 rounded-full bg-red-500/10 px-2 py-1 text-red-400">
                       <Cross2Icon className="h-3 w-3" />
                       Error
                     </div>
                   )}
                 </div>
-                <span className="w-full text-center text-xs text-zinc-400 font-medium">
+                <span className="w-full text-center text-xs font-medium text-zinc-400">
                   Console Output
                 </span>
                 <Button
@@ -550,7 +550,7 @@ export function ComponentBrowser({ currentStyle: initialStyle = "modern" }: Comp
                     className="h-[300px] rounded-b-lg"
                   />
                 ) : (
-                  <div className="h-[300px] flex items-center justify-center text-zinc-400">
+                  <div className="flex h-[300px] items-center justify-center text-zinc-400">
                     <ReloadIcon className="h-6 w-6 animate-spin" />
                   </div>
                 )}

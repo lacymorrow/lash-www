@@ -1,10 +1,10 @@
-type ProgressiveBlurProps = {
+interface ProgressiveBlurProps {
   className?: string;
   backgroundColor?: string;
   position?: "top" | "bottom";
   height?: string;
   blurAmount?: string;
-};
+}
 
 const ProgressiveBlur = ({
   className = "",

@@ -78,7 +78,7 @@ export const columns: ColumnDef<UserData>[] = [
       const hasPaid = Boolean(row.getValue("hasPaid"));
 
       return (
-        <div className="flex flex-col gap-1 items-start justify-center">
+        <div className="flex flex-col items-start justify-center gap-1">
           <Badge variant={hasPaid ? "default" : "secondary"}>{hasPaid ? "Paid" : "Not Paid"}</Badge>
         </div>
       );
@@ -103,7 +103,7 @@ export const columns: ColumnDef<UserData>[] = [
       }
 
       return (
-        <div className="flex flex-col gap-1 items-start justify-center">
+        <div className="flex flex-col items-start justify-center gap-1">
           <Badge variant={variant}>{status}</Badge>
         </div>
       );

@@ -134,7 +134,7 @@ export const ROICalculator = () => {
 
           <div className="space-y-4 text-sm text-muted-foreground">
             <p>* Calculations based on:</p>
-            <ul className="list-disc pl-4 space-y-2">
+            <ul className="list-disc space-y-2 pl-4">
               <li>Average developer salary of {formatCurrency(avgDevSalary)}/year in 2024</li>
               <li>Infrastructure and tooling costs of {formatCurrency(2000)}/month</li>
               <li>Typical time savings of 75% with {siteConfig.title}</li>

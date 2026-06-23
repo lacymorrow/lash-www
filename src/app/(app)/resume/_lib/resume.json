@@ -414,7 +414,17 @@
     {
       "name": "Devops",
       "level": "Senior",
-      "keywords": ["Docker", "AWS", "G Cloud", "Vercel", "Netlify", "Heroku", "Caching", "CI/CD", "Testing"]
+      "keywords": [
+        "Docker",
+        "AWS",
+        "G Cloud",
+        "Vercel",
+        "Netlify",
+        "Heroku",
+        "Caching",
+        "CI/CD",
+        "Testing"
+      ]
     },
     {
       "name": "Web Branding",

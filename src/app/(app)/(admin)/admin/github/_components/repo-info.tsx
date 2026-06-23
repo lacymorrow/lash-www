@@ -10,7 +10,7 @@ export function RepoInfoSkeleton() {
   return (
     <Card>
       <CardHeader>
-        <Skeleton className="h-5 w-[200px] mb-2" />
+        <Skeleton className="mb-2 h-5 w-[200px]" />
         <Skeleton className="h-4 w-[300px]" />
       </CardHeader>
       <CardContent>

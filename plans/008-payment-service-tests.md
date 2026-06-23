@@ -24,12 +24,13 @@ and the user-facing access-control story. It has zero unit tests. Every
 other planned change that touches it (plans 004, 007) is risky without a
 safety net.
 
-This plan is *characterization* — capture what the code does today, so
+This plan is _characterization_ — capture what the code does today, so
 refactors land safely. It is not a quality assessment.
 
 ## Current state
 
 Tests inventory (recon):
+
 - Existing service tests live in `tests/unit/server/services/` — `waitlist-service.test.ts`, `feedback-service.test.ts`, `deployment-service.test.ts`, `github/github-service.test.ts`, `team/team-service.test.ts`.
 - No file matches `tests/**/*payment*`.
 - `tests/e2e/admin-payment-import.spec.ts` exists but is an end-to-end Playwright test of the admin import UI, not the service.
@@ -37,6 +38,7 @@ Tests inventory (recon):
 
 The service exposes these public methods (verify by reading the file's
 `export` lines and the `class PaymentService` block):
+
 - `createPayment`
 - `getPaymentByOrderId`
 - `getUserPaymentStatus`
@@ -48,15 +50,16 @@ The service exposes these public methods (verify by reading the file's
 
 ## Commands you will need
 
-| Purpose          | Command                                                            | Expected |
-|------------------|--------------------------------------------------------------------|----------|
-| Install          | `bun install`                                                      | exit 0   |
-| Tests (focused)  | `bun run test -- tests/unit/server/services/payment-service.test.ts` | new tests pass |
-| Tests (full)     | `bun run test`                                                     | nothing else regresses |
+| Purpose         | Command                                                              | Expected               |
+| --------------- | -------------------------------------------------------------------- | ---------------------- |
+| Install         | `bun install`                                                        | exit 0                 |
+| Tests (focused) | `bun run test -- tests/unit/server/services/payment-service.test.ts` | new tests pass         |
+| Tests (full)    | `bun run test`                                                       | nothing else regresses |
 
 ## Scope
 
 **In scope:**
+
 - New file: `tests/unit/server/services/payment-service.test.ts`.
 - Mocks under `tests/unit/server/services/__mocks__/` or inline — match the
   pattern used in existing service tests (look at
@@ -64,6 +67,7 @@ The service exposes these public methods (verify by reading the file's
 - A small fixture file if the existing service test pattern uses one.
 
 **Out of scope:**
+
 - Refactoring `payment-service.ts` (that's plan 007).
 - Splitting `payment-service.ts` into smaller modules (separate follow-up).
 - Integration tests against real provider sandboxes (worth doing later;
@@ -81,8 +85,9 @@ The service exposes these public methods (verify by reading the file's
 
 ### Step 1: Read the exemplar tests
 
-Read `tests/unit/server/services/team/team-service.test.ts` *and*
+Read `tests/unit/server/services/team/team-service.test.ts` _and_
 `tests/unit/server/services/deployment-service.test.ts` cold. Note:
+
 - How `db` is mocked (`vi.mock("@/server/db", …)` or fixture pattern).
 - How services that depend on `db` are imported and reset between tests.
 - How errors from `db?.query…` are simulated.
@@ -98,7 +103,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/server/db", () => ({
   db: {
-    query: { payments: { findFirst: vi.fn(), findMany: vi.fn() }, users: { findFirst: vi.fn(), findMany: vi.fn() } },
+    query: {
+      payments: { findFirst: vi.fn(), findMany: vi.fn() },
+      users: { findFirst: vi.fn(), findMany: vi.fn() },
+    },
     insert: vi.fn(),
     update: vi.fn(),
     // adjust to match exemplar exactly
@@ -112,7 +120,9 @@ vi.mock("@/server/providers", () => ({
 import { PaymentService } from "@/server/services/payment-service";
 
 describe("PaymentService", () => {
-  beforeEach(() => { vi.clearAllMocks(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   // tests go here
 });
@@ -166,7 +176,7 @@ payment-service's behavior, not to reimplement its world.
 ### Step 4: Snapshot of return shapes (optional safety net)
 
 For `getUsersWithPayments` and `getPaymentsWithUsers`, write a `it.todo` or
-a snapshot of the *current* return shape (one realistic example). When plan
+a snapshot of the _current_ return shape (one realistic example). When plan
 007 refactors, the snapshot tells you immediately if the shape changed
 silently. Vitest snapshots: `expect(result).toMatchInlineSnapshot()`.
 
@@ -219,7 +229,7 @@ caching can do this with `vi.mock` at the top), use `vi.resetModules()` in
 
 - These are characterization tests, not specification. When the underlying
   behavior should change (e.g. plan 007's refactor), the test gets updated
-  to match the *intentional* new behavior — not "fixed" to make a green
+  to match the _intentional_ new behavior — not "fixed" to make a green
   pass-through.
 - The harder integration-style tests (real provider sandbox calls) belong
   in a separate `tests/integration/` suite, not here.

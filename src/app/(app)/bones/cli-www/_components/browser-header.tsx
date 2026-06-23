@@ -55,7 +55,7 @@ export function BrowserHeader({
   return (
     <div
       className={cn(
-        "flex items-center justify-between gap-4 p-4 border-b",
+        "flex items-center justify-between gap-4 border-b p-4",
         currentStyle === "brutalist" ? "border-b-2 border-primary" : "border-border"
       )}
     >
@@ -70,14 +70,14 @@ export function BrowserHeader({
               className={cn(
                 "w-[200px] justify-between",
                 currentStyle === "brutalist"
-                  ? "border-2 border-primary rounded-none"
-                  : "border rounded-md"
+                  ? "rounded-none border-2 border-primary"
+                  : "rounded-md border"
               )}
             >
               <div className="flex items-center gap-2">
                 {currentRegistry && (
                   <div
-                    className="w-2 h-2 rounded-full"
+                    className="h-2 w-2 rounded-full"
                     style={{ backgroundColor: getColor(currentRegistry.name) }}
                   />
                 )}
@@ -103,7 +103,7 @@ export function BrowserHeader({
                           !currentRegistry ? "opacity-100" : "opacity-0"
                         )}
                       />
-                      <div className="w-2 h-2 rounded-full bg-gradient-to-r from-primary to-primary/50" />
+                      <div className="h-2 w-2 rounded-full bg-gradient-to-r from-primary to-primary/50" />
                       All Registries
                     </div>
                   </CommandItem>
@@ -123,7 +123,7 @@ export function BrowserHeader({
                             )}
                           />
                           <div
-                            className="w-2 h-2 rounded-full"
+                            className="h-2 w-2 rounded-full"
                             style={{ backgroundColor: getColor(registry.name) }}
                           />
                           {registry.name}
@@ -151,7 +151,7 @@ export function BrowserHeader({
                               )}
                             />
                             <div
-                              className="w-2 h-2 rounded-full"
+                              className="h-2 w-2 rounded-full"
                               style={{ backgroundColor: getColor(registry.name) }}
                             />
                             {registry.name}

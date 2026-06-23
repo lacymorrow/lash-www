@@ -3,16 +3,8 @@
   "name": "email",
   "title": "Email",
   "description": "Resend email integration with client setup, subscribe/audience actions, email service, and newsletter form component.",
-  "dependencies": [
-    "resend",
-    "zod"
-  ],
-  "registryDependencies": [
-    "@shipkit/cn",
-    "button",
-    "input",
-    "label"
-  ],
+  "dependencies": ["resend", "zod"],
+  "registryDependencies": ["@shipkit/cn", "button", "input", "label"],
   "files": [
     {
       "path": "src/lib/resend.ts",
@@ -52,9 +44,6 @@
     }
   ],
   "docs": "Email integration via Resend. Set `RESEND_API_KEY` to enable. Optionally set `RESEND_AUDIENCE_ID` for newsletter audience management. Includes subscribe form component and email utility functions.",
-  "categories": [
-    "shipkit",
-    "email"
-  ],
+  "categories": ["shipkit", "email"],
   "type": "registry:block"
 }

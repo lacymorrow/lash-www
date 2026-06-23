@@ -55,7 +55,7 @@ export const PaymentDrawer = ({ payment, open, onClose }: PaymentDrawerProps) =>
 
   return (
     <Drawer open={open} onOpenChange={onClose}>
-      <DrawerContent className="max-h-[90vh] flex flex-col">
+      <DrawerContent className="flex max-h-[90vh] flex-col">
         <DrawerHeader>
           <DrawerTitle>Payment Details</DrawerTitle>
           <DrawerDescription>Order ID: {payment.orderId}</DrawerDescription>
@@ -106,7 +106,7 @@ export const PaymentDrawer = ({ payment, open, onClose }: PaymentDrawerProps) =>
                       </div>
                     </div>
                     <CardContent className="p-0">
-                      <div className="grid grid-cols-1 divide-y sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
+                      <div className="grid grid-cols-1 divide-y sm:grid-cols-3 sm:divide-x sm:divide-y-0">
                         <div className="p-4">
                           <div className="flex items-center gap-3">
                             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
@@ -195,12 +195,12 @@ export const PaymentDrawer = ({ payment, open, onClose }: PaymentDrawerProps) =>
                       >
                         {isJsonOpen ? (
                           <>
-                            <ChevronUp className="h-3 w-3 mr-1" />
+                            <ChevronUp className="mr-1 h-3 w-3" />
                             <span>Raw JSON</span>
                           </>
                         ) : (
                           <>
-                            <ChevronDown className="h-3 w-3 mr-1" />
+                            <ChevronDown className="mr-1 h-3 w-3" />
                             <span>Raw JSON</span>
                           </>
                         )}
@@ -216,7 +216,7 @@ export const PaymentDrawer = ({ payment, open, onClose }: PaymentDrawerProps) =>
           </div>
         </ScrollArea>
 
-        <DrawerFooter className="mt-auto pt-4 border-t">
+        <DrawerFooter className="mt-auto border-t pt-4">
           <DrawerClose asChild>
             <Button variant="outline">Close</Button>
           </DrawerClose>

@@ -80,7 +80,7 @@ export const PriorityNav: React.FC<PriorityNavProps> = ({ navLinks, className, i
   return (
     <div
       ref={outerRef}
-      className={cn("relative flex flex-1 min-w-0 overflow-hidden items-center", className)}
+      className={cn("relative flex min-w-0 flex-1 items-center overflow-hidden", className)}
     >
       {/* Hidden measurement bar — absolutely positioned, no effect on layout */}
       <div
@@ -106,7 +106,7 @@ export const PriorityNav: React.FC<PriorityNavProps> = ({ navLinks, className, i
             key={`${link.href}-${link.label}`}
             href={link.href}
             className={cn(
-              "whitespace-nowrap text-sm transition-colors hover:text-foreground shrink-0",
+              "shrink-0 whitespace-nowrap text-sm transition-colors hover:text-foreground",
               link.isCurrent ? "text-foreground" : "text-muted-foreground",
               itemClassName
             )}

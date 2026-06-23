@@ -3,12 +3,7 @@
   "name": "docs",
   "title": "Docs",
   "description": "Full documentation system with sidebar navigation, search, and MDX rendering.",
-  "dependencies": [
-    "next-mdx-remote",
-    "remark-gfm",
-    "gray-matter",
-    "zod"
-  ],
+  "dependencies": ["next-mdx-remote", "remark-gfm", "gray-matter", "zod"],
   "registryDependencies": [
     "@shipkit/cn",
     "@shipkit/routes-config",
@@ -94,9 +89,6 @@
     }
   ],
   "docs": "Full docs system powered by MDX. Place your `.mdx` files in `docs/` at the project root. Includes sidebar navigation, search with optional AI-powered answers, and responsive layout.",
-  "categories": [
-    "shipkit",
-    "docs"
-  ],
+  "categories": ["shipkit", "docs"],
   "type": "registry:block"
 }

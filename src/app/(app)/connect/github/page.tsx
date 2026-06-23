@@ -118,7 +118,7 @@ export default function GitHubConnectPage() {
               </div>
             ) : isSuccess ? (
               <div className="flex flex-col items-center justify-center space-y-4">
-                <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center text-green-500">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

@@ -64,7 +64,7 @@ export const DeleteApiKeyDialog = ({ apiKeyId, triggerProps }: DeleteApiKeyDialo
           <form action={handleDelete}>
             <AlertDialogAction
               type="submit"
-              className="bg-red-600 hover:bg-red-700 text-white"
+              className="bg-red-600 text-white hover:bg-red-700"
               disabled={isLoading}
             >
               {isLoading ? "Deleting..." : "Delete"}

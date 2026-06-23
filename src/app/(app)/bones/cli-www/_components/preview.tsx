@@ -8,21 +8,21 @@ export function Preview({ component, currentStyle }: PreviewProps) {
   return (
     <div
       className={cn(
-        "w-full h-full flex items-center justify-center p-4",
-        currentStyle === "brutalist" ? "border-2 border-primary" : "border rounded-md"
+        "flex h-full w-full items-center justify-center p-4",
+        currentStyle === "brutalist" ? "border-2 border-primary" : "rounded-md border"
       )}
     >
       <Card
         className={cn(
-          "w-full h-full flex items-center justify-center",
+          "flex h-full w-full items-center justify-center",
           currentStyle === "brutalist"
-            ? "border-2 border-primary rounded-none"
-            : "border rounded-md"
+            ? "rounded-none border-2 border-primary"
+            : "rounded-md border"
         )}
       >
         <div className="text-center text-muted-foreground">
           <p>Preview not available for {component.name}</p>
-          <p className="text-sm mt-2">Component type: {component.type}</p>
+          <p className="mt-2 text-sm">Component type: {component.type}</p>
         </div>
       </Card>
     </div>

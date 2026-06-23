@@ -116,7 +116,7 @@ export default function GitHubUsersPage() {
 
       {/* Repository Metrics */}
       <div className="mb-10">
-        <h2 className="text-xl font-semibold tracking-tight mb-4">Repository Metrics</h2>
+        <h2 className="mb-4 text-xl font-semibold tracking-tight">Repository Metrics</h2>
         <Suspense fallback={<RepoMetricsSkeleton />}>
           <RepoMetrics />
         </Suspense>

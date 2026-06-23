@@ -186,8 +186,8 @@ export function CreateApiKeyDialog({ onSubmit, userId }: CreateApiKeyDialogProps
               </AlertDescription>
             </Alert>
 
-            <div className="flex items-center space-x-2 bg-muted p-3 rounded-md">
-              <code className="flex-1 font-mono text-sm break-all">{createdKey}</code>
+            <div className="flex items-center space-x-2 rounded-md bg-muted p-3">
+              <code className="flex-1 break-all font-mono text-sm">{createdKey}</code>
               <CopyButton value={createdKey || ""} />
             </div>
           </div>

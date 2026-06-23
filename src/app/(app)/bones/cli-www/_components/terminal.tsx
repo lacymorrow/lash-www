@@ -49,8 +49,8 @@ export function Terminal({ output, className }: TerminalProps) {
   }, [output]);
 
   return (
-    <ScrollArea className={cn("bg-[#1E1E1E] rounded-md", className)}>
-      <div className="p-4 font-mono text-sm text-[#D4D4D4] leading-5">
+    <ScrollArea className={cn("rounded-md bg-[#1E1E1E]", className)}>
+      <div className="p-4 font-mono text-sm leading-5 text-[#D4D4D4]">
         {processedOutput.map((line, i) => (
           <div
             key={`${i}-${line.slice(0, 20)}`}

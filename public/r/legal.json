@@ -3,10 +3,7 @@
   "name": "legal",
   "title": "Legal Pages",
   "description": "Legal pages with privacy policy, terms of service, EULA, and legal information — all in MDX with shared layout and header navigation.",
-  "registryDependencies": [
-    "@shipkit/cn",
-    "@shipkit/routes-config"
-  ],
+  "registryDependencies": ["@shipkit/cn", "@shipkit/routes-config"],
   "files": [
     {
       "path": "src/app/(app)/(legal)/layout.tsx",
@@ -40,9 +37,6 @@
     }
   ],
   "docs": "Legal pages (privacy policy, terms of service, EULA, legal info) with MDX content and shared layout. Customize the content in each `.mdx` file after installation.",
-  "categories": [
-    "shipkit",
-    "legal"
-  ],
+  "categories": ["shipkit", "legal"],
   "type": "registry:block"
 }

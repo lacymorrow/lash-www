@@ -3,9 +3,7 @@
   "name": "vercel-connect",
   "title": "Vercel Connect",
   "description": "Vercel integration with OAuth, deploy triggers, webhook handling, deployment status, and deploy button components.",
-  "dependencies": [
-    "lucide-react"
-  ],
+  "dependencies": ["lucide-react"],
   "registryDependencies": [
     "@shipkit/cn",
     "@shipkit/routes-config",
@@ -94,10 +92,6 @@
     }
   ],
   "docs": "Vercel deployment integration. Set `VERCEL_TOKEN` and `VERCEL_TEAM_ID` for API access. Provides OAuth connect flow, deploy triggers, webhook receiver, deployment status tracking, and deploy button components.",
-  "categories": [
-    "shipkit",
-    "vercel",
-    "integration"
-  ],
+  "categories": ["shipkit", "vercel", "integration"],
   "type": "registry:block"
 }

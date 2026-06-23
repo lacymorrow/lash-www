@@ -22,8 +22,8 @@ the next executor should pick up. Read it once, then drive from
 
 ## Owner-stated direction (2026-06-23)
 
-> *"I believe we should write tests for everything before we start making too
-> many other changes."*
+> _"I believe we should write tests for everything before we start making too
+> many other changes."_
 
 That reorders the queue. Test plans **008** (`payment-service`) and **009**
 (`auth-service`) move to the front. Their purpose is **characterization**:

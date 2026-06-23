@@ -54,7 +54,7 @@ export default async function PaymentsPage({
 
   return (
     <>
-      <div className="flex justify-between items-center mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <PageHeader>
           <PageHeaderHeading>Payment Management</PageHeaderHeading>
           <PageHeaderDescription>

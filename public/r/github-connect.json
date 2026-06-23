@@ -3,10 +3,7 @@
   "name": "github-connect",
   "title": "GitHub Connect",
   "description": "GitHub OAuth integration with repo creation, collaborator management, invitation checks, and download service.",
-  "dependencies": [
-    "octokit",
-    "@octokit/rest"
-  ],
+  "dependencies": ["octokit", "@octokit/rest"],
   "registryDependencies": [
     "@shipkit/cn",
     "@shipkit/routes-config",
@@ -78,10 +75,6 @@
     }
   ],
   "docs": "GitHub integration for repo management. Requires `AUTH_GITHUB_ID` + `AUTH_GITHUB_SECRET` for OAuth. Provides repo creation, collaborator invitations, download service, and API routes for checking repo availability.",
-  "categories": [
-    "shipkit",
-    "github",
-    "integration"
-  ],
+  "categories": ["shipkit", "github", "integration"],
   "type": "registry:block"
 }

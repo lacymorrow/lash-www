@@ -1,6 +1,6 @@
 # Plan 016: Direction spike — finish or retire the server-actions-for-data-fetching cleanup
 
-> **Executor instructions**: This is a *spike + execution* plan. The first
+> **Executor instructions**: This is a _spike + execution_ plan. The first
 > half is investigation; the second half is implementation conditioned on
 > the spike's conclusion. If the spike concludes the refactor is no longer
 > needed, mark the original `REFACTOR_SERVER_ACTIONS_PLAN.md` archived and
@@ -30,12 +30,13 @@ fetching:
 - `team-switcher.tsx`
 - `project-switcher.tsx`
 
-CLAUDE.md says explicitly: *Never use server actions for data fetching.
-Use Server Components instead.* The plan was written, then nothing landed.
+CLAUDE.md says explicitly: _Never use server actions for data fetching.
+Use Server Components instead._ The plan was written, then nothing landed.
 The anti-pattern (useEffect → server action) is inherited by every fork
 of this template.
 
 This advisor plan does two things:
+
 1. **Spike** — verify the original plan's findings are still accurate at
    commit `6358b2b2`. The codebase has churned 4 months; some of these
    components may have been migrated, refactored, or removed.
@@ -57,20 +58,22 @@ useEffect(() => {
 ```
 
 The right shape is one of:
+
 - **Server Component** — fetch in the parent RSC, pass as prop. Best when the surrounding component is otherwise server-renderable.
-- **API route + SWR/React Query** — when the data needs client-side revalidation (e.g. status polling). Server actions are for *mutations*, not reads.
+- **API route + SWR/React Query** — when the data needs client-side revalidation (e.g. status polling). Server actions are for _mutations_, not reads.
 
 ## Commands you will need
 
-| Purpose         | Command                                              | Expected |
-|-----------------|------------------------------------------------------|----------|
-| Inventory       | `grep -rn "useEffect.*Action\\b" src/components/ src/app/` | list of suspects |
-| Typecheck       | `bun run typecheck`                                  | no new errors |
-| Tests           | `bun run test`                                       | no regressions |
+| Purpose   | Command                                                    | Expected         |
+| --------- | ---------------------------------------------------------- | ---------------- |
+| Inventory | `grep -rn "useEffect.*Action\\b" src/components/ src/app/` | list of suspects |
+| Typecheck | `bun run typecheck`                                        | no new errors    |
+| Tests     | `bun run test`                                             | no regressions   |
 
 ## Scope
 
 ### Spike (always)
+
 - Locate each of the five components listed in
   `REFACTOR_SERVER_ACTIONS_PLAN.md`.
 - For each: confirm the bad pattern still exists at `6358b2b2`.
@@ -78,12 +81,14 @@ The right shape is one of:
 ### Execution (conditional on spike)
 
 **In scope:**
+
 - The components that still have the bad pattern.
 - New API routes if any component genuinely needs client-side fetching for revalidation reasons.
 
 **Out of scope:**
+
 - Components not in the original five (unless the inventory grep turns up egregious cases — document them as follow-up, don't bundle).
-- Server actions used for *mutations* (those are correctly server actions).
+- Server actions used for _mutations_ (those are correctly server actions).
 - The auth flow, the CMS catch-all, anything not on the original list.
 - Tests for components that don't already have tests — don't tax this plan with test backfill.
 
@@ -110,6 +115,7 @@ grep -nC3 "useEffect" <path>
 ```
 
 For each, you'll see one of three states:
+
 - **A (still broken):** useEffect → server action present. Mark for execution.
 - **B (already fixed):** different pattern. Mark RESOLVED, move on.
 - **C (deleted):** file no longer exists. Mark RESOLVED, note in PR.

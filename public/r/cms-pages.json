@@ -3,10 +3,7 @@
   "name": "cms-pages",
   "title": "CMS Pages",
   "description": "Shared catch-all route that renders dynamic pages from Payload CMS and/or Builder.io with automatic fallback.",
-  "dependencies": [
-    "@builder.io/sdk",
-    "uuid"
-  ],
+  "dependencies": ["@builder.io/sdk", "uuid"],
   "registryDependencies": [
     "@shipkit/cn",
     "@shipkit/features-config",
@@ -85,9 +82,6 @@
     }
   ],
   "docs": "Shared CMS catch-all route. Checks Payload CMS first, then falls back to Builder.io. Both CMS systems coexist on the same URL space. Requires `features-config` to detect which CMS is enabled via env vars. Install `builder-io` block for Builder.io support and/or configure Payload CMS separately.",
-  "categories": [
-    "shipkit",
-    "cms"
-  ],
+  "categories": ["shipkit", "cms"],
   "type": "registry:block"
 }

@@ -105,8 +105,8 @@ export function ComponentStats({ component, currentStyle }: ComponentStatsProps)
         className={cn(
           "p-4",
           currentStyle === "brutalist"
-            ? "border-2 border-primary rounded-none"
-            : "border rounded-md"
+            ? "rounded-none border-2 border-primary"
+            : "rounded-md border"
         )}
       >
         <h3 className="font-semibold">Dependencies</h3>
@@ -141,8 +141,8 @@ export function ComponentStats({ component, currentStyle }: ComponentStatsProps)
                   className={cn(
                     "inline-flex items-center px-2.5 py-0.5 text-xs font-semibold text-destructive",
                     currentStyle === "brutalist"
-                      ? "border-2 border-destructive rounded-none"
-                      : "border border-destructive/50 rounded-full"
+                      ? "rounded-none border-2 border-destructive"
+                      : "rounded-full border border-destructive/50"
                   )}
                 >
                   {dep}
@@ -158,8 +158,8 @@ export function ComponentStats({ component, currentStyle }: ComponentStatsProps)
         className={cn(
           "p-4",
           currentStyle === "brutalist"
-            ? "border-2 border-primary rounded-none"
-            : "border rounded-md"
+            ? "rounded-none border-2 border-primary"
+            : "rounded-md border"
         )}
       >
         <h3 className="font-semibold">Registry Dependencies</h3>
@@ -196,8 +196,8 @@ export function ComponentStats({ component, currentStyle }: ComponentStatsProps)
                   className={cn(
                     "inline-flex items-center px-2.5 py-0.5 text-xs font-semibold text-destructive",
                     currentStyle === "brutalist"
-                      ? "border-2 border-destructive rounded-none"
-                      : "border border-destructive/50 rounded-full"
+                      ? "rounded-none border-2 border-destructive"
+                      : "rounded-full border border-destructive/50"
                   )}
                 >
                   {dep}

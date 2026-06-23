@@ -42,78 +42,78 @@ npx shadcn add https://shipkit.io/r/auth.json
 
 ### Core Feature Blocks
 
-| Block | Files | Description |
-|-------|-------|-------------|
-| `auth` | 41 | NextAuth.js v5 — OAuth, credentials, magic link, guest access |
-| `payments` | 30 | Stripe, Lemon Squeezy, Polar — checkout, webhooks, subscriptions |
-| `dashboard` | 46 | User dashboard — projects, teams, API keys, deployments, charts |
-| `blog` | 24 | MDX blog with author profiles, categories, feed-style timeline |
-| `docs` | 12 | Documentation system — sidebar, search, MDX rendering |
-| `admin` | 30 | Role-based admin panel — users, payments, GitHub, integrations |
-| `settings` | 12 | User settings — profile, appearance, account management |
-| `rbac` | 3 | Role-based access control — permission service, hook, API |
-| `demo` | 93 | Showcase pages — dashboard, mail, music, playground, forms, cards |
+| Block       | Files | Description                                                       |
+| ----------- | ----- | ----------------------------------------------------------------- |
+| `auth`      | 41    | NextAuth.js v5 — OAuth, credentials, magic link, guest access     |
+| `payments`  | 30    | Stripe, Lemon Squeezy, Polar — checkout, webhooks, subscriptions  |
+| `dashboard` | 46    | User dashboard — projects, teams, API keys, deployments, charts   |
+| `blog`      | 24    | MDX blog with author profiles, categories, feed-style timeline    |
+| `docs`      | 12    | Documentation system — sidebar, search, MDX rendering             |
+| `admin`     | 30    | Role-based admin panel — users, payments, GitHub, integrations    |
+| `settings`  | 12    | User settings — profile, appearance, account management           |
+| `rbac`      | 3     | Role-based access control — permission service, hook, API         |
+| `demo`      | 93    | Showcase pages — dashboard, mail, music, playground, forms, cards |
 
 ### Content & Marketing
 
-| Block | Files | Description |
-|-------|-------|-------------|
-| `faq` | 3 | Accordion FAQ page with optional Payload CMS integration |
-| `pricing` | 8 | Pricing page with plan cards, features, testimonials content |
-| `legal` | 5 | Privacy policy, terms of service, EULA, legal info (MDX) |
-| `changelog` | 6 | Auto-generated changelog from GitHub commits and tags |
-| `contact` | 4 | Contact form with Resend email and newsletter opt-in |
-| `waitlist` | 10 | Pre-launch signup with hero, social proof, FAQ sections |
+| Block       | Files | Description                                                  |
+| ----------- | ----- | ------------------------------------------------------------ |
+| `faq`       | 3     | Accordion FAQ page with optional Payload CMS integration     |
+| `pricing`   | 8     | Pricing page with plan cards, features, testimonials content |
+| `legal`     | 5     | Privacy policy, terms of service, EULA, legal info (MDX)     |
+| `changelog` | 6     | Auto-generated changelog from GitHub commits and tags        |
+| `contact`   | 4     | Contact form with Resend email and newsletter opt-in         |
+| `waitlist`  | 10    | Pre-launch signup with hero, social proof, FAQ sections      |
 
 ### CMS
 
-| Block | Files | Description |
-|-------|-------|-------------|
-| `builder-io` | 11 | Builder.io visual page builder — drag-and-drop components |
-| `cms-pages` | 11 | Shared Payload + Builder.io catch-all with automatic fallback |
+| Block        | Files | Description                                                   |
+| ------------ | ----- | ------------------------------------------------------------- |
+| `builder-io` | 11    | Builder.io visual page builder — drag-and-drop components     |
+| `cms-pages`  | 11    | Shared Payload + Builder.io catch-all with automatic fallback |
 
 ### Integrations
 
-| Block | Files | Description |
-|-------|-------|-------------|
-| `email` | 6 | Resend email — client, service, subscribe actions, newsletter form |
-| `feedback` | 4 | User feedback dialog/popover with database storage |
-| `analytics` | 9 | PostHog, Umami, DataFast, Google Analytics, GTM, Statsig |
-| `ai` | 15 | SmolLM browser AI (WebGPU) + cloud AI (OpenAI, Anthropic) |
-| `github-connect` | 10 | GitHub OAuth, repo creation, collaborators, download service |
-| `vercel-connect` | 11 | Vercel OAuth, deploy triggers, webhooks, status tracking |
-| `storage` | 6 | AWS S3 presigned uploads, file service, upload components |
-| `caching` | 4 | Redis caching and rate limiting via Upstash |
+| Block            | Files | Description                                                        |
+| ---------------- | ----- | ------------------------------------------------------------------ |
+| `email`          | 6     | Resend email — client, service, subscribe actions, newsletter form |
+| `feedback`       | 4     | User feedback dialog/popover with database storage                 |
+| `analytics`      | 9     | PostHog, Umami, DataFast, Google Analytics, GTM, Statsig           |
+| `ai`             | 15    | SmolLM browser AI (WebGPU) + cloud AI (OpenAI, Anthropic)          |
+| `github-connect` | 10    | GitHub OAuth, repo creation, collaborators, download service       |
+| `vercel-connect` | 11    | Vercel OAuth, deploy triggers, webhooks, status tracking           |
+| `storage`        | 6     | AWS S3 presigned uploads, file service, upload components          |
+| `caching`        | 4     | Redis caching and rate limiting via Upstash                        |
 
 ### Shared Infrastructure
 
 Installed automatically as dependencies of the blocks above.
 
-| Item | Type | Description |
-|------|------|-------------|
-| `cn` | `registry:lib` | Tailwind class merging (`clsx` + `tailwind-merge`) |
-| `routes-config` | `registry:lib` | Centralized route definitions |
-| `features-config` | `registry:lib` | Build-time feature flags from env vars |
+| Item              | Type           | Description                                        |
+| ----------------- | -------------- | -------------------------------------------------- |
+| `cn`              | `registry:lib` | Tailwind class merging (`clsx` + `tailwind-merge`) |
+| `routes-config`   | `registry:lib` | Centralized route definitions                      |
+| `features-config` | `registry:lib` | Build-time feature flags from env vars             |
 
 ### UI Components
 
 Standalone components, also installable individually:
 
-| Component | Description |
-|-----------|-------------|
-| `marquee` | Infinite scrolling marquee (horizontal/vertical) |
-| `border-beam` | Animated beam tracing a container border |
-| `retro-grid` | Perspective grid background |
-| `shimmer-button` | Button with rotating shimmer effect |
-| `dock` | macOS-style dock with magnification |
-| `use-copy-to-clipboard` | Clipboard hook with timeout reset |
-| `use-mobile` | Mobile viewport detection hook |
+| Component               | Description                                      |
+| ----------------------- | ------------------------------------------------ |
+| `marquee`               | Infinite scrolling marquee (horizontal/vertical) |
+| `border-beam`           | Animated beam tracing a container border         |
+| `retro-grid`            | Perspective grid background                      |
+| `shimmer-button`        | Button with rotating shimmer effect              |
+| `dock`                  | macOS-style dock with magnification              |
+| `use-copy-to-clipboard` | Clipboard hook with timeout reset                |
+| `use-mobile`            | Mobile viewport detection hook                   |
 
 ### Roadmap (not yet available)
 
-| Block | Description |
-|-------|-------------|
-| `onboarding` | Multi-step setup wizard |
+| Block         | Description                                  |
+| ------------- | -------------------------------------------- |
+| `onboarding`  | Multi-step setup wizard                      |
 | `payload-cms` | Full Payload CMS collections and admin panel |
 
 ## Block Details
@@ -127,6 +127,7 @@ npx shadcn add @shipkit/faq
 ```
 
 **Installs to:**
+
 - `app/(app)/faq/page.tsx` — Server component with accordion layout
 - `app/(app)/faq/loading.tsx` — Loading skeleton
 - `content/faq/faq-content.tsx` — Static FAQ content (8 questions)
@@ -144,6 +145,7 @@ npx shadcn add @shipkit/docs
 ```
 
 **Installs to:**
+
 - `app/docs/` — Layout, page, loading, not-found, styles
 - `app/docs/_components/` — Sidebar, header, search dialog
 - `app/api/docs/search/` — Search API route (optional AI-powered answers)
@@ -164,6 +166,7 @@ npx shadcn add @shipkit/blog
 ```
 
 **Installs to:**
+
 - `app/blog/` — Listing, post pages, categories, author pages
 - `components/modules/blog/` — 10 components (hero, post, authors, TOC, skeletons)
 - `components/layouts/blog-sidebar.tsx` — Sticky sidebar with search
@@ -185,6 +188,7 @@ npx shadcn add @shipkit/builder-io
 ```
 
 **Installs to:**
+
 - `app/builder.io/[...slug]/page.tsx` — Standalone catch-all route
 - `lib/builder-io/builder-io.tsx` — `RenderBuilderContent` component
 - `builder-registry.ts` — Component registration (Hero, Stats, CTA)
@@ -205,6 +209,7 @@ npx shadcn add @shipkit/cms-pages
 ```
 
 **Installs to:**
+
 - `app/(cms)/[...slug]/page.tsx` — Unified catch-all handler
 - `app/(cms)/layout.tsx` — Conditional Payload layout (tree-shakes when disabled)
 - `app/(cms)/payload-root-layout.tsx` — Payload CSS/config loader
@@ -233,6 +238,7 @@ npx shadcn add @shipkit/auth
 ```
 
 **Installs to:**
+
 - `app/(authentication)/` — Sign-in, sign-up, forgot/reset password, error pages
 - `app/(authentication)/_components/` — Auth form, credentials, magic link, guest, OAuth buttons
 - `app/api/auth/[...nextauth]/route.ts` — NextAuth API route
@@ -249,6 +255,7 @@ npx shadcn add @shipkit/auth
 **Dependencies:** `next-auth@5`, `@auth/drizzle-adapter`, `bcryptjs`, `zod`, `zsa`
 
 **Setup:**
+
 1. Run `npx auth secret` to generate `AUTH_SECRET`
 2. Set `DATABASE_URL` for PostgreSQL
 3. Run Drizzle migrations: `npx drizzle-kit generate && npx drizzle-kit migrate`
@@ -342,6 +349,7 @@ npx shadcn add @shipkit/payments
 ```
 
 Unified payment system. Each provider auto-enables via env vars:
+
 - **Stripe:** `STRIPE_SECRET_KEY` + `STRIPE_PUBLISHABLE_KEY`
 - **Lemon Squeezy:** `LEMONSQUEEZY_API_KEY` + `LEMONSQUEEZY_STORE_ID`
 - **Polar:** `POLAR_ACCESS_TOKEN`
@@ -527,13 +535,13 @@ This resolves all internal deps (`cn`, `routes-config`, etc.) through the local 
 
 ### File Entry Types
 
-| Type | Use for |
-|------|---------|
-| `registry:page` | Route pages (`page.tsx`) |
-| `registry:component` | React components, layouts, loading states |
-| `registry:hook` | React hooks |
-| `registry:lib` | Utilities, configs, server code, types, API routes |
-| `registry:style` | CSS files |
+| Type                 | Use for                                            |
+| -------------------- | -------------------------------------------------- |
+| `registry:page`      | Route pages (`page.tsx`)                           |
+| `registry:component` | React components, layouts, loading states          |
+| `registry:hook`      | React hooks                                        |
+| `registry:lib`       | Utilities, configs, server code, types, API routes |
+| `registry:style`     | CSS files                                          |
 
 ### Target Paths
 

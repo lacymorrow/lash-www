@@ -54,7 +54,7 @@ export async function getOverrides(): Promise<FeatureFlagOverrides> {
 export async function isFeatureEnabledWithOverrides(flagName: string): Promise<boolean> {
   const overrides = await getOverrides();
   if (flagName in overrides) return overrides[flagName]!;
-  return (buildTimeFeatures as Record<string, boolean>)[flagName] ?? false;
+  return buildTimeFeatures[flagName] ?? false;
 }
 
 export function parseOverridesFromParams(searchParams: URLSearchParams): FeatureFlagOverrides {

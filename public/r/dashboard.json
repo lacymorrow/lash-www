@@ -3,11 +3,7 @@
   "name": "dashboard",
   "title": "Dashboard",
   "description": "User dashboard with projects, teams, API keys, deployments, downloads, tools, stats, and revenue chart.",
-  "dependencies": [
-    "recharts",
-    "lucide-react",
-    "date-fns"
-  ],
+  "dependencies": ["recharts", "lucide-react", "date-fns"],
   "registryDependencies": [
     "@shipkit/cn",
     "@shipkit/routes-config",
@@ -413,9 +409,6 @@
     }
   ],
   "docs": "User dashboard with projects, teams, API keys, deployments, downloads, and analytics charts. Requires `auth` block for session management and `DATABASE_URL` for data persistence. Install `payments` block for subscription-aware features.",
-  "categories": [
-    "shipkit",
-    "dashboard"
-  ],
+  "categories": ["shipkit", "dashboard"],
   "type": "registry:block"
 }

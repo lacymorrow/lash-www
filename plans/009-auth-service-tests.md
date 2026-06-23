@@ -26,14 +26,14 @@ multi-system sync logic is the kind that breaks subtly when one of the
 three auth implementations (NextAuth, Better-Auth, Payload credentials)
 changes.
 
-This plan is *characterization* — capture current behavior so future
+This plan is _characterization_ — capture current behavior so future
 changes land safely.
 
 ## Current state
 
 - File: `src/server/services/auth-service.ts` (~993 lines).
 - Tests inventory:
-  - `tests/unit/server/auth-providers.test.ts` — tests the *provider list configuration*, not `auth-service`.
+  - `tests/unit/server/auth-providers.test.ts` — tests the _provider list configuration_, not `auth-service`.
   - No file matches `tests/**/*auth-service*`.
 - Service likely exports (read the file's `export` block to confirm):
   - `hashPassword` / `verifyPassword` (scrypt-based, security-critical).
@@ -48,20 +48,22 @@ changes land safely.
 
 ## Commands you will need
 
-| Purpose         | Command                                                          | Expected |
-|-----------------|------------------------------------------------------------------|----------|
-| Install         | `bun install`                                                    | exit 0   |
+| Purpose         | Command                                                           | Expected       |
+| --------------- | ----------------------------------------------------------------- | -------------- |
+| Install         | `bun install`                                                     | exit 0         |
 | Tests (focused) | `bun run test -- tests/unit/server/services/auth-service.test.ts` | new tests pass |
-| Tests (full)    | `bun run test`                                                   | no regressions |
+| Tests (full)    | `bun run test`                                                    | no regressions |
 
 ## Scope
 
 **In scope:**
+
 - New file: `tests/unit/server/services/auth-service.test.ts`.
 - A simple fixture (Payload mock helper, scrypt assertions) inside the test
   file or under `tests/unit/server/services/__fixtures__/`.
 
 **Out of scope:**
+
 - Refactoring `auth-service.ts` itself.
 - Migrating away from scrypt or changing hashing params.
 - Tests for the OAuth callback flows (those live in NextAuth's config and
@@ -81,6 +83,7 @@ changes land safely.
 Open `src/server/services/auth-service.ts` end-to-end. Don't trust the
 file's section comments; trust the code. Make notes (in your scratchpad,
 not in the test file) of:
+
 - Every exported function and its parameter shape.
 - Every external dependency (`db`, `payload`, `crypto`, `bcrypt`, `env`).
 - Every place that throws or returns a sentinel value.
@@ -113,7 +116,7 @@ vi.mock("@/lib/payload/get-payload", () => ({
   })),
 }));
 
-import { authService } from "@/server/services/auth-service";  // confirm the export name
+import { authService } from "@/server/services/auth-service"; // confirm the export name
 
 describe("authService", () => {
   beforeEach(() => vi.clearAllMocks());
@@ -173,7 +176,7 @@ Two more:
 scrypt with default params is slow (intentional). Two or three hashing
 tests at default params is fine; if the test takes >10 seconds, scope down
 to one hashing round-trip and use shorter `N` only inside tests by
-re-importing with a constant — *do not* lower the production cost factor.
+re-importing with a constant — _do not_ lower the production cost factor.
 
 ### Step 7: Full suite
 
@@ -210,9 +213,9 @@ re-importing with a constant — *do not* lower the production cost factor.
 
 ## Maintenance notes
 
-- These tests document *current* hashing behavior. A future migration to
+- These tests document _current_ hashing behavior. A future migration to
   argon2 or a different scrypt cost factor should write a migration plan
-  (re-hash on next login) and update these tests *intentionally*, not
+  (re-hash on next login) and update these tests _intentionally_, not
   silently.
 - The Payload sync test is the most likely to break under Payload version
   upgrades — flag it for re-review during major bumps.

@@ -30,7 +30,7 @@ export const PricingSection = ({ plans, backgroundImage }: PricingSectionProps) 
               }
             >
               {/* Overlay for better text readability */}
-              <div className="absolute inset-0 bg-neutral-950/80 backdrop-blur-sm rounded-3xl" />
+              <div className="absolute inset-0 rounded-3xl bg-neutral-950/80 backdrop-blur-sm" />
 
               {/* Content */}
               <div className="relative z-10">

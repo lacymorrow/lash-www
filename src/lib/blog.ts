@@ -36,7 +36,7 @@ function resolveAuthors(data: Record<string, unknown>) {
     authorObject = convertLegacyAuthor(data.author as string);
   }
   if (data.authors && Array.isArray(data.authors)) {
-    authorObjects = (data.authors as Array<string | { name?: string }>).map((author) => {
+    authorObjects = (data.authors as (string | { name?: string })[]).map((author) => {
       if (typeof author === "string") return convertLegacyAuthor(author);
       if (author.name) return convertLegacyAuthor(author.name);
       return defaultAuthor;
@@ -73,7 +73,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
         publishedAt: data.publishedAt as string | undefined,
         categories: (data.categories as string[]) || [],
         badge: data.badge as string | undefined,
-        authors: data.authors as Array<{ name: string; avatar: string }> | undefined,
+        authors: data.authors as { name: string; avatar: string }[] | undefined,
         authorObjects,
         image: data.image as string | undefined,
       };

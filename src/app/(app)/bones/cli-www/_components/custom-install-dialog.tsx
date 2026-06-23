@@ -102,7 +102,7 @@ export const CustomInstallDialog = memo(({ onInstall }: CustomInstallDialogProps
                 required
                 disabled={loading}
               />
-              <div className="text-xs text-muted-foreground space-y-1">
+              <div className="space-y-1 text-xs text-muted-foreground">
                 <p>Enter an install command or component URL...</p>
               </div>
             </div>

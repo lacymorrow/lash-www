@@ -14,7 +14,7 @@ export function FontProvider({ children, className, ...props }: FontProviderProp
   return (
     <div
       className={cn(
-        "block w-full mx-auto",
+        "mx-auto block w-full",
         "antialiased",
         "font-sans font-normal leading-relaxed",
         fontSans.variable,

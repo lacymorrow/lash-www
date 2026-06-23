@@ -52,7 +52,7 @@ export function AILandingDemo() {
   const [isLoadingModel, setIsLoadingModel] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
   const [progressItems, setProgressItems] = useState<
-    Array<{ file: string; progress: number; total: number }>
+    { file: string; progress: number; total: number }[]
   >([]);
   const worker = useRef<Worker | null>(null);
   const currentMessageRef = useRef<string>("");

@@ -18,12 +18,14 @@
 ## Why this matters
 
 Shipkit's `cli/` directory implements a working scaffolder:
+
 - Binaries: `shipkit` and `create-shipkit` (per `cli/package.json`).
 - Built with Commander + `@clack/prompts`.
 - Commands: `create`, `sync`, `deploy` (per CLAUDE.md).
 - Local builds and runs fine (`bun run build && node dist/index.js create my-new-site`).
 
 But:
+
 - It is **not published to npm** (verify in Step 1 — if it is, scope shrinks).
 - README does **not** mention it.
 - Forks scaffold manually instead of running `npx create-shipkit my-site`.
@@ -44,16 +46,17 @@ npm?
 
 ## Commands you will need
 
-| Purpose          | Command                                            | Expected |
-|------------------|----------------------------------------------------|----------|
-| Check npm        | `npm view create-shipkit version` and `npm view shipkit version` | exit code reveals existence |
-| Build CLI        | `cd cli && bun install && bun run build`           | `dist/index.js` exists |
-| Smoke test       | `node cli/dist/index.js create my-test-site --yes` (in `/tmp`) | scaffolds successfully |
-| Publish (DO NOT RUN unless approved) | `cd cli && npm publish --access public` | published |
+| Purpose                              | Command                                                          | Expected                    |
+| ------------------------------------ | ---------------------------------------------------------------- | --------------------------- |
+| Check npm                            | `npm view create-shipkit version` and `npm view shipkit version` | exit code reveals existence |
+| Build CLI                            | `cd cli && bun install && bun run build`                         | `dist/index.js` exists      |
+| Smoke test                           | `node cli/dist/index.js create my-test-site --yes` (in `/tmp`)   | scaffolds successfully      |
+| Publish (DO NOT RUN unless approved) | `cd cli && npm publish --access public`                          | published                   |
 
 ## Scope
 
 **In scope:**
+
 - `cli/package.json` — confirm/update `name`, `version`, `bin`, `files`, `publishConfig`.
 - `cli/README.md` — write one if missing; updated example invocations.
 - `README.md` (root) — add a "Quick start" section pointing at `npx create-shipkit my-site`.
@@ -61,6 +64,7 @@ npm?
 - Smoke test script (manual or scripted) confirming the CLI works.
 
 **Out of scope:**
+
 - New CLI commands or features.
 - The CLI's UX or interactivity overhaul.
 - Replacing the build chain (esbuild / tsup / whatever) — only touch if broken.
@@ -84,6 +88,7 @@ npm view shipkit version 2>&1 || echo "not published"
 ```
 
 Three states:
+
 - **Both unpublished:** proceed with publish (Step 2+).
 - **One published, current:** scope shrinks to README + smoke test (skip Steps 3–4).
 - **Squatted by someone else:** pick a different name (`@shipkit/cli` scoped, or `shipkit-create`). **STOP** and report.
@@ -91,6 +96,7 @@ Three states:
 ### Step 2: Audit `cli/package.json` for publish-readiness
 
 Open `cli/package.json`. Required fields for a clean publish:
+
 - `name` — `create-shipkit` (and/or `shipkit`).
 - `version` — semver. Start at `0.1.0` if unpublished.
 - `description` — one sentence.
@@ -121,6 +127,7 @@ plan's publish step depends on a working `dist/index.js`.
 publish; the operator runs it after reviewing the prepared package.
 
 If the operator confirms:
+
 ```
 cd cli && npm publish --access public
 ```
@@ -131,6 +138,7 @@ For initial publish of `create-shipkit`, this makes
 ### Step 5: Write `cli/README.md`
 
 Cover:
+
 - What it does (scaffold a new shipkit site from the template).
 - Install / use: `npx create-shipkit my-site`.
 - Subcommands: `create`, `sync`, `deploy` — one paragraph each.
@@ -184,6 +192,7 @@ If you don't want CI publish yet, skip and document the manual `npm publish` flo
 
 After publish (or after a `npm pack` + local install if not yet
 published):
+
 ```
 cd /tmp
 npx create-shipkit my-test-site

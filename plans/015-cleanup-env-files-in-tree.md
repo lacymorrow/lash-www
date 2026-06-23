@@ -23,7 +23,7 @@
 - `.env.prod`
 - `.env.vercel`
 
-`git ls-files | grep env` confirms only `.env.example` is *tracked* — none
+`git ls-files | grep env` confirms only `.env.example` is _tracked_ — none
 of the above are in the git index. They are local-only files. However:
 
 - They're stage-able. A careless `git add -A` would stage them.
@@ -52,20 +52,22 @@ at risk of being committed by `git add`, but they CAN be added explicitly.
 
 ## Commands you will need
 
-| Purpose         | Command                                          | Expected |
-|-----------------|--------------------------------------------------|----------|
-| Inspect         | `cat .env.old` etc.                              | text content |
-| Verify untracked| `git ls-files \| grep env`                        | only `.env.example` |
-| Delete          | `rm .env.old .env.local.disabled .env.prod .env.vercel` | files gone |
+| Purpose          | Command                                                 | Expected            |
+| ---------------- | ------------------------------------------------------- | ------------------- |
+| Inspect          | `cat .env.old` etc.                                     | text content        |
+| Verify untracked | `git ls-files \| grep env`                              | only `.env.example` |
+| Delete           | `rm .env.old .env.local.disabled .env.prod .env.vercel` | files gone          |
 
 ## Scope
 
 **In scope:**
+
 - `.env.old`, `.env.local.disabled`, `.env.prod`, `.env.vercel` — read, then delete from working tree.
 - `.gitignore` — confirm it already excludes `.env*` (and if not, add).
 - A one-paragraph note in CLAUDE.md about the convention.
 
 **Out of scope:**
+
 - `.env` — the actively-used local env. Keep.
 - `.env.example` — tracked template. Keep.
 - Secret rotation procedures (separate operator task).
@@ -94,6 +96,7 @@ Plan a `git rm --cached` + secret rotation flow instead.
 ### Step 2: Read each file before deleting
 
 Skim each:
+
 - `cat .env.old`
 - `cat .env.local.disabled`
 - `cat .env.prod`
@@ -149,6 +152,7 @@ add it later.
 ## Test plan
 
 No tests. Verification:
+
 - `ls -la | grep env.old` returns nothing.
 - `git ls-files | grep env` returns only `.env.example`.
 - `bun dev` still starts (local `.env` is intact).
