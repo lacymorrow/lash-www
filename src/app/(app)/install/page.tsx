@@ -17,7 +17,7 @@ export default function InstallPage() {
 
   // Check if WebContainer is supported and start container initialization on load
   useEffect(() => {
-    const initialize = async () => {
+    const initialize = () => {
       // Check WebContainer support
       try {
         if (typeof window !== "undefined") {

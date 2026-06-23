@@ -32,7 +32,7 @@ export const metadata: Metadata = constructMetadata({
   ],
 });
 
-export default async function Features() {
+export default function Features() {
   return (
     <div className="container mx-auto mt-header space-y-section py-16">
       <div className="mx-auto max-w-3xl text-center">

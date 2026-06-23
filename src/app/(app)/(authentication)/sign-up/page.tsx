@@ -17,7 +17,7 @@ export const metadata: Metadata = constructMetadata({
   noIndex: true,
 });
 
-export default async function SignUpPage() {
+export default function SignUpPage() {
   const hasAuth = env.NEXT_PUBLIC_FEATURE_AUTH_ENABLED;
   const isGuestOnlyMode =
     !!env.NEXT_PUBLIC_FEATURE_AUTH_GUEST_ENABLED && !env.NEXT_PUBLIC_FEATURE_AUTH_METHODS_ENABLED;

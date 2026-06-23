@@ -224,6 +224,7 @@ export class ContainerManager {
     return output.join("");
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   async getFileSystem(): Promise<FileSystemTree> {
     if (!this.isReady) {
       throw new Error("Container is not ready");

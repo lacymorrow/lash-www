@@ -111,7 +111,7 @@ export const ShadcnCommand = ({
 
           // Write to terminal if available
           if (terminalRef.current?.terminal) {
-            terminalRef.current.write(`${window.webContainerLogs}`);
+            terminalRef.current.write(JSON.stringify(window.webContainerLogs));
           }
         }
       }, TERMINAL_REFRESH_INTERVAL); // Update more frequently for smoother animations
@@ -424,7 +424,7 @@ export const ShadcnCommand = ({
               </div>
             </TabsContent>
             <TabsContent value="files" className="mt-2 max-h-[300px] overflow-auto">
-              <FileChangeDisplay changedFiles={changedFiles} onDownloadAll={() => {}} />
+              <FileChangeDisplay changedFiles={changedFiles} />
             </TabsContent>
           </Tabs>
         )}

@@ -333,6 +333,7 @@ export async function POST(request: Request) {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function GET(request: Request) {
   const headers = Object.fromEntries(request.headers.entries());
   logger.info("GET request received on Stripe webhook endpoint:", {

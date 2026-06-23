@@ -529,6 +529,8 @@ export const getOrderById = async (orderId: string): Promise<PolarOrder | null> 
 /**
  * Process a webhook event from Polar
  */
+// Async signature kept stable for callers that await this API.
+// eslint-disable-next-line @typescript-eslint/require-await
 export const processPolarWebhook = async (event: any) => {
   if (!env.NEXT_PUBLIC_FEATURE_POLAR_ENABLED) {
     logger.warn("Received Polar webhook, but Polar feature is disabled. Skipping processing.", {

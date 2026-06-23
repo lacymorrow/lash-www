@@ -14,7 +14,7 @@ export const Pages: CollectionConfig = {
     defaultColumns: ["title", "slug", "publishedAt"],
     preview: (doc) => {
       if (!doc.slug) return "";
-      return `${BASE_URL}/preview/pages/${doc.slug}`;
+      return `${BASE_URL}/preview/pages/${String(doc.slug)}`;
     },
   },
   access: {
