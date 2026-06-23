@@ -102,7 +102,7 @@ function extractTitleFromH1(content: string): string | null {
 /*
  * Read and parse MDX file with security validations
  */
-async function readMdxFile(filePath: string, slug: string) {
+function readMdxFile(filePath: string, slug: string) {
   try {
     // Check file size limit (5MB)
     const stats = fs.statSync(filePath);
@@ -189,7 +189,7 @@ async function importDocFromRootDocs(slug: string) {
       }
 
       if (fs.existsSync(filePath)) {
-        return await readMdxFile(filePath, sanitizedSlug);
+        return readMdxFile(filePath, sanitizedSlug);
       }
     }
 
@@ -374,6 +374,8 @@ function processDirectory(dir: string): NavSection[] {
   }
 }
 
+// Async signature kept stable for callers that await this API.
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function getAllDocSlugsFromFileSystem(): Promise<string[]> {
   const slugs: string[] = [];
   const rootPath = path.join(process.cwd(), "docs");

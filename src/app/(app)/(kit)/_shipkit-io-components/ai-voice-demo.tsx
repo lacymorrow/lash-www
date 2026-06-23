@@ -70,7 +70,7 @@ function AudioVisualizer({ stream, simulate = false }: AudioVisualizerProps) {
 
     contextRef.current = ctx;
 
-    const setupAudio = async () => {
+    const setupAudio = () => {
       if (stream) {
         try {
           const context = createAudioContext();
@@ -145,7 +145,7 @@ function AudioVisualizer({ stream, simulate = false }: AudioVisualizerProps) {
     };
 
     isAnimating.current = true;
-    void setupAudio();
+    setupAudio();
     requestFrame(animate);
 
     return () => {
@@ -186,7 +186,7 @@ export function AIVoiceDemo() {
   const audioChunks = useRef<Blob[]>([]);
   const audioContextRef = useRef<AudioContext | null>(null);
 
-  const initializeWorker = useCallback(async () => {
+  const initializeWorker = useCallback(() => {
     try {
       if (!worker.current && hasAcceptedPermissions) {
         setIsLoadingModel(true);
@@ -242,7 +242,7 @@ export function AIVoiceDemo() {
   }, [hasAcceptedPermissions]);
 
   useEffect(() => {
-    void initializeWorker();
+    initializeWorker();
   }, [initializeWorker]);
 
   useEffect(() => {
@@ -325,7 +325,7 @@ export function AIVoiceDemo() {
     };
   }, [hasAcceptedPermissions]);
 
-  const startRecording = async () => {
+  const startRecording = () => {
     if (!isWebGPUAvailable) {
       setError("Your browser does not support WebGPU, which is required for voice recognition.");
       return;

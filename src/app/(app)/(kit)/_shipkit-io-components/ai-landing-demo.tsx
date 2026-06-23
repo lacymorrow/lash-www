@@ -144,7 +144,7 @@ export function AILandingDemo() {
     };
   }, [hasAcceptedPermissions]);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!input.trim() || !worker.current || !hasAcceptedPermissions) return;
 

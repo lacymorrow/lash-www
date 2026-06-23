@@ -9,13 +9,15 @@ import { cn } from "@/lib/utils";
 
 type LogLevel = "info" | "warning" | "error" | "success";
 type RequestType = "fetch" | "xmlhttprequest" | "other";
+// Allow well-known types while keeping autocomplete; the `& {}` keeps literal hints in IDEs.
+type RequestTypeOrString = RequestType | (string & Record<never, never>);
 type RequestStatus = "pending" | "success" | "error";
 
 interface NetworkRequest {
   id: string;
   name: string;
   status: RequestStatus;
-  type: RequestType | string;
+  type: RequestTypeOrString;
   size: string;
   time: number;
   level?: LogLevel;

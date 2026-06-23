@@ -66,6 +66,8 @@ function saveCustomRegistries(registries: Registry[]): void {
 /**
  * Get all available registries
  */
+// Async signature kept stable for callers that await this API.
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function getRegistries(): Promise<Registry[]> {
   return [...BUILT_IN_REGISTRIES, ...getCustomRegistries()];
 }
@@ -148,6 +150,7 @@ export function removeCustomRegistry(name: string): void {
 /**
  * Get a specific registry by name
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function getRegistry(name: RegistryName): Promise<Registry> {
   const registry = [...BUILT_IN_REGISTRIES, ...getCustomRegistries()].find((r) => r.name === name);
   if (!registry) {

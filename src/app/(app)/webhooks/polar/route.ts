@@ -141,6 +141,7 @@ export async function POST(request: NextRequest) {
 /**
  * GET handler for webhook endpoint verification
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function GET() {
   if (!env.NEXT_PUBLIC_FEATURE_POLAR_ENABLED) {
     return new Response("Polar feature disabled", { status: 404 });

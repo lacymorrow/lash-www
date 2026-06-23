@@ -69,6 +69,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   return {
     props: {

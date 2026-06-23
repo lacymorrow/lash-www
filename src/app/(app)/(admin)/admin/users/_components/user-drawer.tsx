@@ -41,12 +41,12 @@ import type { Purchase, UserData } from "@/server/services/payment-service";
 
 // Type for complete user data from API
 interface CompleteUserData {
-  user: unknown | null;
+  user: unknown;
   accounts: unknown[];
   payments: unknown[];
   deployments: unknown[];
   apiKeys: unknown[];
-  credits: unknown | null;
+  credits: unknown;
   creditTransactions: unknown[];
   teamMemberships: unknown[];
 }

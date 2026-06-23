@@ -121,6 +121,8 @@ export const providers: NextAuthConfig["providers"] = [
               placeholder: "Enter your name to continue",
             },
           },
+          // NextAuth authorize signature requires async.
+          // eslint-disable-next-line @typescript-eslint/require-await
           async authorize(credentials) {
             if (!credentials?.name || typeof credentials.name !== "string") {
               console.error("Missing name in guest credentials");

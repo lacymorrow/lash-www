@@ -245,7 +245,7 @@ export const BuyButton = ({ className, ...props }: BuyButtonProps) => {
     script.onerror = (error) => {
       logger.error("Error loading Lemon.js script", {
         checkoutId,
-        error: String(error),
+        error: error instanceof Event ? error.type : String(error),
       });
     };
 
