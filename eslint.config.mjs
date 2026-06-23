@@ -16,6 +16,11 @@ const eslintConfig = [
 			"node_modules/**",
 			".cursor/**",
 			".next/**",
+			".vercel/**",
+			"public/**",
+			// tsconfig excludes (demo) examples; ESLint needs to match or it
+			// can't find them in any TS project for type-aware linting.
+			"src/app/(app)/(demo)/examples/**",
 			"src/app/(demo)/**/*",
 			"src/components/blocks/**",
 			"src/components/ui/**",
