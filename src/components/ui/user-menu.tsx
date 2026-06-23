@@ -45,7 +45,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ size = "default", className 
 	const { toast } = useToast();
 	const [isOpen, setIsOpen] = React.useState(false);
 
-	const isAdmin = session?.user?.email && siteConfig.admin.isAdmin(session.user.email);
+	const isAdmin = session?.user?.isAdmin === true;
 
 	const handleThemeChange = React.useCallback(
 		async (value: string) => {
@@ -167,7 +167,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ size = "default", className 
 				<DropdownMenuGroup>
 					{isAdmin && (
 						<DropdownMenuItem asChild>
-							<Link href={routes.admin.root}>
+							<Link href={routes.admin.index}>
 								Admin
 								<DropdownMenuShortcut>⌘A</DropdownMenuShortcut>
 							</Link>
@@ -180,7 +180,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ size = "default", className 
 						</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild>
-						<Link href={routes.app.settings}>
+						<Link href={routes.settings.index}>
 							Settings
 							<DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
 						</Link>

@@ -75,6 +75,7 @@
     "packages",
     "cli/dist",
     "debug/**/*.ts",
+    "scripts",
     "src/app/(app)/(demo)/examples/**/*",
     "src/workers/**/*.ts"
   ]

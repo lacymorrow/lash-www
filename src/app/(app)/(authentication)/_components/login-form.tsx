@@ -4,7 +4,7 @@ import { OAuthButtons } from "@/app/(app)/(authentication)/_components/oauth-but
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { routes } from "@/config/routes";
 import { cn } from "@/lib/utils";
-import { authProvidersArray } from "@/server/auth.providers";
+import { availableProviderIds } from "@/server/auth-providers";
 import Link from "next/link";
 
 interface AuthFormProps extends ComponentPropsWithoutRef<"div"> {
@@ -42,7 +42,7 @@ export function AuthForm({
 					<div className="grid gap-6">
 						<OAuthButtons />
 						{/* Only show email sign-in if credentials provider is enabled */}
-						{authProvidersArray.includes("credentials") && (
+						{availableProviderIds.includes("credentials") && (
 							<>
 								<div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
 									<span className="relative z-10 bg-background px-2 text-muted-foreground">

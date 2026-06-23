@@ -25,7 +25,7 @@ import { useSearchParams } from "next/navigation";
 
 export const SignInForm = () => {
 	const searchParams = useSearchParams();
-	const nextUrl = searchParams.get(SEARCH_PARAM_KEYS.nextUrl);
+	const nextUrl = searchParams?.get(SEARCH_PARAM_KEYS.nextUrl) ?? null;
 	const { toast } = useToast();
 	const form = useForm<z.infer<typeof signInSchema>>({
 		resolver: zodResolver(signInSchema),
@@ -51,7 +51,7 @@ export const SignInForm = () => {
 				formData.append(SEARCH_PARAM_KEYS.nextUrl, nextUrl);
 			}
 
-			await signInWithCredentialsAction(values, formData);
+			await signInWithCredentialsAction(values);
 
 			toast({
 				title: "Success",

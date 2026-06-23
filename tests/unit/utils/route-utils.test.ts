@@ -117,8 +117,10 @@ describe("route-utils", () => {
       expect(() => rx("home.invalidPart" as any)).toThrow(); // Adjust error message based on actual behavior
     });
 
-    it.skip("should handle deeply nested paths", () => {
-      expect(rx("examples.forms.notifications")).toBe("/examples/forms/notifications");
+    it("should handle deeply nested paths via flat aliases", () => {
+      // The codebase uses flat camelCase aliases (e.g. examples.formsNotifications)
+      // rather than dot-nested forms.notifications. This locks the convention.
+      expect(rx("examples.formsNotifications")).toBe("/examples/forms/notifications");
     });
   });
 

@@ -23,13 +23,18 @@ export const getRoutePath = (route: Route | RouteObject, params: RouteParams = {
   return path;
 };
 
-type NestedPaths<T, P extends string = ""> = T extends object
-  ? {
-      [K in keyof T]: T[K] extends object
-        ? NestedPaths<T[K], `${P}${P extends "" ? "" : "."}${K & string}`>
-        : `${P}${P extends "" ? "" : "."}${K & string}`;
-    }[keyof T]
-  : never;
+// Recursion-depth-capped path walker (cap = 4 levels) to prevent
+// "type instantiation excessively deep" diagnostics on large route trees.
+type Depth = [never, 0, 1, 2, 3, 4];
+type NestedPaths<T, P extends string = "", D extends number = 4> = D extends 0
+  ? never
+  : T extends object
+    ? {
+        [K in keyof T]: T[K] extends object
+          ? NestedPaths<T[K], `${P}${P extends "" ? "" : "."}${K & string}`, Depth[D]>
+          : `${P}${P extends "" ? "" : "."}${K & string}`;
+      }[keyof T]
+    : never;
 
 type RoutePath = NestedPaths<typeof routes>;
 

@@ -11,6 +11,7 @@ const options = {
 // Skip all tests if database object is not available
 const testSuite = () => {
   if (!db) {
+    // SKIPPED: DB not available in unit env. Phase 3 (Testcontainers) enables.
     return describe.skip("Feedback Service (skipped - db object not available)", () => {
       it("dummy test", () => {});
     });

@@ -187,4 +187,8 @@ export const routeMetadata = {
     title: `Documentation - Build Better Apps Faster | ${siteConfig.title}`,
     description: `Comprehensive guides, API references, and examples to help you build production-ready apps with ${siteConfig.title}. From quick starts to advanced topics.`,
   },
+  faq: {
+    title: `FAQ - Frequently Asked Questions | ${siteConfig.title}`,
+    description: `Common questions about ${siteConfig.title} — features, pricing, setup, and what to expect.`,
+  },
 };
