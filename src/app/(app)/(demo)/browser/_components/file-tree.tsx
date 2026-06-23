@@ -200,7 +200,7 @@ const TreeIndicator = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTML
 TreeIndicator.displayName = "TreeIndicator";
 
 const Folder = React.forwardRef<HTMLDivElement, FolderProps & React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, element, value, isSelectable = true, isSelect, children, ...props }, ref) => {
+  ({ className, element, value, isSelectable = true, isSelect, children, ...props }, _ref) => {
     const {
       direction,
       handleExpand,

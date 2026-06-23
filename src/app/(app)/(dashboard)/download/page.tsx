@@ -49,7 +49,7 @@ bun install --frozen-lockfile
 # Start the development server
 bun dev`;
 
-const dockerCode = `# Clone the repository
+const _dockerCode = `# Clone the repository
 git clone ${siteConfig.repo.url}
 
 # Change directory

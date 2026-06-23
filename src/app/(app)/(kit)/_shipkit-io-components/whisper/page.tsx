@@ -12,9 +12,5 @@ const AIRealtimeWhisperWebGPU = dynamic(
 );
 
 export default function Page() {
-  return (
-    <>
-      <AIRealtimeWhisperWebGPU />
-    </>
-  );
+  return <AIRealtimeWhisperWebGPU />;
 }

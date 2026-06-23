@@ -1,5 +1,5 @@
-import { ShipkitIoView } from "@/app/(app)/(kit)/_shipkit-io-components/shipkit-io-view";
 import { OnboardingView } from "@/app/(app)/(kit)/_components/onboarding-view";
+import { ShipkitIoView } from "@/app/(app)/(kit)/_shipkit-io-components/shipkit-io-view";
 import { constructMetadata, routeMetadata } from "@/config/metadata";
 import { isShipkitIo } from "@/lib/utils/url-utils";
 

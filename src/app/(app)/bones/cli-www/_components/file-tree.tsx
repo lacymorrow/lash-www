@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
 import { ChevronDownIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { File, Folder } from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 interface FileTreeProps {
   files: {
@@ -142,12 +142,7 @@ function TreeNode({
   );
 }
 
-export function FileTree({
-  files,
-  onFileSelect,
-  selectedFile,
-  currentStyle,
-}: FileTreeProps) {
+export function FileTree({ files, onFileSelect, selectedFile, currentStyle }: FileTreeProps) {
   const tree = buildTree(files);
 
   return (

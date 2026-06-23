@@ -55,7 +55,7 @@ const testSuite = () => {
 
         // Check team member was created
         const member = await db?.query.teamMembers.findFirst({
-          where: eq(teamMembers.teamId, team!.id),
+          where: eq(teamMembers.teamId, team?.id),
         });
         expect(member).toBeDefined();
         expect(member?.userId).toBe(TEST_USER.id);
@@ -78,14 +78,14 @@ const testSuite = () => {
         const team = await teamService.createTeam(TEST_USER.id, "Team to Delete");
 
         // Act
-        const result = await teamService.deleteTeam(team!.id);
+        const result = await teamService.deleteTeam(team?.id);
 
         // Assert
         expect(result).toBe(true);
 
         // Verify soft delete
         const deletedTeam = await db?.query.teams.findFirst({
-          where: eq(teams.id, team!.id),
+          where: eq(teams.id, team?.id),
         });
         expect(deletedTeam?.deletedAt).toBeDefined();
       });
@@ -95,13 +95,13 @@ const testSuite = () => {
         const personalTeam = await teamService.createPersonalTeam(TEST_USER.id);
 
         // Act & Assert
-        await expect(teamService.deleteTeam(personalTeam!.id)).rejects.toThrow(
+        await expect(teamService.deleteTeam(personalTeam?.id)).rejects.toThrow(
           "Cannot delete personal team"
         );
 
         // Verify team still exists
         const team = await db?.query.teams.findFirst({
-          where: eq(teams.id, personalTeam!.id),
+          where: eq(teams.id, personalTeam?.id),
         });
         expect(team?.deletedAt).toBeNull();
       });
@@ -124,7 +124,7 @@ const testSuite = () => {
 
         // Check team member was created
         const member = await db?.query.teamMembers.findFirst({
-          where: eq(teamMembers.teamId, team!.id),
+          where: eq(teamMembers.teamId, team?.id),
         });
         expect(member).toBeDefined();
         expect(member?.userId).toBe(TEST_USER.id);
@@ -150,7 +150,7 @@ const testSuite = () => {
         const team = await teamService.ensureOnePersonalTeam(TEST_USER.id);
 
         // Assert
-        expect(team?.id).toBe(existingTeam!.id);
+        expect(team?.id).toBe(existingTeam?.id);
       });
 
       test("should keep oldest personal team and soft delete others", async () => {
@@ -163,14 +163,14 @@ const testSuite = () => {
         const result = await teamService.ensureOnePersonalTeam(TEST_USER.id);
 
         // Assert
-        expect(result?.id).toBe(team1!.id); // Should keep oldest team
+        expect(result?.id).toBe(team1?.id); // Should keep oldest team
 
         // Check other teams are soft deleted
         const deletedTeam2 = await db?.query.teams.findFirst({
-          where: eq(teams.id, team2!.id),
+          where: eq(teams.id, team2?.id),
         });
         const deletedTeam3 = await db?.query.teams.findFirst({
-          where: eq(teams.id, team3!.id),
+          where: eq(teams.id, team3?.id),
         });
         expect(deletedTeam2?.deletedAt).toBeDefined();
         expect(deletedTeam3?.deletedAt).toBeDefined();

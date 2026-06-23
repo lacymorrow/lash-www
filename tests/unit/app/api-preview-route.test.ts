@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-let mockPreviewSecret: string | undefined = undefined;
+let mockPreviewSecret: string | undefined;
 let mockCookieStore: Record<string, string> = {};
 const deletedCookies: string[] = [];
 const setCookies: Array<{ name: string; value: string; options: any }> = [];
@@ -13,18 +13,16 @@ vi.mock("@/env", () => ({
         if (prop === "PREVIEW_SECRET") return mockPreviewSecret;
         return undefined;
       },
-    },
+    }
   ),
 }));
 
 vi.mock("@/lib/preview-flags", async () => {
-  const actual = await vi.importActual<typeof import("@/lib/preview-flags")>(
-    "@/lib/preview-flags",
-  );
+  const actual = await vi.importActual<typeof import("@/lib/preview-flags")>("@/lib/preview-flags");
   return {
     ...actual,
     getOverrides: vi.fn(async () => {
-      const raw = mockCookieStore["_shipkit_preview"];
+      const raw = mockCookieStore._shipkit_preview;
       if (!raw) return {};
       try {
         const parsed = JSON.parse(raw);
@@ -90,9 +88,9 @@ vi.mock("next/server", () => {
   };
 });
 
-import { GET } from "@/app/(app)/api/flags/route";
 import type { NextRequest } from "next/server";
 import { NextRequest as MockNextRequest } from "next/server";
+import { GET } from "@/app/(app)/api/flags/route";
 
 function makeRequest(url: string): NextRequest {
   return new (MockNextRequest as any)(url) as NextRequest;
@@ -113,18 +111,14 @@ describe("/api/flags route", () => {
   describe("authentication", () => {
     it("allows open access when PREVIEW_SECRET is unset", async () => {
       mockPreviewSecret = undefined;
-      const req = await makeRequest(
-        "http://localhost:3000/api/flags?feature_flag_database=1",
-      );
+      const req = await makeRequest("http://localhost:3000/api/flags?feature_flag_database=1");
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
     });
 
     it("returns 401 when PREVIEW_SECRET is set and no token provided", async () => {
       mockPreviewSecret = "my-secret-token";
-      const req = await makeRequest(
-        "http://localhost:3000/api/flags?feature_flag_database=1",
-      );
+      const req = await makeRequest("http://localhost:3000/api/flags?feature_flag_database=1");
       const res = (await GET(req)) as any;
       expect(res.status).toBe(401);
       expect(res.body).toEqual({ error: "Invalid token" });
@@ -133,7 +127,7 @@ describe("/api/flags route", () => {
     it("returns 401 when PREVIEW_SECRET is set and wrong token provided", async () => {
       mockPreviewSecret = "my-secret-token";
       const req = await makeRequest(
-        "http://localhost:3000/api/flags?token=wrong-token&feature_flag_database=1",
+        "http://localhost:3000/api/flags?token=wrong-token&feature_flag_database=1"
       );
       const res = (await GET(req)) as any;
       expect(res.status).toBe(401);
@@ -143,7 +137,7 @@ describe("/api/flags route", () => {
     it("allows access when correct token is provided", async () => {
       mockPreviewSecret = "my-secret-token";
       const req = await makeRequest(
-        "http://localhost:3000/api/flags?token=my-secret-token&feature_flag_database=1",
+        "http://localhost:3000/api/flags?token=my-secret-token&feature_flag_database=1"
       );
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
@@ -153,7 +147,7 @@ describe("/api/flags route", () => {
   describe("setting flags", () => {
     it("sets cookie with correct JSON for feature_flag_database=1&feature_flag_mdx=0", async () => {
       const req = await makeRequest(
-        "http://localhost:3000/api/flags?feature_flag_database=1&feature_flag_mdx=0",
+        "http://localhost:3000/api/flags?feature_flag_database=1&feature_flag_mdx=0"
       );
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
@@ -168,9 +162,7 @@ describe("/api/flags route", () => {
     });
 
     it("sets cookie with httpOnly, sameSite lax, path /", async () => {
-      const req = await makeRequest(
-        "http://localhost:3000/api/flags?feature_flag_database=1",
-      );
+      const req = await makeRequest("http://localhost:3000/api/flags?feature_flag_database=1");
       const res = (await GET(req)) as any;
       const cookie = setCookies[0];
       expect(cookie.options.httpOnly).toBe(true);
@@ -182,18 +174,14 @@ describe("/api/flags route", () => {
 
   describe("clearing overrides", () => {
     it("deletes cookie when clear=1", async () => {
-      const req = await makeRequest(
-        "http://localhost:3000/api/flags?clear=1",
-      );
+      const req = await makeRequest("http://localhost:3000/api/flags?clear=1");
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
       expect(deletedCookies).toContain("_shipkit_preview");
     });
 
     it("deletes cookie with clear=true", async () => {
-      const req = await makeRequest(
-        "http://localhost:3000/api/flags?clear=true",
-      );
+      const req = await makeRequest("http://localhost:3000/api/flags?clear=true");
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
       expect(deletedCookies).toContain("_shipkit_preview");
@@ -202,12 +190,10 @@ describe("/api/flags route", () => {
 
   describe("merging overrides", () => {
     it("merges new overrides with existing cookie values", async () => {
-      mockCookieStore["_shipkit_preview"] = JSON.stringify({
+      mockCookieStore._shipkit_preview = JSON.stringify({
         DATABASE_ENABLED: true,
       });
-      const req = await makeRequest(
-        "http://localhost:3000/api/flags?feature_flag_mdx=0",
-      );
+      const req = await makeRequest("http://localhost:3000/api/flags?feature_flag_mdx=0");
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
       const cookie = setCookies[0];
@@ -219,12 +205,10 @@ describe("/api/flags route", () => {
     });
 
     it("new values override existing values for same flag", async () => {
-      mockCookieStore["_shipkit_preview"] = JSON.stringify({
+      mockCookieStore._shipkit_preview = JSON.stringify({
         DATABASE_ENABLED: true,
       });
-      const req = await makeRequest(
-        "http://localhost:3000/api/flags?feature_flag_database=0",
-      );
+      const req = await makeRequest("http://localhost:3000/api/flags?feature_flag_database=0");
       const res = (await GET(req)) as any;
       const cookie = setCookies[0];
       const parsed = JSON.parse(cookie.value);
@@ -234,9 +218,7 @@ describe("/api/flags route", () => {
 
   describe("redirect parameter", () => {
     it("redirects to / by default", async () => {
-      const req = await makeRequest(
-        "http://localhost:3000/api/flags?feature_flag_database=1",
-      );
+      const req = await makeRequest("http://localhost:3000/api/flags?feature_flag_database=1");
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
       expect(res.url).toContain("/");
@@ -244,7 +226,7 @@ describe("/api/flags route", () => {
 
     it("redirects to specified path", async () => {
       const req = await makeRequest(
-        "http://localhost:3000/api/flags?feature_flag_database=1&redirect=/dashboard",
+        "http://localhost:3000/api/flags?feature_flag_database=1&redirect=/dashboard"
       );
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
@@ -253,7 +235,7 @@ describe("/api/flags route", () => {
 
     it("redirects to / when redirect param is an external URL (safety)", async () => {
       const req = await makeRequest(
-        "http://localhost:3000/api/flags?feature_flag_database=1&redirect=https://evil.com",
+        "http://localhost:3000/api/flags?feature_flag_database=1&redirect=https://evil.com"
       );
       const res = (await GET(req)) as any;
       expect(new URL(res.url).pathname).toBe("/");
@@ -261,16 +243,14 @@ describe("/api/flags route", () => {
 
     it("redirects to / when redirect param starts with //", async () => {
       const req = await makeRequest(
-        "http://localhost:3000/api/flags?feature_flag_database=1&redirect=//evil.com",
+        "http://localhost:3000/api/flags?feature_flag_database=1&redirect=//evil.com"
       );
       const res = (await GET(req)) as any;
       expect(new URL(res.url).pathname).toBe("/");
     });
 
     it("redirect works with clear param", async () => {
-      const req = await makeRequest(
-        "http://localhost:3000/api/flags?clear=1&redirect=/settings",
-      );
+      const req = await makeRequest("http://localhost:3000/api/flags?clear=1&redirect=/settings");
       const res = (await GET(req)) as any;
       expect(res.type).toBe("redirect");
       expect(new URL(res.url).pathname).toBe("/settings");
@@ -280,7 +260,7 @@ describe("/api/flags route", () => {
 
   describe("no params (current overrides)", () => {
     it("returns current overrides as JSON when no feature_flag_ params", async () => {
-      mockCookieStore["_shipkit_preview"] = JSON.stringify({
+      mockCookieStore._shipkit_preview = JSON.stringify({
         DATABASE_ENABLED: true,
         MDX_ENABLED: false,
       });
@@ -308,10 +288,8 @@ describe("/api/flags route", () => {
       for (let i = 0; i < 200; i++) {
         bigOverrides[`FLAG_${i}_ENABLED`] = true;
       }
-      mockCookieStore["_shipkit_preview"] = JSON.stringify(bigOverrides);
-      const req = await makeRequest(
-        "http://localhost:3000/api/flags?feature_flag_database=1",
-      );
+      mockCookieStore._shipkit_preview = JSON.stringify(bigOverrides);
+      const req = await makeRequest("http://localhost:3000/api/flags?feature_flag_database=1");
       const res = (await GET(req)) as any;
       expect(res.status).toBe(400);
       expect(res.body.error).toContain("Too many overrides");

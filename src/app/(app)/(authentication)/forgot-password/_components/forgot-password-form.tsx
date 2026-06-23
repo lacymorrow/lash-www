@@ -63,7 +63,7 @@ export function ForgotPasswordForm() {
           });
         }
       }
-    } catch (error) {
+    } catch (_error) {
       toast.error("Error sending password reset email", {
         description: "Please try again.",
       });

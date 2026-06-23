@@ -1,5 +1,5 @@
-import fs from "fs/promises";
-import path from "path";
+import fs from "node:fs/promises";
+import path from "node:path";
 import {
   type BlogAuthor,
   convertLegacyAuthor,
@@ -36,13 +36,11 @@ function resolveAuthors(data: Record<string, unknown>) {
     authorObject = convertLegacyAuthor(data.author as string);
   }
   if (data.authors && Array.isArray(data.authors)) {
-    authorObjects = (data.authors as Array<string | { name?: string }>).map(
-      (author) => {
-        if (typeof author === "string") return convertLegacyAuthor(author);
-        if (author.name) return convertLegacyAuthor(author.name);
-        return defaultAuthor;
-      }
-    );
+    authorObjects = (data.authors as Array<string | { name?: string }>).map((author) => {
+      if (typeof author === "string") return convertLegacyAuthor(author);
+      if (author.name) return convertLegacyAuthor(author.name);
+      return defaultAuthor;
+    });
   }
   if (data.authorId) {
     authorObject = getAuthorById(data.authorId as string);
@@ -56,9 +54,7 @@ function resolveAuthors(data: Record<string, unknown>) {
 function sortByDate(posts: BlogPost[]): BlogPost[] {
   return posts.sort((a, b) => {
     if (!a.publishedAt || !b.publishedAt) return 0;
-    return (
-      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-    );
+    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
   });
 }
 

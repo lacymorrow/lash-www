@@ -1,15 +1,16 @@
 "use client";
 
-import { Button, buttonVariants } from "@/components/ui/button";
-import { CopyButton } from "@/components/ui/copy-button";
-import { routes } from "@/config/routes";
-import { useMediaQuery } from "@/hooks/use-media-query";
-import { cn } from "@/lib/utils";
 import { motion, useAnimation } from "framer-motion";
 import { BookOpenTextIcon, Check, Copy, Terminal } from "lucide-react";
 import { Bungee_Shade as FontBungee } from "next/font/google";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { CopyButton } from "@/components/ui/copy-button";
+import { routes } from "@/config/routes";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { cn } from "@/lib/utils";
+
 const fontBungee = FontBungee({
   weight: ["400"],
   style: ["normal"],
@@ -126,11 +127,7 @@ export function InstallSection() {
             onClick={copyToClipboard}
             className="grow bg-blue-600 text-white hover:bg-blue-700"
           >
-            {copied ? (
-              <Check className="mr-2 h-4 w-4" />
-            ) : (
-              <Copy className="mr-2 h-4 w-4" />
-            )}
+            {copied ? <Check className="mr-2 h-4 w-4" /> : <Copy className="mr-2 h-4 w-4" />}
             {copied ? "Copied!" : "Copy Command"}
           </Button>
 

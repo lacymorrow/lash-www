@@ -5,7 +5,6 @@ import type { LucideIcon } from "lucide-react";
 import {
   ArrowLeftFromLineIcon,
   FileTerminalIcon,
-  Rocket,
   Settings2,
   SquareTerminal,
   Wrench,

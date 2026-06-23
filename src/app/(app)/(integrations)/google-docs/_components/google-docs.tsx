@@ -99,10 +99,10 @@ function processListItem(paragraph: any, lists: any, content: string): string {
 function processDocument(doc: any): ProcessedDocument {
   const headings: Heading[] = [];
   let content = "";
-  const currentList: string | null = null;
-  const currentListLevel = 0;
+  const _currentList: string | null = null;
+  const _currentListLevel = 0;
 
-  doc.body.content.forEach((item: any, index: number) => {
+  doc.body.content.forEach((item: any, _index: number) => {
     if (item.paragraph) {
       const paragraph = item.paragraph;
       let paragraphContent = "";
@@ -120,7 +120,8 @@ function processDocument(doc: any): ProcessedDocument {
       // Handle headings
       if (paragraph.paragraphStyle?.namedStyleType?.includes("HEADING")) {
         const level = Number.parseInt(
-          paragraph.paragraphStyle.namedStyleType.replace("HEADING_", "")
+          paragraph.paragraphStyle.namedStyleType.replace("HEADING_", ""),
+          10
         );
         const text = paragraphContent.replace(/<[^>]*>/g, ""); // Strip HTML for heading text
         const id = text.toLowerCase().replace(/[^a-z0-9]+/g, "-");

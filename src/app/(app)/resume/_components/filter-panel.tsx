@@ -1,10 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Download, RotateCcw, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
@@ -12,10 +11,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Download, RotateCcw, X } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
 import type { FilterState, MatchResult } from "../_lib/resume-filters";
-import type { SectionKey } from "../_lib/resume-types";
 import { PRESETS } from "../_lib/resume-presets";
+import type { SectionKey } from "../_lib/resume-types";
 
 const SECTION_LABELS: Record<SectionKey, string> = {
   work: "Work Experience",
@@ -50,12 +50,8 @@ export function FilterPanel({
   onExport,
   onClose,
 }: FilterPanelProps) {
-  const matchedWork = Array.from(workMatches.values()).filter(
-    (m) => m.matched,
-  ).length;
-  const matchedProjects = Array.from(projectMatches.values()).filter(
-    (m) => m.matched,
-  ).length;
+  const matchedWork = Array.from(workMatches.values()).filter((m) => m.matched).length;
+  const matchedProjects = Array.from(projectMatches.values()).filter((m) => m.matched).length;
 
   const setPreset = (presetId: string) => {
     const preset = PRESETS.find((p) => p.id === presetId);
@@ -96,12 +92,7 @@ export function FilterPanel({
             <RotateCcw className="h-3.5 w-3.5" />
           </Button>
           {onClose && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7"
-              onClick={onClose}
-            >
+            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={onClose}>
               <X className="h-3.5 w-3.5" />
             </Button>
           )}
@@ -110,8 +101,7 @@ export function FilterPanel({
 
       {/* Stats */}
       <div className="px-4 pb-2 text-xs text-muted-foreground">
-        Showing {matchedWork}/{totalWork} jobs, {matchedProjects}/
-        {totalProjects} projects
+        Showing {matchedWork}/{totalWork} jobs, {matchedProjects}/{totalProjects} projects
       </div>
 
       <Separator />
@@ -122,10 +112,7 @@ export function FilterPanel({
           <Label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
             Preset
           </Label>
-          <Select
-            value={filters.activePreset ?? ""}
-            onValueChange={setPreset}
-          >
+          <Select value={filters.activePreset ?? ""} onValueChange={setPreset}>
             <SelectTrigger className="mt-1.5 h-8 text-xs">
               <SelectValue placeholder="Custom" />
             </SelectTrigger>

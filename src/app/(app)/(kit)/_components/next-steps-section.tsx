@@ -6,7 +6,6 @@ import {
   Database,
   FileText,
   type LucideIcon,
-  Rocket,
   Shield,
   Zap,
 } from "lucide-react";
@@ -108,7 +107,7 @@ export function NextStepsSection() {
       </Card>
 
       <div className="space-y-4">
-        {nextSteps.map((step, index) => (
+        {nextSteps.map((step, _index) => (
           <Card
             key={step.title}
             className={`transition-all ${

@@ -12,7 +12,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { constructMetadata } from "@/config/metadata";
 import { siteConfig } from "@/config/site-config";
 import { safeDbExecute } from "@/server/db";
-import { users } from "@/server/db/schema";
 import { getCollaboratorDetails } from "@/server/services/github/github-service";
 import { AddCollaboratorForm } from "./_components/add-collaborator-form";
 import { columns, type GitHubUserData } from "./_components/columns";

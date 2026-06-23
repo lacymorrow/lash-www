@@ -1,9 +1,9 @@
 import {
   IconBrandNextjs,
   IconBrandReact,
-  IconBrandTypescript,
-  IconBrandTailwind,
   IconBrandStripeFilled,
+  IconBrandTailwind,
+  IconBrandTypescript,
   IconDatabase,
   IconMail,
 } from "@tabler/icons-react";

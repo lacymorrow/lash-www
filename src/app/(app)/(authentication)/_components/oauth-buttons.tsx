@@ -135,10 +135,7 @@ export function OAuthButtons({
           );
 
           return (
-            <form
-              key={id}
-              action={() => handleSignIn(id)}
-            >
+            <form key={id} action={() => handleSignIn(id)}>
               {currentVariant === "icons" ? (
                 <Tooltip>
                   <TooltipTrigger asChild>{button}</TooltipTrigger>

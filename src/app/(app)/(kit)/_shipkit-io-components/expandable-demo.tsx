@@ -110,7 +110,7 @@ function DesignSyncExample() {
                     Attendees:
                   </h4>
                   <div className="flex -space-x-2 overflow-hidden">
-                    {["Alice", "Bob", "Charlie", "David"].map((name, index) => (
+                    {["Alice", "Bob", "Charlie", "David"].map((name, _index) => (
                       <TooltipProvider key={uuidv4()}>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -260,7 +260,7 @@ export function ProductShowcaseCard() {
                     { icon: Bluetooth, text: "Bluetooth 5.0" },
                     { icon: Fingerprint, text: "Touch controls" },
                     { icon: Mic, text: "Voice assistant compatible" },
-                  ].map((feature, index) => (
+                  ].map((feature, _index) => (
                     <div
                       key={uuidv4()}
                       className="flex items-center text-sm text-gray-600 dark:text-gray-400"

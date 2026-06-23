@@ -6,7 +6,7 @@ import { BlogAuthorSkeleton } from "@/components/modules/blog/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { authorUtils, blogAuthors, getActiveAuthors, getAuthorById } from "@/config/blog-authors";
+import { blogAuthors, getActiveAuthors, getAuthorById } from "@/config/blog-authors";
 import { constructMetadata } from "@/config/metadata";
 
 export const metadata: Metadata = constructMetadata({

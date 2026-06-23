@@ -1,18 +1,5 @@
-import {
-  ArrowRight,
-  Cloud,
-  Code,
-  Download,
-  RefreshCw,
-  Terminal,
-} from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { ArrowRight, Cloud, Code, Download, RefreshCw, Terminal } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function CliPage() {
   return (
@@ -31,9 +18,7 @@ export default function CliPage() {
             <Download className="h-5 w-5" />
             Quick Start
           </CardTitle>
-          <CardDescription>
-            One command to scaffold a new project
-          </CardDescription>
+          <CardDescription>One command to scaffold a new project</CardDescription>
         </CardHeader>
         <CardContent>
           <pre className="bg-muted p-4 rounded-md text-sm overflow-x-auto">
@@ -50,9 +35,7 @@ export default function CliPage() {
               <Terminal className="h-5 w-5" />
               create
             </CardTitle>
-            <CardDescription>
-              Scaffold a new ShipKit project from a template
-            </CardDescription>
+            <CardDescription>Scaffold a new ShipKit project from a template</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <pre className="bg-muted p-3 rounded-md text-sm overflow-x-auto">
@@ -60,28 +43,19 @@ export default function CliPage() {
             </pre>
             <div className="text-sm text-muted-foreground space-y-1">
               <p>
-                <code className="text-xs bg-muted px-1 rounded">
-                  -t, --template
-                </code>{" "}
-                Template repo (owner/name)
+                <code className="text-xs bg-muted px-1 rounded">-t, --template</code> Template repo
+                (owner/name)
               </p>
               <p>
-                <code className="text-xs bg-muted px-1 rounded">
-                  -d, --directory
-                </code>{" "}
-                Target directory
+                <code className="text-xs bg-muted px-1 rounded">-d, --directory</code> Target
+                directory
               </p>
               <p>
-                <code className="text-xs bg-muted px-1 rounded">
-                  -y, --yes
-                </code>{" "}
-                Skip prompts
+                <code className="text-xs bg-muted px-1 rounded">-y, --yes</code> Skip prompts
               </p>
               <p>
-                <code className="text-xs bg-muted px-1 rounded">
-                  --no-install
-                </code>{" "}
-                Skip installing dependencies
+                <code className="text-xs bg-muted px-1 rounded">--no-install</code> Skip installing
+                dependencies
               </p>
             </div>
           </CardContent>
@@ -93,9 +67,7 @@ export default function CliPage() {
               <RefreshCw className="h-5 w-5" />
               sync
             </CardTitle>
-            <CardDescription>
-              Pull upstream changes from the ShipKit template
-            </CardDescription>
+            <CardDescription>Pull upstream changes from the ShipKit template</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <pre className="bg-muted p-3 rounded-md text-sm overflow-x-auto">
@@ -103,16 +75,11 @@ export default function CliPage() {
             </pre>
             <div className="text-sm text-muted-foreground space-y-1">
               <p>
-                <code className="text-xs bg-muted px-1 rounded">
-                  --direct
-                </code>{" "}
-                Merge directly instead of a PR branch
+                <code className="text-xs bg-muted px-1 rounded">--direct</code> Merge directly
+                instead of a PR branch
               </p>
               <p>
-                <code className="text-xs bg-muted px-1 rounded">
-                  -y, --yes
-                </code>{" "}
-                Skip prompts
+                <code className="text-xs bg-muted px-1 rounded">-y, --yes</code> Skip prompts
               </p>
             </div>
           </CardContent>
@@ -124,9 +91,7 @@ export default function CliPage() {
               <Cloud className="h-5 w-5" />
               deploy
             </CardTitle>
-            <CardDescription>
-              Deploy your ShipKit site to Vercel
-            </CardDescription>
+            <CardDescription>Deploy your ShipKit site to Vercel</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <pre className="bg-muted p-3 rounded-md text-sm overflow-x-auto">
@@ -134,14 +99,11 @@ export default function CliPage() {
             </pre>
             <div className="text-sm text-muted-foreground space-y-1">
               <p>
-                <code className="text-xs bg-muted px-1 rounded">--open</code>{" "}
-                Open the Vercel import page in your browser
+                <code className="text-xs bg-muted px-1 rounded">--open</code> Open the Vercel import
+                page in your browser
               </p>
               <p>
-                <code className="text-xs bg-muted px-1 rounded">
-                  -y, --yes
-                </code>{" "}
-                Skip prompts
+                <code className="text-xs bg-muted px-1 rounded">-y, --yes</code> Skip prompts
               </p>
             </div>
           </CardContent>
@@ -155,9 +117,7 @@ export default function CliPage() {
             <Code className="h-5 w-5" />
             Workflow
           </CardTitle>
-          <CardDescription>
-            The full lifecycle of a ShipKit project
-          </CardDescription>
+          <CardDescription>The full lifecycle of a ShipKit project</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">

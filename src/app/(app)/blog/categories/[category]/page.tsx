@@ -1,9 +1,9 @@
+import type { Metadata } from "next";
 import { Link } from "@/components/primitives/link";
 import { Badge } from "@/components/ui/badge";
 import { constructMetadata } from "@/config/metadata";
 import { getBlogCategories, getBlogPosts } from "@/lib/blog";
 import { cn } from "@/lib/utils";
-import type { Metadata } from "next";
 
 interface CategoryPageProps {
   params: Promise<{

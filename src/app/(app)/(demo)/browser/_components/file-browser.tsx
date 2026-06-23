@@ -27,7 +27,7 @@ interface TreeElement {
 }
 
 const convertToTreeElements = (nodes: FileNode[], parentPath = ""): TreeElement[] => {
-  return nodes.map((node, index) => {
+  return nodes.map((node, _index) => {
     const currentPath = parentPath ? `${parentPath}/${node.name}` : node.name;
     return {
       id: currentPath,
@@ -82,7 +82,7 @@ export function FileBrowser() {
       const rootPaths = tree.filter((node) => node.type === "directory").map((node) => node.path);
       setExpandedPaths(rootPaths);
       router.refresh();
-    } catch (error) {
+    } catch (_error) {
       toast.error("Failed to load file tree");
     } finally {
       setLoading(false);

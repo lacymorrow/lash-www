@@ -52,9 +52,7 @@ const BrowserChrome = ({
       )}
     >
       <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
-      <p className="max-w-[240px] text-center text-sm text-muted-foreground">
-        {description}
-      </p>
+      <p className="max-w-[240px] text-center text-sm text-muted-foreground">{description}</p>
     </div>
   </div>
 );

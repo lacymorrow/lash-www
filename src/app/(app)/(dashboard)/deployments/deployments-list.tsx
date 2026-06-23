@@ -96,10 +96,7 @@ export function DeploymentsList({ deployments: initialDeployments }: Deployments
     staleTime: 1000, // Consider data stale after 1 second
   });
 
-  const hasActiveDeployments = useMemo(
-    () => deployments.some(isActivelyDeploying),
-    [deployments]
-  );
+  const hasActiveDeployments = useMemo(() => deployments.some(isActivelyDeploying), [deployments]);
 
   // Detect status changes and show toasts
   useEffect(() => {

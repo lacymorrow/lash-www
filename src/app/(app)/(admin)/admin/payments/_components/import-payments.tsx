@@ -257,7 +257,7 @@ export function ImportPayments() {
   /**
    * Gets the loading icon based on current action
    */
-  const getLoadingIcon = () => {
+  const _getLoadingIcon = () => {
     if (currentAction === "import") {
       return <FolderSyncIcon className="mr-2 h-4 w-4" />;
     }

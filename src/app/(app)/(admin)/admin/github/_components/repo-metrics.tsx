@@ -99,7 +99,7 @@ export async function RepoMetricsContent() {
       ? new Date(commits[0].commit.author.date)
       : new Date();
     const daysSinceLastCommit = Math.floor(
-      (new Date().getTime() - lastCommitDate.getTime()) / (1000 * 60 * 60 * 24)
+      (Date.now() - lastCommitDate.getTime()) / (1000 * 60 * 60 * 24)
     );
 
     const metrics: RepoMetric[] = [

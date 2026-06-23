@@ -2,11 +2,11 @@ import { timingSafeEqual } from "node:crypto";
 import { type NextRequest, NextResponse } from "next/server";
 import { env } from "@/env";
 import {
+  type FeatureFlagOverrides,
+  getOverrides,
   PREVIEW_COOKIE,
   parseOverridesFromParams,
   parseTruthy,
-  getOverrides,
-  type FeatureFlagOverrides,
 } from "@/lib/preview-flags";
 
 const COOKIE_MAX_AGE = 60 * 60 * 8; // 8 hours
@@ -32,7 +32,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
   } else if (process.env.NODE_ENV === "production") {
-    console.warn("[preview-flags] PREVIEW_SECRET is not set — endpoint is unauthenticated in production");
+    console.warn(
+      "[preview-flags] PREVIEW_SECRET is not set — endpoint is unauthenticated in production"
+    );
   }
 
   if (parseTruthy(searchParams.get("clear") ?? "") === true) {
@@ -59,7 +61,7 @@ export async function GET(request: NextRequest) {
   if (json.length > MAX_COOKIE_SIZE) {
     return NextResponse.json(
       { error: "Too many overrides, clear first with ?clear=1" },
-      { status: 400 },
+      { status: 400 }
     );
   }
 

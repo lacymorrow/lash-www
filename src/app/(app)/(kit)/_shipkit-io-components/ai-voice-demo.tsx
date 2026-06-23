@@ -36,7 +36,7 @@ function AudioVisualizer({ stream, simulate = false }: AudioVisualizerProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
-  const animationFrameRef = useRef<number>(0);
+  const _animationFrameRef = useRef<number>(0);
   const isAnimating = useRef<boolean>(false);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const frameStateRef = useRef<{ id: number }>({ id: 0 });
@@ -130,7 +130,7 @@ function AudioVisualizer({ stream, simulate = false }: AudioVisualizerProps) {
       }
     };
 
-    const animate = (time: DOMHighResTimeStamp): void => {
+    const animate = (_time: DOMHighResTimeStamp): void => {
       const currentContext = contextRef.current;
       if (!currentContext || !isAnimating.current) return;
 

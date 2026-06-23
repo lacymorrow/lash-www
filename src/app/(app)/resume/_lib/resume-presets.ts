@@ -65,16 +65,7 @@ export const PRESETS: FilterPreset[] = [
     id: "devops",
     label: "DevOps Engineer",
     description: "Infrastructure, Docker, AWS, CI/CD",
-    tags: [
-      "Docker",
-      "AWS",
-      "Azure",
-      "CI/CD",
-      "Jenkins",
-      "Linux",
-      "Vercel",
-      "Netlify",
-    ],
+    tags: ["Docker", "AWS", "Azure", "CI/CD", "Jenkins", "Linux", "Vercel", "Netlify"],
     sections: { ...ALL_SECTIONS, interests: false, references: false },
   },
   {

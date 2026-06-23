@@ -1,8 +1,6 @@
 import { BookOpen, CheckCircle } from "lucide-react";
 import { Link } from "@/components/primitives/link";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { RainbowButton } from "@/components/ui/magicui/rainbow-button";
 import { routes } from "@/config/routes";
 
@@ -27,9 +25,9 @@ export function OnboardingHeader() {
           </h1>
 
           <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
-            🎉 Congratulations! You&apos;ve successfully deployed Shipkit. Now let&apos;s get you set up and
-            ready to build amazing things. Below you&apos;ll find everything you need to configure your
-            features and start shipping.
+            🎉 Congratulations! You&apos;ve successfully deployed Shipkit. Now let&apos;s get you
+            set up and ready to build amazing things. Below you&apos;ll find everything you need to
+            configure your features and start shipping.
           </p>
 
           <div className="flex gap-4 flex-row justify-center">

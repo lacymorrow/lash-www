@@ -3,7 +3,7 @@ import { z } from "zod";
 import { openai } from "@/lib/open-ai";
 import { DocsSearchService } from "@/server/services/docs-search";
 import { ErrorService } from "@/server/services/error-service";
-import { rateLimitService, rateLimits } from "@/server/services/rate-limit-service";
+import { rateLimitService } from "@/server/services/rate-limit-service";
 
 // Sanitize input to prevent prompt injection
 function sanitizeForPrompt(text: string): string {

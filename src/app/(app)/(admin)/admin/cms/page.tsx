@@ -1,11 +1,10 @@
 "use client";
 
-import { CheckCircle, Database, ExternalLink, Loader2, Terminal, XCircle } from "lucide-react";
+import { CheckCircle, Database, ExternalLink, Loader2, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getCMSStatusAction, seedCMSAction } from "@/app/(app)/(admin)/admin/integrations/actions";
 import { Link } from "@/components/primitives/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { routes } from "@/config/routes";

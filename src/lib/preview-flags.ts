@@ -17,7 +17,7 @@ function flagNameToParamKey(flagName: string): string {
 
 function paramKeyToFlagName(paramKey: string): string | undefined {
   if (!paramKey.startsWith(QUERY_PARAM_PREFIX)) return undefined;
-  const suffix = paramKey.slice(QUERY_PARAM_PREFIX.length).toUpperCase() + "_ENABLED";
+  const suffix = `${paramKey.slice(QUERY_PARAM_PREFIX.length).toUpperCase()}_ENABLED`;
   return featureFlagNames.includes(suffix) ? suffix : undefined;
 }
 
@@ -51,17 +51,13 @@ export async function getOverrides(): Promise<FeatureFlagOverrides> {
   }
 }
 
-export async function isFeatureEnabledWithOverrides(
-  flagName: string,
-): Promise<boolean> {
+export async function isFeatureEnabledWithOverrides(flagName: string): Promise<boolean> {
   const overrides = await getOverrides();
   if (flagName in overrides) return overrides[flagName]!;
   return (buildTimeFeatures as Record<string, boolean>)[flagName] ?? false;
 }
 
-export function parseOverridesFromParams(
-  searchParams: URLSearchParams,
-): FeatureFlagOverrides {
+export function parseOverridesFromParams(searchParams: URLSearchParams): FeatureFlagOverrides {
   const overrides: FeatureFlagOverrides = {};
   for (const [key, value] of searchParams.entries()) {
     const flagName = paramKeyToFlagName(key);
@@ -75,7 +71,5 @@ export function parseOverridesFromParams(
 }
 
 export function getAllFlagParamKeys(): Record<string, string> {
-  return Object.fromEntries(
-    featureFlagNames.map((name) => [name, flagNameToParamKey(name)]),
-  );
+  return Object.fromEntries(featureFlagNames.map((name) => [name, flagNameToParamKey(name)]));
 }

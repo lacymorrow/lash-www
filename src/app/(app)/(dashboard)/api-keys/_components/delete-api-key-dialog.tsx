@@ -37,7 +37,7 @@ export const DeleteApiKeyDialog = ({ apiKeyId, triggerProps }: DeleteApiKeyDialo
       } else {
         toast.error("Failed to delete API key");
       }
-    } catch (error) {
+    } catch (_error) {
       toast.error("Failed to delete API key");
     } finally {
       setIsLoading(false);

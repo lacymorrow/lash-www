@@ -77,7 +77,7 @@ export function CreateApiKeyDialog({ onSubmit, userId }: CreateApiKeyDialogProps
         setCreatedKey(result.key);
         setShowKeyDialog(true);
       }
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: "Error",
         description: "Failed to create API key. Please try again.",

@@ -1,5 +1,5 @@
-import fs from "fs/promises";
-import path from "path";
+import fs from "node:fs/promises";
+import path from "node:path";
 import { changelogManifest } from "@/lib/generated/changelog-manifest";
 
 // ---------------------------------------------------------------------------
@@ -112,10 +112,14 @@ interface ParsedCommit {
 function parseConventional(message: string): ParsedCommit | null {
   const match = message.match(/^(\w+)(?:\(([^)]+)\))?(!?):\s*(.+)/);
   if (!match) return null;
+  // Regex above guarantees groups 1 and 4 exist on a successful match.
+  const type = match[1];
+  const subject = match[4];
+  if (!type || !subject) return null;
   return {
-    type: match[1]!.toLowerCase(),
+    type: type.toLowerCase(),
     scope: match[2] ?? null,
-    subject: match[4]!,
+    subject,
     breaking: match[3] === "!",
   };
 }
@@ -155,7 +159,7 @@ function groupCommits(commits: GitHubCommit[], tagMap: Map<string, string>): Com
     const tag = tagMap.get(commit.sha);
     if (tag && currentGroup.length > 0) {
       // Close previous group as "Recent Updates"
-      const newestDate = currentGroup[0]!.commit.author.date;
+      const newestDate = currentGroup[0]?.commit.author.date ?? new Date().toISOString();
       const groupLabel = currentTag ?? "Recent Updates";
       const groupSlug = currentTag
         ? currentTag.replace(/[^a-zA-Z0-9.-]/g, "-").toLowerCase()
@@ -176,7 +180,7 @@ function groupCommits(commits: GitHubCommit[], tagMap: Map<string, string>): Com
 
   // Final group
   if (currentGroup.length > 0) {
-    const newestDate = currentGroup[0]!.commit.author.date;
+    const newestDate = currentGroup[0]?.commit.author.date ?? new Date().toISOString();
     const groupLabel = currentTag ?? "Recent Updates";
     const groupSlug = currentTag
       ? currentTag.replace(/[^a-zA-Z0-9.-]/g, "-").toLowerCase()
@@ -193,7 +197,7 @@ function groupCommits(commits: GitHubCommit[], tagMap: Map<string, string>): Com
 
   // If no tags at all, keep everything as one "Recent Updates" group
   if (tagMap.size === 0 && commits.length > 0) {
-    const newestDate = commits[0]!.commit.author.date;
+    const newestDate = commits[0]?.commit.author.date ?? new Date().toISOString();
     return [
       {
         label: "Recent Updates",
@@ -224,7 +228,7 @@ function renderEntry(group: CommitGroup): ChangelogEntry {
     if (parsed) {
       const label = TYPE_LABELS[parsed.type] ?? "Other";
       if (!buckets.has(label)) buckets.set(label, []);
-      buckets.get(label)!.push(parsed.subject);
+      buckets.get(label)?.push(parsed.subject);
     } else {
       uncategorized.push(firstLine);
     }
@@ -278,13 +282,9 @@ function renderEntry(group: CommitGroup): ChangelogEntry {
 // ---------------------------------------------------------------------------
 const CHANGELOG_DIR = path.join(process.cwd(), "src/content/changelog");
 
-function manifestToEntries(
-  manifest: typeof changelogManifest
-): ChangelogEntry[] {
+function manifestToEntries(manifest: typeof changelogManifest): ChangelogEntry[] {
   return manifest.map((entry) => {
-    const slug =
-      (entry.frontmatter.slug as string) ??
-      entry.filename.replace(/\.mdx?$/, "");
+    const slug = (entry.frontmatter.slug as string) ?? entry.filename.replace(/\.mdx?$/, "");
     return {
       title: (entry.frontmatter.title as string) ?? slug,
       slug,
@@ -311,9 +311,7 @@ async function getMarkdownEntries(): Promise<ChangelogEntry[]> {
     return [];
   }
 
-  const mdFiles = filenames.filter(
-    (f) => f.endsWith(".md") || f.endsWith(".mdx")
-  );
+  const mdFiles = filenames.filter((f) => f.endsWith(".md") || f.endsWith(".mdx"));
   if (mdFiles.length === 0) return [];
 
   const { default: matter } = await import("gray-matter");

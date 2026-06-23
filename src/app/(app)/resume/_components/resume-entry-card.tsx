@@ -1,5 +1,5 @@
-import { Badge } from "@/components/ui/badge";
 import { ExternalLink } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import type { MatchResult } from "../_lib/resume-filters";
 
 interface ResumeEntryCardProps {
@@ -66,23 +66,15 @@ export function ResumeEntryCard({
               title
             )}
           </h3>
-          <p className="text-sm font-medium text-muted-foreground">
-            {subtitle}
-          </p>
+          <p className="text-sm font-medium text-muted-foreground">{subtitle}</p>
         </div>
         <div className="shrink-0 text-right">
-          <p className="text-sm font-medium text-muted-foreground">
-            {dateRange}
-          </p>
-          {location && (
-            <p className="text-xs text-muted-foreground/70">{location}</p>
-          )}
+          <p className="text-sm font-medium text-muted-foreground">{dateRange}</p>
+          {location && <p className="text-xs text-muted-foreground/70">{location}</p>}
         </div>
       </div>
 
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-        {summary}
-      </p>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{summary}</p>
 
       {highlights && highlights.length > 0 && (
         <ul className="mt-2 space-y-1">

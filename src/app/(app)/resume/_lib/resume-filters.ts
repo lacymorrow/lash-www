@@ -1,5 +1,5 @@
+import { extractProjectTags, extractWorkTags } from "./resume-tags";
 import type { ResumeSchema, SectionKey } from "./resume-types";
-import { extractWorkTags, extractProjectTags } from "./resume-tags";
 
 export interface FilterState {
   sections: Record<SectionKey, boolean>;
@@ -33,7 +33,7 @@ export interface MatchResult {
 function isInDateRange(
   startDate: string,
   endDate: string | undefined,
-  range: FilterState["dateRange"],
+  range: FilterState["dateRange"]
 ): boolean {
   if (!range.from && !range.to) return true;
 
@@ -49,14 +49,12 @@ function isInDateRange(
 function matchesTags(
   entryTags: string[],
   selectedTags: string[],
-  mode: "any" | "all",
+  mode: "any" | "all"
 ): MatchResult {
   if (selectedTags.length === 0) return { matched: true, score: 1 };
 
   const entrySet = new Set(entryTags.map((t) => t.toLowerCase()));
-  const matchCount = selectedTags.filter((t) =>
-    entrySet.has(t.toLowerCase()),
-  ).length;
+  const matchCount = selectedTags.filter((t) => entrySet.has(t.toLowerCase())).length;
 
   if (mode === "any") {
     return {
@@ -73,7 +71,7 @@ function matchesTags(
 
 export function computeWorkMatches(
   data: ResumeSchema,
-  filters: FilterState,
+  filters: FilterState
 ): Map<number, MatchResult> {
   const results = new Map<number, MatchResult>();
   const workTags = extractWorkTags(data.work);
@@ -83,11 +81,7 @@ export function computeWorkMatches(
     if (!entry) continue;
     const tags = workTags.get(i) ?? [];
 
-    const dateMatch = isInDateRange(
-      entry.startDate,
-      entry.endDate,
-      filters.dateRange,
-    );
+    const dateMatch = isInDateRange(entry.startDate, entry.endDate, filters.dateRange);
     const tagMatch = matchesTags(tags, filters.selectedTags, filters.tagMatchMode);
 
     if (!dateMatch) {
@@ -102,7 +96,7 @@ export function computeWorkMatches(
 
 export function computeProjectMatches(
   data: ResumeSchema,
-  filters: FilterState,
+  filters: FilterState
 ): Map<number, MatchResult> {
   const results = new Map<number, MatchResult>();
   const projectTags = extractProjectTags(data.projects);
@@ -112,11 +106,7 @@ export function computeProjectMatches(
     if (!entry) continue;
     const tags = projectTags.get(i) ?? [];
 
-    const dateMatch = isInDateRange(
-      entry.startDate,
-      entry.endDate,
-      filters.dateRange,
-    );
+    const dateMatch = isInDateRange(entry.startDate, entry.endDate, filters.dateRange);
     const tagMatch = matchesTags(tags, filters.selectedTags, filters.tagMatchMode);
 
     if (!dateMatch) {

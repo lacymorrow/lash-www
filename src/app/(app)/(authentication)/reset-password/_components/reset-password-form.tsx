@@ -77,7 +77,7 @@ export function ResetPasswordForm({ token }: { token?: string }) {
           });
         }
       }
-    } catch (error) {
+    } catch (_error) {
       toast.error("Error resetting password", {
         description: "An unexpected error occurred. Please try again.",
       });

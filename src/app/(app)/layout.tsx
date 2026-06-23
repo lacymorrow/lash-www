@@ -1,23 +1,21 @@
 import type { Metadata, Viewport } from "next";
 import type React from "react";
 import { Suspense } from "react";
-
 import { AppRouterLayout } from "@/components/layouts/app-router-layout";
 import { FontSelector } from "@/components/modules/devtools/font-selector";
 import { ReactGrab } from "@/components/modules/devtools/react-grab";
 import { ShipkitBranding } from "@/components/modules/shipkit-branding";
 import { SuspenseFallback } from "@/components/primitives/suspense-fallback";
 import { fontSans, fontSerif } from "@/config/fonts";
-import { siteConfig } from "@/config/site-config";
 import {
   metadata as defaultMetadata,
   type HeadLinkHint,
   headLinkHints,
   viewport as sharedViewport,
 } from "@/config/metadata";
+import { siteConfig } from "@/config/site-config";
 import { env } from "@/env";
 import { initializePaymentProviders } from "@/server/providers";
-import Script from "next/script";
 
 export const fetchCache = "default-cache";
 export const metadata: Metadata = defaultMetadata;

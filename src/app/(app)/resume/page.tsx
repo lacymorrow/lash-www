@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { constructMetadata } from "@/config/metadata";
-import { resumeData } from "./_lib/resume-data";
 import { ResumeViewer } from "./_components/resume-viewer";
+import { resumeData } from "./_lib/resume-data";
 
 export const metadata: Metadata = constructMetadata({
   title: "Resume - Lacy Morrow",

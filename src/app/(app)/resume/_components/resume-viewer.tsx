@@ -1,26 +1,26 @@
 "use client";
 
+import { SlidersHorizontal } from "lucide-react";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { SlidersHorizontal } from "lucide-react";
-import type { ResumeSchema } from "../_lib/resume-types";
 import {
-  type FilterState,
-  DEFAULT_FILTER_STATE,
-  computeWorkMatches,
   computeProjectMatches,
+  computeWorkMatches,
+  DEFAULT_FILTER_STATE,
+  type FilterState,
 } from "../_lib/resume-filters";
-import { getAllTags, extractWorkTags, extractProjectTags } from "../_lib/resume-tags";
-import { ResumeHeader } from "./resume-header";
+import { extractProjectTags, extractWorkTags, getAllTags } from "../_lib/resume-tags";
+import type { ResumeSchema } from "../_lib/resume-types";
 import { FilterPanel } from "./filter-panel";
+import { ResumeHeader } from "./resume-header";
 import {
-  Section,
-  WorkSection,
-  ProjectsSection,
-  SkillsSection,
   EducationSection,
   ExtrasSection,
+  ProjectsSection,
+  Section,
+  SkillsSection,
+  WorkSection,
 } from "./resume-sections";
 
 export function ResumeViewer({ data }: { data: ResumeSchema }) {
@@ -32,14 +32,8 @@ export function ResumeViewer({ data }: { data: ResumeSchema }) {
   const workTags = useMemo(() => extractWorkTags(data.work), [data]);
   const projectTags = useMemo(() => extractProjectTags(data.projects), [data]);
 
-  const workMatches = useMemo(
-    () => computeWorkMatches(data, filters),
-    [data, filters],
-  );
-  const projectMatches = useMemo(
-    () => computeProjectMatches(data, filters),
-    [data, filters],
-  );
+  const workMatches = useMemo(() => computeWorkMatches(data, filters), [data, filters]);
+  const projectMatches = useMemo(() => computeProjectMatches(data, filters), [data, filters]);
 
   const handleExport = useCallback(() => {
     window.print();
@@ -67,20 +61,12 @@ export function ResumeViewer({ data }: { data: ResumeSchema }) {
         </aside>
 
         {/* Resume content */}
-        <main
-          ref={resumeRef}
-          className="min-w-0 flex-1 print:max-w-none"
-          id="resume-content"
-        >
+        <main ref={resumeRef} className="min-w-0 flex-1 print:max-w-none" id="resume-content">
           <ResumeHeader basics={data.basics} />
 
           {filters.sections.work && (
             <Section title="Work Experience">
-              <WorkSection
-                work={data.work}
-                matches={workMatches}
-                tags={workTags}
-              />
+              <WorkSection work={data.work} matches={workMatches} tags={workTags} />
             </Section>
           )}
 
@@ -126,10 +112,7 @@ export function ResumeViewer({ data }: { data: ResumeSchema }) {
             </Button>
           </SheetTrigger>
           <SheetContent side="bottom" className="h-[80vh] rounded-t-xl p-0">
-            <FilterPanel
-              {...filterPanelProps}
-              onClose={() => setSheetOpen(false)}
-            />
+            <FilterPanel {...filterPanelProps} onClose={() => setSheetOpen(false)} />
           </SheetContent>
         </Sheet>
       </div>

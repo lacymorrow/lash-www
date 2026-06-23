@@ -221,7 +221,7 @@ export async function verifyGitHubUsername(username: string) {
     }
 
     console.log("Calling verifyAndStoreGitHubUsername with userId:", session.user.id);
-    const success = await verifyAndStoreGitHubUsername(session.user.id, username);
+    const _success = await verifyAndStoreGitHubUsername(session.user.id, username);
     console.log("GitHub username verification successful");
 
     // Update the session directly with the new GitHub username

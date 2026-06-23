@@ -3,7 +3,7 @@ import { auth } from "@/server/auth";
 import { getTemporaryLinkData } from "@/server/services/temporary-links";
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   {
     params: paramsPromise,
   }: {
