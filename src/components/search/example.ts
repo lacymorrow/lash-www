@@ -18,10 +18,6 @@ export const docsConfig: DocsConfig = {
       href: routes.features,
     },
     {
-      title: "CLI",
-      href: routes.cli,
-    },
-    {
       title: "Sign In",
       href: routes.auth.signIn,
     },
@@ -43,16 +39,6 @@ export const docsConfig: DocsConfig = {
         {
           title: "Features",
           href: routes.features,
-          items: [],
-        },
-        {
-          title: "CLI",
-          href: routes.cli,
-          items: [],
-        },
-        {
-          title: "Bones CLI WWW",
-          href: routes.bones.cliWww,
           items: [],
         },
       ],

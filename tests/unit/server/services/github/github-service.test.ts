@@ -13,8 +13,8 @@ const TEST_USER = {
   githubUsername: "lacy-rvo",
 };
 
-// Since we know the service is disabled in the test environment,
-// we'll only test the disabled behavior
+// SKIPPED: requires real DB (uses db.insert(users)). Will be enabled by Phase 3
+// (Testcontainers Postgres). See plans/MASTER-TEST-PLAN.md.
 describe.skip("GitHub Service when disabled", () => {
   let userId: string;
 

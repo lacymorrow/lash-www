@@ -155,6 +155,7 @@ export function extractWorkTags(
   const map = new Map<number, string[]>();
   for (let i = 0; i < work.length; i++) {
     const entry = work[i];
+    if (!entry) continue;
     const tags = extractTagsFromText(entry.summary);
     if (entry.highlights) {
       for (const h of entry.highlights) {
@@ -172,6 +173,7 @@ export function extractProjectTags(
   const map = new Map<number, string[]>();
   for (let i = 0; i < projects.length; i++) {
     const entry = projects[i];
+    if (!entry) continue;
     const tags = extractTagsFromText(entry.summary);
     if (entry.highlights) {
       for (const h of entry.highlights) {

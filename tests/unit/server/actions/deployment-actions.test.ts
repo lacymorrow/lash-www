@@ -30,6 +30,8 @@ vi.mock("@/server/db", () => ({
   },
 }));
 
+// SKIPPED: DB-gated. Will be enabled by Phase 3 (Testcontainers Postgres).
+// See plans/MASTER-TEST-PLAN.md.
 describe.skip("Deployment Actions (DB gated)", () => {
   const mockUserId = "test-user-id";
   const mockSession = { user: { id: mockUserId } };

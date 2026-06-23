@@ -19,7 +19,8 @@ export async function GET(
     return new NextResponse(null, { status: 401 });
   }
 
-  const data = await getTemporaryLinkData(params.slug, session?.user.id);
+  const linkId = params.slug.join("/");
+  const data = await getTemporaryLinkData(linkId, session?.user.id);
 
   if (!data) {
     return new NextResponse(null, { status: 404 });

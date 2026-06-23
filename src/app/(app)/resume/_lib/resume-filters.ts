@@ -80,6 +80,7 @@ export function computeWorkMatches(
 
   for (let i = 0; i < data.work.length; i++) {
     const entry = data.work[i];
+    if (!entry) continue;
     const tags = workTags.get(i) ?? [];
 
     const dateMatch = isInDateRange(
@@ -108,6 +109,7 @@ export function computeProjectMatches(
 
   for (let i = 0; i < data.projects.length; i++) {
     const entry = data.projects[i];
+    if (!entry) continue;
     const tags = projectTags.get(i) ?? [];
 
     const dateMatch = isInDateRange(

@@ -71,7 +71,7 @@ export function ProjectsSection({
         <ResumeEntryCard
           key={`${project.name}-${project.startDate}`}
           title={project.name}
-          subtitle={project.summary.split(".")[0]}
+          subtitle={project.summary.split(".")[0] ?? ""}
           dateRange={formatDateRange(project.startDate, project.endDate)}
           summary={project.summary}
           tags={tags.get(i) ?? []}
