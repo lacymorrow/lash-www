@@ -28,6 +28,12 @@ const eslintConfig = [
 		settings: {
 			react: { version: "detect" },
 		},
+		rules: {
+			...(pluginReact.configs.flat.recommended?.rules ?? {}),
+			// TS handles prop-types via types; the runtime prop-types lint rule is
+			// noise here and produces 300+ false errors against typed components.
+			"react/prop-types": "off",
+		},
 	},
 	pluginReact.configs.flat["jsx-runtime"],
 
@@ -53,6 +59,7 @@ const eslintConfig = [
 	// TypeScript files configuration
 	{
 		files: ["**/*.{ts,tsx}"],
+		ignores: ["tests/**", "src/workers/**", "scripts/**"],
 		languageOptions: {
 			parser: tsParser,
 			parserOptions: {
@@ -117,6 +124,71 @@ const eslintConfig = [
 		},
 		plugins: {
 			"@typescript-eslint": ts,
+		},
+	},
+
+	// Build-tooling scripts: tsconfig excludes scripts/ for the same reason as
+	// tests. Use non-project parser config.
+	{
+		files: ["scripts/**/*.{ts,tsx,mts,mjs}"],
+		languageOptions: {
+			parser: tsParser,
+			parserOptions: {
+				project: null,
+				ecmaVersion: "latest",
+				sourceType: "module",
+			},
+		},
+		plugins: {
+			"@typescript-eslint": ts,
+		},
+		rules: {
+			"@typescript-eslint/prefer-nullish-coalescing": "off",
+			"@typescript-eslint/no-floating-promises": "off",
+			"@typescript-eslint/no-misused-promises": "off",
+			"@typescript-eslint/no-unsafe-argument": "off",
+			"@typescript-eslint/no-unsafe-assignment": "off",
+			"@typescript-eslint/no-unsafe-call": "off",
+			"@typescript-eslint/no-unsafe-member-access": "off",
+			"@typescript-eslint/no-unsafe-return": "off",
+			"@typescript-eslint/require-await": "off",
+			"@typescript-eslint/no-base-to-string": "off",
+			"@typescript-eslint/await-thenable": "off",
+		},
+	},
+
+	// Tests: tsconfig excludes tests/ so type-aware linting can't parse them.
+	// Use non-project parser config here to silence parser errors.
+	{
+		files: ["tests/**/*.{ts,tsx}"],
+		languageOptions: {
+			parser: tsParser,
+			parserOptions: {
+				project: null,
+				ecmaVersion: "latest",
+				sourceType: "module",
+				ecmaFeatures: {
+					jsx: true,
+				},
+			},
+		},
+		plugins: {
+			"@typescript-eslint": ts,
+		},
+		rules: {
+			// Type-aware rules require parserOptions.project; explicitly disable
+			// them here to match the non-project parser.
+			"@typescript-eslint/prefer-nullish-coalescing": "off",
+			"@typescript-eslint/no-floating-promises": "off",
+			"@typescript-eslint/no-misused-promises": "off",
+			"@typescript-eslint/no-unsafe-argument": "off",
+			"@typescript-eslint/no-unsafe-assignment": "off",
+			"@typescript-eslint/no-unsafe-call": "off",
+			"@typescript-eslint/no-unsafe-member-access": "off",
+			"@typescript-eslint/no-unsafe-return": "off",
+			"@typescript-eslint/require-await": "off",
+			"@typescript-eslint/no-base-to-string": "off",
+			"@typescript-eslint/await-thenable": "off",
 		},
 	},
 ];

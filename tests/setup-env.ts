@@ -24,13 +24,13 @@ if (typeof window === "undefined") {
     // Patch next-auth test runtime when Next.js module pathing differs
     // Some versions expect next/server; in Vitest we can noop this
     try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+       
       require.resolve("next/server");
     } catch {
       // Map bare import "next/server" to our JS shim so next-auth/env can import it safely
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+       
       const Module = require("node:module");
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+       
       const path = require("node:path");
       const originalResolve = Module._resolveFilename;
       const shimPath = path.resolve(__dirname, "./shims/next-server.js");
