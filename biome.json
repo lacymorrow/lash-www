@@ -10,6 +10,7 @@
       "!**/node_modules",
       "!**/.next",
       "!**/.vercel",
+      "!**/.claude/**",
       "!**/cli/dist",
       "!**/public/workers",
       "!**/public/**/*.js",
