@@ -19,7 +19,7 @@ fixes can land with confidence.
 
 | # | Title | Priority | Effort | Category | Issue | Status |
 |---|---|---|---|---|---|---|
-| 008 | Characterization tests for `payment-service.ts` | P2 | M | tests | [#229](https://github.com/lacymorrow/shipkit/issues/229) | ✅ done (advisor/008-payment-service-tests-clean) |
+| 008 | Characterization tests for `payment-service.ts` | P2 | M | tests | [#229](https://github.com/lacymorrow/shipkit/issues/229) | ⬜ todo |
 | 009 | Characterization tests for `auth-service.ts` | P2 | L | tests | [#230](https://github.com/lacymorrow/shipkit/issues/230) | ⬜ todo |
 | 001 | Enforce team membership on `GET /api/projects` | P1 | S | security (IDOR) | [#222](https://github.com/lacymorrow/shipkit/issues/222) | ⬜ todo |
 | 002 | LemonSqueezy webhook — reject untrusted `custom_data.user_id` | P1 | S | security (IDOR / payment) | [#223](https://github.com/lacymorrow/shipkit/issues/223) | ⬜ todo |
