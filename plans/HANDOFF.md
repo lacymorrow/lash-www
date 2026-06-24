@@ -97,13 +97,13 @@ git checkout -b tests/payment-service-characterization
 
 ## 2026-06-24 update — Phases 1 & 2 complete, on main
 
-| Check | State on main (`97cbd8a7`) |
-|---|---|
-| `bun run typecheck` | 0 errors |
-| `bun run test` | 198 passed / 23 skipped / 0 failed |
-| `bunx biome lint .` | 0 errors, 495 warnings |
-| `bun run lint:eslint` | 0 errors, 2099 warnings |
-| `bun run lint:prettier` | clean |
+| Check                   | State on main (`97cbd8a7`)         |
+| ----------------------- | ---------------------------------- |
+| `bun run typecheck`     | 0 errors                           |
+| `bun run test`          | 198 passed / 23 skipped / 0 failed |
+| `bunx biome lint .`     | 0 errors, 495 warnings             |
+| `bun run lint:eslint`   | 0 errors, 2099 warnings            |
+| `bun run lint:prettier` | clean                              |
 
 **Phase 2 numbers:** ESLint 1182→0, Biome 222→0, Prettier 381 unformatted→0.
 ~19 commits landed via `phase-2/lint-cleanup`. See the merge commit for
@@ -111,7 +111,7 @@ the full breakdown.
 
 **Plans drafted for the next phases:**
 
-- `plans/PHASE-3-TESTCONTAINERS.md` — test-DB infrastructure
+- `plans/PHASE-3-TESTCONTAINERS.md` — test-DB infrastructure (✅ landed)
 - `plans/PHASE-5-E2E-COVERAGE.md` — critical-flow Playwright coverage
 - `plans/draft-ci-workflow.yml` — Phase 6 CI workflow (move to
   `.github/workflows/ci.yml` once Phase 5 is green)
@@ -123,5 +123,50 @@ the full breakdown.
 - `advisor/008-payment-service-tests` (local only) — abandoned plan-008
   attempt with vite bump; reference only.
 
-**Next:** Phase 3 (Testcontainers). See `plans/PHASE-3-TESTCONTAINERS.md`
-for concrete deliverables.
+## 2026-06-24 second update — Phase 3 complete
+
+| Check                      | State                                                         |
+| -------------------------- | ------------------------------------------------------------- |
+| `bun run test`             | 198 passed / 16 skipped / 0 failed (24 files; 2 file-skipped) |
+| `bun run test:integration` | 7 passed / 19 skipped / 0 failed (4 files; 2 file-skipped)    |
+| `bun run typecheck`        | 0 errors                                                      |
+| `bun run lint`             | 0 errors, 2099 warnings                                       |
+
+**Phase 3 wiring:**
+
+- `tests/helpers/test-db.ts` — boots Postgres via Testcontainers,
+  pushes the live schema via `drizzle-kit push --force` (matches the
+  `bun run db:push` production deploy path — repo has no migration
+  files).
+- `tests/helpers/global-setup-integration.ts` — vitest globalSetup
+  that starts the container and propagates `DATABASE_URL` to workers.
+  Auto-detects the Docker Desktop socket on macOS / Linux / Colima.
+- `tests/setup-integration.ts` — does NOT mock `@/server/db`;
+  truncates user tables after each test.
+- `vitest.config.integration.ts` — separate project, serial fork pool,
+  120s hook timeout for container startup.
+- `tests/integration/smoke.test.ts` — proves the rig works end-to-end.
+- `package.json` — `test:integration` and `test:all` scripts.
+
+**The 4 previously-DB-skipped tests:**
+
+- `github-service` — passing (5 tests; covers the "service-disabled"
+  branch which is the only path testable without GitHub env vars).
+- `feedback-service` — re-skipped with reason "asserts outdated API
+  where createFeedback() threw and returned the row; current service
+  returns FeedbackResult". Phase 4 task #18.
+- `team-service` — re-skipped with reason "predates workspace-id
+  rework; method shapes don't match". Phase 4 task #19.
+- `deployment-actions` (kept under `tests/unit/`) — its mock-based
+  setup can't compose with real Drizzle helpers; needs a real-DB
+  rewrite. Phase 4 task #20.
+
+**Hard prereq for running locally / in CI:** Docker (or compatible
+runtime) must be running. Testcontainers exits with "Could not find a
+working container runtime strategy" if it isn't. The Phase 6 CI
+workflow draft handles this with a Postgres service container instead
+(cheaper than spinning a container per CI job).
+
+**Next:** Phase 4 — real characterization of payment-service,
+auth-service, and webhook surfaces, plus the three test rewrites
+queued as tasks #18–#20.

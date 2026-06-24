@@ -31,8 +31,11 @@ vi.mock("@/server/db", () => ({
   },
 }));
 
-// SKIPPED: DB-gated. Will be enabled by Phase 3 (Testcontainers Postgres).
-// See plans/MASTER-TEST-PLAN.md.
+// SKIPPED: This suite mocks db with a chainable whose `.returning()` is
+// overridden per-test, but the surrounding action calls real Drizzle helpers
+// (eq/and/desc) that don't compose with the bare mock. Rewriting against
+// the real testcontainer DB belongs to Phase 4 (characterization). Keep
+// skipped so the test surface is honest until then.
 describe.skip("Deployment Actions (DB gated)", () => {
   const mockUserId = "test-user-id";
   const mockSession = { user: { id: mockUserId } };
