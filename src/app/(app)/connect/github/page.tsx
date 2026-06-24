@@ -24,6 +24,7 @@ const ClientOnly = ({ children }: { children: React.ReactNode }) => {
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional client-only mount detection for SSR hydration
     setHasMounted(true);
   }, []);
 

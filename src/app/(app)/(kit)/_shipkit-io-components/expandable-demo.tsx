@@ -304,7 +304,7 @@ export function WeatherForecastCard() {
               <div className="flex items-center">
                 <Sun className="mr-2 h-8 w-8 text-yellow-400" />
                 <ExpandableContent preset="blur-sm" keepMounted={true}>
-                  <h3 className="text-lg font-medium">Today's Weather</h3>
+                  <h3 className="text-lg font-medium">Today&apos;s Weather</h3>
                 </ExpandableContent>
               </div>
               <Badge variant="secondary" className="bg-blue-100 text-blue-800">
@@ -425,7 +425,7 @@ function ControlledExpandableCard() {
             </ExpandableCardHeader>
           </ExpandableTrigger>
           <ExpandableCardContent>
-            <p className="mb-4">This card's expanded state is controlled externally.</p>
+            <p className="mb-4">This card&apos;s expanded state is controlled externally.</p>
             <ExpandableContent preset="fade" stagger staggerChildren={0.1}>
               <p className="mb-2">This content fades in when expanded.</p>
               <p className="mb-2">It uses staggered animation for child elements.</p>

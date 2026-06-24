@@ -191,7 +191,7 @@ export default async function sitemap({ id }: { id: number }): Promise<MetadataR
         const changelogId = process.env.NEXT_PUBLIC_HAS_BLOG === "true" ? 3 : 2;
         if (id === changelogId) {
           return changelogManifest.map((entry) => ({
-            url: `${siteConfig.url}/changelog/${entry.frontmatter.slug ?? entry.filename.replace(/\.(mdx?|md)$/, "")}`,
+            url: `${siteConfig.url}/changelog/${(entry.frontmatter.slug as string | undefined) ?? entry.filename.replace(/\.(mdx?|md)$/, "")}`,
             lastModified: entry.frontmatter.publishedAt
               ? new Date(entry.frontmatter.publishedAt as string)
               : new Date(),

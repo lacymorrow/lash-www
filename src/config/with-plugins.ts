@@ -33,6 +33,7 @@ export function withPlugins(initialConfig: NextConfig, pluginsRelativeDir?: stri
       for (const file of pluginFiles) {
         const pluginPath = path.join(pluginsDir, file);
         try {
+          // eslint-disable-next-line @typescript-eslint/no-require-imports -- dynamic plugin loading requires CommonJS require
           const pluginModule = require(pluginPath);
           // Find the exported function (prefer default export, fallback to the first named export function)
           let pluginFunction = pluginModule.default;

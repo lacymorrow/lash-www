@@ -386,6 +386,7 @@ export const ToolsSection = () => {
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing with external localStorage on mount
       setStarredTools(new Set(JSON.parse(stored)));
     }
   }, []);

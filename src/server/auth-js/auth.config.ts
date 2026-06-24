@@ -222,6 +222,7 @@ export const authOptions: NextAuthConfig = {
       // Log the sign in activity
       return true;
     },
+    // eslint-disable-next-line @typescript-eslint/require-await -- NextAuth callback signature requires async
     async redirect({ url, baseUrl }) {
       // Handle the nextUrl parameter for redirects
       const redirectUrl = new URL(url, baseUrl);

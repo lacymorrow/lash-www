@@ -50,7 +50,14 @@ const formatImportMessage = (provider: PaymentProvider, result: unknown): string
         );
       } else if (stats && typeof stats === "object" && "error" in stats) {
         const providerName = providerId.charAt(0).toUpperCase() + providerId.slice(1);
-        messages.push(`${providerName}: Error - ${String(stats.error ?? "Unknown error")}`);
+        const errorValue = (stats as { error: unknown }).error;
+        const errorMessage =
+          errorValue instanceof Error
+            ? errorValue.message
+            : typeof errorValue === "string"
+              ? errorValue
+              : "Unknown error";
+        messages.push(`${providerName}: Error - ${errorMessage}`);
       }
     }
 

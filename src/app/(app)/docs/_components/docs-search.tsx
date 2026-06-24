@@ -75,6 +75,7 @@ export function DocsSearch() {
     try {
       const stored = localStorage.getItem(RECENT_SEARCHES_KEY);
       if (stored) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing with external localStorage on mount
         setRecentSearches(JSON.parse(stored));
       }
     } catch (error) {
@@ -113,6 +114,7 @@ export function DocsSearch() {
 
   // Reset selection when items change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- resets selection when search results change
     setSelectedIndex(0);
   }, [totalItems, query]);
 
@@ -329,7 +331,7 @@ export function DocsSearch() {
             )}
 
             {!isLoading && !error && hasSearched && results.length === 0 && (
-              <CommandEmpty>No results found for "{query}"</CommandEmpty>
+              <CommandEmpty>No results found for &quot;{query}&quot;</CommandEmpty>
             )}
 
             {/* Search Results */}

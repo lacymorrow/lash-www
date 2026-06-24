@@ -107,6 +107,12 @@ const nextConfig: NextConfig = {
         source: `/${POSTHOG_RELAY_SLUG}/flags`,
         destination: "https://us.i.posthog.com/flags",
       },
+      // .well-known/* routes live under src/app/wellknown/* because TS/ESLint
+      // can't traverse dot-directories for type-aware linting.
+      {
+        source: "/.well-known/:path*",
+        destination: "/wellknown/:path*",
+      },
     ]);
   },
   // This is required to support PostHog trailing slash API requests

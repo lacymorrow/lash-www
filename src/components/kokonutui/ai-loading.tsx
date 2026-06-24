@@ -149,6 +149,7 @@ export default function AILoadingState({
         });
       }
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- resets animation state when task sequence changes
     setVisibleLines(initialLines);
     setScrollPosition(0);
   }, [sequenceIndex, currentSequence, totalLines]);

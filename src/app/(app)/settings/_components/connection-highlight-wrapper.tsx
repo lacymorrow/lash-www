@@ -35,6 +35,7 @@ export const ConnectionHighlightWrapper = ({
       });
 
       // Trigger highlight via state so React controls the style
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- triggered by external URL search params + scroll side effect
       setHighlighted(true);
 
       // Remove highlight and clean up URL after animation

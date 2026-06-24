@@ -31,6 +31,7 @@ const BlogNavigation = ({ posts }: BlogSidebarProps) => {
     return posts.filter(
       (post) =>
         post.title?.toLowerCase().includes(query) ||
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- intentional boolean OR over optional chain results
         post.description?.toLowerCase().includes(query) ||
         post.categories?.some((cat) => cat.toLowerCase().includes(query))
     );

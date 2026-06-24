@@ -48,3 +48,4 @@ export const LoaderAtoms = React.forwardRef<HTMLDivElement, LoaderAtomsProps>(
     );
   }
 );
+LoaderAtoms.displayName = "LoaderAtoms";

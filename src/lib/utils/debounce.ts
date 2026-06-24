@@ -59,6 +59,7 @@ export function debounce<T extends unknown[], R>(
   };
 
   const debounced = restArguments(function (this: unknown, _args: unknown) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- intentional: debounce needs to preserve caller's `this`
     context = this;
     args = _args as T;
     previous = now();

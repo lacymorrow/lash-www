@@ -59,6 +59,7 @@ export const OnboardingWizard = ({
   const [open, setOpen] = useState(!safeOnboardingState.completed);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- syncs with external localStorage onboardingState
     setOpen(!safeOnboardingState.completed);
   }, [safeOnboardingState.completed]);
 

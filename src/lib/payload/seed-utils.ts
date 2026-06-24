@@ -137,6 +137,7 @@ export const seedRBACDirect = async (payload: Payload) => {
             const rolePerms = roleData.permissions.find((p) => p.resource === permission?.resource);
             return (
               rolePerms &&
+              // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- intentional boolean OR
               ((permission?.action && rolePerms.actions.includes(permission.action)) ||
                 (rolePerms.actions.includes("manage" as Action) && permission?.action === "manage"))
             );

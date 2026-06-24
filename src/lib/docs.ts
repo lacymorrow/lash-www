@@ -160,6 +160,7 @@ function readMdxFile(filePath: string, slug: string) {
 /*
  * Dynamic import helper for docs from root /docs directory
  */
+// eslint-disable-next-line @typescript-eslint/require-await -- kept async to preserve Promise return type for caller
 async function importDocFromRootDocs(slug: string) {
   try {
     const sanitizedSlug = validateSlug(slug);
@@ -289,9 +290,7 @@ function processDirectory(dir: string): NavSection[] {
 
               // Check if doc has a valid title (frontmatter or H1)
               let title = data.title;
-              if (!title) {
-                title = extractTitleFromH1(mdContent);
-              }
+              title ??= extractTitleFromH1(mdContent);
 
               // Only include docs with valid titles in navigation
               if (title) {
@@ -342,9 +341,7 @@ function processDirectory(dir: string): NavSection[] {
         if (fileName !== "index") {
           // Check if doc has a valid title (frontmatter or H1)
           let title = data.title;
-          if (!title) {
-            title = extractTitleFromH1(mdContent);
-          }
+          title ??= extractTitleFromH1(mdContent);
 
           // Only include docs with valid titles in navigation
           if (title) {

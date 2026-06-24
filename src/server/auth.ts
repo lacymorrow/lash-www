@@ -79,6 +79,7 @@ const {
   : {
       auth: () => Promise.resolve(null),
       handlers: {
+        // eslint-disable-next-line @typescript-eslint/require-await -- NextAuth handler signature requires async
         GET: async (request: Request) => {
           const url = new URL(request.url);
           const path = url.pathname;
@@ -97,6 +98,7 @@ const {
             { status: 503 }
           );
         },
+        // eslint-disable-next-line @typescript-eslint/require-await -- NextAuth handler signature requires async
         POST: async () =>
           Response.json(
             {

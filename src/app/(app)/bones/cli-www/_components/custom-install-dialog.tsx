@@ -22,7 +22,7 @@ export const CustomInstallDialog = memo(({ onInstall }: CustomInstallDialogProps
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = useCallback(
-    async (e: FormEvent) => {
+    (e: FormEvent) => {
       e.preventDefault();
       setLoading(true);
 
@@ -44,7 +44,7 @@ export const CustomInstallDialog = memo(({ onInstall }: CustomInstallDialogProps
           title: "Command accepted",
           description: "Starting installation...",
         });
-        await onInstall(finalCommand);
+        onInstall(finalCommand);
       } catch (error) {
         toast({
           title: "Invalid input",

@@ -60,6 +60,7 @@ export const LoaderBouncingShapes = () => {
 
   return (
     <>
+      {/* eslint-disable-next-line react/no-unknown-property -- styled-jsx attributes */}
       <style jsx global>{`
         :root {
           --base_scale: 5vh;

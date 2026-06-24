@@ -217,6 +217,7 @@ export default function InstallPage() {
       </div>
 
       {/* Add a CSS class for the grid pattern */}
+      {/* eslint-disable-next-line react/no-unknown-property -- styled-jsx attributes */}
       <style jsx global>{`
         .bg-grid-pattern {
           background-size: 40px 40px;

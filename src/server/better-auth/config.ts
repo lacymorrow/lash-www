@@ -95,11 +95,13 @@ export const auth = (() => {
     trustedOrigins: [env?.BETTER_AUTH_BASE_URL ?? BASE_URL],
 
     callbacks: {
+      // eslint-disable-next-line @typescript-eslint/require-await -- Better Auth callback signature requires async
       async signUp({ user, account }: { user: any; account: any }) {
         // Custom logic after user signs up
         return { user, account };
       },
 
+      // eslint-disable-next-line @typescript-eslint/require-await -- Better Auth callback signature requires async
       async signIn({ user, account }: { user: any; account: any }) {
         // Custom logic after user signs in
         return { user, account };

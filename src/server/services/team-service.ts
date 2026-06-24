@@ -174,11 +174,14 @@ export class TeamService extends BaseService<typeof teams> {
       );
 
       // Soft delete extra personal teams
-      await Promise.all(
-        teamsToDelete.map((team) =>
-          db?.update(teams).set({ deletedAt: new Date() }).where(eq(teams.id, team.id))
-        )
-      );
+      const dbInstance = db;
+      if (dbInstance) {
+        await Promise.all(
+          teamsToDelete.map((team) =>
+            dbInstance.update(teams).set({ deletedAt: new Date() }).where(eq(teams.id, team.id))
+          )
+        );
+      }
 
       return oldestTeam;
     } catch (error) {

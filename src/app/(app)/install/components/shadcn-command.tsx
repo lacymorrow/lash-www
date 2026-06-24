@@ -17,9 +17,7 @@ let containerManagerInstance: ContainerManager | null = null;
 
 // Get or create the container manager instance
 function getContainerManager(): ContainerManager {
-  if (!containerManagerInstance) {
-    containerManagerInstance = new ContainerManager();
-  }
+  containerManagerInstance ??= new ContainerManager();
   return containerManagerInstance;
 }
 

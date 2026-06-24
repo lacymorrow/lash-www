@@ -154,7 +154,7 @@ export function WaitlistHero() {
           {/* Trust Signal */}
           <div className="flex items-center justify-center gap-2 text-sm text-slate-500 dark:text-slate-400">
             <div className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
-            <span>Built by developers who've shipped 100+ products</span>
+            <span>Built by developers who&apos;ve shipped 100+ products</span>
           </div>
         </div>
       </div>

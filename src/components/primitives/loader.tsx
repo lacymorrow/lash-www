@@ -80,3 +80,4 @@ export const Loader = React.forwardRef<HTMLDivElement, LoaderProps>(
     );
   }
 );
+Loader.displayName = "Loader";

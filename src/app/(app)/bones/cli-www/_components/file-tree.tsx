@@ -40,15 +40,13 @@ function buildTree(files: FileTreeProps["files"]): TreeNode {
 
     for (const part of parts) {
       const path = parts.slice(0, parts.indexOf(part) + 1).join("/");
-      if (!current.children[part]) {
-        current.children[part] = {
-          name: part,
-          path,
-          type: part === parts[parts.length - 1] ? "file" : "directory",
-          content: part === parts[parts.length - 1] ? file.content : undefined,
-          children: {},
-        };
-      }
+      current.children[part] ??= {
+        name: part,
+        path,
+        type: part === parts[parts.length - 1] ? "file" : "directory",
+        content: part === parts[parts.length - 1] ? file.content : undefined,
+        children: {},
+      };
       current = current.children[part];
     }
   }

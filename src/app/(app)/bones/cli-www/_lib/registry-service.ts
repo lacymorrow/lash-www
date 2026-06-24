@@ -226,9 +226,7 @@ export function categorizeItems(items: RegistryItem[]): Record<string, RegistryI
   return items.reduce(
     (acc, item) => {
       const category = item.type === "registry:block" ? "Blocks" : "Components";
-      if (!acc[category]) {
-        acc[category] = [];
-      }
+      acc[category] ??= [];
       acc[category].push(item);
       return acc;
     },
@@ -244,9 +242,7 @@ export function groupItemsByType(items: RegistryItem[]): Record<string, Registry
     (acc, item) => {
       const categories = item.categories ?? ["Uncategorized"];
       for (const category of categories) {
-        if (!acc[category]) {
-          acc[category] = [];
-        }
+        acc[category] ??= [];
         acc[category].push(item);
       }
       return acc;

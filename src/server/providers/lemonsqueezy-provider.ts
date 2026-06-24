@@ -769,6 +769,7 @@ export class LemonSqueezyProvider extends BasePaymentProvider {
    * Handle a webhook event
    * @param event The webhook event
    */
+  // eslint-disable-next-line @typescript-eslint/require-await -- provider interface contract requires async
   async handleWebhookEvent(event: any): Promise<void> {
     try {
       this.checkProviderReady();
@@ -798,6 +799,7 @@ export class LemonSqueezyProvider extends BasePaymentProvider {
    * @param options Checkout options
    * @returns The checkout URL
    */
+  // eslint-disable-next-line @typescript-eslint/require-await -- provider interface contract requires async
   async createCheckoutUrl(options: CheckoutOptions): Promise<string | null> {
     try {
       this.checkProviderReady();

@@ -242,11 +242,13 @@ export function AIVoiceDemo() {
   }, [hasAcceptedPermissions]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initializes external Whisper worker
     initializeWorker();
   }, [initializeWorker]);
 
   useEffect(() => {
     if (currentStream && !isProcessing) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncs transcript with external worker streaming output
       setTranscript((prev) => {
         const newTranscript = prev ? `${prev}\n${currentStream}` : currentStream;
         return newTranscript;
@@ -316,6 +318,7 @@ export function AIVoiceDemo() {
           setError("Failed to access microphone. Please ensure you have granted permission.");
         });
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncs error with external MediaDevices API availability
       setError("Voice recognition is not supported in your browser.");
     }
 
@@ -354,7 +357,7 @@ export function AIVoiceDemo() {
         <div className="space-y-4 text-center">
           <h2 className="text-lg font-semibold">Browser Not Supported</h2>
           <p className="text-sm text-muted-foreground">
-            Your browser doesn't support WebGPU, which is required for voice recognition. Please try
+            Your browser doesn&apos;t support WebGPU, which is required for voice recognition. Please try
             using Chrome Canary or another WebGPU-enabled browser.
           </p>
         </div>
