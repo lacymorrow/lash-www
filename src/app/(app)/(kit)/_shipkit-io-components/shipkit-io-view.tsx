@@ -88,8 +88,8 @@ export function ShipkitIoView() {
 
               <BlurFade delay={1} duration={1}>
                 <div className="mb-8 max-w-2xl text-balance text-lg tracking-tight text-muted-foreground md:text-xl">
-                  The production stack you&apos;d build yourself if you had three months. Auth, payments,
-                  database, CMS, AI. Already wired.
+                  The production stack you&apos;d build yourself if you had three months. Auth,
+                  payments, database, CMS, AI. Already wired.
                 </div>
               </BlurFade>
 
@@ -129,9 +129,9 @@ export function ShipkitIoView() {
 
           <BlurFade delay={1} duration={1} inView>
             <SectionCopy>
-              You don&apos;t need to build auth again. Or wire up payments. Or configure a CMS. Or set up
-              email templates. Shipkit handles the first three months of infrastructure work so you
-              can focus on the part that actually matters.
+              You don&apos;t need to build auth again. Or wire up payments. Or configure a CMS. Or
+              set up email templates. Shipkit handles the first three months of infrastructure work
+              so you can focus on the part that actually matters.
             </SectionCopy>
           </BlurFade>
         </Section>
@@ -189,7 +189,8 @@ export function ShipkitIoView() {
                 <div className="mb-8 text-center">
                   <p className="text-lg text-muted-foreground">
                     Auth setup, payment integration, CMS, email system, dashboard UI, AI hooks.
-                    That&apos;s 2-3 months of plumbing before you write a single line of product code.
+                    That&apos;s 2-3 months of plumbing before you write a single line of product
+                    code.
                   </p>
                 </div>
                 <ROICalculator />

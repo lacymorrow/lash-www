@@ -182,7 +182,9 @@ export function PolarProductStatus({
       <CardContent>
         <div className="space-y-2">
           {productPrice && <p className="font-semibold">{productPrice}</p>}
-          <p className="text-sm text-muted-foreground">You haven&apos;t purchased this product yet.</p>
+          <p className="text-sm text-muted-foreground">
+            You haven&apos;t purchased this product yet.
+          </p>
         </div>
       </CardContent>
       <CardFooter>

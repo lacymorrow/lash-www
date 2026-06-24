@@ -139,7 +139,7 @@ Add a `tests/README.md` (under 50 lines) explaining:
 - The chainable mock vs. real-DB choice per test type.
 - How to run a single service test against the live container.
 - CI implications (the draft workflow at `plans/draft-ci-workflow.yml`
-  uses Postgres as a CI service, which is *redundant* with Testcontainers
+  uses Postgres as a CI service, which is _redundant_ with Testcontainers
   but cheaper than spinning a container on every CI job. Keep CI's
   Postgres service container; let Testcontainers handle local dev).
 

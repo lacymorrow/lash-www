@@ -357,8 +357,8 @@ export function AIVoiceDemo() {
         <div className="space-y-4 text-center">
           <h2 className="text-lg font-semibold">Browser Not Supported</h2>
           <p className="text-sm text-muted-foreground">
-            Your browser doesn&apos;t support WebGPU, which is required for voice recognition. Please try
-            using Chrome Canary or another WebGPU-enabled browser.
+            Your browser doesn&apos;t support WebGPU, which is required for voice recognition.
+            Please try using Chrome Canary or another WebGPU-enabled browser.
           </p>
         </div>
       </Card>

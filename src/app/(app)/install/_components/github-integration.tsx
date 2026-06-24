@@ -29,7 +29,7 @@ export function GitHubIntegration({ changedFiles, disabled, command }: GitHubInt
   const timestamp = isoParts[0] ?? ""; // YYYY-MM-DD
 
   const timePart = isoParts[1];
-  const timeComponent = timePart ? timePart.split(".")[0]?.replace(/:/g, "-") ?? "" : ""; // HH-MM-SS
+  const timeComponent = timePart ? (timePart.split(".")[0]?.replace(/:/g, "-") ?? "") : ""; // HH-MM-SS
 
   // Generate default values once
   const defaultValues = {

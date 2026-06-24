@@ -975,7 +975,7 @@ const PaymentService = {
           await Promise.all(statusPromises);
 
           const hadSubscription = user.metadata
-            ? JSON.parse(user.metadata)?.hadSubscription ?? false
+            ? (JSON.parse(user.metadata)?.hadSubscription ?? false)
             : false;
 
           // Get the last purchase date

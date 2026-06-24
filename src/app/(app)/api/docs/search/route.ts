@@ -197,9 +197,7 @@ export async function POST(req: Request) {
           status: 429,
           headers: {
             "X-RateLimit-Limit": String((error.metadata?.limit as number | undefined) ?? 10),
-            "X-RateLimit-Remaining": String(
-              (error.metadata?.remaining as number | undefined) ?? 0
-            ),
+            "X-RateLimit-Remaining": String((error.metadata?.remaining as number | undefined) ?? 0),
             "X-RateLimit-Reset": String((error.metadata?.reset as number | undefined) ?? 0),
             "Retry-After": String(
               Math.ceil(((error.metadata?.reset as number) || 0) - Date.now() / 1000)

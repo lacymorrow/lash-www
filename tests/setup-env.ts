@@ -24,13 +24,12 @@ if (typeof window === "undefined") {
     // Patch next-auth test runtime when Next.js module pathing differs
     // Some versions expect next/server; in Vitest we can noop this
     try {
-       
       require.resolve("next/server");
     } catch {
       // Map bare import "next/server" to our JS shim so next-auth/env can import it safely
-       
+
       const Module = require("node:module");
-       
+
       const path = require("node:path");
       const originalResolve = Module._resolveFilename;
       const shimPath = path.resolve(__dirname, "./shims/next-server.js");

@@ -95,9 +95,9 @@ export function WaitlistForm() {
                     Welcome to the club! 🚀
                   </h3>
                   <p className="mb-8 text-lg text-green-700 dark:text-green-300">
-                    You&apos;re now part of an exclusive group of developers who are tired of building
-                    the same things over and over. We&apos;ll keep you updated on our progress and give
-                    you first access when we launch.
+                    You&apos;re now part of an exclusive group of developers who are tired of
+                    building the same things over and over. We&apos;ll keep you updated on our
+                    progress and give you first access when we launch.
                   </p>
                   <div className="grid gap-6 sm:grid-cols-2">
                     <div className="flex items-center gap-3 rounded-lg bg-green-50 p-4 dark:bg-green-900/10">
@@ -310,8 +310,8 @@ export function WaitlistForm() {
                   </Button>
 
                   <p className="text-center text-xs text-slate-500 dark:text-slate-400">
-                    We&apos;ll only email you about Shipkit updates. No spam, no selling your data, no
-                    BS.
+                    We&apos;ll only email you about Shipkit updates. No spam, no selling your data,
+                    no BS.
                   </p>
                 </form>
               </CardContent>

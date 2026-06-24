@@ -40,11 +40,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 // _____________________EXAMPLES______________________
 function DesignSyncExample() {
   return (
-    <Expandable
-      expandDirection="both"
-      expandBehavior="replace"
-      initialDelay={0.2}
-    >
+    <Expandable expandDirection="both" expandBehavior="replace" initialDelay={0.2}>
       {({ isExpanded }) => (
         <ExpandableTrigger>
           <ExpandableCard
@@ -157,10 +153,7 @@ function DesignSyncExample() {
 
 export function ProductShowcaseCard() {
   return (
-    <Expandable
-      expandDirection="both"
-      expandBehavior="replace"
-    >
+    <Expandable expandDirection="both" expandBehavior="replace">
       {({ isExpanded }) => (
         <ExpandableTrigger>
           <ExpandableCard

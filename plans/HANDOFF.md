@@ -108,6 +108,7 @@ Biome standalone: 203 errors / 500 warnings remaining (dominated by
 300 `noExplicitAny` — needs case-by-case judgment).
 
 Preserved work:
+
 - `wip/vercel-cost-optimization` — previously-stashed cache header +
   guide work (committed for safety, not yet reviewed).
 - `advisor/008-payment-service-tests` (local only) — abandoned plan-008

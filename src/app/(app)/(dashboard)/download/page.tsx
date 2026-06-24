@@ -323,7 +323,9 @@ function InstallationPreview() {
           <TerminalIcon className="h-5 w-5" />
           Installation Preview
         </CardTitle>
-        <CardDescription>Here&apos;s what you&apos;ll do after downloading {siteConfig.name}</CardDescription>
+        <CardDescription>
+          Here&apos;s what you&apos;ll do after downloading {siteConfig.name}
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
@@ -359,7 +361,9 @@ function SupportSection() {
     <Card>
       <CardHeader>
         <CardTitle>Need Help?</CardTitle>
-        <CardDescription>We&apos;re here to help you get started with {siteConfig.name}</CardDescription>
+        <CardDescription>
+          We&apos;re here to help you get started with {siteConfig.name}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4 md:grid-cols-3">
