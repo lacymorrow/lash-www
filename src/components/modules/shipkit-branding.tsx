@@ -32,9 +32,8 @@ export const ShipkitBranding = () => {
       <meta name="made-with" content="shipkit.io" />
       <link rel="author" href="/humans.txt" />
       {/* Styled console attribution — bypasses Next.js removeConsole since it's an inline script */}
-      <script
-        dangerouslySetInnerHTML={{ __html: consoleScript }}
-      />
+      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: trusted internal HTML source */}
+      <script dangerouslySetInnerHTML={{ __html: consoleScript }} />
     </>
   );
 };

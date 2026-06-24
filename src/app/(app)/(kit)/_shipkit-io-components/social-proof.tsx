@@ -57,9 +57,7 @@ export const SocialProof = () => {
 
       {/* Tech Stack Logos */}
       <div className="mb-16">
-        <h3 className="mb-8 text-center text-sm font-semibold text-muted-foreground">
-          Built on
-        </h3>
+        <h3 className="mb-8 text-center text-sm font-semibold text-muted-foreground">Built on</h3>
         <BrandLogos />
       </div>
     </Section>

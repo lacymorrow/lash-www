@@ -3,10 +3,7 @@
   "name": "faq",
   "title": "FAQ",
   "description": "A full FAQ page with accordion layout, CMS integration, and static content fallback.",
-  "registryDependencies": [
-    "@shipkit/cn",
-    "accordion"
-  ],
+  "registryDependencies": ["@shipkit/cn", "accordion"],
   "files": [
     {
       "path": "src/app/(app)/(kit)/faq/page.tsx",
@@ -28,9 +25,6 @@
     }
   ],
   "docs": "Static FAQ page with accordion UI. Optionally integrates with Payload CMS for dynamic FAQ management.",
-  "categories": [
-    "shipkit",
-    "faq"
-  ],
+  "categories": ["shipkit", "faq"],
   "type": "registry:block"
 }

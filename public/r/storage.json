@@ -3,15 +3,8 @@
   "name": "storage",
   "title": "Storage",
   "description": "File storage with AWS S3 presigned uploads, file service, server actions, and upload components.",
-  "dependencies": [
-    "@aws-sdk/client-s3",
-    "@aws-sdk/s3-request-presigner"
-  ],
-  "registryDependencies": [
-    "@shipkit/cn",
-    "button",
-    "input"
-  ],
+  "dependencies": ["@aws-sdk/client-s3", "@aws-sdk/s3-request-presigner"],
+  "registryDependencies": ["@shipkit/cn", "button", "input"],
   "files": [
     {
       "path": "src/server/services/s3.ts",
@@ -51,10 +44,6 @@
     }
   ],
   "docs": "File storage via AWS S3 with presigned URL uploads. Set `AWS_S3_BUCKET_NAME`, `AWS_S3_REGION`, `AWS_ACCESS_KEY_ID`, and `AWS_SECRET_ACCESS_KEY`. Includes file upload components and server actions for managing uploads.",
-  "categories": [
-    "shipkit",
-    "storage",
-    "infrastructure"
-  ],
+  "categories": ["shipkit", "storage", "infrastructure"],
   "type": "registry:block"
 }

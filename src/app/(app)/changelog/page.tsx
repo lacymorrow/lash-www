@@ -20,7 +20,7 @@ export default async function ChangelogPage() {
   const entries = await getChangelogEntries();
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="mx-auto w-full max-w-3xl">
       <header className="mb-12">
         <h1 className="text-4xl font-bold tracking-tight">Changelog</h1>
         <p className="mt-2 text-lg text-muted-foreground">New updates, features, and fixes.</p>
@@ -31,17 +31,17 @@ export default async function ChangelogPage() {
       )}
 
       <div className="relative space-y-0">
-        <div className="absolute left-[7px] top-2 bottom-2 w-px bg-border" />
+        <div className="absolute bottom-2 left-[7px] top-2 w-px bg-border" />
 
         {entries.map((entry) => {
           const date = formatDate(entry.publishedAt);
           return (
-            <div key={entry.slug} className="relative pl-8 pb-10">
+            <div key={entry.slug} className="relative pb-10 pl-8">
               <div className="absolute left-0 top-1.5 h-[15px] w-[15px] rounded-full border-2 border-primary bg-background" />
 
-              <div className="flex items-center gap-3 mb-1">
+              <div className="mb-1 flex items-center gap-3">
                 {entry.badge && (
-                  <Badge variant="secondary" className="text-xs font-mono">
+                  <Badge variant="secondary" className="font-mono text-xs">
                     {entry.badge}
                   </Badge>
                 )}
@@ -53,7 +53,7 @@ export default async function ChangelogPage() {
               </div>
 
               <Link href={`/changelog/${entry.slug}`} className="group">
-                <h2 className="text-xl font-semibold group-hover:text-primary transition-colors">
+                <h2 className="text-xl font-semibold transition-colors group-hover:text-primary">
                   {entry.title}
                 </h2>
               </Link>
@@ -63,9 +63,9 @@ export default async function ChangelogPage() {
               )}
 
               {entry.categories.length > 0 && (
-                <div className="flex gap-1.5 mt-2 flex-wrap">
+                <div className="mt-2 flex flex-wrap gap-1.5">
                   {entry.categories.map((cat) => (
-                    <Badge key={cat} variant="outline" className="text-[10px] px-1.5 py-0">
+                    <Badge key={cat} variant="outline" className="px-1.5 py-0 text-[10px]">
                       {cat}
                     </Badge>
                   ))}

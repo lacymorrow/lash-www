@@ -39,11 +39,11 @@ Preview deployments are behind Vercel Authentication by default. The health chec
 
 ShipKit is a boilerplate, so everything degrades gracefully:
 
-| Scenario | Behavior |
-|---|---|
-| **Not on Vercel** | Workflow never triggers (no `deployment_status` events) |
-| **No bypass secret** | Health check passes 401 (auth) as non-5xx; logs a warning |
-| **With bypass secret** | Full health check — catches 500s on protected previews |
+| Scenario                          | Behavior                                                        |
+| --------------------------------- | --------------------------------------------------------------- |
+| **Not on Vercel**                 | Workflow never triggers (no `deployment_status` events)         |
+| **No bypass secret**              | Health check passes 401 (auth) as non-5xx; logs a warning       |
+| **With bypass secret**            | Full health check — catches 500s on protected previews          |
 | **Deployment Checks not enabled** | Workflow runs and reports status, but Vercel doesn't gate on it |
 
 ## Files

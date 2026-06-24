@@ -68,7 +68,7 @@ async function resolveUpstream(): Promise<string | null> {
 }
 
 export async function create(projectName: string | undefined, opts: CreateOptions): Promise<void> {
-  const nonInteractive = opts.yes || isNonInteractive();
+  const nonInteractive = opts.yes ?? isNonInteractive();
 
   p.intro(pc.bgCyan(pc.black(" create-shipkit ")));
 
@@ -107,7 +107,7 @@ export async function create(projectName: string | undefined, opts: CreateOption
   }
 
   // --- Target directory ---
-  const targetDir = resolve(opts.directory || name);
+  const targetDir = resolve(opts.directory ?? name);
   if (existsSync(targetDir)) {
     if (nonInteractive) {
       p.log.error(`Directory ${targetDir} already exists.`);

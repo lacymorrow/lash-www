@@ -7,13 +7,21 @@
     "shipkit": "./dist/index.js",
     "create-shipkit": "./dist/index.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": ["shipkit", "nextjs", "starter", "cli", "scaffold"],
+  "keywords": [
+    "shipkit",
+    "nextjs",
+    "starter",
+    "cli",
+    "scaffold"
+  ],
   "author": "Lacy Morrow",
   "license": "MIT",
   "engines": {

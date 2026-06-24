@@ -21,13 +21,13 @@ Overrides are stored in a short-lived cookie (`_shipkit_preview`, 8 hours) and m
 
 ### Parameters
 
-| Param | Effect |
-|---|---|
-| `feature_flag_<name>=1` | Enable the named flag |
-| `feature_flag_<name>=0` | Disable the named flag |
-| `clear=1` | Remove all overrides |
-| `redirect=<path>` | Redirect to `<path>` after applying (internal paths only) |
-| `token=<secret>` | Required when `PREVIEW_SECRET` is set in env |
+| Param                   | Effect                                                    |
+| ----------------------- | --------------------------------------------------------- |
+| `feature_flag_<name>=1` | Enable the named flag                                     |
+| `feature_flag_<name>=0` | Disable the named flag                                    |
+| `clear=1`               | Remove all overrides                                      |
+| `redirect=<path>`       | Redirect to `<path>` after applying (internal paths only) |
+| `token=<secret>`        | Required when `PREVIEW_SECRET` is set in env              |
 
 ### Security
 

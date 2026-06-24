@@ -1,8 +1,4 @@
-import {
-  IconBrandDocker,
-  IconBrandOpenai,
-  IconBrandVercelFilled,
-} from "@tabler/icons-react";
+import { IconBrandDocker, IconBrandOpenai, IconBrandVercelFilled } from "@tabler/icons-react";
 import {
   BrainCircuit,
   Calculator,
@@ -17,6 +13,12 @@ import {
 } from "lucide-react";
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { AiDemoSection } from "@/app/(app)/(kit)/_shipkit-io-components/ai-demo-section";
+import { FAQ } from "@/app/(app)/(kit)/_shipkit-io-components/faq";
+import { ParticlesHero } from "@/app/(app)/(kit)/_shipkit-io-components/particles-hero";
+import PrimaryCta from "@/app/(app)/(kit)/_shipkit-io-components/primary-cta";
+import { ROICalculator } from "@/app/(app)/(kit)/_shipkit-io-components/roi-calculator";
+import { SocialProof } from "@/app/(app)/(kit)/_shipkit-io-components/social-proof";
 import { Icon } from "@/components/assets/icon";
 import { PricingSectionSingle } from "@/components/blocks/pricing-section-single";
 import { JsonLd } from "@/components/primitives/json-ld";
@@ -38,18 +40,13 @@ import { routes } from "@/config/routes";
 import { siteConfig } from "@/config/site-config";
 import { singlePlan } from "@/content/pricing/pricing-content";
 import { cn } from "@/lib/utils";
-import { AiDemoSection } from "@/app/(app)/(kit)/_shipkit-io-components/ai-demo-section";
-import { FAQ } from "@/app/(app)/(kit)/_shipkit-io-components/faq";
-import { ParticlesHero } from "@/app/(app)/(kit)/_shipkit-io-components/particles-hero";
-import PrimaryCta from "@/app/(app)/(kit)/_shipkit-io-components/primary-cta";
-import { ROICalculator } from "@/app/(app)/(kit)/_shipkit-io-components/roi-calculator";
-import { SocialProof } from "@/app/(app)/(kit)/_shipkit-io-components/social-proof";
 
 const headings = ["Ship your Next.js app this week"];
 
 export const metadata: Metadata = constructMetadata({
   title: `${siteConfig.name} - Launch Your SaaS in Days`,
-  description: "The complete Next.js stack with auth, payments, database, CMS, AI, and 100+ components. $249, lifetime updates.",
+  description:
+    "The complete Next.js stack with auth, payments, database, CMS, AI, and 100+ components. $249, lifetime updates.",
 });
 
 export function ShipkitIoView() {
@@ -67,7 +64,7 @@ export function ShipkitIoView() {
               }}
             />
           </div>
-          <div className="flex min-h-[calc(100vh-16rem)] flex-col items-center justify-center mt-header">
+          <div className="mt-header flex min-h-[calc(100vh-16rem)] flex-col items-center justify-center">
             <div className="relative mx-auto flex min-h-64 max-w-[80rem] flex-col items-center justify-center gap-4 px-6 text-center md:px-8">
               <BlurFade delay={1} duration={1}>
                 <div className="flex flex-col items-center gap-4">
@@ -84,21 +81,21 @@ export function ShipkitIoView() {
               </BlurFade>
 
               <BlurFade delay={0.5} duration={0.5}>
-                <h1 className="max-w-4xl mx-auto text-balance bg-gradient-to-br from-black from-30% to-black/40 bg-clip-text py-6 text-5xl font-medium leading-none tracking-tighter text-transparent dark:from-white dark:to-white/40 sm:text-6xl md:text-7xl lg:text-8xl">
+                <h1 className="mx-auto max-w-4xl text-balance bg-gradient-to-br from-black from-30% to-black/40 bg-clip-text py-6 text-5xl font-medium leading-none tracking-tighter text-transparent dark:from-white dark:to-white/40 sm:text-6xl md:text-7xl lg:text-8xl">
                   {headings[0]}
                 </h1>
               </BlurFade>
 
               <BlurFade delay={1} duration={1}>
                 <div className="mb-8 max-w-2xl text-balance text-lg tracking-tight text-muted-foreground md:text-xl">
-                  The production stack you'd build yourself if you had three months.
-                  Auth, payments, database, CMS, AI. Already wired.
+                  The production stack you&apos;d build yourself if you had three months. Auth,
+                  payments, database, CMS, AI. Already wired.
                 </div>
               </BlurFade>
 
               <BlurFade delay={2.5} duration={1}>
                 <div className="flex flex-col items-center gap-4">
-                  <div className="flex flex-col-reverse sm:flex-row justify-center flex-wrap gap-4">
+                  <div className="flex flex-col-reverse flex-wrap justify-center gap-4 sm:flex-row">
                     <PrimaryCta />
                   </div>
                 </div>
@@ -113,13 +110,13 @@ export function ShipkitIoView() {
           <BlurFade delay={0.5} duration={1} inView>
             <div className="flex items-center gap-2">
               <div className="flex -space-x-2">
-                <div className="h-8 w-8 rounded-full border-2 border-background bg-muted flex items-center justify-center">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-muted">
                   <IconBrandVercelFilled className="h-5 w-5" />
                 </div>
-                <div className="h-8 w-8 rounded-full border-2 border-background bg-muted flex items-center justify-center">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-muted">
                   <IconBrandDocker className="h-5 w-5" />
                 </div>
-                <div className="h-8 w-8 rounded-full border-2 border-background bg-muted flex items-center justify-center">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-muted">
                   <IconBrandOpenai className="h-5 w-5" />
                 </div>
               </div>
@@ -132,7 +129,9 @@ export function ShipkitIoView() {
 
           <BlurFade delay={1} duration={1} inView>
             <SectionCopy>
-              You don't need to build auth again. Or wire up payments. Or configure a CMS. Or set up email templates. Shipkit handles the first three months of infrastructure work so you can focus on the part that actually matters.
+              You don&apos;t need to build auth again. Or wire up payments. Or configure a CMS. Or
+              set up email templates. Shipkit handles the first three months of infrastructure work
+              so you can focus on the part that actually matters.
             </SectionCopy>
           </BlurFade>
         </Section>
@@ -147,7 +146,11 @@ export function ShipkitIoView() {
                 { icon: Database, label: "Database", detail: "Postgres + Drizzle ORM" },
                 { icon: FileText, label: "CMS", detail: "Payload CMS + MDX" },
                 { icon: BrainCircuit, label: "AI", detail: "OpenAI, Anthropic, RAG" },
-                { icon: LayoutDashboard, label: "100+ Components", detail: "Shadcn/Radix, ready to ship" },
+                {
+                  icon: LayoutDashboard,
+                  label: "100+ Components",
+                  detail: "Shadcn/Radix, ready to ship",
+                },
               ].map(({ icon: ItemIcon, label, detail }) => (
                 <div key={label} className="flex items-start gap-3">
                   <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/50 bg-muted/50">
@@ -182,10 +185,12 @@ export function ShipkitIoView() {
             </SectionBadge>
             <SectionHeader>How long would this take to build yourself?</SectionHeader>
             <SectionContent>
-              <div className="max-w-4xl mx-auto">
-                <div className="text-center mb-8">
+              <div className="mx-auto max-w-4xl">
+                <div className="mb-8 text-center">
                   <p className="text-lg text-muted-foreground">
-                    Auth setup, payment integration, CMS, email system, dashboard UI, AI hooks. That's 2-3 months of plumbing before you write a single line of product code.
+                    Auth setup, payment integration, CMS, email system, dashboard UI, AI hooks.
+                    That&apos;s 2-3 months of plumbing before you write a single line of product
+                    code.
                   </p>
                 </div>
                 <ROICalculator />
@@ -221,7 +226,7 @@ export function ShipkitIoView() {
 
             <BlurFade inView>
               <div className="mt-6 text-center">
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="mb-4 text-sm text-muted-foreground">
                   Everything included: Next.js 15, TypeScript, Authentication, Database, UI
                   Components, and more
                 </p>
@@ -248,7 +253,7 @@ export function ShipkitIoView() {
               <SectionBadge>FAQ</SectionBadge>
               <SectionHeader>Common Questions</SectionHeader>
               <SectionCopy>
-                Can't find what you're looking for? Reach out on
+                Can&apos;t find what you&apos;re looking for? Reach out on
                 <Link
                   className={cn(buttonVariants({ variant: "link", size: "lg" }), "px-1")}
                   href={routes.external.email}
@@ -271,7 +276,7 @@ export function ShipkitIoView() {
                   href={routes.external.email}
                   className={cn(buttonVariants({ variant: "link", size: "sm" }), "px-1")}
                 >
-                  Let's chat
+                  Let&apos;s chat
                 </Link>
               </SectionCopy>
             </BlurFade>

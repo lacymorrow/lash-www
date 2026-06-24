@@ -1,6 +1,6 @@
-import fs from "fs";
+import fs from "node:fs";
+import path from "node:path";
 import matter from "gray-matter";
-import path from "path";
 import { cache } from "react";
 import { z } from "zod";
 
@@ -89,7 +89,7 @@ function extractTitleFromH1(content: string): string | null {
 
   // Look for the first H1 tag in the cleaned content
   const h1Match = /^#\s+(.+)$/m.exec(contentWithoutCodeBlocks);
-  if (h1Match && h1Match[1]) {
+  if (h1Match?.[1]) {
     // Clean up the title (remove extra whitespace, emoji, etc.)
     return h1Match[1]
       .trim()
@@ -102,7 +102,7 @@ function extractTitleFromH1(content: string): string | null {
 /*
  * Read and parse MDX file with security validations
  */
-async function readMdxFile(filePath: string, slug: string) {
+function readMdxFile(filePath: string, slug: string) {
   try {
     // Check file size limit (5MB)
     const stats = fs.statSync(filePath);
@@ -138,7 +138,7 @@ async function readMdxFile(filePath: string, slug: string) {
       title: title.slice(0, 500), // Use extracted or frontmatter title
       description: frontmatter.description?.slice(0, 1000), // Optional and increased limit
       updatedAt: frontmatter.updatedAt,
-      section: frontmatter.section || "core", // Provide default if missing
+      section: frontmatter.section ?? "core", // Provide default if missing
     };
 
     // For docs migration: return raw content for MDXRemote processing
@@ -160,6 +160,7 @@ async function readMdxFile(filePath: string, slug: string) {
 /*
  * Dynamic import helper for docs from root /docs directory
  */
+// eslint-disable-next-line @typescript-eslint/require-await -- kept async to preserve Promise return type for caller
 async function importDocFromRootDocs(slug: string) {
   try {
     const sanitizedSlug = validateSlug(slug);
@@ -189,7 +190,7 @@ async function importDocFromRootDocs(slug: string) {
       }
 
       if (fs.existsSync(filePath)) {
-        return await readMdxFile(filePath, sanitizedSlug);
+        return readMdxFile(filePath, sanitizedSlug);
       }
     }
 
@@ -289,9 +290,7 @@ function processDirectory(dir: string): NavSection[] {
 
               // Check if doc has a valid title (frontmatter or H1)
               let title = data.title;
-              if (!title) {
-                title = extractTitleFromH1(mdContent);
-              }
+              title ??= extractTitleFromH1(mdContent);
 
               // Only include docs with valid titles in navigation
               if (title) {
@@ -342,9 +341,7 @@ function processDirectory(dir: string): NavSection[] {
         if (fileName !== "index") {
           // Check if doc has a valid title (frontmatter or H1)
           let title = data.title;
-          if (!title) {
-            title = extractTitleFromH1(mdContent);
-          }
+          title ??= extractTitleFromH1(mdContent);
 
           // Only include docs with valid titles in navigation
           if (title) {
@@ -374,6 +371,8 @@ function processDirectory(dir: string): NavSection[] {
   }
 }
 
+// Async signature kept stable for callers that await this API.
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function getAllDocSlugsFromFileSystem(): Promise<string[]> {
   const slugs: string[] = [];
   const rootPath = path.join(process.cwd(), "docs");
@@ -434,7 +433,7 @@ export const getDocsNavigation = getDocNavigation;
  */
 export async function getDocFromParams(paramsPromise: Promise<{ slug?: string[] }>) {
   const params = await paramsPromise;
-  const slug = params.slug?.join("/") || "index";
+  const slug = params.slug?.join("/") ?? "index";
   return await getDocBySlug(slug);
 }
 

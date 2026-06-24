@@ -3,10 +3,7 @@
   "name": "waitlist",
   "title": "Waitlist",
   "description": "Pre-launch waitlist with signup form, hero section, social proof, FAQ, database storage, and Resend email notifications.",
-  "dependencies": [
-    "zod",
-    "lucide-react"
-  ],
+  "dependencies": ["zod", "lucide-react"],
   "registryDependencies": [
     "@shipkit/cn",
     "@shipkit/routes-config",
@@ -80,9 +77,6 @@
     }
   ],
   "docs": "Pre-launch waitlist page with email signup, social proof, and FAQ. Requires a database (`DATABASE_URL`) for storing entries. Optionally set `RESEND_API_KEY` for confirmation emails.",
-  "categories": [
-    "shipkit",
-    "waitlist"
-  ],
+  "categories": ["shipkit", "waitlist"],
   "type": "registry:block"
 }

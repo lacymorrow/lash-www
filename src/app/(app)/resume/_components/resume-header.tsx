@@ -1,5 +1,5 @@
+import { Github, Globe, Linkedin, Mail, Phone, Twitter } from "lucide-react";
 import type { ResumeBasics } from "../_lib/resume-types";
-import { Globe, Mail, Phone, Github, Linkedin, Twitter } from "lucide-react";
 
 const NETWORK_ICONS: Record<string, typeof Globe> = {
   github: Github,
@@ -23,10 +23,7 @@ export function ResumeHeader({ basics }: { basics: ResumeBasics }) {
             <Phone className="h-3.5 w-3.5" />
             {basics.phone}
           </a>
-          <a
-            href={basics.url}
-            className="flex items-center gap-1.5 hover:text-foreground"
-          >
+          <a href={basics.url} className="flex items-center gap-1.5 hover:text-foreground">
             <Globe className="h-3.5 w-3.5" />
             {basics.url.replace("http://", "")}
           </a>
@@ -42,8 +39,7 @@ export function ResumeHeader({ basics }: { basics: ResumeBasics }) {
 
       <div className="mt-4 flex gap-3">
         {basics.profiles.map((profile) => {
-          const Icon =
-            NETWORK_ICONS[profile.network.toLowerCase()] ?? Globe;
+          const Icon = NETWORK_ICONS[profile.network.toLowerCase()] ?? Globe;
           return (
             <a
               key={profile.network}
@@ -58,7 +54,7 @@ export function ResumeHeader({ basics }: { basics: ResumeBasics }) {
         })}
       </div>
 
-      <p className="mt-4 text-sm leading-relaxed whitespace-pre-line">
+      <p className="mt-4 whitespace-pre-line text-sm leading-relaxed">
         {basics.summary.split("\n\n")[0]}
       </p>
     </header>

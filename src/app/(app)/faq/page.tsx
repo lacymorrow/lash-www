@@ -1,5 +1,5 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import {
   Accordion,
   AccordionContent,
@@ -14,19 +14,19 @@ import type { Faq } from "@/payload-types";
 export const metadata: Metadata = routeMetadata.faq;
 
 // Define types for static content structure
-type StaticFaq = {
+interface StaticFaq {
   id?: string;
   question: string;
   answer: string;
   category: string;
   order?: number;
-};
+}
 
 const getAnswerText = (answer: unknown): string => {
   if (typeof answer === "string") return answer;
   if (typeof answer === "object" && answer && "root" in answer) {
     const richText = answer as { root: { children: { children?: { text: string }[] }[] } };
-    return richText.root.children.map((child) => child.children?.[0]?.text || "").join("\n");
+    return richText.root.children.map((child) => child.children?.[0]?.text ?? "").join("\n");
   }
   return "";
 };

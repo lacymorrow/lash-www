@@ -3,9 +3,7 @@
   "name": "pricing",
   "title": "Pricing",
   "description": "Pricing page with plan cards, features showcase, testimonials, and static content data files.",
-  "dependencies": [
-    "lucide-react"
-  ],
+  "dependencies": ["lucide-react"],
   "registryDependencies": [
     "@shipkit/cn",
     "@shipkit/routes-config",
@@ -61,10 +59,6 @@
     }
   ],
   "docs": "Pricing page with plan cards and feature comparison. Customize plans in `content/pricing/pricing-content.ts`, features in `content/features/features-content.ts`, and testimonials in `content/testimonials/testimonials-content.ts`.",
-  "categories": [
-    "shipkit",
-    "pricing",
-    "marketing"
-  ],
+  "categories": ["shipkit", "pricing", "marketing"],
   "type": "registry:block"
 }

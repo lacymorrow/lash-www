@@ -60,7 +60,7 @@ export const UserMenu = ({
         if (!result.success) {
           toast({
             title: "Failed to save theme preference",
-            description: result.error || "Your theme preference could not be saved.",
+            description: result.error ?? "Your theme preference could not be saved.",
             variant: "destructive",
           });
         }
@@ -198,7 +198,7 @@ export const UserMenu = ({
   return (
     <div
       className={cn(
-        "relative rounded-full flex items-center justify-center aspect-square",
+        "relative flex aspect-square items-center justify-center rounded-full",
         size === "sm" ? "size-9" : "size-9"
       )}
     >
@@ -227,32 +227,28 @@ export const UserMenu = ({
           >
             <Avatar className={cn(size === "sm" ? "size-6" : "size-8")}>
               <AvatarImage
-                src={currentUser?.image || ""}
-                alt={currentUser?.name || "User avatar"}
+                src={currentUser?.image ?? ""}
+                alt={currentUser?.name ?? "User avatar"}
                 draggable={false}
               />
-              <AvatarFallback>{currentUser?.name?.[0]?.toUpperCase() || "?"}</AvatarFallback>
+              <AvatarFallback>{currentUser?.name?.[0]?.toUpperCase() ?? "?"}</AvatarFallback>
             </Avatar>
           </Button>
         </UserMenuDropdown>
-      ) : (
-        <>
-          {pathname !== routes.auth.signIn && pathname !== routes.auth.signUp ? (
-            <Link
-              href={signInRedirectUrl}
-              className={cn(
-                buttonVariants({ variant: "ghost", size: "icon" }),
-                "rounded-full cursor-pointer"
-              )}
-            >
-              <UserIcon className="size-6" />
-            </Link>
-          ) : (
-            <Button variant="ghost" size="icon" className={cn("relative rounded-full", className)}>
-              <UserIcon className="size-6" />
-            </Button>
+      ) : pathname !== routes.auth.signIn && pathname !== routes.auth.signUp ? (
+        <Link
+          href={signInRedirectUrl}
+          className={cn(
+            buttonVariants({ variant: "ghost", size: "icon" }),
+            "cursor-pointer rounded-full"
           )}
-        </>
+        >
+          <UserIcon className="size-6" />
+        </Link>
+      ) : (
+        <Button variant="ghost" size="icon" className={cn("relative rounded-full", className)}>
+          <UserIcon className="size-6" />
+        </Button>
       )}
     </div>
   );

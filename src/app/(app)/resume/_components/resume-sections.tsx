@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
-import type { ResumeSchema } from "../_lib/resume-types";
 import type { MatchResult } from "../_lib/resume-filters";
-import { ResumeEntryCard, formatDateRange } from "./resume-entry-card";
+import type { ResumeSchema } from "../_lib/resume-types";
+import { formatDateRange, ResumeEntryCard } from "./resume-entry-card";
 
 interface SectionProps {
   title: string;
@@ -108,11 +108,7 @@ export function SkillsSection({ skills }: { skills: ResumeSchema["skills"] }) {
   );
 }
 
-export function EducationSection({
-  education,
-}: {
-  education: ResumeSchema["education"];
-}) {
+export function EducationSection({ education }: { education: ResumeSchema["education"] }) {
   return (
     <div className="space-y-4">
       {education.map((edu) => (
@@ -180,10 +176,8 @@ export function ExtrasSection({
               key={r.name}
               className="border-l-2 border-muted pl-4 text-sm italic text-muted-foreground"
             >
-              <p>"{r.reference}"</p>
-              <footer className="mt-1 text-xs not-italic font-medium">
-                — {r.name}
-              </footer>
+              <p>&quot;{r.reference}&quot;</p>
+              <footer className="mt-1 text-xs font-medium not-italic">— {r.name}</footer>
             </blockquote>
           ))}
         </Section>

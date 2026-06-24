@@ -3,10 +3,7 @@
   "name": "feedback",
   "title": "Feedback",
   "description": "User feedback system with dialog and popover components, server actions, and database-backed feedback service.",
-  "dependencies": [
-    "zod",
-    "lucide-react"
-  ],
+  "dependencies": ["zod", "lucide-react"],
   "registryDependencies": [
     "@shipkit/cn",
     "button",
@@ -43,9 +40,6 @@
     }
   ],
   "docs": "User feedback collection with dialog and popover UI. Stores feedback in the database and optionally emails it via Resend. Requires `DATABASE_URL` for storage.",
-  "categories": [
-    "shipkit",
-    "feedback"
-  ],
+  "categories": ["shipkit", "feedback"],
   "type": "registry:block"
 }

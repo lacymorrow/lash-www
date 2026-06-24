@@ -27,7 +27,7 @@
 but does **not** verify that the calling user is a member of `teamId`. Any
 authenticated user can enumerate the `projects` of any team by changing the
 query string. The security audit doc (`SECURITY-AUDIT-2026-06-03.md`) tightened
-the *server actions* in `teams.ts` and `projects.ts` to require team
+the _server actions_ in `teams.ts` and `projects.ts` to require team
 membership, but missed this API route. This plan closes the gap.
 
 A grep also finds other team-scoped read paths in `projectService` that may
@@ -80,34 +80,37 @@ async function requireTeamRole(teamId: string, allowedRoles: readonly string[]) 
   const members = await teamService.getTeamMembers(teamId);
   const me = members?.find((m) => m.userId === userId);
   if (!me) ErrorService.throwForbidden("You are not a member of this team.");
-  if (!allowedRoles.includes(me.role)) ErrorService.throwForbidden(`This action requires one of: ${allowedRoles.join(", ")}.`);
+  if (!allowedRoles.includes(me.role))
+    ErrorService.throwForbidden(`This action requires one of: ${allowedRoles.join(", ")}.`);
   return { userId, role: me.role };
 }
 ```
 
-For a *read* (GET) we only need membership, not a particular role.
+For a _read_ (GET) we only need membership, not a particular role.
 
 ## Commands you will need
 
-| Purpose   | Command                                                  | Expected on success |
-|-----------|----------------------------------------------------------|---------------------|
-| Install   | `bun install`                                            | exit 0              |
-| Typecheck | `bun run typecheck`                                      | exit 0; no new errors vs baseline |
-| Tests     | `bun run test -- tests/unit/server/services/project`     | all pass; new tests pass |
-| Lint      | `bun run lint:biome -- src/app/\(app\)/api/projects src/server/services/project-service.ts` | exit 0 on touched files |
+| Purpose   | Command                                                                                     | Expected on success               |
+| --------- | ------------------------------------------------------------------------------------------- | --------------------------------- |
+| Install   | `bun install`                                                                               | exit 0                            |
+| Typecheck | `bun run typecheck`                                                                         | exit 0; no new errors vs baseline |
+| Tests     | `bun run test -- tests/unit/server/services/project`                                        | all pass; new tests pass          |
+| Lint      | `bun run lint:biome -- src/app/\(app\)/api/projects src/server/services/project-service.ts` | exit 0 on touched files           |
 
 Baseline note: the repo currently builds with `typescript.ignoreBuildErrors:
-true` (see plan 010). For this plan, treat "no *new* type errors introduced
+true` (see plan 010). For this plan, treat "no _new_ type errors introduced
 by your changes" as the bar.
 
 ## Scope
 
 **In scope:**
+
 - `src/app/(app)/api/projects/route.ts`
 - `src/server/services/project-service.ts`
 - A new test file: `tests/unit/server/services/project-service.test.ts` (if absent)
 
 **Out of scope** (do NOT touch even though related):
+
 - `src/server/actions/projects.ts` — fixed on `origin/security`; do not re-fix.
 - The legacy `LocalProjectStorage` path in `project-service.ts` — keep behavior unchanged for the no-DB local dev case (it's only reached when `db` is undefined).
 - Public response shape — the client code consuming `/api/projects` expects `{ projects: [...] }`. Do not change the envelope.
@@ -182,6 +185,7 @@ exist. Model after `tests/unit/server/services/team/team-service.test.ts`
 there).
 
 Tests to write (4):
+
 1. `getTeamProjects(teamId)` returns the projects for a team (happy path).
 2. `isUserInTeam(userId, teamId)` returns `true` when a membership row exists.
 3. `isUserInTeam(userId, teamId)` returns `false` when no row exists.

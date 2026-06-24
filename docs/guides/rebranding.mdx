@@ -17,13 +17,13 @@ That's it. The script updates `src/config/site-config.ts`, `.env.example`, and `
 
 ## Options
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `--name` | Display name (e.g. "My App") | Prompted |
-| `--slug` | URL/package slug (e.g. "my-app") | Derived from name |
-| `--domain` | Production domain (e.g. "myapp.com") | `{slug}.com` |
-| `--creator-name` | Your full name (optional) | Empty |
-| `--dry-run` | Preview changes without writing files | Off |
+| Flag             | Description                           | Default           |
+| ---------------- | ------------------------------------- | ----------------- |
+| `--name`         | Display name (e.g. "My App")          | Prompted          |
+| `--slug`         | URL/package slug (e.g. "my-app")      | Derived from name |
+| `--domain`       | Production domain (e.g. "myapp.com")  | `{slug}.com`      |
+| `--creator-name` | Your full name (optional)             | Empty             |
+| `--dry-run`      | Preview changes without writing files | Off               |
 
 If you omit `--name`, `--slug`, or `--domain`, the script prompts for them interactively.
 
@@ -43,17 +43,17 @@ Output shows old vs. new values for every field without touching any files.
 
 The script replaces these sections in `siteConfig`:
 
-| Section | Fields updated |
-|---------|---------------|
-| Top-level | `name`, `title`, `url`, `ogImage` |
-| `branding` | `projectName`, `projectSlug`, `domain`, `protocol`, `githubOrg`, `githubRepo`, `vercelProjectName`, `databaseName`, `productNames.main` |
-| `repo` | `owner`, `name`, `url`, `format.clone()`, `format.ssh()` |
-| `email` | `support`, `team`, `noreply`, `domain`, `legal`, `privacy`, `format()` |
-| `creator` | `name`, `email`, `url`, `twitter`, `domain`, `fullName`, `avatar` |
-| `social` | `github`, `x` (other social fields reset to empty) |
-| `links` | `twitter`, `x`, `github` URLs |
-| `store` | `id`, product keys (variant IDs reset to empty for you to fill in) |
-| `metadata.keywords` | Replaces "Shipkit" with your project name |
+| Section             | Fields updated                                                                                                                          |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Top-level           | `name`, `title`, `url`, `ogImage`                                                                                                       |
+| `branding`          | `projectName`, `projectSlug`, `domain`, `protocol`, `githubOrg`, `githubRepo`, `vercelProjectName`, `databaseName`, `productNames.main` |
+| `repo`              | `owner`, `name`, `url`, `format.clone()`, `format.ssh()`                                                                                |
+| `email`             | `support`, `team`, `noreply`, `domain`, `legal`, `privacy`, `format()`                                                                  |
+| `creator`           | `name`, `email`, `url`, `twitter`, `domain`, `fullName`, `avatar`                                                                       |
+| `social`            | `github`, `x` (other social fields reset to empty)                                                                                      |
+| `links`             | `twitter`, `x`, `github` URLs                                                                                                           |
+| `store`             | `id`, product keys (variant IDs reset to empty for you to fill in)                                                                      |
+| `metadata.keywords` | Replaces "Shipkit" with your project name                                                                                               |
 
 ### `.env.example`
 

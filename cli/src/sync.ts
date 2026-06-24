@@ -24,7 +24,7 @@ async function ensureUpstream(cwd: string): Promise<string | null> {
 }
 
 export async function sync(opts: SyncOptions): Promise<void> {
-  const nonInteractive = opts.yes || isNonInteractive();
+  const nonInteractive = opts.yes ?? isNonInteractive();
   const cwd = process.cwd();
 
   p.intro(pc.bgCyan(pc.black(" shipkit sync ")));

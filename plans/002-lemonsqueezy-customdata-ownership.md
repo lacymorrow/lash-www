@@ -32,7 +32,7 @@ the webhook will credit the access to the victim's account instead of theirs
 — or, more usefully to the attacker, claim a victim's perks while leaving the
 attacker's email as the billing contact.
 
-LemonSqueezy's documented use of `custom_data` is for *hints*, not
+LemonSqueezy's documented use of `custom_data` is for _hints_, not
 authentication; the only trustworthy identity in the webhook is the verified
 buyer email.
 
@@ -70,20 +70,22 @@ The function is called from event handlers higher in the file (`handleOrderCreat
 
 ## Commands you will need
 
-| Purpose   | Command                                                              | Expected            |
-|-----------|----------------------------------------------------------------------|---------------------|
-| Install   | `bun install`                                                        | exit 0              |
-| Typecheck | `bun run typecheck`                                                  | no new errors       |
-| Tests     | `bun run test -- tests/unit/server/webhooks tests/unit/lib/lemonsqueezy` | all pass            |
-| Lint      | `bun run lint:biome -- src/app/\(app\)/webhooks/lemonsqueezy/route.ts`  | exit 0              |
+| Purpose   | Command                                                                  | Expected      |
+| --------- | ------------------------------------------------------------------------ | ------------- |
+| Install   | `bun install`                                                            | exit 0        |
+| Typecheck | `bun run typecheck`                                                      | no new errors |
+| Tests     | `bun run test -- tests/unit/server/webhooks tests/unit/lib/lemonsqueezy` | all pass      |
+| Lint      | `bun run lint:biome -- src/app/\(app\)/webhooks/lemonsqueezy/route.ts`   | exit 0        |
 
 ## Scope
 
 **In scope:**
+
 - `src/app/(app)/webhooks/lemonsqueezy/route.ts` (only `findOrCreateUser` and, if needed, the callsites that pass `custom_data`).
 - A new or extended test in `tests/unit/server/webhooks/` (or wherever the lemonsqueezy webhook tests live — see Step 4).
 
 **Out of scope:**
+
 - The signature verification logic (already correct).
 - The idempotency check (planned separately in plan 004 — do not fold in).
 - Stripe / Polar webhook handlers.
@@ -159,6 +161,7 @@ that imports the `findOrCreateUser` function directly (export it or extract
 it to a sibling module if not already exported).
 
 Tests to write (3):
+
 1. **Hint accepted when matching:** given a `users` row with id `X` and email `alice@example.com`, calling `findOrCreateUser("alice@example.com", undefined, { user_id: "X" })` returns `X` and does NOT call `userService.findOrCreateUserByEmail`.
 2. **Hint ignored when email mismatch:** given a `users` row with id `X` and email `attacker@evil.com`, calling `findOrCreateUser("alice@example.com", undefined, { user_id: "X" })` falls through to `findOrCreateUserByEmail("alice@example.com")` and returns whatever that produces.
 3. **No custom_data still works:** calling `findOrCreateUser("alice@example.com", undefined, undefined)` falls through cleanly.
@@ -200,13 +203,13 @@ real orders (where `custom_data.user_id` either matches or is absent).
 
 - The checkout flow (wherever Shipkit assembles the LemonSqueezy checkout
   URL) currently inserts `custom_data: { user_id: session.user.id }` on the
-  legitimate path. That stays useful — the new code now correctly *trusts*
+  legitimate path. That stays useful — the new code now correctly _trusts_
   the hint only when it agrees with the verified billing email. Don't remove
   the checkout-side population.
 - If LemonSqueezy ever ships a `custom_data` signing scheme distinct from the
   webhook body, revisit this and trust the signed hint directly.
 - Reviewer should scrutinize: the email comparison is case-insensitive (LS
-  sends mixed-case sometimes), and the early-return only happens on a *positive*
+  sends mixed-case sometimes), and the early-return only happens on a _positive_
   match — every other shape falls through to the email path.
 
 ## Backfill candidate for `shipkit-io/bones`

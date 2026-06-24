@@ -11,13 +11,13 @@ shipkit gets to production-grade quality before any behavioral fix (plans
 
 ## The truthful baseline (2026-06-23)
 
-| Check | State | Notes |
-|---|---|---|
-| `bun run test` | **1 red**, 196 green, 24 skipped, 5 files entirely skipped | Failing file: `tests/unit/components/deployments/dashboard-vercel-deploy.test.tsx` — `Cannot read properties of null (reading 'useEffect')` thrown from `QueryClientProvider`. Skipped files all guard on `if (!db)` because there is no test database. |
-| `bun run typecheck` | **Red** | (a) `src/components/ui/user-menu.tsx` references `routes.app.root` and `routes.app.dashboard.settings` which don't exist on the routes type. (b) `src/lib/utils/route-utils.ts:34` "Type instantiation excessively deep." (c) `src/server/actions/deploy-private-repo.ts` imports a missing export `generateProjectNameSuggestions`. (d) All three `vitest.config*.ts` fail because `@vitejs/plugin-react@6` requires `vite@^8` and we have vite 7.3.1. |
-| `bun run lint` | **Red** | 222 errors, 795 warnings, 59 infos. Diagnostics overflow Biome's default cap. |
-| `bun run test:e2e` | Unrun this session | `tests/e2e/login.spec.ts` and `full-deploy-flow.spec.ts` skip when credentials auth and deploy env vars aren't set. |
-| `bun run build` | Unrun this session | Known historical OOM; `bun run build:vercel` uses 8GB heap. |
+| Check               | State                                                      | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bun run test`      | **1 red**, 196 green, 24 skipped, 5 files entirely skipped | Failing file: `tests/unit/components/deployments/dashboard-vercel-deploy.test.tsx` — `Cannot read properties of null (reading 'useEffect')` thrown from `QueryClientProvider`. Skipped files all guard on `if (!db)` because there is no test database.                                                                                                                                                                                                 |
+| `bun run typecheck` | **Red**                                                    | (a) `src/components/ui/user-menu.tsx` references `routes.app.root` and `routes.app.dashboard.settings` which don't exist on the routes type. (b) `src/lib/utils/route-utils.ts:34` "Type instantiation excessively deep." (c) `src/server/actions/deploy-private-repo.ts` imports a missing export `generateProjectNameSuggestions`. (d) All three `vitest.config*.ts` fail because `@vitejs/plugin-react@6` requires `vite@^8` and we have vite 7.3.1. |
+| `bun run lint`      | **Red**                                                    | 222 errors, 795 warnings, 59 infos. Diagnostics overflow Biome's default cap.                                                                                                                                                                                                                                                                                                                                                                           |
+| `bun run test:e2e`  | Unrun this session                                         | `tests/e2e/login.spec.ts` and `full-deploy-flow.spec.ts` skip when credentials auth and deploy env vars aren't set.                                                                                                                                                                                                                                                                                                                                     |
+| `bun run build`     | Unrun this session                                         | Known historical OOM; `bun run build:vercel` uses 8GB heap.                                                                                                                                                                                                                                                                                                                                                                                             |
 
 **What this means.** Shipkit cannot claim "tests pass" today. The unit suite
 is misleadingly mostly-green because the most important code paths — service
@@ -106,7 +106,7 @@ Now — and only now — write the tests the behavioral plans need.
   logic. Cover metadata-parsing fallback chain.
 - **4.2** `auth-service.ts`: cover session resolution, role checks, provider
   resolution, the dangling RBAC path from plan 003, `isAdmin()` (plan 011).
-- **4.3** Webhook surface — write tests that *fail today* and would pass
+- **4.3** Webhook surface — write tests that _fail today_ and would pass
   after plan 002, 004, 005 land. These tests become the spec for those
   plans. (LemonSqueezy `custom_data.user_id` IDOR, payment idempotency,
   temporary-link one-time use.)

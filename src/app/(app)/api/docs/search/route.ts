@@ -3,7 +3,7 @@ import { z } from "zod";
 import { openai } from "@/lib/open-ai";
 import { DocsSearchService } from "@/server/services/docs-search";
 import { ErrorService } from "@/server/services/error-service";
-import { rateLimitService, rateLimits } from "@/server/services/rate-limit-service";
+import { rateLimitService } from "@/server/services/rate-limit-service";
 
 // Sanitize input to prevent prompt injection
 function sanitizeForPrompt(text: string): string {
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
     const cfConnectingIp = req.headers.get("cf-connecting-ip");
 
     // Use the first available IP address, with fallback to a generic identifier
-    const clientIp = forwardedFor?.split(",")[0]?.trim() || realIp || cfConnectingIp || "anonymous";
+    const clientIp = forwardedFor?.split(",")[0]?.trim() ?? realIp ?? cfConnectingIp ?? "anonymous";
 
     // Apply rate limiting with custom limits for AI search
     // More restrictive than regular search due to OpenAI API costs
@@ -71,9 +71,13 @@ export async function POST(req: Request) {
           {
             status: 429,
             headers: {
-              "X-RateLimit-Limit": String(error.metadata?.limit || aiSearchRateLimit.requests),
-              "X-RateLimit-Remaining": String(error.metadata?.remaining || 0),
-              "X-RateLimit-Reset": String(error.metadata?.reset || 0),
+              "X-RateLimit-Limit": String(
+                (error.metadata?.limit as number | undefined) ?? aiSearchRateLimit.requests
+              ),
+              "X-RateLimit-Remaining": String(
+                (error.metadata?.remaining as number | undefined) ?? 0
+              ),
+              "X-RateLimit-Reset": String((error.metadata?.reset as number | undefined) ?? 0),
               "Retry-After": String(
                 Math.ceil(((error.metadata?.reset as number) || 0) - Date.now() / 1000)
               ),
@@ -192,9 +196,9 @@ export async function POST(req: Request) {
         {
           status: 429,
           headers: {
-            "X-RateLimit-Limit": String(error.metadata?.limit || 10),
-            "X-RateLimit-Remaining": String(error.metadata?.remaining || 0),
-            "X-RateLimit-Reset": String(error.metadata?.reset || 0),
+            "X-RateLimit-Limit": String((error.metadata?.limit as number | undefined) ?? 10),
+            "X-RateLimit-Remaining": String((error.metadata?.remaining as number | undefined) ?? 0),
+            "X-RateLimit-Reset": String((error.metadata?.reset as number | undefined) ?? 0),
             "Retry-After": String(
               Math.ceil(((error.metadata?.reset as number) || 0) - Date.now() / 1000)
             ),

@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return constructMetadata({
       title: `${doc.title} - ${siteConfig.title} Documentation`,
       description:
-        doc.description ||
+        doc.description ??
         `Learn how to implement ${siteConfig.title} features and best practices in your app development workflow. Detailed guides and examples included.`,
       openGraph: {
         type: "article",
@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         locale: "en_US",
       },
     });
-  } catch (error) {
+  } catch (_error) {
     return defaultMetadata;
   }
 }

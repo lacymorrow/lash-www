@@ -3,18 +3,8 @@
   "name": "changelog",
   "title": "Changelog",
   "description": "Changelog with markdown file support and GitHub commit fallback, timeline view, and individual entry pages.",
-  "dependencies": [
-    "react-markdown",
-    "remark-gfm",
-    "lucide-react",
-    "gray-matter"
-  ],
-  "registryDependencies": [
-    "@shipkit/cn",
-    "@shipkit/routes-config",
-    "badge",
-    "button"
-  ],
+  "dependencies": ["react-markdown", "remark-gfm", "lucide-react", "gray-matter"],
+  "registryDependencies": ["@shipkit/cn", "@shipkit/routes-config", "badge", "button"],
   "files": [
     {
       "path": "src/app/(app)/changelog/layout.tsx",
@@ -54,9 +44,6 @@
     }
   ],
   "docs": "Changelog that reads from `src/content/changelog/*.md` files when present, falling back to auto-generation from GitHub commits and tags. Set `GITHUB_REPO_OWNER` and `GITHUB_REPO_NAME` env vars for the fallback (defaults to lacymorrow/shipkit). Optionally set `GITHUB_TOKEN` for higher API rate limits.",
-  "categories": [
-    "shipkit",
-    "changelog"
-  ],
+  "categories": ["shipkit", "changelog"],
   "type": "registry:block"
 }

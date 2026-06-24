@@ -48,12 +48,23 @@ import { temporaryLinks } from "@/server/db/schema";
 
 const EXPIRES_IN_MINUTES = 30;
 
-export async function createTemporaryLink({ data, userId, type, expiresInMinutes = EXPIRES_IN_MINUTES, metadata }) {
-  return await db?.insert(temporaryLinks).values({
-    userId, type, data,
-    expiresAt: addMinutes(new Date(), expiresInMinutes),
-    metadata,
-  }).returning();
+export async function createTemporaryLink({
+  data,
+  userId,
+  type,
+  expiresInMinutes = EXPIRES_IN_MINUTES,
+  metadata,
+}) {
+  return await db
+    ?.insert(temporaryLinks)
+    .values({
+      userId,
+      type,
+      data,
+      expiresAt: addMinutes(new Date(), expiresInMinutes),
+      metadata,
+    })
+    .returning();
 }
 
 // TODO: First use should record the IP address, and any subsequent uses from a different IP should be blocked
@@ -69,7 +80,8 @@ export async function getTemporaryLinkData(linkId: string, userId: string) {
 
   // Reset the expiresAt if the link is used, so it can be used again
   if (link) {
-    await db?.update(temporaryLinks)
+    await db
+      ?.update(temporaryLinks)
       .set({ expiresAt: addMinutes(new Date(), EXPIRES_IN_MINUTES) })
       .where(eq(temporaryLinks.id, linkId));
     return link.data;
@@ -86,23 +98,25 @@ column today.
 
 ## Commands you will need
 
-| Purpose          | Command                                          | Expected |
-|------------------|--------------------------------------------------|----------|
-| Install          | `bun install`                                    | exit 0   |
-| Generate         | `bun run db:generate`                            | new migration |
-| Migrate          | `bun run db:migrate`                             | exit 0   |
-| Typecheck        | `bun run typecheck`                              | no new errors |
-| Tests            | `bun run test -- tests/unit/server/services/temporary-links` | pass + new tests |
+| Purpose   | Command                                                      | Expected         |
+| --------- | ------------------------------------------------------------ | ---------------- |
+| Install   | `bun install`                                                | exit 0           |
+| Generate  | `bun run db:generate`                                        | new migration    |
+| Migrate   | `bun run db:migrate`                                         | exit 0           |
+| Typecheck | `bun run typecheck`                                          | no new errors    |
+| Tests     | `bun run test -- tests/unit/server/services/temporary-links` | pass + new tests |
 
 ## Scope
 
 **In scope:**
+
 - `src/server/db/schema.ts` — add `usedAt` (timestamp, nullable) to `temporaryLinks`.
 - `src/server/services/temporary-links.ts` — remove expiry extension; record `usedAt`; reject already-used links.
 - A new migration.
 - `tests/unit/server/services/temporary-links.test.ts` (new).
 
 **Out of scope:**
+
 - IP recording / IP-binding (TODO comment one). Different threat model, more
   intrusive, deserves its own plan if anyone wants it. Delete the TODO when
   removing the second TODO comment.
@@ -141,7 +155,7 @@ export async function getTemporaryLinkData(linkId: string, userId: string) {
       eq(temporaryLinks.id, linkId),
       eq(temporaryLinks.userId, userId),
       gt(temporaryLinks.expiresAt, new Date()),
-      isNull(temporaryLinks.usedAt),                  // ← never been used
+      isNull(temporaryLinks.usedAt) // ← never been used
     ),
   });
 
@@ -169,6 +183,7 @@ this plan solves; the first (IP recording) is recorded in Scope as out of scope.
 ### Step 4: Tests
 
 Create `tests/unit/server/services/temporary-links.test.ts`. Tests:
+
 1. **Happy path:** create a link, fetch it once, get the data back.
 2. **Cannot be used twice:** create a link, fetch it once (gets data), fetch it again (returns `null`).
 3. **Expired returns null:** create a link with `expiresInMinutes: -5` (already expired), fetch it, get `null`.

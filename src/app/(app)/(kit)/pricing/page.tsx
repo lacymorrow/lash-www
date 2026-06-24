@@ -48,8 +48,8 @@ export default function PricingPage() {
       <section className="mx-auto mt-24 max-w-2xl text-center">
         <h2 className="mb-4 text-2xl font-semibold">Questions?</h2>
         <p className="text-muted-foreground">
-          Not sure if Shipkit is the right fit?{" "}
-          <Link href={routes.contact}>Reach out</Link> and we'll help you figure it out.
+          Not sure if Shipkit is the right fit? <Link href={routes.contact}>Reach out</Link> and
+          we&apos;ll help you figure it out.
         </p>
       </section>
     </div>

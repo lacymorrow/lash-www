@@ -18,7 +18,7 @@ test.describe("Marketing pages return 200", () => {
     test(`${route} renders successfully`, async ({ page }) => {
       const response = await page.goto(route);
       expect(response, `Failed to navigate to ${route}`).not.toBeNull();
-      expect(response!.ok(), `${route} returned status ${response?.status()}`).toBeTruthy();
+      expect(response?.ok(), `${route} returned status ${response?.status()}`).toBeTruthy();
     });
   }
 });
@@ -55,7 +55,7 @@ test.describe("Demo link is reachable", () => {
   test("/examples page loads", async ({ page }) => {
     const response = await page.goto("/examples");
     expect(response, "/examples failed to navigate").not.toBeNull();
-    expect(response!.ok(), `/examples returned status ${response?.status()}`).toBeTruthy();
+    expect(response?.ok(), `/examples returned status ${response?.status()}`).toBeTruthy();
   });
 });
 
@@ -78,7 +78,7 @@ test.describe("SEO: title and meta description present", () => {
       const content = await metaDescription.getAttribute("content");
       expect(content, `${route}: <meta name="description"> content is empty`).toBeTruthy();
       expect(
-        content!.length,
+        content?.length,
         `${route}: <meta name="description"> content is too short`
       ).toBeGreaterThan(10);
     });

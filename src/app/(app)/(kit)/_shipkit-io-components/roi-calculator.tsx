@@ -23,7 +23,7 @@ export const ROICalculator = () => {
   const [monthlyBurn, setMonthlyBurn] = useState(20000);
 
   // Get the highest priced plan
-  const shipkitCost = Math.max(...oneTimePlans.map((plan) => plan.price.oneTime || 0));
+  const shipkitCost = Math.max(...oneTimePlans.map((plan) => plan.price.oneTime ?? 0));
 
   // Calculate savings
   const avgDevSalary = 150000; // Average developer salary in 2024
@@ -44,7 +44,7 @@ export const ROICalculator = () => {
               <Users className="h-5 w-5 text-muted-foreground" />
               <Slider
                 value={[teamSize]}
-                onValueChange={(values) => setTeamSize(values[0] || teamSize)}
+                onValueChange={(values) => setTeamSize(values[0] ?? teamSize)}
                 min={1}
                 max={10}
                 step={1}
@@ -60,7 +60,7 @@ export const ROICalculator = () => {
               <Clock className="h-5 w-5 text-muted-foreground" />
               <Slider
                 value={[monthsToLaunch]}
-                onValueChange={(values) => setMonthsToLaunch(values[0] || monthsToLaunch)}
+                onValueChange={(values) => setMonthsToLaunch(values[0] ?? monthsToLaunch)}
                 min={3}
                 max={12}
                 step={1}
@@ -76,7 +76,7 @@ export const ROICalculator = () => {
               <DollarSign className="h-5 w-5 text-muted-foreground" />
               <Slider
                 value={[monthlyBurn]}
-                onValueChange={(values) => setMonthlyBurn(values[0] || monthlyBurn)}
+                onValueChange={(values) => setMonthlyBurn(values[0] ?? monthlyBurn)}
                 min={5000}
                 max={100000}
                 step={5000}
@@ -134,7 +134,7 @@ export const ROICalculator = () => {
 
           <div className="space-y-4 text-sm text-muted-foreground">
             <p>* Calculations based on:</p>
-            <ul className="list-disc pl-4 space-y-2">
+            <ul className="list-disc space-y-2 pl-4">
               <li>Average developer salary of {formatCurrency(avgDevSalary)}/year in 2024</li>
               <li>Infrastructure and tooling costs of {formatCurrency(2000)}/month</li>
               <li>Typical time savings of 75% with {siteConfig.title}</li>

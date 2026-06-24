@@ -3,9 +3,7 @@
   "name": "admin",
   "title": "Admin Dashboard",
   "description": "Role-based admin panel with user management, payments, GitHub repos, integrations, feedback, waitlist, and CMS admin sections.",
-  "dependencies": [
-    "lucide-react"
-  ],
+  "dependencies": ["lucide-react"],
   "registryDependencies": [
     "@shipkit/cn",
     "@shipkit/routes-config",
@@ -207,9 +205,6 @@
     }
   ],
   "docs": "Role-based admin dashboard. Set `ADMIN_EMAIL` (comma-separated) to grant admin access by email. Requires auth block for session management and database for user/role queries.",
-  "categories": [
-    "shipkit",
-    "admin"
-  ],
+  "categories": ["shipkit", "admin"],
   "type": "registry:block"
 }

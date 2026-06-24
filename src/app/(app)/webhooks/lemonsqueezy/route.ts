@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from "node:crypto";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
@@ -8,7 +8,6 @@ import { env } from "@/env";
 import { logger } from "@/lib/logger";
 import { db } from "@/server/db";
 import { payments, users } from "@/server/db/schema";
-import { PaymentService } from "@/server/services/payment-service";
 import { userService } from "@/server/services/user-service";
 
 // Types for webhook payload structure
@@ -68,6 +67,7 @@ interface SubscriptionAttributes {
   status_formatted: string;
   card_brand: string | null;
   card_last_four: string | null;
+  // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents -- third-party webhook payload structure
   pause: any | null;
   cancelled: boolean;
   trial_ends_at: string | null;
@@ -89,6 +89,7 @@ interface WebhookPayload {
   data: {
     type: "orders" | "subscriptions" | "subscription_invoices" | "license_keys";
     id: string;
+    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents -- attributes union includes loose payload variants from third-party webhook
     attributes: OrderAttributes | SubscriptionAttributes | any;
   };
 }
@@ -179,7 +180,7 @@ async function findOrCreateUser(
 
     // Use the consistent userService method for finding or creating users
     const { user, created } = await userService.findOrCreateUserByEmail(userEmail, {
-      name: userName || null,
+      name: userName ?? null,
     });
 
     if (created) {
@@ -198,7 +199,9 @@ async function findOrCreateUser(
     return user.id;
   } catch (error) {
     logger.error("Error finding or creating user", { userEmail, userName, error });
-    throw new Error(`Failed to find or create user: ${error}`);
+    throw new Error(
+      `Failed to find or create user: ${error instanceof Error ? error.message : String(error)}`
+    );
   }
 }
 
@@ -394,7 +397,7 @@ async function handleSubscriptionStatusChange(
       throw new Error(`Subscription payment not found for ${data.id}`);
     }
 
-    const existingMetadata = JSON.parse(existingPayment.metadata || "{}");
+    const existingMetadata = JSON.parse(existingPayment.metadata ?? "{}");
 
     // Update the metadata with new subscription status
     const updatedMetadata = {
@@ -475,7 +478,7 @@ async function handleSubscriptionPayment(
     await tx.insert(payments).values({
       userId,
       orderId: `${attributes.subscription_id}-${data.id}`, // Combine subscription and invoice ID
-      amount: attributes.total || 0,
+      amount: attributes.total ?? 0,
       status: eventName === "subscription_payment_success" ? "completed" : "failed",
       processor: "lemonsqueezy",
       metadata: JSON.stringify({
@@ -639,6 +642,7 @@ export async function POST(request: Request) {
 }
 
 // Prevent GET requests
+// eslint-disable-next-line @typescript-eslint/require-await -- Next.js Route Handler signature requires async
 export async function GET() {
   return new NextResponse("Method not allowed", { status: 405 });
 }

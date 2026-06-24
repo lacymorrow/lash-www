@@ -22,8 +22,8 @@ the next executor should pick up. Read it once, then drive from
 
 ## Owner-stated direction (2026-06-23)
 
-> *"I believe we should write tests for everything before we start making too
-> many other changes."*
+> _"I believe we should write tests for everything before we start making too
+> many other changes."_
 
 That reorders the queue. Test plans **008** (`payment-service`) and **009**
 (`auth-service`) move to the front. Their purpose is **characterization**:
@@ -94,3 +94,22 @@ git log --oneline -5
 git checkout -b tests/payment-service-characterization
 # open plans/008-payment-service-tests.md and follow it
 ```
+
+## 2026-06-23 evening update — MASTER-TEST-PLAN execution status
+
+Phase 1 (typecheck + tests green): ✅ landed on `main` (`b3770514`).
+
+Phase 2 (lint to green): in progress on `origin/phase-2/lint-cleanup`.
+6 commits so far (auto-fix, prettier+eslint --fix, config drift fixes,
+build-output exclusion, real-bug repair, Biome worktree exclusion). 3
+parallel worktree agents running for the remaining ~600 ESLint errors
+across `prefer-nullish-coalescing`, React/JSX, and misc TS categories.
+Biome standalone: 203 errors / 500 warnings remaining (dominated by
+300 `noExplicitAny` — needs case-by-case judgment).
+
+Preserved work:
+
+- `wip/vercel-cost-optimization` — previously-stashed cache header +
+  guide work (committed for safety, not yet reviewed).
+- `advisor/008-payment-service-tests` (local only) — abandoned plan-008
+  attempt with vite bump; reference only.

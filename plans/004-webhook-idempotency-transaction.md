@@ -19,7 +19,7 @@
 
 ## Why this matters
 
-Both the LemonSqueezy and Stripe webhook handlers use a *check-then-insert*
+Both the LemonSqueezy and Stripe webhook handlers use a _check-then-insert_
 pattern with no DB transaction and no DB-level uniqueness:
 
 1. Read: does a payment with this `orderId` already exist?
@@ -39,6 +39,7 @@ handler's happy path clean.
 ## Current state
 
 Schema:
+
 ```ts
 // src/server/db/schema.ts:87-103
 export const payments = createTable("payment", {
@@ -54,6 +55,7 @@ export const payments = createTable("payment", {
 ```
 
 Lemon Squeezy:
+
 ```ts
 // src/app/(app)/webhooks/lemonsqueezy/route.ts:138-159
 async function isEventProcessed(eventId, eventName): Promise<boolean> {
@@ -71,12 +73,13 @@ async function isEventProcessed(eventId, eventName): Promise<boolean> {
     return !!existingPayment;
   } catch (error) {
     logger.error("Error checking if event is processed", { eventId, eventName, error });
-    return false;                                       // ← silent: returns "not processed" on DB error
+    return false; // ← silent: returns "not processed" on DB error
   }
 }
 ```
 
 Stripe (`payment_intent.succeeded`):
+
 ```ts
 // src/app/(app)/webhooks/stripe/route.ts:138-168
 const existingPayment = await PaymentService.getPaymentByOrderId(paymentIntent.id);
@@ -94,18 +97,19 @@ No transaction in either case. No `UNIQUE` on `payments(orderId, processor)`.
 
 ## Commands you will need
 
-| Purpose          | Command                                                       | Expected |
-|------------------|---------------------------------------------------------------|----------|
-| Install          | `bun install`                                                 | exit 0   |
-| Generate         | `bun run db:generate`                                         | new migration file in `drizzle/` |
-| Migrate (dev)    | `bun run db:migrate`                                          | exit 0   |
-| Typecheck        | `bun run typecheck`                                           | no new errors |
-| Tests            | `bun run test -- tests/unit/server/services/payment tests/unit/server/webhooks` | pass |
-| Lint             | `bun run lint:biome -- src/server/db src/app/\(app\)/webhooks src/server/services/payment-service.ts` | exit 0 |
+| Purpose       | Command                                                                                               | Expected                         |
+| ------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------- |
+| Install       | `bun install`                                                                                         | exit 0                           |
+| Generate      | `bun run db:generate`                                                                                 | new migration file in `drizzle/` |
+| Migrate (dev) | `bun run db:migrate`                                                                                  | exit 0                           |
+| Typecheck     | `bun run typecheck`                                                                                   | no new errors                    |
+| Tests         | `bun run test -- tests/unit/server/services/payment tests/unit/server/webhooks`                       | pass                             |
+| Lint          | `bun run lint:biome -- src/server/db src/app/\(app\)/webhooks src/server/services/payment-service.ts` | exit 0                           |
 
 ## Scope
 
 **In scope:**
+
 - `src/server/db/schema.ts` — add a unique constraint on `(processor, processorOrderId)` (preferred — see Step 1 for why not `orderId`).
 - `src/server/services/payment-service.ts` — the `createPayment` method's insert path.
 - `src/app/(app)/webhooks/lemonsqueezy/route.ts` — switch from check-then-insert to "attempt insert; on conflict skip".
@@ -114,6 +118,7 @@ No transaction in either case. No `UNIQUE` on `payments(orderId, processor)`.
 - Tests for the conflict path.
 
 **Out of scope:**
+
 - Polar webhook: idempotency there depends on `origin/security` having
   landed the signature-verification fix. Plan a follow-up; do not bundle.
 - Refactoring the LemonSqueezy `subscription_*` events' metadata-LIKE check
@@ -131,17 +136,18 @@ No transaction in either case. No `UNIQUE` on `payments(orderId, processor)`.
 ### Step 1: Add a unique constraint to `payments`
 
 The right key is `(processor, processorOrderId)`, not `orderId` alone:
+
 - `orderId` is nullable (free-product internal IDs may be absent).
 - Two providers could theoretically emit the same `orderId` string.
 - `processorOrderId` is the foreign system's authoritative ID.
 
-If `processorOrderId` is currently *also* nullable, you can't enforce a
+If `processorOrderId` is currently _also_ nullable, you can't enforce a
 unique constraint until non-null is true for the rows webhooks insert. Two
 acceptable shapes:
 
 **Option A (cleaner, recommended):** make `processorOrderId notNull` on all
 new inserts (the webhook handlers always have it). Existing nullable rows
-created before this change are tolerated; the constraint is `UNIQUE (processor, processor_order_id)` *with* `processorOrderId` still nullable in the schema (Postgres allows multiple NULLs in a unique index by default). This works.
+created before this change are tolerated; the constraint is `UNIQUE (processor, processor_order_id)` _with_ `processorOrderId` still nullable in the schema (Postgres allows multiple NULLs in a unique index by default). This works.
 
 **Option B:** introduce a separate dedup table `payment_idempotency (processor, event_id PRIMARY KEY)` and write to it inside the same transaction as the payment insert. More code, but doesn't change the existing schema. Pick A unless you discover a reason A breaks.
 
@@ -171,6 +177,7 @@ this repo uses — check the existing `index`/`uniqueIndex` imports at the top
 of `schema.ts`).
 
 **Verify**:
+
 - `bun run db:generate` produces a new migration that contains `CREATE UNIQUE INDEX`.
 - Inspect the migration. Expect: `CREATE UNIQUE INDEX "payment_processor_processor_order_id_uniq" ON "payment" ("processor","processor_order_id")` (table name may be prefixed if `DB_PREFIX` is set — that's fine).
 
@@ -213,9 +220,10 @@ existing-or-just-inserted payment record either way.
 ### Step 4: Simplify the webhook check-then-insert into a single call
 
 LemonSqueezy `route.ts`:
+
 - For `order_*` event types, the existing `isEventProcessed` call can stay
   as a fast-path optimization (it answers 200 quickly when an event is
-  obviously already processed), but the *correctness* now lives in
+  obviously already processed), but the _correctness_ now lives in
   `createPayment`'s `onConflictDoNothing`. Add a comment noting that the
   pre-check is now an optimization, not a guarantee.
 - For `subscription_*` events: see Maintenance notes; do not change behavior
@@ -227,13 +235,16 @@ itself handles the conflict. Keep the `existingPayment` log block if
 desired for debug visibility (read first, then call).
 
 Critically: fix the silent-on-error path. Change:
+
 ```ts
 } catch (error) {
   logger.error("Error checking if event is processed", { eventId, eventName, error });
   return false;
 }
 ```
+
 to:
+
 ```ts
 } catch (error) {
   logger.error("Error checking if event is processed", { eventId, eventName, error });
@@ -251,6 +262,7 @@ add to an existing payment-service test file once plan 008 introduces one;
 this plan should NOT block on plan 008 — write the file fresh if needed).
 
 Tests:
+
 1. **Conflict returns existing.** Call `createPayment` once with `processor:"stripe", processorOrderId:"pi_123"`. Call again with the same key — second call returns the same record, no second row inserted. (Verify with a `db.select().from(payments).where(…).count()` style query.)
 2. **Different `processorOrderId` inserts a new row.** Same processor, different IDs → two rows.
 3. **Different `processor`, same `processorOrderId` inserts a new row.** (E.g. someone has both a Stripe and a LemonSqueezy order with the same external string ID — pathological but possible.)
@@ -301,8 +313,8 @@ single row appears in `payments`.
 ## Maintenance notes
 
 - The LemonSqueezy `subscription_*` event idempotency uses a metadata LIKE
-  query (`%"subscription_id":"${eventId}"%`). After this plan, the *payment*
-  insert is safe, but the *subscription metadata search* is still messy.
+  query (`%"subscription_id":"${eventId}"%`). After this plan, the _payment_
+  insert is safe, but the _subscription metadata search_ is still messy.
   Follow-up plan to extract subscription IDs into a real column and index
   it — out of scope here.
 - The Polar webhook gets the same treatment once its signature verification

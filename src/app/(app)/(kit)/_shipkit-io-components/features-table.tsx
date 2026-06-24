@@ -454,22 +454,20 @@ export const FeaturesTable = () => {
                       />
                     </TableCell>
                     {!isMobile ? (
-                      <>
-                        {comparePlans.map((plan) => (
-                          <TableCell key={plan} className="text-center">
-                            {feature[plan] ? (
-                              <Check
-                                className={cn(
-                                  "mx-auto h-4 w-4",
-                                  shouldHighlight(feature) ? "text-primary" : "text-green-500"
-                                )}
-                              />
-                            ) : (
-                              <Minus className="mx-auto h-4 w-4 text-muted-foreground" />
-                            )}
-                          </TableCell>
-                        ))}
-                      </>
+                      comparePlans.map((plan) => (
+                        <TableCell key={plan} className="text-center">
+                          {feature[plan] ? (
+                            <Check
+                              className={cn(
+                                "mx-auto h-4 w-4",
+                                shouldHighlight(feature) ? "text-primary" : "text-green-500"
+                              )}
+                            />
+                          ) : (
+                            <Minus className="mx-auto h-4 w-4 text-muted-foreground" />
+                          )}
+                        </TableCell>
+                      ))
                     ) : (
                       <TableCell className="text-center">
                         <Badge

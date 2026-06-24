@@ -318,14 +318,10 @@ export const buildTimeFeatureFlags = Object.fromEntries(
 ) as Record<`NEXT_PUBLIC_FEATURE_${string}`, string>;
 
 // Always export AUTH_ENABLED regardless of its value for client-side checks
-if (!buildTimeFeatureFlags.NEXT_PUBLIC_FEATURE_AUTH_ENABLED) {
-  buildTimeFeatureFlags.NEXT_PUBLIC_FEATURE_AUTH_ENABLED = buildTimeFeatures.AUTH_ENABLED
-    ? "true"
-    : "false";
-}
+buildTimeFeatureFlags.NEXT_PUBLIC_FEATURE_AUTH_ENABLED ??= buildTimeFeatures.AUTH_ENABLED
+  ? "true"
+  : "false";
 
 // Always export AUTH_METHODS_ENABLED regardless of its value (used client-side)
-if (!buildTimeFeatureFlags.NEXT_PUBLIC_FEATURE_AUTH_METHODS_ENABLED) {
-  buildTimeFeatureFlags.NEXT_PUBLIC_FEATURE_AUTH_METHODS_ENABLED =
-    buildTimeFeatures.AUTH_METHODS_ENABLED ? "true" : "false";
-}
+buildTimeFeatureFlags.NEXT_PUBLIC_FEATURE_AUTH_METHODS_ENABLED ??=
+  buildTimeFeatures.AUTH_METHODS_ENABLED ? "true" : "false";

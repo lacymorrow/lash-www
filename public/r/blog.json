@@ -3,12 +3,7 @@
   "name": "blog",
   "title": "Blog",
   "description": "Complete blog system with MDX posts, author profiles, categories, sidebar, and feed-style timeline layout.",
-  "dependencies": [
-    "gray-matter",
-    "next-mdx-remote",
-    "remark-gfm",
-    "lucide-react"
-  ],
+  "dependencies": ["gray-matter", "next-mdx-remote", "remark-gfm", "lucide-react"],
   "registryDependencies": [
     "@shipkit/cn",
     "@shipkit/routes-config",
@@ -167,9 +162,6 @@
     }
   ],
   "docs": "MDX-powered blog with author profiles, categories, feed-style timeline, and sidebar navigation. Place `.mdx` posts in `src/content/blog/`. Add `withBlog()` to your `next.config.ts` to auto-detect blog content.",
-  "categories": [
-    "shipkit",
-    "blog"
-  ],
+  "categories": ["shipkit", "blog"],
   "type": "registry:block"
 }

@@ -3,9 +3,7 @@
   "name": "data-table",
   "title": "Data Table",
   "description": "Feature-rich data table with search, pagination, column visibility, and row actions built on TanStack Table.",
-  "dependencies": [
-    "@tanstack/react-table"
-  ],
+  "dependencies": ["@tanstack/react-table"],
   "registryDependencies": [
     "@shipkit/cn",
     "button",

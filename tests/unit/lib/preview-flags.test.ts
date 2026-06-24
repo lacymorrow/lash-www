@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("next/headers", () => {
   let cookieStore: Record<string, string> = {};
@@ -19,11 +19,11 @@ vi.mock("next/headers", () => {
 });
 
 import {
-  parseTruthy,
-  parseOverridesFromParams,
   getOverrides,
   isFeatureEnabledWithOverrides,
   PREVIEW_COOKIE,
+  parseOverridesFromParams,
+  parseTruthy,
   QUERY_PARAM_PREFIX,
 } from "@/lib/preview-flags";
 
@@ -51,14 +51,14 @@ describe("preview-flags", () => {
       "returns true for truthy value '%s'",
       (value) => {
         expect(parseTruthy(value)).toBe(true);
-      },
+      }
     );
 
     it.each(["0", "false", "off", "no", "disable", "disabled"])(
       "returns false for falsy value '%s'",
       (value) => {
         expect(parseTruthy(value)).toBe(false);
-      },
+      }
     );
 
     it("is case-insensitive", () => {
@@ -83,9 +83,7 @@ describe("preview-flags", () => {
 
   describe("parseOverridesFromParams", () => {
     it("parses feature_flag_database=1 and feature_flag_mdx=0", () => {
-      const params = new URLSearchParams(
-        "feature_flag_database=1&feature_flag_mdx=0",
-      );
+      const params = new URLSearchParams("feature_flag_database=1&feature_flag_mdx=0");
       const result = parseOverridesFromParams(params);
       expect(result).toEqual({
         DATABASE_ENABLED: true,
@@ -95,7 +93,7 @@ describe("preview-flags", () => {
 
     it("ignores non-feature-flag params", () => {
       const params = new URLSearchParams(
-        "token=secret&redirect=/dashboard&feature_flag_database=1",
+        "token=secret&redirect=/dashboard&feature_flag_database=1"
       );
       const result = parseOverridesFromParams(params);
       expect(result).toEqual({ DATABASE_ENABLED: true });
@@ -121,7 +119,7 @@ describe("preview-flags", () => {
 
     it("handles multiple flags", () => {
       const params = new URLSearchParams(
-        "feature_flag_database=1&feature_flag_mdx=0&feature_flag_pwa=true&feature_flag_auth_github=off",
+        "feature_flag_database=1&feature_flag_mdx=0&feature_flag_pwa=true&feature_flag_auth_github=off"
       );
       const result = parseOverridesFromParams(params);
       expect(result).toEqual({
@@ -140,10 +138,7 @@ describe("preview-flags", () => {
     });
 
     it("returns parsed overrides from cookie", async () => {
-      setCookie(
-        PREVIEW_COOKIE,
-        JSON.stringify({ DATABASE_ENABLED: true, MDX_ENABLED: false }),
-      );
+      setCookie(PREVIEW_COOKIE, JSON.stringify({ DATABASE_ENABLED: true, MDX_ENABLED: false }));
       const result = await getOverrides();
       expect(result).toEqual({ DATABASE_ENABLED: true, MDX_ENABLED: false });
     });
@@ -154,7 +149,7 @@ describe("preview-flags", () => {
         JSON.stringify({
           DATABASE_ENABLED: true,
           FAKE_FLAG: true,
-        }),
+        })
       );
       const result = await getOverrides();
       expect(result).toEqual({ DATABASE_ENABLED: true });
@@ -166,7 +161,7 @@ describe("preview-flags", () => {
         JSON.stringify({
           DATABASE_ENABLED: true,
           MDX_ENABLED: "yes",
-        }),
+        })
       );
       const result = await getOverrides();
       expect(result).toEqual({ DATABASE_ENABLED: true });
@@ -187,10 +182,7 @@ describe("preview-flags", () => {
 
   describe("isFeatureEnabledWithOverrides", () => {
     it("returns override value when flag is overridden", async () => {
-      setCookie(
-        PREVIEW_COOKIE,
-        JSON.stringify({ DATABASE_ENABLED: false }),
-      );
+      setCookie(PREVIEW_COOKIE, JSON.stringify({ DATABASE_ENABLED: false }));
       const result = await isFeatureEnabledWithOverrides("DATABASE_ENABLED");
       expect(result).toBe(false);
     });
