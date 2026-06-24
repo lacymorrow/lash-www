@@ -17,6 +17,7 @@ const eslintConfig = [
 			".cursor/**",
 			".next/**",
 			".vercel/**",
+			".claude/**",
 			"public/**",
 			// tsconfig excludes (demo) examples; ESLint needs to match or it
 			// can't find them in any TS project for type-aware linting.

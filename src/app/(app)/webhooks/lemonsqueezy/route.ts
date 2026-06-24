@@ -67,7 +67,7 @@ interface SubscriptionAttributes {
   status_formatted: string;
   card_brand: string | null;
   card_last_four: string | null;
-  pause: unknown;
+  pause: any | null;
   cancelled: boolean;
   trial_ends_at: string | null;
   billing_anchor: number;
@@ -88,7 +88,7 @@ interface WebhookPayload {
   data: {
     type: "orders" | "subscriptions" | "subscription_invoices" | "license_keys";
     id: string;
-    attributes: OrderAttributes | SubscriptionAttributes | Record<string, unknown>;
+    attributes: OrderAttributes | SubscriptionAttributes | any;
   };
 }
 
@@ -197,9 +197,7 @@ async function findOrCreateUser(
     return user.id;
   } catch (error) {
     logger.error("Error finding or creating user", { userEmail, userName, error });
-    throw new Error(
-      `Failed to find or create user: ${error instanceof Error ? error.message : String(error)}`
-    );
+    throw new Error(`Failed to find or create user: ${error}`);
   }
 }
 
@@ -640,7 +638,6 @@ export async function POST(request: Request) {
 }
 
 // Prevent GET requests
-// eslint-disable-next-line @typescript-eslint/require-await
 export async function GET() {
   return new NextResponse("Method not allowed", { status: 405 });
 }
