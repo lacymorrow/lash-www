@@ -36,6 +36,7 @@ export const FeaturesGrid = ({ title, subtitle, features, columns = 3 }: Feature
         >
           {features.map((feature, index) => (
             <div
+              // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
               key={index}
               className="rounded-lg border border-gray-200 p-6 transition-shadow hover:shadow-lg"
             >

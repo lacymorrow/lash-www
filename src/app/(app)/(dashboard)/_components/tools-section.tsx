@@ -615,6 +615,7 @@ const ToolCardContent = ({
       <div className="mt-3 flex flex-wrap gap-1">
         {tool.keywords.slice(0, 6).map((keyword, index) => (
           <span
+            // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
             key={`${keyword}-${index}`}
             className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground"
           >

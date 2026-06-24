@@ -146,6 +146,7 @@ const DefaultFallback: React.FC<{
           <h4 className="text-sm font-medium">Suggested solutions:</h4>
           <ul className="space-y-1 text-sm text-muted-foreground">
             {getErrorSolution().map((solution, index) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
               <li key={index} className="flex items-start gap-2">
                 <span className="mt-1 text-xs">•</span>
                 <span>{solution}</span>

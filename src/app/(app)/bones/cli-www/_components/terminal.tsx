@@ -55,6 +55,7 @@ export function Terminal({ output, className }: TerminalProps) {
           <div
             key={`${i}-${line.slice(0, 20)}`}
             className="min-h-[6px]"
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted internal HTML source
             dangerouslySetInnerHTML={{
               __html: convert.toHtml(cleanAnsi(line)) || "&nbsp;",
             }}

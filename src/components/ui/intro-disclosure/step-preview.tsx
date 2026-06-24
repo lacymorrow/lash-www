@@ -38,6 +38,7 @@ export function StepPreview({ step, direction }: { step: Step; direction: 1 | -1
                 className="object-cover"
               />
             ) : (
+              // biome-ignore lint/a11y/useMediaCaption: optional demo media without captions
               <video src={step.media.src} controls className="h-full w-full object-cover" />
             )}
           </motion.div>

@@ -73,6 +73,7 @@ export default function AuthorPageLoading() {
       {/* Posts List */}
       <div className="grid gap-6">
         {Array.from({ length: 3 }).map((_, i) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
           <Card key={i} className="transition-colors">
             <CardHeader>
               <div className="mb-2 flex flex-wrap gap-2">

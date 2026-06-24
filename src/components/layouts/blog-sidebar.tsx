@@ -51,7 +51,9 @@ const BlogNavigation = ({ posts }: BlogSidebarProps) => {
   const allCategories = useMemo(() => {
     const cats = new Set<string>();
     posts.forEach((post) => {
-      post.categories?.forEach((cat) => cats.add(cat));
+      post.categories?.forEach((cat) => {
+        cats.add(cat);
+      });
     });
     return Array.from(cats).sort();
   }, [posts]);

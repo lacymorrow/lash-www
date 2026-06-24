@@ -134,6 +134,7 @@ export function StripeGradient(props: GradientBackgroundProps = {}) {
       canvas.height = height;
 
       gl.viewport(0, 0, width, height);
+      // biome-ignore lint/correctness/useHookAtTopLevel: WebGL gl.useProgram is not a React hook
       gl.useProgram(program);
 
       const time = ((Date.now() - startTimeRef.current) / 1000) * mergedProps.speed;

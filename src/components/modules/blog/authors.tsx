@@ -23,6 +23,7 @@ export const BlogAuthors = ({ authors }: BlogAuthorsProps) => {
   if (!authors || authors.length === 0) return null;
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: presentational author group with explicit aria role
     <div className="relative z-0 mt-6 flex -space-x-2" role="group" aria-label="Article authors">
       {authors.map((author, i) => {
         const isNewAuthor = isBlogAuthor(author);

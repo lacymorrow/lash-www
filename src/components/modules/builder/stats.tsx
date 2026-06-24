@@ -45,6 +45,7 @@ export const Stats = ({
         >
           {stats.map((stat, index) => (
             <div
+              // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
               key={index}
               className="rounded-lg border border-gray-200 p-6 text-center transition-shadow hover:shadow-lg"
             >

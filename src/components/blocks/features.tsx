@@ -27,6 +27,7 @@ export function Features() {
         <div className="grid gap-8 md:grid-cols-3">
           {features.map((feature, index) => (
             <motion.div
+              // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
               key={index}
               className="rounded-lg bg-background p-6 shadow-lg"
               initial={{ opacity: 0, y: 20 }}

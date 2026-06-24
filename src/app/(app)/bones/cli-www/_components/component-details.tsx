@@ -66,6 +66,7 @@ export function ComponentDetails({
 
   return (
     <>
+      {/* biome-ignore lint/a11y/useSemanticElements: backdrop overlay - role/tabIndex used for keyboard close */}
       <div
         className="absolute inset-0 z-40 bg-background/50"
         onClick={onClose}

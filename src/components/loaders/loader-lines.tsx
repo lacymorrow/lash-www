@@ -97,6 +97,7 @@ export const LoaderLines = ({
     >
       <div className="loader-inner">
         {[...Array(5)].map((_, i) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
           <div key={i} className="loader-line-wrap">
             <div className="loader-line" />
           </div>

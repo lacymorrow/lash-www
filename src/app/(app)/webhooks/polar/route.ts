@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
   try {
     // Get the raw body for webhook verification
     const body = await request.text();
-    let event;
+    let event: any;
 
     try {
       event = JSON.parse(body);

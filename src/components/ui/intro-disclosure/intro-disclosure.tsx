@@ -67,10 +67,6 @@ export function IntroDisclosure({
     }
   }, [initialCompletedSteps]);
 
-  if (!isVisible || !open) {
-    return null;
-  }
-
   const handleNext = () => {
     setDirection(1);
     setCompletedSteps((prev) => (prev.includes(currentStep) ? prev : [...prev, currentStep]));
@@ -130,6 +126,10 @@ export function IntroDisclosure({
   };
 
   const { handleDragEnd } = useSwipe(handleSwipe);
+
+  if (!isVisible || !open) {
+    return null;
+  }
 
   if (isDesktop) {
     return (
@@ -193,6 +193,7 @@ export function IntroDisclosure({
               <div className="mb-6 grid grid-cols-2 gap-2">
                 {steps.map((step, index) => (
                   <StepTab
+                    // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
                     key={index}
                     step={step}
                     isActive={currentStep === index}
@@ -226,7 +227,7 @@ export function IntroDisclosure({
                         <ExternalLinkIcon className="h-4 w-4" />
                       </a>
                     ) : (
-                      <button onClick={steps[currentStep]?.action?.onClick}>
+                      <button type="button" onClick={steps[currentStep]?.action?.onClick}>
                         {steps[currentStep]?.action?.label}
                       </button>
                     )}

@@ -51,6 +51,7 @@ const Skiper41 = () => {
 
         <div className="mt-24 w-full max-w-lg space-y-20 px-5 text-justify">
           {Array.from({ length: 10 }).map((_, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
             <div key={index}>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati, reiciendis eum
               vitae nostrum, temporibus repudiandae voluptatibus, natus iure ipsa velit odit

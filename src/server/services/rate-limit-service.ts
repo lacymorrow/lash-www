@@ -106,6 +106,7 @@ export class RateLimitService {
     const key = `ratelimit:${action}:${identifier}`;
     // @ts-expect-error
     const [[limit], [remaining], [reset]] = await redis
+      // biome-ignore lint/correctness/noUnsafeOptionalChaining: runtime safety ensured by isUpstashConfigured() guard above
       ?.pipeline()
       .get(`${key}:limit`)
       .get(`${key}:remaining`)

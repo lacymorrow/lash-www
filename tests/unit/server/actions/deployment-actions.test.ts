@@ -26,6 +26,7 @@ vi.mock("@/server/db", () => ({
     and: vi.fn((...args) => args),
     desc: vi.fn((col) => col),
     execute: vi.fn(),
+    // biome-ignore lint/suspicious/noThenProperty: mocking a thenable for DB query builder chain
     then: vi.fn(),
   },
 }));
@@ -64,6 +65,7 @@ describe.skip("Deployment Actions (DB gated)", () => {
       };
 
       vi.mocked(db.db.returning).mockReturnValue({
+        // biome-ignore lint/suspicious/noThenProperty: mocking thenable for DB query builder chain
         then: vi.fn().mockResolvedValue([mockCreatedDeployment]),
       } as any);
 
@@ -102,6 +104,7 @@ describe.skip("Deployment Actions (DB gated)", () => {
       };
 
       vi.mocked(db.db.returning).mockReturnValue({
+        // biome-ignore lint/suspicious/noThenProperty: mocking thenable for DB query builder chain
         then: vi.fn().mockResolvedValue([mockUpdatedDeployment]),
       } as any);
 
@@ -126,6 +129,7 @@ describe.skip("Deployment Actions (DB gated)", () => {
       const deploymentId = "test-deployment-id";
 
       vi.mocked(db.db.returning).mockReturnValue({
+        // biome-ignore lint/suspicious/noThenProperty: mocking thenable for DB query builder chain
         then: vi.fn().mockResolvedValue([{ id: deploymentId }]),
       } as any);
 
@@ -138,6 +142,7 @@ describe.skip("Deployment Actions (DB gated)", () => {
 
     it("should return false when deployment not found", async () => {
       vi.mocked(db.db.returning).mockReturnValue({
+        // biome-ignore lint/suspicious/noThenProperty: mocking thenable for DB query builder chain
         then: vi.fn().mockResolvedValue([]),
       } as any);
 

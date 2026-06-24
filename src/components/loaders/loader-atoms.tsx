@@ -31,6 +31,7 @@ export interface LoaderAtomsProps
 export const LoaderAtoms = React.forwardRef<HTMLDivElement, LoaderAtomsProps>(
   ({ className, size, color, label, ...props }, ref) => {
     return (
+      // biome-ignore lint/a11y/useAriaPropsSupportedByRole: live region announcement on container div
       <div
         ref={ref}
         aria-live="polite"

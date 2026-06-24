@@ -425,6 +425,8 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
         } // When onSearch is provided, we don't want to filter the options. You can still override it.
         filter={commandFilter()}
       >
+        {/* biome-ignore lint/a11y/noStaticElementInteractions: decorative/UI hover interaction, not primary action */}
+        {/* biome-ignore lint/a11y/useKeyWithClickEvents: decorative click target, no keyboard handler required */}
         <div
           className={cn(
             "min-h-10 rounded-md border border-input text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
@@ -453,7 +455,7 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
                   data-disabled={disabled || undefined}
                 >
                   {option.label}
-                  <button
+                  <button type="button"
                     className={cn(
                       "ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2",
                       (disabled || option.fixed) && "hidden"

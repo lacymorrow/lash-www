@@ -95,6 +95,7 @@ const HoverExpand_001 = ({
         <div className="flex w-full items-center justify-center gap-1">
           {images.map((image, index) => (
             <motion.div
+              // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
               key={index}
               className="relative cursor-pointer overflow-hidden rounded-3xl"
               initial={{ width: "2.5rem", height: "20rem" }}

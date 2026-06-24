@@ -13,6 +13,7 @@ const ScrollFade = () => {
           <div className="space-y-1 p-1">
             {Array.from({ length: 11 }).map((_, index) => (
               <div
+                // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
                 key={index}
                 className="flex h-10 w-full items-center gap-2 rounded-lg bg-foreground/5 px-4 text-foreground/30 hover:bg-foreground/10"
               >

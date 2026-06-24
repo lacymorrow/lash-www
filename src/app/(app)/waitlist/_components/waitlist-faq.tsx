@@ -61,6 +61,7 @@ export function WaitlistFAQ() {
               <Accordion type="single" collapsible className="w-full">
                 {faqs.map((faq, index) => (
                   <AccordionItem
+                    // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
                     key={index}
                     value={`item-${index}`}
                     className="border-slate-200 dark:border-slate-700"

@@ -272,7 +272,7 @@ export const AISmollmWebGPU = () => {
               </div>
             )}
 
-            <button
+            <button type="button"
               className="select-none rounded-lg border bg-blue-400 px-4 py-2 text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-blue-100"
               onClick={() => {
                 worker.current.postMessage({ type: "load" });
@@ -289,6 +289,7 @@ export const AISmollmWebGPU = () => {
         <div className="bottom-0 mx-auto mt-auto w-full max-w-[500px] p-4 text-left">
           <p className="mb-1 text-center">{loadingMessage}</p>
           {progressItems.map(({ file, progress, total }, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
             <Progress key={i} text={file} percentage={progress} total={total} />
           ))}
         </div>
@@ -303,7 +304,10 @@ export const AISmollmWebGPU = () => {
           {messages.length === 0 && (
             <div>
               {EXAMPLES.map((msg, i) => (
+                // biome-ignore lint/a11y/noStaticElementInteractions: decorative/UI hover interaction, not primary action
+                // biome-ignore lint/a11y/useKeyWithClickEvents: decorative click target, no keyboard handler required
                 <div
+                  // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
                   key={i}
                   className="m-1 cursor-pointer rounded-md border bg-gray-100 p-2 dark:border-gray-600 dark:bg-gray-700"
                   onClick={() => onEnter(msg)}
@@ -333,6 +337,8 @@ export const AISmollmWebGPU = () => {
                 {!isRunning && (
                   <>
                     <span className="mr-1">&#41;.</span>
+                    {/* biome-ignore lint/a11y/noStaticElementInteractions: decorative/UI hover interaction, not primary action */}
+                    {/* biome-ignore lint/a11y/useKeyWithClickEvents: decorative click target, no keyboard handler required */}
                     <span
                       className="cursor-pointer underline"
                       onClick={() => {

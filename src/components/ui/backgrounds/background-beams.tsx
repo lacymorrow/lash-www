@@ -80,6 +80,7 @@ export const BackgroundBeams = React.memo(({ className }: { className?: string }
 
         {paths.map((path, index) => (
           <motion.path
+            // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
             key={`path-${index}`}
             d={path}
             stroke={`url(#linearGradient-${index})`}
@@ -91,6 +92,7 @@ export const BackgroundBeams = React.memo(({ className }: { className?: string }
           {paths.map((_path, index) => (
             <motion.linearGradient
               id={`linearGradient-${index}`}
+              // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
               key={`gradient-${index}`}
               initial={{
                 x1: "0%",

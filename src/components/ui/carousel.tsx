@@ -118,6 +118,7 @@ const Carousel = React.forwardRef<
         canScrollNext,
       }}
     >
+      {/* biome-ignore lint/a11y/useSemanticElements: carousel wrapper uses explicit role/aria for semantics */}
       <div
         ref={ref}
         onKeyDownCapture={handleKeyDown}
@@ -159,6 +160,7 @@ const CarouselItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
     const { orientation } = useCarousel();
 
     return (
+      // biome-ignore lint/a11y/useSemanticElements: carousel slide uses explicit role for screen readers
       <div
         ref={ref}
         role="group"

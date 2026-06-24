@@ -89,6 +89,7 @@ const ScrollArea = React.forwardRef<
     return (
       <ScrollAreaContext.Provider value={isTouch}>
         {isTouch ? (
+          // biome-ignore lint/a11y/useSemanticElements: scroll area uses explicit role for screen readers
           <div
             ref={ref}
             role="group"

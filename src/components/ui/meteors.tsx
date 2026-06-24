@@ -25,6 +25,7 @@ export const Meteors = ({ number = 20 }: MeteorsProps) => {
       {[...meteorStyles].map((style, idx) => (
         // Meteor Head
         <span
+          // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
           key={idx}
           className={cn(
             "pointer-events-none absolute left-1/2 top-1/2 size-0.5 rotate-[215deg] animate-meteor rounded-full bg-slate-500 shadow-[0_0_0_1px_#ffffff10]"

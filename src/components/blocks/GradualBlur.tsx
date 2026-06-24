@@ -135,7 +135,7 @@ function GradualBlur(props: any) {
       let progress = i / config.divCount;
       progress = curveFunc(progress);
 
-      let blurValue;
+      let blurValue: number;
       if (config.exponential) {
         blurValue = ((2 ** (progress * 4)) as number) * 0.0625 * currentStrength;
       } else {
@@ -215,6 +215,7 @@ function GradualBlur(props: any) {
   }, [isVisible, animated, onAnimationComplete, duration]);
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: decorative/UI hover interaction, not primary action
     <div
       ref={containerRef}
       className={`gradual-blur ${config.target === "page" ? "gradual-blur-page" : "gradual-blur-parent"} ${config.className}`}

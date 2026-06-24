@@ -40,6 +40,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
 }
 
 function _LinkStatusDot() {
+  // biome-ignore lint/correctness/useHookAtTopLevel: component named with leading underscore (unused export); hook is at top level of component
   const { pending } = useLinkStatus();
 
   if (pending) {

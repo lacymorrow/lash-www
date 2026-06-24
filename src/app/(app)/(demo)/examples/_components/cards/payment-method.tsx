@@ -121,6 +121,7 @@ export function CardsPaymentMethod() {
               </SelectTrigger>
               <SelectContent>
                 {Array.from({ length: 10 }, (_, i) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
                   <SelectItem key={i} value={`${new Date().getFullYear() + i}`}>
                     {new Date().getFullYear() + i}
                   </SelectItem>

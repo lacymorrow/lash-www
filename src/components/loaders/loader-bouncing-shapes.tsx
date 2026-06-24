@@ -19,6 +19,7 @@ export const LoaderBouncingShapes = () => {
 
   useEffect(() => {
     const shapes = shapesRef.current.filter(Boolean);
+    const intervals: ReturnType<typeof setInterval>[] = [];
 
     shapes.forEach((shape, _index) => {
       if (!shape) return;
@@ -54,8 +55,14 @@ export const LoaderBouncingShapes = () => {
         }, 400);
       }, 740);
 
-      return () => clearInterval(interval);
+      intervals.push(interval);
     });
+
+    return () => {
+      intervals.forEach((interval) => {
+        clearInterval(interval);
+      });
+    };
   }, []);
 
   return (
@@ -142,6 +149,7 @@ export const LoaderBouncingShapes = () => {
       <div className="loader">
         {[...Array(3)].map((_, i) => (
           <div
+            // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
             key={i}
             ref={(el) => {
               if (el) {

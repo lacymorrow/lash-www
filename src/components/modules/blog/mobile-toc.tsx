@@ -34,6 +34,7 @@ function MobileTocInner({ headings }: MobileTocProps) {
   }
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: outer collapsible container with explicit aria role
     <div className="mb-8 xl:hidden" role="complementary" aria-label="Mobile table of contents">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
@@ -78,7 +79,7 @@ function MobileTocErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
           {error instanceof Error && (
             <p className="mb-3 text-xs text-muted-foreground">{error.message}</p>
           )}
-          <button
+          <button type="button"
             onClick={resetErrorBoundary}
             className="text-xs text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1"
           >

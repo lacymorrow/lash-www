@@ -179,6 +179,7 @@ export const BlogPostListSkeleton = ({
   return (
     <div className={cn("space-y-8", className)}>
       {Array.from({ length: count }).map((_, i) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
         <BlogPostListItemSkeleton key={i} />
       ))}
     </div>
