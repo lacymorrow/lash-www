@@ -83,7 +83,7 @@ export default async function DownloadPage() {
     hasPurchased,
     hasGitHubConnection: gitHubStatus.isConnected,
     githubUsername: gitHubStatus.username,
-    userEmail: session?.user?.email || undefined,
+    userEmail: session?.user?.email ?? undefined,
   };
 
   return (

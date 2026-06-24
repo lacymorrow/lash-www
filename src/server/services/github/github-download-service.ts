@@ -69,7 +69,7 @@ async function makeGitHubRequest(url: string): Promise<{
           response.on("end", () => {
             try {
               resolve({
-                statusCode: response.statusCode || 500,
+                statusCode: response.statusCode ?? 500,
                 headers: response.headers,
                 data: data ? JSON.parse(data) : null,
               });
@@ -117,7 +117,7 @@ async function verifyTokenPermissions(): Promise<{
     return {
       isValid: false,
       scopes,
-      error: data?.message || "Unknown error",
+      error: data?.message ?? "Unknown error",
     };
   } catch (error) {
     logger.error("GitHub repository accessibility request failed", { error });
@@ -307,7 +307,7 @@ async function downloadLatestRelease(): Promise<{
   if (!isValid) {
     throw new Error(
       `GitHub token verification failed: ${error}. Required scopes: repo. Current scopes: ${
-        scopes?.join(", ") || "none"
+        scopes?.join(", ") ?? "none"
       }`
     );
   }

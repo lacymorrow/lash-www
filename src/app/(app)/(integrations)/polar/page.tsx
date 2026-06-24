@@ -32,13 +32,13 @@ export default async function SubscriptionsPage() {
     hasSubscription = await hasUserActiveSubscription(userId);
 
     // Check subscription tiers
-    const subscriptionId = process.env.NEXT_PUBLIC_POLAR_SUBSCRIPTION_PRICE_ID || "";
+    const subscriptionId = process.env.NEXT_PUBLIC_POLAR_SUBSCRIPTION_PRICE_ID ?? "";
     if (subscriptionId) {
       purchasedProducts[subscriptionId] = hasSubscription;
     }
 
     // Check one-time product
-    const oneTimeId = process.env.NEXT_PUBLIC_POLAR_ONE_TIME_PRICE_ID || "";
+    const oneTimeId = process.env.NEXT_PUBLIC_POLAR_ONE_TIME_PRICE_ID ?? "";
     if (oneTimeId) {
       purchasedProducts[oneTimeId] = await hasUserPurchasedProduct(userId, oneTimeId);
     }
@@ -46,7 +46,7 @@ export default async function SubscriptionsPage() {
 
   const subscriptionTiers = [
     {
-      id: process.env.NEXT_PUBLIC_POLAR_SUBSCRIPTION_PRICE_ID || "",
+      id: process.env.NEXT_PUBLIC_POLAR_SUBSCRIPTION_PRICE_ID ?? "",
       name: "Basic",
       description: "Perfect for getting started",
       price: "$9/month",
@@ -55,7 +55,7 @@ export default async function SubscriptionsPage() {
 
   const oneTimeTiers = [
     {
-      id: process.env.NEXT_PUBLIC_POLAR_ONE_TIME_PRICE_ID || "",
+      id: process.env.NEXT_PUBLIC_POLAR_ONE_TIME_PRICE_ID ?? "",
       name: "One-Time",
       description: "Perfect for getting started",
       price: "$5",

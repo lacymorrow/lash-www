@@ -47,7 +47,7 @@ export function ComponentStats({ component, currentStyle }: ComponentStatsProps)
 
         // Check dependencies
         const dependencies: DependencyStats = {
-          total: component.dependencies?.length || 0,
+          total: component.dependencies?.length ?? 0,
           installed: 0,
           missing: [],
         };
@@ -66,7 +66,7 @@ export function ComponentStats({ component, currentStyle }: ComponentStatsProps)
 
         // Check registry dependencies
         const registryDependencies: DependencyStats = {
-          total: component.registryDependencies?.length || 0,
+          total: component.registryDependencies?.length ?? 0,
           installed: 0,
           missing: [],
         };

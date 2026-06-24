@@ -81,7 +81,7 @@ export function BrowserHeader({
                     style={{ backgroundColor: getColor(currentRegistry.name) }}
                   />
                 )}
-                {currentRegistry?.name || "All Registries"}
+                {currentRegistry?.name ?? "All Registries"}
               </div>
               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
@@ -165,7 +165,7 @@ export function BrowserHeader({
                               if (currentRegistry?.name === registry.name) {
                                 const defaultRegistry = registries.find((r) => !r.custom);
                                 const fallbackRegistry = registries[0];
-                                const nextRegistry = defaultRegistry || fallbackRegistry;
+                                const nextRegistry = defaultRegistry ?? fallbackRegistry;
                                 if (nextRegistry) {
                                   handleRegistryChange(nextRegistry);
                                 }

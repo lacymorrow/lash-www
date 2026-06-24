@@ -54,7 +54,7 @@ export async function connectGitHub(data?: GitHubConnectionData) {
       // The username should already be in the session
       githubData = {
         githubId: githubAccount.providerAccountId,
-        githubUsername: session.user.githubUsername || "",
+        githubUsername: session.user.githubUsername ?? "",
         accessToken: "", // We don't have direct access to the token here
       };
     }
@@ -210,7 +210,7 @@ export async function verifyGitHubUsername(username: string) {
     const session = await auth();
     console.log("Auth session in verifyGitHubUsername:", {
       isAuthenticated: !!session?.user?.id,
-      sessionStrategy: process.env.NEXTAUTH_SESSION_STRATEGY || "default (jwt)",
+      sessionStrategy: process.env.NEXTAUTH_SESSION_STRATEGY ?? "default (jwt)",
       userId: session?.user?.id,
     });
 

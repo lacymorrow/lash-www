@@ -63,7 +63,7 @@ export function ContactForm({ defaultValues, onSuccess, className }: ContactForm
       } else {
         toast({
           title: "Error",
-          description: result.error || "Something went wrong. Please try again.",
+          description: result.error ?? "Something went wrong. Please try again.",
           variant: "destructive",
         });
       }

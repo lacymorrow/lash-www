@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return constructMetadata({
     title: `${post.title} | Shipkit Blog`,
     description:
-      post.description ||
+      post.description ??
       "Read this comprehensive guide on app development best practices, tips, and insights from the Shipkit team.",
     images: [
       {

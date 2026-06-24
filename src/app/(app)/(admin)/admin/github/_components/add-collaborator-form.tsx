@@ -28,7 +28,7 @@ export function AddCollaboratorForm() {
       } else {
         toast({
           title: "Error",
-          description: result.error || "Failed to add collaborator",
+          description: result.error ?? "Failed to add collaborator",
           variant: "destructive",
         });
       }

@@ -116,8 +116,8 @@ export async function GET(request: NextRequest) {
   const apiKey = env.GOOGLE_FONTS_API_KEY;
   const searchParams = request.nextUrl.searchParams;
   const searchQuery = searchParams.get("search")?.trim().toLowerCase();
-  const page = Number.parseInt(searchParams.get("page") || "1", 10);
-  const limit = Number.parseInt(searchParams.get("limit") || String(BROWSE_PAGE_LIMIT), 10);
+  const page = Number.parseInt(searchParams.get("page") ?? "1", 10);
+  const limit = Number.parseInt(searchParams.get("limit") ?? String(BROWSE_PAGE_LIMIT), 10);
 
   if (!apiKey) {
     console.warn(

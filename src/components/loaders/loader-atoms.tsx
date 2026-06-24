@@ -34,7 +34,7 @@ export const LoaderAtoms = React.forwardRef<HTMLDivElement, LoaderAtomsProps>(
       <div
         ref={ref}
         aria-live="polite"
-        aria-label={label || "Loading"}
+        aria-label={label ?? "Loading"}
         className={cn("relative", className)}
         {...props}
       >

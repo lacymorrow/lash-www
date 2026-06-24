@@ -44,7 +44,7 @@ export async function runInstallCommand(
       // First overload: packageManager, command[], displayCommand?
       packageManager = packageManagerOrCommandString;
       command = commandArray;
-      fullCommand = displayCommand || `${packageManager} ${command.join(" ")}`;
+      fullCommand = displayCommand ?? `${packageManager} ${command.join(" ")}`;
     } else {
       // Second overload: commandString
       fullCommand = packageManagerOrCommandString;

@@ -216,7 +216,7 @@ export function AIVoiceDemo() {
 
             case "error":
               console.error("Worker error:", e.data);
-              throw new Error(data?.error || "An error occurred while processing your request.");
+              throw new Error(data?.error ?? "An error occurred while processing your request.");
           }
         };
 

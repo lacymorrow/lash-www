@@ -111,12 +111,12 @@ export function DeploymentsList({ deployments: initialDeployments }: Deployments
           toast.success(`Deployment "${deployment.projectName}" completed successfully!`);
         } else if (deployment.status === "failed") {
           toast.error(
-            `Deployment "${deployment.projectName}" failed: ${deployment.error || "Unknown error"}`,
+            `Deployment "${deployment.projectName}" failed: ${deployment.error ?? "Unknown error"}`,
             { duration: 10000 }
           );
         } else if (deployment.status === "timeout") {
           toast.error(
-            `Deployment "${deployment.projectName}" timed out: ${deployment.error || "No response received"}`,
+            `Deployment "${deployment.projectName}" timed out: ${deployment.error ?? "No response received"}`,
             { duration: 10000 }
           );
         }

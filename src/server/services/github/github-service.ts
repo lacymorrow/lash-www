@@ -82,8 +82,8 @@ export const getRepo = cache(async (owner?: string, repo?: string) => {
   }
   try {
     // Use provided values or fall back to siteConfig defaults
-    const repoOwner = owner || siteConfig.repo.owner;
-    const repoName = repo || siteConfig.repo.name;
+    const repoOwner = owner ?? siteConfig.repo.owner;
+    const repoName = repo ?? siteConfig.repo.name;
 
     const response = await octokit?.rest.repos.get({
       owner: repoOwner,
@@ -540,10 +540,10 @@ export async function getCollaboratorDetails(username: string): Promise<GitHubPr
       login: profile.login,
       avatar_url: profile.avatar_url,
       html_url: profile.html_url,
-      name: profile.name || profile.login,
-      bio: profile.bio || "",
+      name: profile.name ?? profile.login,
+      bio: profile.bio ?? "",
       company: profile.company,
-      blog: profile.blog || "",
+      blog: profile.blog ?? "",
       location: profile.location,
       email: profile.email,
       public_repos: profile.public_repos,

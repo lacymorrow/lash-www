@@ -162,7 +162,7 @@ export const UserDrawer = ({ user, open, onClose }: UserDrawerProps) => {
                           <User className="h-8 w-8 text-primary" />
                         </div>
                         <div>
-                          <h4 className="text-xl font-medium">{user.name || "Unnamed User"}</h4>
+                          <h4 className="text-xl font-medium">{user.name ?? "Unnamed User"}</h4>
                           <div className="flex items-center gap-2 text-sm text-muted-foreground">
                             <Mail className="h-3 w-3" />
                             <span>{user.email}</span>

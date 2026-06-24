@@ -137,7 +137,7 @@ export const seedRBACDirect = async (payload: Payload) => {
             const rolePerms = roleData.permissions.find((p) => p.resource === permission?.resource);
             return (
               rolePerms &&
-              (permission?.action && rolePerms.actions.includes(permission.action) ||
+              ((permission?.action && rolePerms.actions.includes(permission.action)) ||
                 (rolePerms.actions.includes("manage" as Action) && permission?.action === "manage"))
             );
           });

@@ -87,7 +87,7 @@ export const signInWithCredentialsAction = async (input: SignInCredentialsInput)
     }
 
     console.error("Error in signInWithCredentialsAction:", error);
-    return { ok: false, error: error.message || "Sign in failed" };
+    return { ok: false, error: error.message ?? "Sign in failed" };
   }
 };
 
@@ -101,7 +101,7 @@ export const signUpWithCredentialsAction = async (_prevState: ActionState, formD
     const result = await AuthService.signUpWithCredentials(parsed.data);
 
     if (!result.ok || !result.user) {
-      return { ok: false, error: result.error || "Sign up failed" };
+      return { ok: false, error: result.error ?? "Sign up failed" };
     }
 
     // Send verification email (moved from auth service for clarity)
@@ -109,7 +109,7 @@ export const signUpWithCredentialsAction = async (_prevState: ActionState, formD
       if (!resend) {
         console.warn("Resend client not initialized - skipping verification email");
       } else {
-        const RESEND_FROM_EMAIL = env.RESEND_FROM_EMAIL || "noreply@example.com";
+        const RESEND_FROM_EMAIL = env.RESEND_FROM_EMAIL ?? "noreply@example.com";
         await resend.emails.send({
           from: RESEND_FROM_EMAIL,
           to: parsed.data.email,
@@ -129,7 +129,7 @@ export const signUpWithCredentialsAction = async (_prevState: ActionState, formD
     return { ok: true, user: result.user }; // Only return necessary info
   } catch (error: any) {
     console.error("Error in signUpWithCredentialsAction:", error);
-    return { ok: false, error: error.message || "Sign up failed" };
+    return { ok: false, error: error.message ?? "Sign up failed" };
   }
 };
 

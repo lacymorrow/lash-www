@@ -167,7 +167,7 @@ export const PaymentDrawer = ({ payment, open, onClose }: PaymentDrawerProps) =>
                             <User className="h-5 w-5 text-primary" />
                           </div>
                           <div>
-                            <p className="font-medium">{payment.userName || "Unknown"}</p>
+                            <p className="font-medium">{payment.userName ?? "Unknown"}</p>
                             {payment.userEmail && (
                               <div className="flex items-center gap-1 text-sm text-muted-foreground">
                                 <Mail className="h-3 w-3" />

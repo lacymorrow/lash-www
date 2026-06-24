@@ -78,7 +78,7 @@ export async function RepoMetricsContent() {
       per_page: 1,
     });
 
-    const prCount = pullRequests[0]?.number || 0;
+    const prCount = pullRequests[0]?.number ?? 0;
 
     // Get recent commits
     const { data: commits } = await octokit.rest.repos.listCommits({

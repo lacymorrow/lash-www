@@ -37,7 +37,7 @@ export const LoaderBouncingShapes = () => {
           ["--bounce-variance", `${Math.random() * 20 - 10}vh`],
           ["--base_scale", `${Math.random() * 6 + 4}vh`],
           ["--rotation", `${Math.random() * 180 - 90}deg`],
-          ["--color", COLORS[Math.floor(Math.random() * COLORS.length)] || ""],
+          ["--color", COLORS[Math.floor(Math.random() * COLORS.length)] ?? ""],
         ];
 
         styles.forEach(([property, value]) => {

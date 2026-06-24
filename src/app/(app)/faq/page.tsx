@@ -26,7 +26,7 @@ const getAnswerText = (answer: unknown): string => {
   if (typeof answer === "string") return answer;
   if (typeof answer === "object" && answer && "root" in answer) {
     const richText = answer as { root: { children: { children?: { text: string }[] }[] } };
-    return richText.root.children.map((child) => child.children?.[0]?.text || "").join("\n");
+    return richText.root.children.map((child) => child.children?.[0]?.text ?? "").join("\n");
   }
   return "";
 };

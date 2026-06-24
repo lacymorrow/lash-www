@@ -210,7 +210,7 @@ export const ShadcnCommand = ({
         .map((log) => {
           // Color coding for logs
           const formattedMsg = `${log.message}`;
-          let formattedData = log.data || "";
+          let formattedData = log.data ?? "";
 
           // Format prompt outputs and responses
           if (typeof formattedData === "string") {

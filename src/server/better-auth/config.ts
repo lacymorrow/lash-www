@@ -89,10 +89,10 @@ export const auth = (() => {
         }),
     },
 
-    secret: env?.BETTER_AUTH_SECRET || env?.AUTH_SECRET,
-    baseURL: env?.BETTER_AUTH_BASE_URL || BASE_URL,
+    secret: env?.BETTER_AUTH_SECRET ?? env?.AUTH_SECRET,
+    baseURL: env?.BETTER_AUTH_BASE_URL ?? BASE_URL,
 
-    trustedOrigins: [env?.BETTER_AUTH_BASE_URL || BASE_URL],
+    trustedOrigins: [env?.BETTER_AUTH_BASE_URL ?? BASE_URL],
 
     callbacks: {
       async signUp({ user, account }: { user: any; account: any }) {

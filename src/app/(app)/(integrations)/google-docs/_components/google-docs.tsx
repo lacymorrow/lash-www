@@ -75,11 +75,11 @@ function processTextRun(textRun: any): string {
 function processListItem(paragraph: any, lists: any, content: string): string {
   const listId = paragraph.bullet?.listId;
   const list = lists[listId];
-  const nestingLevel = paragraph.bullet?.nestingLevel || 0;
+  const nestingLevel = paragraph.bullet?.nestingLevel ?? 0;
   const listProperties = list.listProperties;
 
   // Get the correct list style
-  const glyphFormat = listProperties?.nestingLevels?.[nestingLevel]?.glyphFormat || "%0.";
+  const glyphFormat = listProperties?.nestingLevels?.[nestingLevel]?.glyphFormat ?? "%0.";
   const glyphType = listProperties?.nestingLevels?.[nestingLevel]?.glyphType;
 
   let listTag = "ul";

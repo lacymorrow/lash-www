@@ -61,7 +61,7 @@ export const ProjectMenu = ({ project, teamId, deleteAction }: ProjectMenuProps)
         </SidebarMenuAction>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-48" align="start">
-        <ProjectDialog variant="edit" project={project} userId={session?.user?.id || ""}>
+        <ProjectDialog variant="edit" project={project} userId={session?.user?.id ?? ""}>
           <DropdownMenuItem className="flex items-center gap-2 px-2 py-1.5">
             <Pencil2Icon className="h-4 w-4" />
             <span className="text-sm">Rename Project</span>

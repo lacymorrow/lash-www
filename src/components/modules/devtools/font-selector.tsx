@@ -132,7 +132,7 @@ export function FontSelector() {
         const response = await fetch(`${FONT_API_PATH}?page=1&limit=${BROWSE_LIMIT}`);
         if (!response.ok) {
           const data: Partial<FontsApiResponse> = await response.json();
-          throw new Error(data.error || `HTTP error! status: ${response.status}`);
+          throw new Error(data.error ?? `HTTP error! status: ${response.status}`);
         }
         const data: FontsApiResponse = await response.json();
 
@@ -168,7 +168,7 @@ export function FontSelector() {
         return;
       }
     }
-    const defaultFont = GOOGLE_FONTS.find((f) => f.family === "Inter")?.family || "";
+    const defaultFont = GOOGLE_FONTS.find((f) => f.family === "Inter")?.family ?? "";
     setSelectedFont(defaultFont);
   }, [mounted, initialLoading, fontCategories]);
 
@@ -182,7 +182,7 @@ export function FontSelector() {
       const response = await fetch(`${FONT_API_PATH}?page=${nextPage}&limit=${BROWSE_LIMIT}`);
       if (!response.ok) {
         const data: Partial<FontsApiResponse> = await response.json();
-        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+        throw new Error(data.error ?? `HTTP error! status: ${response.status}`);
       }
       const data: FontsApiResponse = await response.json();
       const newFonts = data.fonts || [];
@@ -213,7 +213,7 @@ export function FontSelector() {
         );
         if (!response.ok) {
           const data: Partial<FontsApiResponse> = await response.json();
-          throw new Error(data.error || `HTTP error! status: ${response.status}`);
+          throw new Error(data.error ?? `HTTP error! status: ${response.status}`);
         }
         const data: FontsApiResponse = await response.json();
         const fonts = data.fonts || [];

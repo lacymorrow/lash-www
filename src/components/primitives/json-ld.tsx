@@ -175,8 +175,8 @@ export function JsonLd({
       localBusiness && {
         "@type": localBusiness.type || "SoftwareApplication",
         "@id": `${siteConfig.url}/#local-business`,
-        name: localBusiness.name || siteConfig.title,
-        description: localBusiness.description || siteConfig.description,
+        name: localBusiness.name ?? siteConfig.title,
+        description: localBusiness.description ?? siteConfig.description,
         url: siteConfig.url,
         ...(localBusiness.telephone && { telephone: localBusiness.telephone }),
         ...(localBusiness.email && { email: localBusiness.email }),

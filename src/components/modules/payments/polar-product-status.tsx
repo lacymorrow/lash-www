@@ -99,7 +99,7 @@ export function PolarProductStatus({
 
         setIsPurchased(result.purchased);
       } else {
-        setError(result.message || "Failed to check purchase status");
+        setError(result.message ?? "Failed to check purchase status");
       }
     } catch (err) {
       setError("An error occurred while checking purchase status");
@@ -136,7 +136,7 @@ export function PolarProductStatus({
       if (result.success && result.url) {
         window.location.href = result.url;
       } else {
-        toast.error(result.message || "Failed to create checkout URL");
+        toast.error(result.message ?? "Failed to create checkout URL");
       }
     } catch (error) {
       console.error("Error creating checkout:", error);

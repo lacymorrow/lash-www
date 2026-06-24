@@ -32,7 +32,7 @@ export function WaitlistHero() {
         setStatus("error");
         toast({
           title: "Oops, something went wrong",
-          description: result.error || "Mind trying again? We promise it'll work this time.",
+          description: result.error ?? "Mind trying again? We promise it'll work this time.",
           variant: "destructive",
         });
       }

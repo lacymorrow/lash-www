@@ -40,7 +40,7 @@ export const SignInButton = ({
       onSignOut();
     }
     await signOut({
-      callbackUrl: nextUrl || routes.home,
+      callbackUrl: nextUrl ?? routes.home,
       redirect: true,
     });
   };
@@ -58,7 +58,7 @@ export const SignInButton = ({
   if (isAuthenticated && showSignOut) {
     return (
       <Button variant={variant} size={size} className={cn(className)} onClick={handleSignOut}>
-        {children || "Sign Out"}
+        {children ?? "Sign Out"}
       </Button>
     );
   }
@@ -70,7 +70,7 @@ export const SignInButton = ({
 
   return (
     <Link href={signInUrl} className={cn(buttonVariants({ variant, size }), className)}>
-      {children || "Sign In"}
+      {children ?? "Sign In"}
     </Link>
   );
 };

@@ -120,7 +120,7 @@ export function ImportPayments() {
           // Show success toast
           toast({
             title: "All payments deleted",
-            description: result.message || `Successfully deleted ${result.deletedCount} payments`,
+            description: result.message ?? `Successfully deleted ${result.deletedCount} payments`,
             variant: "default",
           });
 
@@ -146,7 +146,7 @@ export function ImportPayments() {
           toast({
             title: "All payments refreshed",
             description:
-              result.message ||
+              result.message ??
               `Successfully refreshed payments: deleted ${result.deletedCount} old payments and imported fresh data`,
             variant: "default",
           });

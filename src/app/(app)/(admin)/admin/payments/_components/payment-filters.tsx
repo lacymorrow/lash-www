@@ -21,7 +21,7 @@ export function PaymentFilters() {
   const searchParams = useSearchParams();
 
   // Get the current active filter
-  const currentFilter = searchParams?.get("filter") || "all";
+  const currentFilter = searchParams?.get("filter") ?? "all";
 
   // Function to update the URL with the selected filter
   const setFilter = (filterValue: string) => {

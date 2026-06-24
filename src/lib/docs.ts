@@ -138,7 +138,7 @@ function readMdxFile(filePath: string, slug: string) {
       title: title.slice(0, 500), // Use extracted or frontmatter title
       description: frontmatter.description?.slice(0, 1000), // Optional and increased limit
       updatedAt: frontmatter.updatedAt,
-      section: frontmatter.section || "core", // Provide default if missing
+      section: frontmatter.section ?? "core", // Provide default if missing
     };
 
     // For docs migration: return raw content for MDXRemote processing
@@ -436,7 +436,7 @@ export const getDocsNavigation = getDocNavigation;
  */
 export async function getDocFromParams(paramsPromise: Promise<{ slug?: string[] }>) {
   const params = await paramsPromise;
-  const slug = params.slug?.join("/") || "index";
+  const slug = params.slug?.join("/") ?? "index";
   return await getDocBySlug(slug);
 }
 

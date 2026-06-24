@@ -32,7 +32,7 @@ export default function DevToolsGitHubPage() {
 
   // Effect to update input field when username changes (e.g., after connect/disconnect)
   useEffect(() => {
-    setUsernameInput(githubUsername || "");
+    setUsernameInput(githubUsername ?? "");
   }, [githubUsername]);
 
   const handleConnectOrUpdate = async () => {

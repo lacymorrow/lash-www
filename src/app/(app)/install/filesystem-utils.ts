@@ -106,7 +106,7 @@ export async function takeFileSystemSnapshot(container: any): Promise<Map<string
           } catch (_readError) {
             // If we can't read it as a directory, assume it's a file
             // Skip binary files based on extension
-            const extension = fullPath.split(".").pop()?.toLowerCase() || "";
+            const extension = fullPath.split(".").pop()?.toLowerCase() ?? "";
             const binaryExtensions = [
               "png",
               "jpg",

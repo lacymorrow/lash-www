@@ -42,16 +42,16 @@ export async function FeaturesGridDynamic() {
       )}
     >
       {features.map((feature, index) => {
-        const id = feature.id || index;
+        const id = feature.id ?? index;
         return (
           <FeatureCard
             key={uuidv4()}
             feature={{
               ...feature,
               id: Number(id),
-              icon: feature.icon || undefined,
-              order: feature.order || undefined,
-              badge: feature.badge || undefined,
+              icon: feature.icon ?? undefined,
+              order: feature.order ?? undefined,
+              badge: feature.badge ?? undefined,
             }}
           />
         );

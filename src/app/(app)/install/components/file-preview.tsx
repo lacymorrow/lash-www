@@ -36,7 +36,7 @@ function SingleFilePreview({ file }: SingleFilePreviewProps) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = file.path.split("/").pop() || "file.txt";
+    a.download = file.path.split("/").pop() ?? "file.txt";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

@@ -268,7 +268,7 @@ export class ContainerManager {
         }
 
         // Check content type to determine how to handle the response
-        const contentType = response.headers.get("Content-Type") || "";
+        const contentType = response.headers.get("Content-Type") ?? "";
         logInfo(`Received content type: ${contentType} for file: ${filePath}`);
 
         // Handle binary files
@@ -866,7 +866,7 @@ export class ContainerManager {
             } catch (_readError) {
               // If we can't read it as a directory, assume it's a file
               // Skip binary files based on extension
-              const extension = fullPath.split(".").pop()?.toLowerCase() || "";
+              const extension = fullPath.split(".").pop()?.toLowerCase() ?? "";
               const binaryExtensions = [
                 "png",
                 "jpg",
@@ -1007,7 +1007,7 @@ export class ContainerManager {
       throw new Error("Container not initialized");
     }
 
-    logInfo("Importing project files", { count: files?.length || 0 });
+    logInfo("Importing project files", { count: files?.length ?? 0 });
 
     // Files to synchronize with the host project
     const targetFiles = files?.length ? files : getEssentialConfigFiles();

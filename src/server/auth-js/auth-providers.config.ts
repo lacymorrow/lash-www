@@ -228,7 +228,7 @@ export const providers: NextAuthConfig["providers"] = [
               ...profile,
               id: profile.sub,
               emailVerified: profile.email_verified ? new Date() : null,
-              name: profile.name || profile.given_name || profile.email?.split("@")[0] || null,
+              name: profile.name ?? profile.given_name ?? profile.email?.split("@")[0] ?? null,
             };
           },
         }),
@@ -274,10 +274,10 @@ export const providers: NextAuthConfig["providers"] = [
           },
           profile(profile: VercelUserProfile) {
             return {
-              id: profile.id || profile.uid || "",
-              name: profile.name || profile.username || "",
+              id: profile.id ?? profile.uid ?? "",
+              name: profile.name ?? profile.username ?? "",
               email: profile.email,
-              image: profile.avatar?.url || null,
+              image: profile.avatar?.url ?? null,
               emailVerified: null,
             };
           },

@@ -186,7 +186,7 @@ const PaymentService = {
           .from(users)
           .where(eq(users.id, userId))
           .limit(1)
-          .then((rows: any[]) => rows[0] || null);
+          .then((rows: any[]) => rows[0] ?? null);
 
         if (!user) {
           return false;
@@ -198,7 +198,7 @@ const PaymentService = {
         // Check if any payment metadata contains the variant ID
         return userPayments.some((payment: any) => {
           try {
-            const metadata = JSON.parse(payment.metadata || "{}");
+            const metadata = JSON.parse(payment.metadata ?? "{}");
             // Check various ways the variant might be identified
             // Use String() conversion to handle number vs string comparison
             const variantIdStr = String(variantId);
@@ -288,7 +288,7 @@ const PaymentService = {
           .from(users)
           .where(eq(users.id, userId))
           .limit(1)
-          .then((rows: any[]) => rows[0] || null);
+          .then((rows: any[]) => rows[0] ?? null);
 
         if (!user) {
           return false;
@@ -301,7 +301,7 @@ const PaymentService = {
         // Check if any payment metadata contains the product ID
         return userPayments.some((payment: any) => {
           try {
-            const metadata = JSON.parse(payment.metadata || "{}");
+            const metadata = JSON.parse(payment.metadata ?? "{}");
             // Check various ways the product might be identified
             // Use String() conversion to handle number vs string comparison
             const productIdStr = String(productId);
@@ -374,7 +374,7 @@ const PaymentService = {
           .from(users)
           .where(eq(users.id, userId))
           .limit(1)
-          .then((rows: any[]) => rows[0] || null);
+          .then((rows: any[]) => rows[0] ?? null);
 
         if (!user) {
           return false;
@@ -426,7 +426,7 @@ const PaymentService = {
           .from(users)
           .where(eq(users.id, userId))
           .limit(1)
-          .then((rows: any[]) => rows[0] || null);
+          .then((rows: any[]) => rows[0] ?? null);
 
         if (!user) {
           return [];
@@ -440,24 +440,24 @@ const PaymentService = {
 
         for (const payment of userPayments) {
           try {
-            const metadata = JSON.parse(payment.metadata || "{}");
+            const metadata = JSON.parse(payment.metadata ?? "{}");
             const productId =
-              metadata.productId || metadata.variant_id || metadata.product_id || payment.orderId;
+              metadata.productId ?? metadata.variant_id ?? metadata.product_id ?? payment.orderId;
 
             // Enhanced product name extraction from multiple possible fields
             const productName =
-              metadata.productName ||
-              metadata.variant_name ||
-              metadata.product_name ||
+              metadata.productName ??
+              metadata.variant_name ??
+              metadata.product_name ??
               "Unknown Product";
 
             if (productId && !dbProductsMap.has(productId)) {
               dbProductsMap.set(productId, {
                 id: productId,
                 name: productName,
-                price: (payment.amount || 0) / 100,
-                description: metadata.description || "",
-                provider: payment.processor || "unknown",
+                price: (payment.amount ?? 0) / 100,
+                description: metadata.description ?? "",
+                provider: payment.processor ?? "unknown",
                 // Add other fields as needed
               });
             }
@@ -519,7 +519,7 @@ const PaymentService = {
       logger.debug("User payments fetched", {
         userId,
         count: userPayments.length,
-        totalAmount: userPayments.reduce((sum: number, p: Payment) => sum + (p.amount || 0), 0),
+        totalAmount: userPayments.reduce((sum: number, p: Payment) => sum + (p.amount ?? 0), 0),
       });
 
       return userPayments;
@@ -548,7 +548,7 @@ const PaymentService = {
           .from(payments)
           .where(eq(payments.orderId, data.orderId))
           .limit(1)
-          .then((rows: any[]) => rows[0] || null);
+          .then((rows: any[]) => rows[0] ?? null);
 
         if (existingPayment) {
           logger.debug("Payment already exists", { orderId: data.orderId });
@@ -564,14 +564,14 @@ const PaymentService = {
             processorOrderId: data.orderId, // Store same value for consistency
             amount: data.amount,
             status: data.status,
-            processor: data.processor || "unknown",
-            isFreeProduct: data.isFreeProduct || false,
-            metadata: JSON.stringify(data.metadata || {}),
+            processor: data.processor ?? "unknown",
+            isFreeProduct: data.isFreeProduct ?? false,
+            metadata: JSON.stringify(data.metadata ?? {}),
             createdAt: new Date(),
             updatedAt: new Date(),
           })
           .returning()
-          .then((rows: any[]) => rows[0] || null);
+          .then((rows: any[]) => rows[0] ?? null);
 
         logger.info("Payment created", {
           paymentId: newPayment?.id,
@@ -637,7 +637,7 @@ const PaymentService = {
         .from(payments)
         .where(eq(payments.orderId, orderId))
         .limit(1)
-        .then((rows) => rows[0] || null);
+        .then((rows) => rows[0] ?? null);
     }, null);
   },
 
@@ -668,7 +668,7 @@ const PaymentService = {
           const user = allUsers.find((u) => u.id === payment.userId);
           let productName = "Unknown Product";
           let variantName: string | null = null;
-          let isFreeProduct = payment.isFreeProduct || false;
+          let isFreeProduct = payment.isFreeProduct ?? false;
 
           // First check if productName is stored directly in the database
           if (payment.productName) {
@@ -681,13 +681,13 @@ const PaymentService = {
 
                 // Enhanced product name extraction from multiple possible fields
                 productName =
-                  metadata.productName ||
-                  metadata.product_name ||
-                  metadata.variant_name ||
+                  metadata.productName ??
+                  metadata.product_name ??
+                  metadata.variant_name ??
                   "Unknown Product";
 
                 // Extract variant name separately
-                variantName = metadata.variantName || metadata.variant_name || null;
+                variantName = metadata.variantName ?? metadata.variant_name ?? null;
 
                 if (metadata.isFreeProduct !== undefined) {
                   isFreeProduct = metadata.isFreeProduct;
@@ -701,26 +701,26 @@ const PaymentService = {
             }
           }
 
-          const processorOrderId = payment.processorOrderId || payment.orderId;
+          const processorOrderId = payment.processorOrderId ?? payment.orderId;
           if (!processorOrderId) {
             logger.warn(`Skipping DB payment ID ${payment.id} due to missing order identifier.`);
             continue;
           }
 
-          const compositeKey = `${payment.processor || "unknown"}:${processorOrderId}`;
+          const compositeKey = `${payment.processor ?? "unknown"}:${processorOrderId}`;
 
           dbPaymentsMap.set(compositeKey, {
             id: payment.id.toString(),
             orderId: processorOrderId,
-            userEmail: user?.email || "unknown@example.com",
-            userName: user?.name || null,
-            userImage: user?.image || null,
-            amount: (payment.amount || 0) / 100,
+            userEmail: user?.email ?? "unknown@example.com",
+            userName: user?.name ?? null,
+            userImage: user?.image ?? null,
+            amount: (payment.amount ?? 0) / 100,
             status: payment.status as "paid" | "refunded" | "pending",
             productName,
             variantName,
-            purchaseDate: payment.purchasedAt || new Date(payment.createdAt),
-            processor: payment.processor || "unknown",
+            purchaseDate: payment.purchasedAt ?? new Date(payment.createdAt),
+            processor: payment.processor ?? "unknown",
             isFreeProduct,
             isInDatabase: true,
           });
@@ -764,8 +764,8 @@ const PaymentService = {
                 if ((order as any).attributes) {
                   const orderAttributes = (order as any).attributes;
                   const variantName =
-                    orderAttributes.first_order_item?.variant_name ||
-                    orderAttributes.variant_name ||
+                    orderAttributes.first_order_item?.variant_name ??
+                    orderAttributes.variant_name ??
                     null;
                   if (variantName && !existingEntry.variantName) {
                     existingEntry.variantName = variantName;
@@ -807,8 +807,8 @@ const PaymentService = {
               if ((order as any).attributes) {
                 const orderAttributes = (order as any).attributes;
                 variantName =
-                  orderAttributes.first_order_item?.variant_name ||
-                  orderAttributes.variant_name ||
+                  orderAttributes.first_order_item?.variant_name ??
+                  orderAttributes.variant_name ??
                   null;
               }
 
@@ -816,8 +816,8 @@ const PaymentService = {
                 id: order.id,
                 orderId: order.orderId,
                 userEmail: order.userEmail || "unknown@example.com",
-                userName: order.userName || user?.name || null,
-                userImage: user?.image || null,
+                userName: order.userName ?? user?.name ?? null,
+                userImage: user?.image ?? null,
                 amount: order.amount,
                 status: order.status,
                 productName: order.productName || "Unknown Product",
@@ -902,13 +902,13 @@ const PaymentService = {
 
                   // Enhanced product name extraction from multiple possible fields
                   productName =
-                    metadata.productName ||
-                    metadata.product_name ||
-                    metadata.variant_name ||
+                    metadata.productName ??
+                    metadata.product_name ??
+                    metadata.variant_name ??
                     "Unknown Product";
 
                   // Extract variant name separately
-                  variantName = metadata.variantName || metadata.variant_name || null;
+                  variantName = metadata.variantName ?? metadata.variant_name ?? null;
                 }
               } catch (_error) {
                 // Ignore parsing errors
@@ -922,9 +922,9 @@ const PaymentService = {
               amount: (payment.amount ?? 0) / 100,
               status: payment.status as "paid" | "refunded" | "pending",
               purchaseDate: new Date(payment.createdAt),
-              orderId: payment.orderId || payment.processorOrderId || "",
-              processor: payment.processor || "unknown",
-              isFreeProduct: payment.isFreeProduct || false,
+              orderId: payment.orderId ?? payment.processorOrderId ?? "",
+              processor: payment.processor ?? "unknown",
+              isFreeProduct: payment.isFreeProduct ?? false,
             };
           });
 
@@ -973,7 +973,7 @@ const PaymentService = {
           await Promise.all(statusPromises);
 
           const hadSubscription = user.metadata
-            ? JSON.parse(user.metadata)?.hadSubscription || false
+            ? JSON.parse(user.metadata)?.hadSubscription ?? false
             : false;
 
           // Get the last purchase date

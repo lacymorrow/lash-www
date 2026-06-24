@@ -30,7 +30,7 @@ interface ErrorBoundaryState {
 function isReactServerActionError(error: Error): boolean {
   const errorString = error.toString().toLowerCase();
   const message = error.message?.toLowerCase() || "";
-  const stack = error.stack?.toLowerCase() || "";
+  const stack = error.stack?.toLowerCase() ?? "";
 
   const serverActionIndicators = [
     "#418",
@@ -52,7 +52,7 @@ function isReactServerActionError(error: Error): boolean {
 function isProxyBlockingError(error: Error): boolean {
   const errorString = error.toString().toLowerCase();
   const message = error.message?.toLowerCase() || "";
-  const stack = error.stack?.toLowerCase() || "";
+  const stack = error.stack?.toLowerCase() ?? "";
 
   const proxyIndicators = [
     "403",

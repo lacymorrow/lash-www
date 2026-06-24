@@ -69,7 +69,7 @@ export async function RepoInfoContent() {
           <div className="space-y-2">
             <h3 className="font-medium">{repo.full_name}</h3>
             <p className="text-sm text-muted-foreground">
-              {repo.description || "No description available"}
+              {repo.description ?? "No description available"}
             </p>
 
             {repo.homepage && (

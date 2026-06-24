@@ -29,7 +29,7 @@ export function ResetPasswordForm({ token }: { token?: string }) {
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
       ...getSchemaDefaults<typeof resetPasswordSchema>(resetPasswordSchema),
-      token: token || "",
+      token: token ?? "",
     },
   });
 
@@ -73,7 +73,7 @@ export function ResetPasswordForm({ token }: { token?: string }) {
           router.push(routes.auth.signIn);
         } else {
           toast.error("Error resetting password", {
-            description: typedResult.error || "The password reset link is invalid or has expired.",
+            description: typedResult.error ?? "The password reset link is invalid or has expired.",
           });
         }
       }

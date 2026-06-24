@@ -74,7 +74,7 @@ async function UsersTableContent() {
   const sortedUsers = users.map((user) => ({
     ...user,
     purchases:
-      user.purchases?.sort((a, b) => b.purchaseDate.getTime() - a.purchaseDate.getTime()) || [],
+      user.purchases?.sort((a, b) => b.purchaseDate.getTime() - a.purchaseDate.getTime()) ?? [],
   }));
 
   return <DataTable columns={columns} data={sortedUsers} searchPlaceholder="Search users..." />;

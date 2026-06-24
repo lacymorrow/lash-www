@@ -102,8 +102,8 @@ export function AILandingDemo() {
             break;
           case "error": {
             console.error("Worker error:", e.data);
-            const errorMessage = data?.error || "An error occurred while processing your request.";
-            const errorType = data?.type || "unknown";
+            const errorMessage = data?.error ?? "An error occurred while processing your request.";
+            const errorType = data?.type ?? "unknown";
 
             switch (errorType) {
               case "webgpu_not_supported":

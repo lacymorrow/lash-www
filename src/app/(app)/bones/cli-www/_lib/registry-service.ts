@@ -242,7 +242,7 @@ export function categorizeItems(items: RegistryItem[]): Record<string, RegistryI
 export function groupItemsByType(items: RegistryItem[]): Record<string, RegistryItem[]> {
   return items.reduce(
     (acc, item) => {
-      const categories = item.categories || ["Uncategorized"];
+      const categories = item.categories ?? ["Uncategorized"];
       for (const category of categories) {
         if (!acc[category]) {
           acc[category] = [];
@@ -300,7 +300,7 @@ export function searchItems(
  */
 export function getInstallCommand(component: RegistryItem, registry?: Registry) {
   const componentUrl =
-    component.componentUrl || `${registry?.baseComponentUrl}/default/${component.name}.json`;
+    component.componentUrl ?? `${registry?.baseComponentUrl}/default/${component.name}.json`;
   return `npx shadcn@latest add "${componentUrl}"`;
 }
 

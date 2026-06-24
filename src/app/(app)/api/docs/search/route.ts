@@ -48,7 +48,7 @@ export async function POST(req: Request) {
     const cfConnectingIp = req.headers.get("cf-connecting-ip");
 
     // Use the first available IP address, with fallback to a generic identifier
-    const clientIp = forwardedFor?.split(",")[0]?.trim() || realIp || cfConnectingIp || "anonymous";
+    const clientIp = forwardedFor?.split(",")[0]?.trim() ?? realIp ?? cfConnectingIp ?? "anonymous";
 
     // Apply rate limiting with custom limits for AI search
     // More restrictive than regular search due to OpenAI API costs

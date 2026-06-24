@@ -330,7 +330,7 @@ export class ContainerManager {
     await importProjectFiles(
       this.container,
       (path) => fileExists(this.container!, path),
-      files || ESSENTIAL_CONFIG_FILES
+      files ?? ESSENTIAL_CONFIG_FILES
     );
   }
 }

@@ -98,11 +98,11 @@ const ComponentCard = memo(
     isInstalled,
   }: ComponentCardProps) => {
     const registryColor = useMemo(
-      () => getColor(component.registry || "default"),
+      () => getColor(component.registry ?? "default"),
       [component.registry]
     );
     const categoryColor = useMemo(
-      () => getColor(component.categories?.[0] || "default"),
+      () => getColor(component.categories?.[0] ?? "default"),
       [component.categories]
     );
 
@@ -230,7 +230,7 @@ export function ComponentBrowser({ currentStyle: initialStyle = "modern" }: Comp
 
   // Wrap setCurrentRegistry to handle null case
   const setCurrentRegistry = (registry: Registry | null) => {
-    setCurrentRegistryBase(registry || undefined);
+    setCurrentRegistryBase(registry ?? undefined);
   };
 
   useEffect(() => {
@@ -345,7 +345,7 @@ export function ComponentBrowser({ currentStyle: initialStyle = "modern" }: Comp
       setInstallationProgress({ status: "installing" });
 
       // Extract the component URL or name from the command
-      const match = /"([^"]+)"/.exec(command) || /add\s+(\S+)$/.exec(command);
+      const match = /"([^"]+)"/.exec(command) ?? /add\s+(\S+)$/.exec(command);
       const componentUrl = match ? match[1] : null;
 
       if (!componentUrl) {
@@ -461,7 +461,7 @@ export function ComponentBrowser({ currentStyle: initialStyle = "modern" }: Comp
             setRegistries(updatedRegistries);
             if (currentRegistry?.name === name) {
               const defaultRegistry =
-                updatedRegistries.find((r) => !r.custom) || updatedRegistries[0];
+                updatedRegistries.find((r) => !r.custom) ?? updatedRegistries[0];
               if (defaultRegistry) {
                 setCurrentRegistry(defaultRegistry);
               }

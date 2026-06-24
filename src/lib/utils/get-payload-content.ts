@@ -45,7 +45,7 @@ const extractRichText = (richText: PayloadRichText): string => {
       richText?.root?.children
         .map((child) => {
           const textNode = child?.children?.[0];
-          return textNode?.text || "";
+          return textNode?.text ?? "";
         })
         .join("\n") || ""
     );

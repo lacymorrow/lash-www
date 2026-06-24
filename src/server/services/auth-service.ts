@@ -158,7 +158,7 @@ export const AuthService = {
       await userService.ensureUserExists({
         id,
         email,
-        name: name || email,
+        name: name ?? email,
         image,
       });
       // logger.info(`Ensured user ${id} exists in Shipkit database`);
@@ -384,7 +384,7 @@ export const AuthService = {
       })) as any;
 
       if (!result || result.ok === false) {
-        return { ok: false, error: result?.error || STATUS_CODES.CREDENTIALS.message };
+        return { ok: false, error: result?.error ?? STATUS_CODES.CREDENTIALS.message };
       }
 
       return { ok: true, url: result.url ?? redirectTo };
@@ -491,7 +491,7 @@ export const AuthService = {
       })) as any;
 
       if (!result || result.ok === false) {
-        return { ok: false, error: result?.error || "Sign-up failed" };
+        return { ok: false, error: result?.error ?? "Sign-up failed" };
       }
 
       return { ok: true, user: newUser };
@@ -927,7 +927,7 @@ export const AuthService = {
       await userService.ensureUserExists({
         id: userId,
         email: userData.email,
-        name: userData.name || userData.email,
+        name: userData.name ?? userData.email,
         image: null,
       });
 

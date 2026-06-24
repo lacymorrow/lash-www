@@ -94,7 +94,7 @@ export function BetterAuthOAuthButtons({
       }
     } catch (error) {
       console.error("Better Auth: Sign-in failed", error);
-      toast.error(`Failed to sign in with ${providerConfigs[providerId]?.name || providerId}`);
+      toast.error(`Failed to sign in with ${providerConfigs[providerId]?.name ?? providerId}`);
     } finally {
       setLoadingProvider(null);
     }

@@ -188,7 +188,7 @@ export function CreateApiKeyDialog({ onSubmit, userId }: CreateApiKeyDialogProps
 
             <div className="flex items-center space-x-2 rounded-md bg-muted p-3">
               <code className="flex-1 break-all font-mono text-sm">{createdKey}</code>
-              <CopyButton value={createdKey || ""} />
+              <CopyButton value={createdKey ?? ""} />
             </div>
           </div>
 

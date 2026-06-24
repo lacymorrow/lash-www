@@ -113,7 +113,7 @@ export function shouldIgnoreFile(filename: string): boolean {
  * @returns Content type string
  */
 export function getContentType(ext: string): string {
-  return CONTENT_TYPE_MAP[ext.toLowerCase()] || "text/plain";
+  return CONTENT_TYPE_MAP[ext.toLowerCase()] ?? "text/plain";
 }
 
 /**
@@ -144,7 +144,7 @@ export async function readTemplateFile(filePath: string): Promise<string | Uint8
     if (typeof window !== "undefined") {
       // Check cache first
       if (fileContentCache.has(normalizedPath)) {
-        return fileContentCache.get(normalizedPath) || null;
+        return fileContentCache.get(normalizedPath) ?? null;
       }
 
       // Fetch directly from source components
@@ -157,7 +157,7 @@ export async function readTemplateFile(filePath: string): Promise<string | Uint8
       }
 
       // Check content type to determine how to handle the response
-      const contentType = response.headers.get("Content-Type") || "";
+      const contentType = response.headers.get("Content-Type") ?? "";
 
       let content: string | Uint8Array;
 
@@ -198,7 +198,7 @@ export async function getDirectoryEntries(directoryPath = ""): Promise<any[]> {
 
     // Check cache first
     if (directoryListingCache.has(normalizedPath)) {
-      return directoryListingCache.get(normalizedPath) || [];
+      return directoryListingCache.get(normalizedPath) ?? [];
     }
 
     const response = await fetch(

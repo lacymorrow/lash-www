@@ -87,7 +87,7 @@ export const PrivateRepoDeployButton = () => {
         }
         setStatus({
           step: "error",
-          error: result.error || "Deployment failed",
+          error: result.error ?? "Deployment failed",
           githubRepo: result.data?.githubRepo, // Keep the GitHub repo info if available
         });
 
@@ -99,7 +99,7 @@ export const PrivateRepoDeployButton = () => {
           )}`;
           window.open(importUrl, "_blank", "noopener,noreferrer");
         } else {
-          toast.error(result.error || "Deployment failed");
+          toast.error(result.error ?? "Deployment failed");
         }
       }
     } catch (error) {
@@ -172,7 +172,7 @@ export const PrivateRepoDeployButton = () => {
               </Badge>
             </div>
             <AlertDescription className="mt-2">
-              {status.message || status.error}
+              {status.message ?? status.error}
               {needsGitHubAuth && (
                 <div className="mt-3">
                   <LinkWithTransition
@@ -202,7 +202,7 @@ export const PrivateRepoDeployButton = () => {
                     size="sm"
                     onClick={() => {
                       const importUrl = `https://vercel.com/new/import?s=${encodeURIComponent(
-                        status.githubRepo?.url || ""
+                        status.githubRepo?.url ?? ""
                       )}`;
                       window.open(importUrl, "_blank", "noopener,noreferrer");
                     }}

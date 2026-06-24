@@ -52,7 +52,7 @@ export const FileChangeDisplay = ({ changedFiles, onDownloadAll }: FileChangeDis
 
   const downloadSingleFile = (file: FileChange) => {
     const blob = new Blob([file.content], { type: "text/plain;charset=utf-8" });
-    saveAs(blob, file.path.split("/").pop() || "file.txt");
+    saveAs(blob, file.path.split("/").pop() ?? "file.txt");
   };
 
   const downloadAllFiles = async () => {

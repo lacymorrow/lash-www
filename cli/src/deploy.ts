@@ -9,7 +9,7 @@ export interface DeployOptions {
 }
 
 export async function deploy(opts: DeployOptions): Promise<void> {
-  const nonInteractive = opts.yes || isNonInteractive();
+  const nonInteractive = opts.yes ?? isNonInteractive();
   const cwd = process.cwd();
 
   p.intro(pc.bgCyan(pc.black(" shipkit deploy ")));

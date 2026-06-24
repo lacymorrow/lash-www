@@ -58,7 +58,7 @@ export function WaitlistForm() {
         setStatus("error");
         toast({
           title: "Something went wrong",
-          description: result.error || "Please try again or contact support.",
+          description: result.error ?? "Please try again or contact support.",
           variant: "destructive",
         });
       }

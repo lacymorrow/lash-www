@@ -89,7 +89,7 @@ export function ComponentDetails({
               <div className="flex items-center gap-2">
                 <div
                   className="h-2 w-2 rounded-full"
-                  style={{ backgroundColor: getColor(component.registry || "") }}
+                  style={{ backgroundColor: getColor(component.registry ?? "") }}
                 />
                 <h2 className="text-lg font-bold">{component.name}</h2>
               </div>

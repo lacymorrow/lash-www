@@ -216,7 +216,7 @@ export class AIAssistant {
       ],
     };
 
-    return recommendations[feature] || [];
+    return recommendations[feature] ?? [];
   }
 
   /**

@@ -149,7 +149,7 @@ export const BuyButton = ({ className, ...props }: BuyButtonProps) => {
               orderId: orderData.attributes.identifier, // Use identifier as primary orderId
               orderIdentifier: orderData.attributes.identifier, // Keep for backward compatibility
               userId,
-              userEmail: orderData.attributes.user_email || undefined,
+              userEmail: orderData.attributes.user_email ?? undefined,
               customData: event.data.custom_data,
               status: orderData.attributes.status,
               total: orderData.attributes.total,
@@ -179,7 +179,7 @@ export const BuyButton = ({ className, ...props }: BuyButtonProps) => {
 
             // Add order data to URL
             successUrl.searchParams.set("order_id", orderData.attributes.identifier);
-            successUrl.searchParams.set("email", orderData.attributes.user_email || "");
+            successUrl.searchParams.set("email", orderData.attributes.user_email ?? "");
             successUrl.searchParams.set("status", orderData.attributes.status);
 
             // Add custom data that was passed during checkout

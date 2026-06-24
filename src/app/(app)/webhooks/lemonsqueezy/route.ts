@@ -178,7 +178,7 @@ async function findOrCreateUser(
 
     // Use the consistent userService method for finding or creating users
     const { user, created } = await userService.findOrCreateUserByEmail(userEmail, {
-      name: userName || null,
+      name: userName ?? null,
     });
 
     if (created) {
@@ -393,7 +393,7 @@ async function handleSubscriptionStatusChange(
       throw new Error(`Subscription payment not found for ${data.id}`);
     }
 
-    const existingMetadata = JSON.parse(existingPayment.metadata || "{}");
+    const existingMetadata = JSON.parse(existingPayment.metadata ?? "{}");
 
     // Update the metadata with new subscription status
     const updatedMetadata = {
@@ -474,7 +474,7 @@ async function handleSubscriptionPayment(
     await tx.insert(payments).values({
       userId,
       orderId: `${attributes.subscription_id}-${data.id}`, // Combine subscription and invoice ID
-      amount: attributes.total || 0,
+      amount: attributes.total ?? 0,
       status: eventName === "subscription_payment_success" ? "completed" : "failed",
       processor: "lemonsqueezy",
       metadata: JSON.stringify({

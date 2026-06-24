@@ -132,8 +132,8 @@ export async function createLemonSqueezyPayment(data: {
     }
 
     // Use either the session user ID or the custom data user ID
-    let actualUserId = data.userId || data.customData?.user_id;
-    const userEmail = data.userEmail || data.customData?.user_email;
+    let actualUserId = data.userId ?? data.customData?.user_id;
+    const userEmail = data.userEmail ?? data.customData?.user_email;
 
     if (!actualUserId && userEmail) {
       const user = await findOrCreateUser(userEmail);
@@ -181,7 +181,7 @@ export async function createLemonSqueezyPayment(data: {
 
         // Store order details
         orderIdentifier: data.orderIdentifier,
-        userEmail: data.userEmail || data.customData?.user_email,
+        userEmail: data.userEmail ?? data.customData?.user_email,
         customData: data.customData,
       },
     });

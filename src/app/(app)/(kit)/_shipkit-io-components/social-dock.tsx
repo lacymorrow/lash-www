@@ -73,7 +73,7 @@ export const SocialDock = ({ className }: { className?: string }) => {
   const isNearTop = y && y < SOCIAL_DOCK_BUFFER;
   const isNearBottom =
     y && y < document.body.scrollHeight - window.innerHeight - SOCIAL_DOCK_BUFFER;
-  const isHidden = isNearTop || isNearBottom;
+  const isHidden = isNearTop ?? isNearBottom;
 
   return (
     <Dock
