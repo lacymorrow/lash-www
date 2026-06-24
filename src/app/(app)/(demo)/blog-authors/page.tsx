@@ -97,7 +97,7 @@ export default function BlogAuthorsDemo() {
               <AuthorByline author={lacyAuthor} publishedAt="2024-12-28" />
               <p className="text-muted-foreground">
                 This is how an author byline would appear in a blog post header, showing the
-                author's avatar, name, and publication date.
+                author&apos;s avatar, name, and publication date.
               </p>
             </CardContent>
           </Card>

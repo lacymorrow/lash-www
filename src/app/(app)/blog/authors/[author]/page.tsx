@@ -87,7 +87,7 @@ export default async function AuthorPage({ params }: Props) {
     return (
       <div className="container py-8">
         <h1 className="mb-4 text-3xl font-bold">Author Not Found</h1>
-        <p className="mb-4 text-muted-foreground">No posts found for author "{displayName}".</p>
+        <p className="mb-4 text-muted-foreground">No posts found for author &quot;{displayName}&quot;.</p>
         <Link href={routes.blog} className="text-blue-600 underline hover:text-blue-800">
           ← Back to Blog
         </Link>

@@ -79,7 +79,7 @@ const OfferCard = ({
             {price.oneTime ? "Get Started" : "Download Now"}
           </Link>
         )}
-        <p className={cn("mb-4 text-sm font-semibold tracking-tight")}>What's included:</p>
+        <p className={cn("mb-4 text-sm font-semibold tracking-tight")}>What&apos;s included:</p>
         <ul className="space-y-2">
           {features.map((feature) => (
             <li className="flex items-center gap-2" key={feature}>

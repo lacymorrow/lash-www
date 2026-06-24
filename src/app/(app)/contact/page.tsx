@@ -37,7 +37,7 @@ export default function ContactPage() {
         <div className="mb-12 text-center">
           <h1 className="mb-4 text-4xl font-bold tracking-tight">Get in Touch</h1>
           <p className="text-lg text-muted-foreground">
-            Have a question or want to learn more? We'd love to hear from you.
+            Have a question or want to learn more? We&apos;d love to hear from you.
           </p>
         </div>
 
@@ -94,7 +94,7 @@ export default function ContactPage() {
             <div className="mb-6">
               <h2 className="mb-2 text-2xl font-semibold">Send us a Message</h2>
               <p className="text-muted-foreground">
-                Fill out the form below and we'll get back to you as soon as possible.
+                Fill out the form below and we&apos;ll get back to you as soon as possible.
               </p>
             </div>
             <ContactForm className="max-w-none" />

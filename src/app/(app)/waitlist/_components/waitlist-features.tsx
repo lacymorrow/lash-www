@@ -129,7 +129,7 @@ export function WaitlistFeatures() {
               variant="outline"
               className="mb-4 border-red-200 text-red-700 dark:border-red-800 dark:text-red-300"
             >
-              We've All Been There
+              We&apos;ve All Been There
             </Badge>
             <h2 className="mb-6 text-3xl font-bold tracking-tight md:text-4xl">
               Tired of Building the Same Stuff?

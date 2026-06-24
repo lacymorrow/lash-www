@@ -88,7 +88,7 @@ export function ShipkitIoView() {
 
               <BlurFade delay={1} duration={1}>
                 <div className="mb-8 max-w-2xl text-balance text-lg tracking-tight text-muted-foreground md:text-xl">
-                  The production stack you'd build yourself if you had three months. Auth, payments,
+                  The production stack you&apos;d build yourself if you had three months. Auth, payments,
                   database, CMS, AI. Already wired.
                 </div>
               </BlurFade>
@@ -129,7 +129,7 @@ export function ShipkitIoView() {
 
           <BlurFade delay={1} duration={1} inView>
             <SectionCopy>
-              You don't need to build auth again. Or wire up payments. Or configure a CMS. Or set up
+              You don&apos;t need to build auth again. Or wire up payments. Or configure a CMS. Or set up
               email templates. Shipkit handles the first three months of infrastructure work so you
               can focus on the part that actually matters.
             </SectionCopy>
@@ -189,7 +189,7 @@ export function ShipkitIoView() {
                 <div className="mb-8 text-center">
                   <p className="text-lg text-muted-foreground">
                     Auth setup, payment integration, CMS, email system, dashboard UI, AI hooks.
-                    That's 2-3 months of plumbing before you write a single line of product code.
+                    That&apos;s 2-3 months of plumbing before you write a single line of product code.
                   </p>
                 </div>
                 <ROICalculator />
@@ -252,7 +252,7 @@ export function ShipkitIoView() {
               <SectionBadge>FAQ</SectionBadge>
               <SectionHeader>Common Questions</SectionHeader>
               <SectionCopy>
-                Can't find what you're looking for? Reach out on
+                Can&apos;t find what you&apos;re looking for? Reach out on
                 <Link
                   className={cn(buttonVariants({ variant: "link", size: "lg" }), "px-1")}
                   href={routes.external.email}
@@ -275,7 +275,7 @@ export function ShipkitIoView() {
                   href={routes.external.email}
                   className={cn(buttonVariants({ variant: "link", size: "sm" }), "px-1")}
                 >
-                  Let's chat
+                  Let&apos;s chat
                 </Link>
               </SectionCopy>
             </BlurFade>

@@ -89,7 +89,7 @@ export function WaitlistFAQ() {
                 Still have questions?
               </h3>
               <p className="mb-4 text-slate-600 dark:text-slate-300">
-                No sales pressure, just honest answers from developers who've been there.
+                No sales pressure, just honest answers from developers who&apos;ve been there.
               </p>
               <a
                 href="mailto:hey@shipkit.io"

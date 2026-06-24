@@ -176,7 +176,7 @@ export function ExtrasSection({
               key={r.name}
               className="border-l-2 border-muted pl-4 text-sm italic text-muted-foreground"
             >
-              <p>"{r.reference}"</p>
+              <p>&quot;{r.reference}&quot;</p>
               <footer className="mt-1 text-xs font-medium not-italic">— {r.name}</footer>
             </blockquote>
           ))}
