@@ -95,21 +95,33 @@ git checkout -b tests/payment-service-characterization
 # open plans/008-payment-service-tests.md and follow it
 ```
 
-## 2026-06-23 evening update — MASTER-TEST-PLAN execution status
+## 2026-06-24 update — Phases 1 & 2 complete, on main
 
-Phase 1 (typecheck + tests green): ✅ landed on `main` (`b3770514`).
+| Check | State on main (`97cbd8a7`) |
+|---|---|
+| `bun run typecheck` | 0 errors |
+| `bun run test` | 198 passed / 23 skipped / 0 failed |
+| `bunx biome lint .` | 0 errors, 495 warnings |
+| `bun run lint:eslint` | 0 errors, 2099 warnings |
+| `bun run lint:prettier` | clean |
 
-Phase 2 (lint to green): in progress on `origin/phase-2/lint-cleanup`.
-6 commits so far (auto-fix, prettier+eslint --fix, config drift fixes,
-build-output exclusion, real-bug repair, Biome worktree exclusion). 3
-parallel worktree agents running for the remaining ~600 ESLint errors
-across `prefer-nullish-coalescing`, React/JSX, and misc TS categories.
-Biome standalone: 203 errors / 500 warnings remaining (dominated by
-300 `noExplicitAny` — needs case-by-case judgment).
+**Phase 2 numbers:** ESLint 1182→0, Biome 222→0, Prettier 381 unformatted→0.
+~19 commits landed via `phase-2/lint-cleanup`. See the merge commit for
+the full breakdown.
 
-Preserved work:
+**Plans drafted for the next phases:**
+
+- `plans/PHASE-3-TESTCONTAINERS.md` — test-DB infrastructure
+- `plans/PHASE-5-E2E-COVERAGE.md` — critical-flow Playwright coverage
+- `plans/draft-ci-workflow.yml` — Phase 6 CI workflow (move to
+  `.github/workflows/ci.yml` once Phase 5 is green)
+
+**Preserved work:**
 
 - `wip/vercel-cost-optimization` — previously-stashed cache header +
   guide work (committed for safety, not yet reviewed).
 - `advisor/008-payment-service-tests` (local only) — abandoned plan-008
   attempt with vite bump; reference only.
+
+**Next:** Phase 3 (Testcontainers). See `plans/PHASE-3-TESTCONTAINERS.md`
+for concrete deliverables.

@@ -42,6 +42,17 @@ Each phase has an explicit definition of done, a rough effort estimate, and
 the verification command that proves it shipped. Sequence is load-bearing —
 do not start phase N before phase N-1 is green.
 
+**Execution status (as of 2026-06-24):**
+
+| Phase | Status | Commit |
+|---|---|---|
+| 1 — typecheck + tests green | ✅ done | `b3770514` |
+| 2 — lint to green | ✅ done | `97cbd8a7` |
+| 3 — Testcontainers (see `plans/PHASE-3-TESTCONTAINERS.md`) | pending | — |
+| 4 — characterization (see plans 008/009) | pending | — |
+| 5 — e2e (see `plans/PHASE-5-E2E-COVERAGE.md`) | pending | — |
+| 6 — CI gating (see `plans/draft-ci-workflow.yml`) | pending | — |
+
 ### Phase 1 — Get the existing suite truly green (~2-4h)
 
 Fix what's already broken before adding anything.
