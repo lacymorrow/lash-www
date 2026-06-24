@@ -44,14 +44,26 @@ do not start phase N before phase N-1 is green.
 
 **Execution status (as of 2026-06-24):**
 
-| Phase | Status | Commit |
-|---|---|---|
-| 1 — typecheck + tests green | ✅ done | `b3770514` |
-| 2 — lint to green | ✅ done | `97cbd8a7` |
-| 3 — Testcontainers (see `plans/PHASE-3-TESTCONTAINERS.md`) | pending | — |
-| 4 — characterization (see plans 008/009) | pending | — |
-| 5 — e2e (see `plans/PHASE-5-E2E-COVERAGE.md`) | pending | — |
-| 6 — CI gating (see `plans/draft-ci-workflow.yml`) | pending | — |
+| Phase                                                      | Status  | Commit     |
+| ---------------------------------------------------------- | ------- | ---------- |
+| 1 — typecheck + tests green                                | ✅ done | `b3770514` |
+| 2 — lint to green                                          | ✅ done | `97cbd8a7` |
+| 3 — Testcontainers (see `plans/PHASE-3-TESTCONTAINERS.md`) | ✅ done | (this PR)  |
+| 4 — characterization (see plans 008/009)                   | pending | —          |
+| 5 — e2e (see `plans/PHASE-5-E2E-COVERAGE.md`)              | pending | —          |
+| 6 — CI gating (see `plans/draft-ci-workflow.yml`)          | pending | —          |
+
+**Phase 3 outcome (2026-06-24):** Testcontainers Postgres + drizzle-kit-push
+infrastructure landed and green via a smoke test that proves end-to-end
+flow (container start → schema push → insert/read → truncate). The three
+previously-DB-skipped service test files were moved to `tests/integration/`
+but the two non-trivial ones (`feedback-service`, `team-service`) were
+**re-skipped** with precise reasons: they assert outdated service APIs
+(e.g., `createFeedback` now returns a `FeedbackResult` object instead of
+throwing). The github-service suite enabled cleanly (5 passing). Per the
+"don't enable broken tests silently" rule in section _Execution rules_,
+the rewrites are queued for Phase 4 (characterization), where the right
+contract assertions live anyway.
 
 ### Phase 1 — Get the existing suite truly green (~2-4h)
 

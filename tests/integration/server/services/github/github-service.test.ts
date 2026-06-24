@@ -13,9 +13,7 @@ const TEST_USER = {
   githubUsername: "lacy-rvo",
 };
 
-// SKIPPED: requires real DB (uses db.insert(users)). Will be enabled by Phase 3
-// (Testcontainers Postgres). See plans/MASTER-TEST-PLAN.md.
-describe.skip("GitHub Service when disabled", () => {
+describe("GitHub Service when disabled", () => {
   let userId: string;
 
   beforeAll(async () => {
