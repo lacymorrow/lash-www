@@ -495,7 +495,10 @@ export default function Dashboard() {
                             width="84"
                           />
                         </button>
-                        <button type="button" className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed">
+                        <button
+                          type="button"
+                          className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed"
+                        >
                           <Upload className="h-4 w-4 text-muted-foreground" />
                           <span className="sr-only">Upload</span>
                         </button>

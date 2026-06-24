@@ -22,7 +22,9 @@ export default function GlobalError({
                     <pre>{error.message}</pre>
                   </div>
                 )}
-                <button type="button" onClick={retry}>Try again</button>
+                <button type="button" onClick={retry}>
+                  Try again
+                </button>
               </div>
             </div>
           )}

@@ -79,7 +79,8 @@ function MobileTocErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
           {error instanceof Error && (
             <p className="mb-3 text-xs text-muted-foreground">{error.message}</p>
           )}
-          <button type="button"
+          <button
+            type="button"
             onClick={resetErrorBoundary}
             className="text-xs text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1"
           >

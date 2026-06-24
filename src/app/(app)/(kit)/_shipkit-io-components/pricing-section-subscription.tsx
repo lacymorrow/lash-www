@@ -121,7 +121,8 @@ export function SelectOfferTab({
           duration: 0.2,
         }}
       />
-      <button type="button"
+      <button
+        type="button"
         onClick={() => handleSwitchTab("monthly")}
         className={cn(
           "relative z-10 flex-1 rounded-full px-4 text-sm font-medium transition-colors",
@@ -130,7 +131,8 @@ export function SelectOfferTab({
       >
         Monthly
       </button>
-      <button type="button"
+      <button
+        type="button"
         onClick={() => handleSwitchTab("annually")}
         className={cn(
           "relative z-10 flex-1 rounded-full px-4 text-sm font-medium transition-colors",

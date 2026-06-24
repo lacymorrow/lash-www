@@ -272,7 +272,8 @@ export const AISmollmWebGPU = () => {
               </div>
             )}
 
-            <button type="button"
+            <button
+              type="button"
               className="select-none rounded-lg border bg-blue-400 px-4 py-2 text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-blue-100"
               onClick={() => {
                 worker.current.postMessage({ type: "load" });

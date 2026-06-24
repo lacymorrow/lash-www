@@ -16,7 +16,7 @@ due to missing env vars). `bun run test:browser` also green.
 ## Current state (baseline)
 
 - `tests/e2e/login.spec.ts` — uses `test.skip(!hasForm, "Credentials auth
-  not enabled")` and `test.skip(!loggedIn, "Login failed")`. Both skip
+not enabled")` and `test.skip(!loggedIn, "Login failed")`. Both skip
   unless `AUTH_SECRET` and `NEXT_PUBLIC_FEATURE_AUTH_CREDENTIALS_ENABLED`
   are set.
 - `tests/e2e/full-deploy-flow.spec.ts` — skips unless deploy env vars
