@@ -48,10 +48,23 @@ do not start phase N before phase N-1 is green.
 | ---------------------------------------------------------- | ------- | ---------- |
 | 1 — typecheck + tests green                                | ✅ done | `b3770514` |
 | 2 — lint to green                                          | ✅ done | `97cbd8a7` |
-| 3 — Testcontainers (see `plans/PHASE-3-TESTCONTAINERS.md`) | ✅ done | (this PR)  |
-| 4 — characterization (see plans 008/009)                   | pending | —          |
+| 3 — Testcontainers (see `plans/PHASE-3-TESTCONTAINERS.md`) | ✅ done | `d6954cff` |
+| 4 — characterization (see plans 008/009)                   | ✅ done | (this PR)  |
 | 5 — e2e (see `plans/PHASE-5-E2E-COVERAGE.md`)              | pending | —          |
 | 6 — CI gating (see `plans/draft-ci-workflow.yml`)          | pending | —          |
+
+**Phase 4 outcome (2026-06-24):** 86 integration tests pinning the core
+DB-touching surfaces. Per-suite counts: smoke (2), github (5), feedback
+(12), team (11), deployment-actions (8), payment-service (28), user-service
+(10), admin-service / isAdmin (9), temporary-links (5), payment-idempotency
+(3). Of those, 4 tests use `it.fails` to encode the post-fix behavior for
+plans 004 (orderId uniqueness) and 005 (one-time temporary links) — they
+are the SPEC for those plans and must lose `.fails` in the same PR.
+
+The 002 IDOR test (LemonSqueezy custom_data.user_id) was deferred: the
+vulnerable `findOrCreateUser` is module-private to the route handler, so
+testing it cleanly needs either an export-for-tests refactor or full
+webhook-signed POST in e2e. Filed as a Phase 5 task.
 
 **Phase 3 outcome (2026-06-24):** Testcontainers Postgres + drizzle-kit-push
 infrastructure landed and green via a smoke test that proves end-to-end

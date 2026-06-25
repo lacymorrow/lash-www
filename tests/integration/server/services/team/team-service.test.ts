@@ -1,177 +1,166 @@
+/**
+ * Characterization tests for TeamService against the live Testcontainers
+ * DB. Pins the current method shapes so the upcoming RBAC / team-member
+ * pattern work (origin/security branch and plan 003) doesn't silently
+ * change the contract.
+ *
+ * Key facts captured here:
+ *   - createTeam / createPersonalTeam return { ...team, members: [{...member, user}] }
+ *     (the nested user object — not just the team row).
+ *   - deleteTeam throws ErrorService errors ("Team not found", "Cannot delete
+ *     personal team") rather than returning a Result.
+ *   - ensureOnePersonalTeam soft-deletes duplicates and returns the oldest
+ *     existing one (by createdAt asc).
+ */
+
 import { eq } from "drizzle-orm";
-import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
-import { db } from "@/server/db";
+import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import { teamMembers, teams, users } from "@/server/db/schema";
 import { TeamService } from "@/server/services/team-service";
+import { getTestDb } from "../../../../helpers/test-db";
 
-const TEST_USER = {
-  id: "test-user-id",
-  email: "test@shipkit.io",
-  githubUsername: "test-user",
-  createdAt: new Date("2025-02-16T00:14:11.560Z"),
-};
+const TEST_USER_ID = "test-user-team-service";
+const TEST_USER_EMAIL = "team-service-test@shipkit.test";
 
-// SKIPPED FOR PHASE 4: This suite was written before the workspace-id
-// rework and assumes `createTeam` returns a flat team row. Current
-// service returns a richer shape and uses different FK semantics for
-// team_members. Phase 4 (real characterization) will rewrite these
-// against the live service API.
-describe.skip("Team Service", () => {
-  let teamService: TeamService;
+let teamService: TeamService;
 
-  beforeAll(async () => {
-    teamService = new TeamService();
-    // Create test user
-    await db?.insert(users).values({
-      id: TEST_USER.id,
-      email: TEST_USER.email,
-      githubUsername: TEST_USER.githubUsername,
-      createdAt: TEST_USER.createdAt,
-    });
+beforeAll(() => {
+  teamService = new TeamService();
+});
+
+afterEach(async () => {
+  // Truncate happens in setup-integration.ts; nothing else needed here.
+});
+
+async function seedTestUser() {
+  const db = getTestDb();
+  await db.insert(users).values({
+    id: TEST_USER_ID,
+    email: TEST_USER_EMAIL,
+  });
+}
+
+describe("TeamService.createTeam (workspace)", () => {
+  it("returns the team merged with a members array containing the owner", async () => {
+    await seedTestUser();
+    const team = await teamService.createTeam(TEST_USER_ID, "Acme Workspace");
+
+    expect(team).toBeDefined();
+    expect(team?.name).toBe("Acme Workspace");
+    expect(team?.type).toBe("workspace");
+    expect(team?.deletedAt).toBeNull();
+    expect(Array.isArray(team?.members)).toBe(true);
+    expect(team?.members).toHaveLength(1);
+    expect(team?.members?.[0]?.userId).toBe(TEST_USER_ID);
+    expect(team?.members?.[0]?.role).toBe("owner");
+    expect(team?.members?.[0]?.user?.id).toBe(TEST_USER_ID);
   });
 
-  afterAll(async () => {
-    // Clean up test user
-    await db?.delete(users).where(eq(users.id, TEST_USER.id));
+  it("assigns distinct UUIDs to two teams created in succession", async () => {
+    await seedTestUser();
+    const a = await teamService.createTeam(TEST_USER_ID, "Team A");
+    const b = await teamService.createTeam(TEST_USER_ID, "Team B");
+    expect(a?.id).toBeTruthy();
+    expect(b?.id).toBeTruthy();
+    expect(a?.id).not.toBe(b?.id);
   });
 
-  afterEach(async () => {
-    // Clean up test data
-    await db?.delete(teamMembers);
-    await db?.delete(teams);
+  it("persists both the team and the membership row", async () => {
+    await seedTestUser();
+    const team = await teamService.createTeam(TEST_USER_ID, "Persisted Team");
+    const db = getTestDb();
+
+    const teamRow = await db.query.teams.findFirst({
+      where: eq(teams.id, team?.id as string),
+    });
+    expect(teamRow?.name).toBe("Persisted Team");
+
+    const memberRow = await db.query.teamMembers.findFirst({
+      where: eq(teamMembers.teamId, team?.id as string),
+    });
+    expect(memberRow?.userId).toBe(TEST_USER_ID);
+    expect(memberRow?.role).toBe("owner");
+  });
+});
+
+describe("TeamService.createPersonalTeam", () => {
+  it('creates a team with type="personal" and name="Personal"', async () => {
+    await seedTestUser();
+    const team = await teamService.createPersonalTeam(TEST_USER_ID);
+
+    expect(team?.name).toBe("Personal");
+    expect(team?.type).toBe("personal");
+    expect(team?.members?.[0]?.role).toBe("owner");
   });
 
-  describe("createTeam", () => {
-    test("should create a workspace team with owner", async () => {
-      // Act
-      const team = await teamService.createTeam(TEST_USER.id, "Test Team");
+  it("returns null when the user does not exist (does not throw)", async () => {
+    const team = await teamService.createPersonalTeam("nonexistent-user-id");
+    expect(team).toBeNull();
+  });
+});
 
-      // Assert
-      expect(team).toBeDefined();
-      expect(team?.name).toBe("Test Team");
-      expect(team?.type).toBe("workspace");
+describe("TeamService.deleteTeam", () => {
+  it("soft-deletes a workspace team (sets deletedAt)", async () => {
+    await seedTestUser();
+    const team = await teamService.createTeam(TEST_USER_ID, "To Delete");
 
-      // Check team member was created
-      const member = await db?.query.teamMembers.findFirst({
-        where: eq(teamMembers.teamId, team?.id),
-      });
-      expect(member).toBeDefined();
-      expect(member?.userId).toBe(TEST_USER.id);
-      expect(member?.role).toBe("owner");
+    const ok = await teamService.deleteTeam(team?.id as string);
+    expect(ok).toBe(true);
+
+    const db = getTestDb();
+    const row = await db.query.teams.findFirst({
+      where: eq(teams.id, team?.id as string),
     });
-
-    test("should create teams with unique IDs", async () => {
-      // Act
-      const team1 = await teamService.createTeam(TEST_USER.id, "Team 1");
-      const team2 = await teamService.createTeam(TEST_USER.id, "Team 2");
-
-      // Assert
-      expect(team1?.id).not.toBe(team2?.id);
-    });
+    expect(row?.deletedAt).toBeInstanceOf(Date);
   });
 
-  describe("deleteTeam", () => {
-    test("should soft delete a workspace team", async () => {
-      // Arrange
-      const team = await teamService.createTeam(TEST_USER.id, "Team to Delete");
-
-      // Act
-      const result = await teamService.deleteTeam(team?.id);
-
-      // Assert
-      expect(result).toBe(true);
-
-      // Verify soft delete
-      const deletedTeam = await db?.query.teams.findFirst({
-        where: eq(teams.id, team?.id),
-      });
-      expect(deletedTeam?.deletedAt).toBeDefined();
-    });
-
-    test("should not allow deleting a personal team", async () => {
-      // Arrange
-      const personalTeam = await teamService.createPersonalTeam(TEST_USER.id);
-
-      // Act & Assert
-      await expect(teamService.deleteTeam(personalTeam?.id)).rejects.toThrow(
-        "Cannot delete personal team"
-      );
-
-      // Verify team still exists
-      const team = await db?.query.teams.findFirst({
-        where: eq(teams.id, personalTeam?.id),
-      });
-      expect(team?.deletedAt).toBeNull();
-    });
-
-    test("should throw error when team not found", async () => {
-      // Act & Assert
-      await expect(teamService.deleteTeam("non-existent-id")).rejects.toThrow("Team not found");
-    });
+  it("throws when trying to delete a personal team", async () => {
+    await seedTestUser();
+    const personal = await teamService.createPersonalTeam(TEST_USER_ID);
+    await expect(teamService.deleteTeam(personal?.id as string)).rejects.toThrow(/personal team/i);
   });
 
-  describe("createPersonalTeam", () => {
-    test("should create a personal team with owner", async () => {
-      // Act
-      const team = await teamService.createPersonalTeam(TEST_USER.id);
+  it("throws when the team id does not exist", async () => {
+    await expect(teamService.deleteTeam("00000000-0000-0000-0000-000000000000")).rejects.toThrow(
+      /not found/i
+    );
+  });
+});
 
-      // Assert
-      expect(team).toBeDefined();
-      expect(team?.name).toBe("Personal");
-      expect(team?.type).toBe("personal");
-
-      // Check team member was created
-      const member = await db?.query.teamMembers.findFirst({
-        where: eq(teamMembers.teamId, team?.id),
-      });
-      expect(member).toBeDefined();
-      expect(member?.userId).toBe(TEST_USER.id);
-      expect(member?.role).toBe("owner");
-    });
+describe("TeamService.ensureOnePersonalTeam", () => {
+  it("creates a personal team when none exists", async () => {
+    await seedTestUser();
+    const team = await teamService.ensureOnePersonalTeam(TEST_USER_ID);
+    expect(team?.type).toBe("personal");
   });
 
-  describe("ensureOnePersonalTeam", () => {
-    test("should create personal team if none exists", async () => {
-      // Act
-      const team = await teamService.ensureOnePersonalTeam(TEST_USER.id);
+  it("returns the existing personal team when exactly one exists", async () => {
+    await seedTestUser();
+    const original = await teamService.createPersonalTeam(TEST_USER_ID);
+    const ensured = await teamService.ensureOnePersonalTeam(TEST_USER_ID);
+    expect(ensured?.id).toBe(original?.id);
+  });
 
-      // Assert
-      expect(team).toBeDefined();
-      expect(team?.type).toBe("personal");
+  it("keeps the oldest and soft-deletes duplicates when multiple personals exist", async () => {
+    await seedTestUser();
+    const first = await teamService.createPersonalTeam(TEST_USER_ID);
+    // Brief gap so createdAt differs reliably across rows
+    await new Promise((r) => setTimeout(r, 10));
+    const second = await teamService.createPersonalTeam(TEST_USER_ID);
+    await new Promise((r) => setTimeout(r, 10));
+    const third = await teamService.createPersonalTeam(TEST_USER_ID);
+
+    const kept = await teamService.ensureOnePersonalTeam(TEST_USER_ID);
+    expect(kept?.id).toBe(first?.id);
+
+    const db = getTestDb();
+    const secondRow = await db.query.teams.findFirst({
+      where: eq(teams.id, second?.id as string),
     });
-
-    test("should return existing personal team if one exists", async () => {
-      // Arrange
-      const existingTeam = await teamService.createPersonalTeam(TEST_USER.id);
-
-      // Act
-      const team = await teamService.ensureOnePersonalTeam(TEST_USER.id);
-
-      // Assert
-      expect(team?.id).toBe(existingTeam?.id);
+    const thirdRow = await db.query.teams.findFirst({
+      where: eq(teams.id, third?.id as string),
     });
-
-    test("should keep oldest personal team and soft delete others", async () => {
-      // Arrange - Create multiple personal teams
-      const team1 = await teamService.createPersonalTeam(TEST_USER.id);
-      const team2 = await teamService.createPersonalTeam(TEST_USER.id);
-      const team3 = await teamService.createPersonalTeam(TEST_USER.id);
-
-      // Act
-      const result = await teamService.ensureOnePersonalTeam(TEST_USER.id);
-
-      // Assert
-      expect(result?.id).toBe(team1?.id); // Should keep oldest team
-
-      // Check other teams are soft deleted
-      const deletedTeam2 = await db?.query.teams.findFirst({
-        where: eq(teams.id, team2?.id),
-      });
-      const deletedTeam3 = await db?.query.teams.findFirst({
-        where: eq(teams.id, team3?.id),
-      });
-      expect(deletedTeam2?.deletedAt).toBeDefined();
-      expect(deletedTeam3?.deletedAt).toBeDefined();
-    });
+    expect(secondRow?.deletedAt).toBeInstanceOf(Date);
+    expect(thirdRow?.deletedAt).toBeInstanceOf(Date);
   });
 });
