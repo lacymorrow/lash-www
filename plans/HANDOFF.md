@@ -255,3 +255,47 @@ at `plans/draft-ci-workflow.yml` needs updating to add the
 `test:integration` step and require Docker-in-CI for Postgres
 (simpler to use GH Actions' postgres service container; see
 plan-section comments). Build must be a required check.
+
+## 2026-06-25 second update — Phase 6 complete
+
+| Check                      | State                                             |
+| -------------------------- | ------------------------------------------------- |
+| `bun run test`             | 198 passed / 9 skipped / 0 failed                 |
+| `bun run test:integration` | 94 passed (with USE_EXTERNAL_DB=1, simulating CI) |
+| `bun run test:e2e`         | 16 passed / 5 skipped / 0 failed                  |
+| `bun run typecheck`        | 0 errors                                          |
+| `bun run lint`             | 0 errors, 2099 warnings                           |
+| `bun run build`            | succeeds                                          |
+
+**Phase 6 wiring:**
+
+- `.github/workflows/ci.yml` — required-check workflow with six jobs:
+  - `typecheck` and `lint` (fast feedback)
+  - `test-unit` (vitest, no DB)
+  - `test-integration` (vitest against Postgres service container,
+    `USE_EXTERNAL_DB=1`)
+  - `build` (catches the kind of regression Phase 5 found)
+  - `test-e2e` (Playwright against `bun dev`, Postgres service)
+  - `ci-pass` aggregator — wire THIS as the single required check in
+    branch protection so jobs can be renamed/added without touching
+    settings.
+- `tests/helpers/test-db.ts` — gained `USE_EXTERNAL_DB=1` mode that
+  skips the Testcontainers spin-up and only pushes schema against the
+  provided `DATABASE_URL`. Same code path locally (with a docker run
+  postgres) and in CI (with the service container).
+
+**To complete Phase 6 (requires owner action):**
+
+1. Push `phase-6/ci-gating` and merge. The new workflow will start
+   running on the next PR.
+2. In Settings → Branches → Branch protection rules → `main`:
+   - Require status checks to pass before merging
+   - Add `CI / CI pass` as a required status check
+   - Require branches to be up to date before merging
+   - (Optional but recommended) Require linear history
+3. Watch the first PR run. Adjust timeouts in `ci.yml` if any job hits
+   the cap.
+
+**Phase 6 does NOT (yet) wire credentials auth, payment provider
+sandbox keys, or Payload CMS in CI** — see follow-up tasks #24-#26
+in tasks. The e2e job runs the smoke surface only.

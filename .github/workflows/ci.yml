@@ -1,0 +1,176 @@
+# CI gate — every job MUST pass before merging to main.
+# See plans/MASTER-TEST-PLAN.md (Phase 6) for the rationale.
+#
+# Job summary:
+#   typecheck       — `bun run typecheck` (cheap, fast feedback)
+#   lint            — biome + eslint + prettier
+#   test-unit       — vitest unit suite (no DB)
+#   test-integration— vitest integration suite (real Postgres service)
+#   test-e2e        — Playwright against `bun dev` (real Postgres service)
+#   build           — production build (catches client-bundle / SSR regressions)
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# Cancel in-flight PR runs when new commits arrive; never cancel main pushes.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  BUN_VERSION: "latest"
+
+jobs:
+  typecheck:
+    name: TypeScript
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - run: bun install --frozen-lockfile
+      - run: bun run typecheck
+
+  lint:
+    name: Lint (biome + eslint + prettier)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - run: bun install --frozen-lockfile
+      - run: bun run lint
+
+  test-unit:
+    name: Unit tests (mocked db)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      AUTH_SECRET: ci-only-secret-do-not-use-in-prod
+      SKIP_ENV_VALIDATION: "1"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - run: bun install --frozen-lockfile
+      - run: bun run test
+
+  test-integration:
+    name: Integration tests (real Postgres)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: shipkit_integration
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      USE_EXTERNAL_DB: "1"
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/shipkit_integration
+      AUTH_SECRET: ci-only-secret-do-not-use-in-prod
+      SKIP_ENV_VALIDATION: "1"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - run: bun install --frozen-lockfile
+      - run: bun run test:integration
+
+  build:
+    name: Production build
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    needs: [typecheck, lint]
+    env:
+      AUTH_SECRET: ci-only-secret-do-not-use-in-prod
+      SKIP_ENV_VALIDATION: "1"
+      NODE_OPTIONS: "--max-old-space-size=8192"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+
+  test-e2e:
+    name: E2E (Playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [test-unit, test-integration]
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: shipkit_e2e
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      E2E_SKIP_DB_SETUP: "0"
+      USE_EXTERNAL_DB: "1"
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/shipkit_e2e
+      AUTH_SECRET: ci-only-secret-do-not-use-in-prod
+      SKIP_ENV_VALIDATION: "1"
+      CI: "true"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - run: bun install --frozen-lockfile
+      - name: Install Playwright browsers
+        run: bunx playwright install --with-deps chromium
+      - run: bun run test:e2e
+      - if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: playwright-report
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+
+  # Aggregate "everything must pass" job — wire this as the
+  # required check in branch protection rules rather than wiring each
+  # job individually. Lets us add/rename jobs without re-configuring
+  # protection.
+  ci-pass:
+    name: CI pass
+    runs-on: ubuntu-latest
+    needs: [typecheck, lint, test-unit, test-integration, build, test-e2e]
+    if: always()
+    steps:
+      - name: Fail if any required job failed
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1
+      - run: echo "All CI jobs passed."

@@ -50,8 +50,20 @@ do not start phase N before phase N-1 is green.
 | 2 — lint to green                                          | ✅ done | `97cbd8a7` |
 | 3 — Testcontainers (see `plans/PHASE-3-TESTCONTAINERS.md`) | ✅ done | `d6954cff` |
 | 4 — characterization (see plans 008/009)                   | ✅ done | `d2e02ca2` |
-| 5 — e2e (see `plans/PHASE-5-E2E-COVERAGE.md`)              | ✅ done | (this PR)  |
-| 6 — CI gating (see `plans/draft-ci-workflow.yml`)          | pending | —          |
+| 5 — e2e (see `plans/PHASE-5-E2E-COVERAGE.md`)              | ✅ done | `968385f2` |
+| 6 — CI gating (see `plans/draft-ci-workflow.yml`)          | ✅ done | (this PR)  |
+
+**Phase 6 outcome (2026-06-25):** `.github/workflows/ci.yml` ships
+with 6 jobs (typecheck / lint / test-unit / test-integration / build /
+test-e2e) plus a `ci-pass` aggregator. `test-integration` and
+`test-e2e` use a Postgres service container; `tests/helpers/test-db.ts`
+gained a `USE_EXTERNAL_DB=1` switch that skips the Testcontainers
+spin-up and pushes schema against the provided DATABASE_URL. Verified
+locally by running `USE_EXTERNAL_DB=1 DATABASE_URL=postgres://... bun
+run test:integration` against a docker-run Postgres — 94/94 pass.
+
+Branch protection (require `CI / CI pass` on `main`) is the owner's
+last step; doc the click-path in HANDOFF.
 
 **Phase 5 outcome (2026-06-25):** Playwright globalSetup boots a
 Testcontainers Postgres + pushes the schema before the dev server
