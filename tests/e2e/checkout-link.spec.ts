@@ -14,8 +14,7 @@
  */
 import { expect, test } from "@playwright/test";
 
-const CHECKOUT_HREF_RE =
-  /^https:\/\/([a-z0-9-]+\.)?(lemonsqueezy\.com|stripe\.com|polar\.sh)\//i;
+const CHECKOUT_HREF_RE = /^https:\/\/([a-z0-9-]+\.)?(lemonsqueezy\.com|stripe\.com|polar\.sh)\//i;
 
 test.describe("Pricing CTA points at a real checkout URL", () => {
   test("/pricing primary CTA is a real https checkout link", async ({ page }) => {
