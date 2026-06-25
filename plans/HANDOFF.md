@@ -299,3 +299,81 @@ plan-section comments). Build must be a required check.
 **Phase 6 does NOT (yet) wire credentials auth, payment provider
 sandbox keys, or Payload CMS in CI** — see follow-up tasks #24-#26
 in tasks. The e2e job runs the smoke surface only.
+
+## 2026-06-25 third update — Phase 5 follow-ups #24 and #25 complete
+
+**Tasks #24 and #25 from the prior handoff are now merged on main.**
+
+### Task #24 — not-found.tsx client-side crash (fixed + e2e unskipped)
+
+**Root cause:** `src/components/blocks/FaultyTerminal.jsx` (the WebGL
+animated background used by `(app)/not-found.tsx`) had two SSR-unsafe
+defaults:
+
+1. `dpr = Math.min(window.devicePixelRatio || 1, 2)` as a default
+   parameter — evaluated during SSR of this client component, where
+   `window` is undefined.
+2. `useRef(Math.random() * 100)` — hydration mismatch (different value
+   on server vs client).
+
+**Fix (`fix/not-found-client-crash`, merged):**
+
+- Moved `dpr` resolution into `useEffect` (browser-only).
+- Lazy-init the `Math.random()` ref behind `typeof window !== "undefined"`.
+- Wrapped `<FaultyTerminal />` in a `SilentBoundary` (class component
+  with `getDerivedStateFromError` → render null) so any future WebGL
+  / shader / GPU failure renders nothing instead of taking down the
+  containing page.
+- Unskipped the pinned e2e test in `tests/e2e/smoke.spec.ts`. Uses
+  `waitUntil: "domcontentloaded"` because the rAF loop blocks the
+  `load` event, and a per-test `setTimeout(90_000)` for cold dev compile.
+
+### Task #25 — auth/checkout/admin e2e (partial — shipped what's safe)
+
+**Shipped LIVE (`feat/e2e-checkout-and-auth-spec`, merged):**
+
+- `tests/e2e/checkout-link.spec.ts` (2 tests) — walks `/pricing` and
+  asserts the primary CTA is an anchor whose href resolves to a real
+  LemonSqueezy / Stripe / Polar checkout URL with a checkout-shaped
+  path. Catches LAC-249 / LAC-1450-class regressions at the source
+  (the buy button) rather than only at the destination (the existing
+  `shipkit-regression` spec only checks the destination is reachable).
+
+**Shipped as SPEC (skipped by default):**
+
+- `tests/e2e/auth-admin-flows.spec.ts` (3 tests) — describes the full
+  sign-up → sign-out → sign-in → /dashboard loop and the /admin role
+  gate. Skipped unless `PLAYWRIGHT_E2E_PAYLOAD_READY=1`. The file
+  header documents activation requirements.
+
+**Why the auth/admin tests are gated instead of live:**
+
+The current e2e DB (Testcontainers or service-container Postgres) only
+has the Drizzle schema pushed (`bunx drizzle-kit push`). Payload uses a
+separate Postgres schema (`siteConfig.payload.dbSchemaName`) and its
+tables are created lazily on first `getPayload()` call. The sign-up
+server action depends on those tables existing, so it throws in the
+default e2e environment.
+
+**To activate the auth/admin specs (next phase of work):**
+
+1. Add a `payload migrate` (or programmatic `getPayload()` warm-up)
+   step to `tests/e2e/global-setup.ts` AFTER `startTestDb()`.
+2. Add to the test-e2e job env in `.github/workflows/ci.yml`:
+   ```yaml
+   PAYLOAD_SECRET: ci-only-payload-secret-do-not-use-in-prod
+   ADMIN_DOMAINS: e2e.local
+   PLAYWRIGHT_E2E_PAYLOAD_READY: "1"
+   ```
+3. Expect the e2e job runtime to grow by 30–60s for the Payload
+   warm-up + schema push.
+
+This is real follow-up work — open as a fresh task ("activate
+auth-admin-flows in CI") rather than adding noise to #25.
+
+### Open follow-ups (unchanged)
+
+- #26 — LemonSqueezy `custom_data.user_id` IDOR e2e (plan 002 webhook-
+  signed POST).
+- Owner action: enable branch protection requiring `CI / CI pass`
+  status check on main.
