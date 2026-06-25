@@ -3,17 +3,13 @@
  * This file contains only server-safe code (no browser APIs or client-specific functionality)
  */
 
-import path from "node:path";
 import { getAlternativePaths, getEssentialConfigFiles } from "./project-config";
 import type { ContainerFile } from "./types";
 
-// Common constants
-export const TEMPLATE_BASE_DIR = path.join(
-  "packages",
-  "create-shipkit-app",
-  "templates",
-  "minimal"
-);
+// Common constants — string literal because this module is imported by
+// client components and node:* schemes blow up under the webpack client
+// build.
+export const TEMPLATE_BASE_DIR = "packages/create-shipkit-app/templates/minimal";
 export const BINARY_EXTENSIONS = [
   ".ico",
   ".png",
