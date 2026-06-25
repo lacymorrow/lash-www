@@ -5,8 +5,9 @@ test.describe("Login", () => {
   test("sign-in page loads", async ({ page }) => {
     await page.goto("/sign-in");
 
-    const heading = page.getByRole("heading", { name: /sign in/i });
-    await expect(heading).toBeVisible({ timeout: 15000 });
+    // Heading copy is "Welcome" (see sign-in.tsx). Assert on the form
+    // (the load-bearing UI) rather than the marketing wording.
+    await expect(page.getByLabel(/email/i)).toBeVisible({ timeout: 15_000 });
   });
 
   test("login with valid credentials redirects to dashboard", async ({ page }) => {

@@ -209,3 +209,49 @@ queued as tasks #18–#20.
 
 **Next:** Phase 5 — e2e Playwright coverage of critical user flows.
 See `plans/PHASE-5-E2E-COVERAGE.md`.
+
+## 2026-06-25 update — Phase 5 complete
+
+| Check                      | State                                       |
+| -------------------------- | ------------------------------------------- |
+| `bun run test`             | 198 passed / 9 skipped / 0 failed           |
+| `bun run test:integration` | 86 passed / 0 skipped / 0 failed (10 files) |
+| `bun run test:e2e`         | 16 passed / 5 skipped / 0 failed            |
+| `bun run typecheck`        | 0 errors                                    |
+| `bun run lint`             | 0 errors, 2099 warnings                     |
+| `bun run build`            | succeeds (was broken; see below)            |
+
+**Real bug fix during Phase 5:**
+`src/app/(app)/install/shared-utils.ts` imported `node:path` and was
+reachable through the client bundle. Build failed with
+`UnhandledSchemeError`. Phase 1's gate (`typecheck && test`) didn't
+catch it. Fixed by replacing `path.join("packages",...)` with a string
+literal. Phase 6 CI MUST include `bun run build` so this can't recur.
+
+**Phase 5 wiring:**
+
+- `tests/e2e/global-setup.ts` — boots Postgres testcontainer + pushes
+  schema, sets `DATABASE_URL` in env so the webServer (`bun dev`)
+  inherits it. Honors `E2E_SKIP_DB_SETUP=1` for external-DB runs.
+- `tests/e2e/global-teardown.ts` — stops the container.
+- `playwright.config.ts` — wires the global setup/teardown; sets
+  `retries: process.env.CI ? 2 : 0` (was always 2 → ate 3× the local
+  dev loop on failures); extends webServer timeout to 180s.
+- `tests/e2e/smoke.spec.ts` — new Phase-5 smoke suite (8 tests, 7
+  passing, 1 skipped pending task #24).
+- Pre-existing e2e fixes: `login.spec.ts` heading wording, `/docs`
+  removed from `MARKETING_ROUTES`, `/features` and `/examples`
+  softened to "not 5xx" since they're downstream-only routes,
+  `admin-payment-import` skipped pending task #25 (needs Payload).
+
+**Phase 5 follow-ups filed:**
+
+- #24 — fix `(app)/not-found.tsx` client-side crash
+- #25 — deep auth/checkout/admin flows (needs Payload + sandbox keys)
+- #26 — LemonSqueezy IDOR e2e (plan 002 — webhook-signed POST)
+
+**Next:** Phase 6 — CI gating (`.github/workflows/ci.yml`). The draft
+at `plans/draft-ci-workflow.yml` needs updating to add the
+`test:integration` step and require Docker-in-CI for Postgres
+(simpler to use GH Actions' postgres service container; see
+plan-section comments). Build must be a required check.

@@ -18,18 +18,25 @@ export default defineConfig({
   timeout: 30 * 1000,
   // Test directory
   testDir: path.join(__dirname, "tests/e2e"),
-  // If a test fails, retry it additional 2 times
-  retries: 2,
+  // Retry on CI to absorb flakes; never locally — keeps the dev loop tight.
+  retries: process.env.CI ? 2 : 0,
   // Artifacts folder where screenshots, videos, and traces are stored.
   outputDir: "test-results/",
 
-  // Run your local dev server before starting the tests:*
+  // Boot a Postgres testcontainer + push schema before tests start.
+  // Tears it down after. Set E2E_SKIP_DB_SETUP=1 to use an external DB.
+  globalSetup: path.join(__dirname, "tests/e2e/global-setup.ts"),
+  globalTeardown: path.join(__dirname, "tests/e2e/global-teardown.ts"),
+
+  // Run your local dev server before starting the tests:
   // https://playwright.dev/docs/test-advanced#launching-a-development-web-server-during-the-tests
   webServer: {
     command: "bun dev",
     url: baseURL,
-    timeout: 120 * 1000,
+    timeout: 180 * 1000,
     reuseExistingServer: !process.env.CI,
+    // Inherit DATABASE_URL etc. set by globalSetup.
+    env: process.env as Record<string, string>,
   },
 
   use: {

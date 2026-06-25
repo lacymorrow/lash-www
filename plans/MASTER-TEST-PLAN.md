@@ -49,9 +49,31 @@ do not start phase N before phase N-1 is green.
 | 1 — typecheck + tests green                                | ✅ done | `b3770514` |
 | 2 — lint to green                                          | ✅ done | `97cbd8a7` |
 | 3 — Testcontainers (see `plans/PHASE-3-TESTCONTAINERS.md`) | ✅ done | `d6954cff` |
-| 4 — characterization (see plans 008/009)                   | ✅ done | (this PR)  |
-| 5 — e2e (see `plans/PHASE-5-E2E-COVERAGE.md`)              | pending | —          |
+| 4 — characterization (see plans 008/009)                   | ✅ done | `d2e02ca2` |
+| 5 — e2e (see `plans/PHASE-5-E2E-COVERAGE.md`)              | ✅ done | (this PR)  |
 | 6 — CI gating (see `plans/draft-ci-workflow.yml`)          | pending | —          |
+
+**Phase 5 outcome (2026-06-25):** Playwright globalSetup boots a
+Testcontainers Postgres + pushes the schema before the dev server
+starts (`process.env.DATABASE_URL` propagates to `bun dev`). New
+`tests/e2e/smoke.spec.ts` covers the highest-value catch points
+(home, sign-in, pricing, robots; `/dashboard` and `/deployments` auth
+gates; a documented not-found regression skipped pending task #24
+with the production-mode client-side crash). Existing
+shipkit-regression and login specs were repaired (heading wording
+drift, `/docs` known-404 dropped). E2E run is 1.5-2 min on a warm
+container; 16 passed / 5 skipped / 0 failed locally.
+
+**Real bug uncovered:** `src/app/(app)/install/shared-utils.ts`
+imported `node:path` and was reachable through the client bundle.
+Build was silently red on `main` since the Phase-1 gate didn't include
+build. Fixed in this PR (string literal in place of `path.join`).
+
+**Deferred to Phase 5 follow-ups:**
+
+- #24: not-found client-side crash (skipped test pinned as spec)
+- #25: deep auth/checkout/admin flows (needs Payload + sandbox keys)
+- #26: LemonSqueezy IDOR e2e (plan 002 — needs webhook-signed POST)
 
 **Phase 4 outcome (2026-06-24):** 86 integration tests pinning the core
 DB-touching surfaces. Per-suite counts: smoke (2), github (5), feedback
