@@ -6,6 +6,12 @@ process.env = {
   ...process.env,
   NODE_ENV: "test",
   SKIP_ENV_VALIDATION: "1",
+  // Webhook-secret tests (LemonSqueezy plan 002 e2e) need this captured at
+  // @/env module-eval time, which happens before any test code runs. Keep
+  // a test-only default so a missing CI env var doesn't silently disable
+  // signature verification.
+  LEMONSQUEEZY_WEBHOOK_SECRET:
+    process.env.LEMONSQUEEZY_WEBHOOK_SECRET ?? "test-only-lemonsqueezy-webhook-secret",
 };
 
 // Only load Next.js environment config in Node.js environment
