@@ -57,16 +57,18 @@ test.describe("auth gate", () => {
 });
 
 test.describe("error contract", () => {
-  // SKIPPED PENDING TASK #24: (app)/not-found.tsx wraps a client-only
-  // animation inside AppRouterLayout and throws "Application error: a
-  // client-side exception" instead of rendering the not-found UI.
-  // Unskip in the SAME PR that fixes the not-found crash.
-  test.skip("a nonexistent route renders not-found UI (Next renders 200 by design)", async ({
+  test("a nonexistent route renders not-found UI (Next renders 200 by design)", async ({
     page,
   }) => {
-    await page.goto("/this-route-truly-does-not-exist-12345");
+    // Cold-compiling an unknown route + the not-found page's WebGL background
+    // (rAF loop blocks `load`) can take >30s in dev.
+    test.setTimeout(90_000);
+    await page.goto("/this-route-truly-does-not-exist-12345", {
+      waitUntil: "domcontentloaded",
+      timeout: 60_000,
+    });
     await expect(page.locator("body")).toContainText(/not found|404|lost in space/i, {
-      timeout: 10_000,
+      timeout: 30_000,
     });
   });
 });
