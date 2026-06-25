@@ -16,20 +16,14 @@
 import { eq } from "drizzle-orm";
 import { describe, expect, it } from "vitest";
 import { feedback } from "@/server/db/schema";
-import {
-  createFeedback,
-  updateFeedbackStatus,
-} from "@/server/services/feedback-service";
+import { createFeedback, updateFeedbackStatus } from "@/server/services/feedback-service";
 import { getTestDb } from "../../../helpers/test-db";
 
 const opts = { skipEmail: true };
 
 describe("feedback-service createFeedback", () => {
   it("returns success+data for a valid dialog feedback", async () => {
-    const result = await createFeedback(
-      { content: "Test feedback", source: "dialog" },
-      opts
-    );
+    const result = await createFeedback({ content: "Test feedback", source: "dialog" }, opts);
 
     expect(result.success).toBe(true);
     expect(result.error).toBeUndefined();
@@ -68,10 +62,7 @@ describe("feedback-service createFeedback", () => {
   });
 
   it("persists the row to the database (visible on requery)", async () => {
-    const result = await createFeedback(
-      { content: "persisted row check", source: "dialog" },
-      opts
-    );
+    const result = await createFeedback({ content: "persisted row check", source: "dialog" }, opts);
     expect(result.success).toBe(true);
     const id = result.data?.id;
     expect(id).toBeTruthy();
@@ -84,20 +75,14 @@ describe("feedback-service createFeedback", () => {
   });
 
   it("returns success:false for empty content (no throw)", async () => {
-    const result = await createFeedback(
-      { content: "", source: "dialog" },
-      opts
-    );
+    const result = await createFeedback({ content: "", source: "dialog" }, opts);
     expect(result.success).toBe(false);
     expect(result.error).toMatch(/required/i);
     expect(result.data).toBeUndefined();
   });
 
   it("returns success:false for content > 1000 chars", async () => {
-    const result = await createFeedback(
-      { content: "x".repeat(1001), source: "dialog" },
-      opts
-    );
+    const result = await createFeedback({ content: "x".repeat(1001), source: "dialog" }, opts);
     expect(result.success).toBe(false);
     expect(result.error).toMatch(/too long/i);
   });
@@ -125,10 +110,7 @@ describe("feedback-service createFeedback", () => {
 
 describe("feedback-service updateFeedbackStatus", () => {
   it("flips status from default to reviewed", async () => {
-    const created = await createFeedback(
-      { content: "to be reviewed", source: "dialog" },
-      opts
-    );
+    const created = await createFeedback({ content: "to be reviewed", source: "dialog" }, opts);
     expect(created.success).toBe(true);
     const id = created.data?.id as string;
 
@@ -139,22 +121,16 @@ describe("feedback-service updateFeedbackStatus", () => {
   });
 
   it("returns undefined for a non-existent id (no throw)", async () => {
-    const result = await updateFeedbackStatus(
-      "00000000-0000-0000-0000-000000000000",
-      "reviewed"
-    );
+    const result = await updateFeedbackStatus("00000000-0000-0000-0000-000000000000", "reviewed");
     expect(result).toBeUndefined();
   });
 
   it("throws on invalid status (the one branch that DOES throw)", async () => {
-    const created = await createFeedback(
-      { content: "valid", source: "dialog" },
-      opts
-    );
+    const created = await createFeedback({ content: "valid", source: "dialog" }, opts);
     const id = created.data?.id as string;
 
-    await expect(
-      updateFeedbackStatus(id, "not-a-real-status")
-    ).rejects.toThrow(/invalid feedback status/i);
+    await expect(updateFeedbackStatus(id, "not-a-real-status")).rejects.toThrow(
+      /invalid feedback status/i
+    );
   });
 });

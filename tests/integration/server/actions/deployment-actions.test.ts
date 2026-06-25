@@ -41,9 +41,7 @@ beforeEach(async () => {
   vi.mocked(auth).mockReset();
   const db = getTestDb();
   await db.insert(users).values({ id: OWNER_ID, email: "owner@shipkit.test" });
-  await db
-    .insert(users)
-    .values({ id: STRANGER_ID, email: "stranger@shipkit.test" });
+  await db.insert(users).values({ id: STRANGER_ID, email: "stranger@shipkit.test" });
 });
 
 function signIn(userId: string) {
@@ -76,9 +74,9 @@ describe("createDeployment", () => {
 
   it("throws Unauthorized when no session", async () => {
     vi.mocked(auth).mockResolvedValue(null as never);
-    await expect(
-      createDeployment({ projectName: "x", status: "deploying" })
-    ).rejects.toThrow(/unauthorized/i);
+    await expect(createDeployment({ projectName: "x", status: "deploying" })).rejects.toThrow(
+      /unauthorized/i
+    );
   });
 });
 
@@ -129,20 +127,16 @@ describe("updateDeployment", () => {
     const seed = await seedDeployment(OWNER_ID);
     vi.mocked(auth).mockResolvedValue(null as never);
 
-    await expect(
-      updateDeployment(seed!.id, { status: "completed" })
-    ).rejects.toThrow(/unauthorized/i);
+    await expect(updateDeployment(seed!.id, { status: "completed" })).rejects.toThrow(
+      /unauthorized/i
+    );
   });
 
   it("permits a background-task call (userId passed explicitly, no session)", async () => {
     const seed = await seedDeployment(OWNER_ID);
     vi.mocked(auth).mockResolvedValue(null as never);
 
-    const updated = await updateDeployment(
-      seed!.id,
-      { status: "completed" },
-      OWNER_ID
-    );
+    const updated = await updateDeployment(seed!.id, { status: "completed" }, OWNER_ID);
     expect(updated?.status).toBe("completed");
   });
 });
@@ -197,8 +191,6 @@ describe("deleteDeployment", () => {
 
   it("throws Unauthorized when no session", async () => {
     vi.mocked(auth).mockResolvedValue(null as never);
-    await expect(deleteDeployment("anything")).rejects.toThrow(
-      /unauthorized/i
-    );
+    await expect(deleteDeployment("anything")).rejects.toThrow(/unauthorized/i);
   });
 });

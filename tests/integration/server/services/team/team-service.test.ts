@@ -117,15 +117,13 @@ describe("TeamService.deleteTeam", () => {
   it("throws when trying to delete a personal team", async () => {
     await seedTestUser();
     const personal = await teamService.createPersonalTeam(TEST_USER_ID);
-    await expect(teamService.deleteTeam(personal?.id as string)).rejects.toThrow(
-      /personal team/i
-    );
+    await expect(teamService.deleteTeam(personal?.id as string)).rejects.toThrow(/personal team/i);
   });
 
   it("throws when the team id does not exist", async () => {
-    await expect(
-      teamService.deleteTeam("00000000-0000-0000-0000-000000000000")
-    ).rejects.toThrow(/not found/i);
+    await expect(teamService.deleteTeam("00000000-0000-0000-0000-000000000000")).rejects.toThrow(
+      /not found/i
+    );
   });
 });
 

@@ -170,3 +170,42 @@ workflow draft handles this with a Postgres service container instead
 **Next:** Phase 4 — real characterization of payment-service,
 auth-service, and webhook surfaces, plus the three test rewrites
 queued as tasks #18–#20.
+
+## 2026-06-24 third update — Phase 4 complete
+
+| Check                      | State                                       |
+| -------------------------- | ------------------------------------------- |
+| `bun run test`             | 198 passed / 9 skipped / 0 failed           |
+| `bun run test:integration` | 86 passed / 0 skipped / 0 failed (10 files) |
+| `bun run typecheck`        | 0 errors                                    |
+| `bun run lint`             | 0 errors, 2099 warnings                     |
+
+**What landed:**
+
+- Tasks #18–20: rewrote feedback-service, team-service, and
+  deployment-actions tests against the live Testcontainers DB. The
+  previous versions were red filler (outdated APIs / broken chainable
+  mocks).
+- Task #21 (Phase 4.1): payment-service characterization — 28 tests
+  covering createPayment idempotency-by-orderId, status updates,
+  metadata fallback chain, hasUserPurchased{Variant,Product} DB
+  branches, getPaymentsWithUsers (with the N+1 documented as the spec
+  for plan 007), and getUsersWithPayments.
+- Task #22 (Phase 4.2): auth-service characterization — 10 tests for
+  user-service (ensureUserExists case-folding, personal-team side
+  effect, no-op on undefined name, etc.) and 9 tests for
+  admin-service.isAdmin (4 layered checks: typeof / static config /
+  DB role / RBAC).
+- Task #23 (Phase 4.3): failing-as-spec tests for plans 004 (orderId
+  uniqueness) and 005 (one-time temporary links). Each uses
+  `it.fails`; remove the `.fails` modifier in the SAME PR as the fix.
+
+**Deferred to Phase 5:**
+
+- Plan 002 (LemonSqueezy custom_data.user_id IDOR) — the vulnerable
+  resolver is module-private to the route handler. Testing cleanly
+  needs either an export-for-tests refactor or webhook-signed e2e
+  POST. Filed for Phase 5.
+
+**Next:** Phase 5 — e2e Playwright coverage of critical user flows.
+See `plans/PHASE-5-E2E-COVERAGE.md`.
