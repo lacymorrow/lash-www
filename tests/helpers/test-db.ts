@@ -48,10 +48,26 @@ function pushSchemaViaDrizzleKit(databaseUrl: string): Promise<void> {
 }
 
 /**
- * globalSetup-only: boot container + push schema. Returns the URL so
- * the caller can stash it in env for workers.
+ * globalSetup-only: ensure a Postgres is ready and the schema is
+ * pushed. Returns the URL so the caller can stash it in env for
+ * workers.
+ *
+ * If `USE_EXTERNAL_DB=1` and `DATABASE_URL` is set, we use that DB
+ * (e.g. a CI service container) and only push the schema — no
+ * testcontainer is started. Otherwise we boot one via Testcontainers.
  */
 export async function startTestDb(): Promise<{ url: string }> {
+  if (process.env.USE_EXTERNAL_DB === "1") {
+    const url = process.env.DATABASE_URL;
+    if (!url) {
+      throw new Error(
+        "USE_EXTERNAL_DB=1 but DATABASE_URL is not set. Provide one or unset USE_EXTERNAL_DB."
+      );
+    }
+    await pushSchemaViaDrizzleKit(url);
+    return { url };
+  }
+
   if (container) {
     return { url: container.getConnectionUri() };
   }
