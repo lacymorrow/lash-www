@@ -1,10 +1,22 @@
 import { describe, expect, it } from "vitest";
-import { routes } from "../routes";
+import { routes } from "@/config/routes";
+
+// `routes.external` holds external links (absolute URLs, mailto:, empty
+// fallbacks, and builder functions), not internal app paths. Internal-route
+// invariants (leading slash, kebab segments, uniqueness) don't apply to it, so
+// it's excluded from the structural validations below.
+const EXTERNAL_KEY = "external";
+
+// Path segments are lowercase kebab-case but may also contain dots, which are
+// legitimate in real route paths — version numbers (e.g. /ai/llama-3.2-webgpu)
+// and static-asset file extensions (e.g. /workers/.../logger-worker.js).
+const SEGMENT_FORMAT = /^[a-z0-9]+(?:[.-][a-z0-9]+)*$/;
 
 describe("Routes Configuration", () => {
   describe("Route Format Validation", () => {
     const validateRoutes = (obj: Record<string, any>, parentPath = "") => {
       for (const [key, value] of Object.entries(obj)) {
+        if (key === EXTERNAL_KEY) continue;
         if (typeof value === "string") {
           it(`${parentPath}${key} should be a valid route format`, () => {
             // Check if route starts with /
@@ -16,11 +28,11 @@ describe("Routes Configuration", () => {
             // Check for no double slashes
             expect(value).not.toMatch(/\/\//);
 
-            // Check for kebab-case in path segments
+            // Check for kebab-case (dots allowed) in path segments
             const segments = value.split("/").slice(1);
             for (const segment of segments) {
               if (segment && !segment.startsWith(":")) {
-                expect(segment).toMatch(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+                expect(segment).toMatch(SEGMENT_FORMAT);
               }
             }
           });
@@ -75,8 +87,6 @@ describe("Routes Configuration", () => {
         "deepseekWeb",
       ] as const;
 
-      type AiRouteKey = (typeof requiredAiRoutes)[number];
-
       for (const route of requiredAiRoutes) {
         expect(routes.ai[route]).toBeDefined();
         expect(routes.ai[route]).toMatch(/^\/ai\//);
@@ -88,13 +98,11 @@ describe("Routes Configuration", () => {
     it("should have unique route paths", () => {
       const paths = new Set<string>();
       const findPaths = (obj: Record<string, any>) => {
-        for (const value of Object.values(obj)) {
+        for (const [key, value] of Object.entries(obj)) {
+          if (key === EXTERNAL_KEY) continue;
           if (typeof value === "string") {
-            // Skip external URLs and mailto links
-            if (!value.startsWith("http") && !value.startsWith("mailto:")) {
-              expect(paths.has(value)).toBeFalsy();
-              paths.add(value);
-            }
+            expect(paths.has(value)).toBeFalsy();
+            paths.add(value);
           } else if (typeof value === "object" && value !== null) {
             findPaths(value);
           }
@@ -108,7 +116,8 @@ describe("Routes Configuration", () => {
   describe("Dynamic Route Parameters", () => {
     it("should have valid parameter format", () => {
       const findDynamicRoutes = (obj: Record<string, any>) => {
-        for (const value of Object.values(obj)) {
+        for (const [key, value] of Object.entries(obj)) {
+          if (key === EXTERNAL_KEY) continue;
           if (typeof value === "string") {
             // Check if route has parameters
             if (value.includes("/:")) {

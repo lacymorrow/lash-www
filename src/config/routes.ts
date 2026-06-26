@@ -1,20 +1,8 @@
-import type { Route } from "next";
 import { siteConfig } from "./site-config";
 
-type ParamValue = string | number | null;
-export type RouteParams = Record<string, ParamValue>;
-
-export interface RouteObject {
-  path: Route;
-  params?: RouteParams;
-}
-
-export const createRoute = (path: Route, params: RouteParams = {}): RouteObject => ({
-  path,
-  params,
-});
-
-// Flattened routes structure for better type safety and easier access
+// Route definitions. Every leaf is one of two shapes:
+//   - a string for static routes
+//   - a function `(params) => string` for dynamic routes
 export const routes = {
   // Public routes
   home: "/",
@@ -69,7 +57,6 @@ export const routes = {
     deployments: "/deployments",
     apiKeys: "/api-keys",
     logs: "/logs",
-    network: "/network",
     live: "/live",
     tools: "/tools",
     downloads: "/downloads",
@@ -100,7 +87,7 @@ export const routes = {
   api: {
     download: "/api/download",
     apiKeys: "/api/api-keys",
-    apiKey: createRoute("/api/api-keys/:key", { key: null }),
+    apiKey: (key: string) => `/api/api-keys/${key}`,
     live: "/api/live-logs",
     sse: "/api/sse-logs",
     sendTestLog: "/api/send-test-log",
@@ -140,7 +127,6 @@ export const routes = {
     formsDisplay: "/examples/forms/display",
     music: "/examples/music",
     authentication: "/examples/authentication",
-    notifications: "/examples/forms/notifications",
     profile: "/examples/forms/profile",
   },
 
@@ -231,7 +217,6 @@ export const routes = {
     dribbble: (siteConfig as any).social?.dribbble ?? "",
     threads: (siteConfig as any).social?.threads ?? "",
     website: (siteConfig as any).creator?.url ?? "",
-    docs: "/docs",
     email: `mailto:${(siteConfig as any).creator?.email ?? siteConfig.email?.support ?? ""}`,
     vercelDeploy: ({
       repositoryUrl,
