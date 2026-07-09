@@ -14,8 +14,11 @@ const baseURL = `http://localhost:${PORT}`;
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  // Timeout per test
-  timeout: 30 * 1000,
+  // Timeout per test. CI runs the webpack dev server, which compiles routes
+  // on demand — heavy pages (e.g. the dashboard layout pulls in the whole
+  // Payload/Drizzle chain) take 30s+ to first-compile on CI runners, so a
+  // 30s test timeout fails on cold navigation alone (LAC-2685).
+  timeout: process.env.CI ? 90 * 1000 : 30 * 1000,
   // Test directory
   testDir: path.join(__dirname, "tests/e2e"),
   // Retry on CI to absorb flakes; never locally — keeps the dev loop tight.
@@ -35,6 +38,10 @@ export default defineConfig({
     url: baseURL,
     timeout: 180 * 1000,
     reuseExistingServer: !process.env.CI,
+    // Surface dev-server output in CI logs. Playwright swallows stdout by
+    // default, which hid the Next 16 Turbopack panic behind a bare
+    // "Timed out waiting 180000ms" (LAC-2685).
+    stdout: "pipe",
     // Inherit DATABASE_URL etc. set by globalSetup.
     env: process.env as Record<string, string>,
   },

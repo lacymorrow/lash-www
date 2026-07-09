@@ -3,7 +3,17 @@ import { hasCredentialsForm, login, STORAGE_STATE, TEST_USER } from "./fixtures"
 
 test.describe("Login", () => {
   test("sign-in page loads", async ({ page }) => {
-    await page.goto("/sign-in");
+    const response = await page.goto("/sign-in");
+    expect(response?.status()).toBe(200);
+
+    // The email/password form only renders when credentials auth is
+    // enabled (requires PAYLOAD_SECRET or APP_SECRET); CI runs without
+    // it. Gate the form assertion like the other tests in this file.
+    const hasForm = await hasCredentialsForm(page);
+    test.skip(
+      !hasForm,
+      "Credentials auth not enabled — set NEXT_PUBLIC_FEATURE_AUTH_CREDENTIALS_ENABLED"
+    );
 
     // Heading copy is "Welcome" (see sign-in.tsx). Assert on the form
     // (the load-bearing UI) rather than the marketing wording.
