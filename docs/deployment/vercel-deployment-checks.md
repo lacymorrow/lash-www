@@ -49,7 +49,7 @@ ShipKit is a boilerplate, so everything degrades gracefully:
 ## Files
 
 - `.github/workflows/deployment-check.yml` — the health check workflow
-- `scripts/smoke-test.ts` — build-time smoke test (separate layer, runs during `build:vercel`)
+- `scripts/smoke-test.ts` — standalone build-time smoke test (separate layer, run manually or wire into your build command)
 
 ## Troubleshooting
 
