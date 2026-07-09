@@ -56,13 +56,13 @@ Current index is okay but has broken links and some fluff. Rewrite to be:
 ```
 # ShipKit
 
-Next.js 15 starter kit. Auth, payments, CMS, email, AI — all feature-flagged. Enable what you need via env vars.
+Next.js 16 starter kit. Auth, payments, CMS, email, AI — all feature-flagged. Enable what you need via env vars.
 
 ## Quick Start
 → getting-started/
 
 ## Stack
-- Next.js 15 (App Router)
+- Next.js 16 (App Router)
 - TypeScript + Bun
 - Tailwind + Shadcn/UI
 - Drizzle ORM + PostgreSQL

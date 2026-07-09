@@ -5,6 +5,8 @@ description: "Comprehensive optimization plan for upgrading Shipkit to Next.js 1
 
 # Next.js 15 Optimization Plan for Shipkit
 
+> **Historical document.** This plan covered the Next.js 15 upgrade; the repo has since moved to Next.js 16. Kept for reference — do not treat version-specific guidance below as current.
+
 ## Current Status ✅
 
 The Shipkit codebase is already well-optimized for Next.js 15! The team has done excellent work implementing most best practices:

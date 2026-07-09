@@ -21,7 +21,7 @@ This directory contains comprehensive documentation for Shipkit's implementation
 
 ### Optimization Plans
 
-- [Next.js 15 Optimization Plan](./development/implementations/NEXTJS_15_OPTIMIZATION_PLAN.md) - Performance optimization strategy for Next.js 15
+- [Next.js 15 Optimization Plan](./NEXTJS_15_OPTIMIZATION_PLAN.md) - Historical: optimization strategy from the Next.js 15 era (repo is now on Next.js 16)
 
 ## 🔗 Integrations
 

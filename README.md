@@ -42,7 +42,7 @@ No environment variables needed to start! The setup wizard guides you through co
 
 ## Stack
 
-- ⚡️ [Next.js 15](https://nextjs.org) - App Router
+- ⚡️ [Next.js 16](https://nextjs.org) - App Router
 - 🎨 [Tailwind CSS](https://tailwindcss.com) + [Shadcn/UI](https://ui.shadcn.com)
 - 🛠 [Drizzle ORM](https://orm.drizzle.team) - Type-safe database
 - 📝 [Payload CMS v3](https://payloadcms.com) - Content management

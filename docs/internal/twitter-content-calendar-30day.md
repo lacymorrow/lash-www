@@ -39,7 +39,7 @@
 
 > Ship your SaaS in days, not months.
 >
-> Shipkit: the most complete Next.js 15 boilerplate.
+> Shipkit: the most complete Next.js 16 boilerplate.
 >
 > Auth, payments, CMS, AI — all wired up. One purchase, forever yours.
 
@@ -97,7 +97,7 @@
 >
 > `npx create-shipkit my-app`
 >
-> Full Next.js 15 app with Drizzle, NextAuth, Tailwind, shadcn — ready in 60 seconds.
+> Full Next.js 16 app with Drizzle, NextAuth, Tailwind, shadcn — ready in 60 seconds.
 >
 > Free tier (Bones) included. Premium upgrade adds AI, payments, CMS.
 
@@ -190,7 +190,7 @@
 >
 > Mine:
 >
-> - Next.js 15 (App Router)
+> - Next.js 16 (App Router)
 > - Drizzle + Postgres
 > - NextAuth v5
 > - Stripe + Lemon Squeezy
@@ -306,7 +306,7 @@
 
 **@lacybuilds:**
 
-> Dev tip: Server Components should be your default in Next.js 15.
+> Dev tip: Server Components should be your default in Next.js 16.
 >
 > In Shipkit, every page is a Server Component. Client components are opt-in, wrapped in Suspense.
 >
@@ -405,7 +405,7 @@
 > Mine:
 >
 > ```
-> Next.js 15
+> Next.js 16
 > Drizzle + Postgres
 > shadcn/ui
 > Vercel
@@ -466,7 +466,7 @@
 
 **@lacybuilds (thread):**
 
-> 1/5 I just launched Shipkit — the most complete Next.js 15 boilerplate for SaaS.
+> 1/5 I just launched Shipkit — the most complete Next.js 16 boilerplate for SaaS.
 >
 > 100+ components. 9 auth providers. 3 payment processors. AI-first. $249 once, own forever.
 >
@@ -506,7 +506,7 @@
 
 > Shipkit is live.
 >
-> The most complete Next.js 15 SaaS boilerplate.
+> The most complete Next.js 16 SaaS boilerplate.
 > $249 once. Own forever.
 >
 > shipkit.io

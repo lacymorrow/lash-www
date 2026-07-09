@@ -75,7 +75,7 @@ const nextConfig: NextConfig = {
       },
     ],
     /*
-     * Next.js 15+ Enhanced Image Optimization
+     * Enhanced Image Optimization
      * Optimized for Core Web Vitals and performance
      */
     formats: ["image/avif", "image/webp"],
@@ -225,8 +225,9 @@ const nextConfig: NextConfig = {
     "@octokit/rest",
   ],
 
-  // Enable React Compiler for useMemoCache runtime support
-  // Required for dependencies like lucide-react and @payloadcms/ui that use the compiler
+  // Compile this app's components with the React Compiler (auto-memoization).
+  // Deps that ship pre-compiled output (e.g. @payloadcms/ui) don't need this flag;
+  // they use react/compiler-runtime, provided by React 19 itself.
   reactCompiler: true,
 
   /*
@@ -344,7 +345,7 @@ const nextConfig: NextConfig = {
       "**/node_modules/three/**",
       "**/node_modules/@react-three/**",
       "**/node_modules/jspdf/**",
-      // Additional Next.js 15 optimizations
+      // Additional watcher exclusions for heavy dependencies
       "**/node_modules/monaco-editor/**",
       "**/node_modules/@playwright/**",
       "**/node_modules/typescript/lib/**",

@@ -120,7 +120,7 @@ Fix what's already broken before adding anything.
   `@vitejs/plugin-react` to its v7-compatible major. The known-good fix from
   the abandoned `advisor/008-payment-service-tests` branch was vite 7.3.1 →
   8.0.16. Re-evaluate; the senior call is to keep vite on a major in the
-  Next 15 supported window. Verify `bun run typecheck` no longer complains
+  Next 16 supported window. Verify `bun run typecheck` no longer complains
   about the vitest configs.
 - **1.2** Fix the three source TS errors. Each is localized; none should
   require redesign.
