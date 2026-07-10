@@ -279,6 +279,13 @@ const nextConfig: NextConfig = {
       static: 360, // 360 seconds for static routes
     },
 
+    /*
+     * Reduce peak webpack memory during builds. Vercel's standard build
+     * container has 8GB total; without this the build is SIGKILLed by the
+     * container OOM killer (see build:vercel heap cap in package.json).
+     */
+    webpackMemoryOptimizations: true,
+
     // Memory optimization for builds - Uncomment if experiencing memory issues
     // webpackBuildWorker: false, // Disable for low memory
     // cpus: 1, // Limit concurrent operations
