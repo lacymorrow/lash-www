@@ -14,10 +14,9 @@ const baseURL = `http://localhost:${PORT}`;
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  // Timeout per test. CI runs the webpack dev server, which compiles routes
-  // on demand — heavy pages (e.g. the dashboard layout pulls in the whole
-  // Payload/Drizzle chain) take 30s+ to first-compile on CI runners, so a
-  // 30s test timeout fails on cold navigation alone (LAC-2685).
+  // Timeout per test. CI runs against a production build (`next start`,
+  // LAC-2687) so there is no compile-on-demand, but keep headroom for slow
+  // 4-vCPU runners.
   timeout: process.env.CI ? 90 * 1000 : 30 * 1000,
   // Test directory
   testDir: path.join(__dirname, "tests/e2e"),
@@ -34,11 +33,15 @@ export default defineConfig({
   // Run your local dev server before starting the tests:
   // https://playwright.dev/docs/test-advanced#launching-a-development-web-server-during-the-tests
   webServer: {
-    command: "bun dev",
+    // CI serves the production build (`bun run build` runs earlier in the
+    // workflow) — dev-server compile-on-demand caused first-navigation
+    // timeout flakes on CI runners (LAC-2687). Locally keep `bun dev` so
+    // reuseExistingServer picks up a running dev server.
+    command: process.env.CI ? "bun run start" : "bun dev",
     url: baseURL,
     timeout: 180 * 1000,
     reuseExistingServer: !process.env.CI,
-    // Surface dev-server output in CI logs. Playwright swallows stdout by
+    // Surface server output in CI logs. Playwright swallows stdout by
     // default, which hid the Next 16 Turbopack panic behind a bare
     // "Timed out waiting 180000ms" (LAC-2685).
     stdout: "pipe",

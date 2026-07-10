@@ -1,7 +1,8 @@
 /**
  * Playwright globalSetup: boot a Postgres testcontainer, push the
  * Drizzle schema via the CLI, and stash the connection URL in
- * process.env so the webServer (bun dev) inherits it.
+ * process.env so the webServer (`next start` in CI, `bun dev` locally)
+ * inherits it.
  *
  * Reuses the helpers from tests/helpers/test-db.ts.
  */

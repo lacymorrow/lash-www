@@ -29,6 +29,8 @@ jobs:
       - name: Install Playwright browsers
         run: bunx playwright install --with-deps chromium
 
+      # Playwright's webServer serves this build via `next start` in CI
+      # (see playwright.config.ts, LAC-2687) — do not remove.
       - name: Build
         run: bun run build
 
