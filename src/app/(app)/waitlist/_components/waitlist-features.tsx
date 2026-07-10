@@ -108,7 +108,7 @@ const realFeatures = [
 ];
 
 const techStack = [
-  { name: "Next.js 15", description: "App Router, Server Components", emoji: "⚡" },
+  { name: "Next.js 16", description: "App Router, Server Components", emoji: "⚡" },
   { name: "TypeScript", description: "End-to-end type safety", emoji: "🛡️" },
   { name: "Tailwind CSS", description: "Utility-first styling", emoji: "🎨" },
   { name: "Drizzle ORM", description: "Type-safe database", emoji: "🗄️" },

@@ -23,7 +23,7 @@ export const singlePlan: PricingPlan = {
   price: { oneTime: 249 },
   href: routes.external.buy,
   features: [
-    "Next.js 15 App Router + TypeScript",
+    "Next.js 16 App Router + TypeScript",
     "Auth that works out of the box (Better Auth + OAuth)",
     "Postgres + Drizzle, already migrated",
     "LemonSqueezy payments, pre-wired",
@@ -43,7 +43,7 @@ export const oneTimePlans: PricingPlan[] = [
     price: { oneTime: 0 },
     href: routes.external.buy,
     features: [
-      "Next.js 15 App Router Setup",
+      "Next.js 16 App Router Setup",
       "Authentication (Better Auth)",
       "TypeScript Configuration",
       "Basic UI Components",

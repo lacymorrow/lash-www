@@ -30,7 +30,7 @@ const comparisonData = [
     category: "Core Features",
     features: [
       {
-        name: "Next.js 15 App Router",
+        name: "Next.js 16 App Router",
         description: "Latest Next.js features including server components, streaming, and more",
         bones: true,
         muscles: true,

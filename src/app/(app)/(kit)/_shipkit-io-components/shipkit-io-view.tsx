@@ -227,7 +227,7 @@ export function ShipkitIoView() {
             <BlurFade inView>
               <div className="mt-6 text-center">
                 <p className="mb-4 text-sm text-muted-foreground">
-                  Everything included: Next.js 15, TypeScript, Authentication, Database, UI
+                  Everything included: Next.js 16, TypeScript, Authentication, Database, UI
                   Components, and more
                 </p>
                 <div className="flex items-center justify-center gap-8">
