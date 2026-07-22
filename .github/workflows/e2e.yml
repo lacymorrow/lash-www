@@ -1,10 +1,14 @@
 name: E2E Tests
 
+# PR-only: main merges are already covered by the PR run — see LAC-2964.
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   DATABASE_URL: ${{ secrets.DATABASE_URL }}

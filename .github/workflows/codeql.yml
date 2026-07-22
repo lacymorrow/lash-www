@@ -1,18 +1,16 @@
 name: CodeQL
 
+# Runs weekly (not per-PR/push) to conserve Actions minutes — see LAC-2964.
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   schedule:
     - cron: "23 7 * * 1"
+  workflow_dispatch:
 
 jobs:
   analyze:
     name: Analyze ${{ matrix.language }}
     runs-on: ubuntu-latest
-    timeout-minutes: 360
+    timeout-minutes: 30
     permissions:
       actions: read
       contents: read
