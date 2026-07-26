@@ -282,13 +282,20 @@ export const siteConfig: SiteConfig = {
 
   metadata: {
     keywords: [
+      "Next.js boilerplate",
+      "Next.js SaaS starter",
+      "best Next.js boilerplate 2026",
+      "Next.js starter kit",
+      "SaaS boilerplate",
+      "Next.js template",
+      "React SaaS starter",
+      "Shipkit",
       "Next.js",
       "React",
       "Tailwind CSS",
       "Server Components",
-      "Shipkit",
       "Shadcn",
-      "UI Components",
+      "TypeScript starter",
     ],
     themeColor: {
       light: "white",

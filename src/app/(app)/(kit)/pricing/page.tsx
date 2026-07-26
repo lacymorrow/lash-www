@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { PricingSectionSingle } from "@/components/blocks/pricing-section-single";
+import { JsonLd } from "@/components/primitives/json-ld";
 import { Link } from "@/components/primitives/link";
 import { constructMetadata } from "@/config/metadata";
 import { routes } from "@/config/routes";
+import { siteConfig } from "@/config/site-config";
 import { singlePlan } from "@/content/pricing/pricing-content";
 import { FAQ } from "../_shipkit-io-components/faq";
 export const metadata: Metadata = constructMetadata({
@@ -22,6 +24,38 @@ export const metadata: Metadata = constructMetadata({
 export default function PricingPage() {
   return (
     <div className="container mx-auto mt-header py-16">
+      <JsonLd
+        organization
+        website={false}
+        softwareSourceCode={false}
+        product={{
+          name: "Shipkit - Next.js SaaS Boilerplate",
+          description:
+            "The complete Next.js 16 stack with auth, payments, database, CMS, AI, and 100+ components. $249 one-time, lifetime updates.",
+          image: `${siteConfig.url}/app/og-image.png`,
+          price: "249",
+          priceCurrency: "USD",
+        }}
+        faq={{
+          questions: [
+            {
+              question: "What do I actually get?",
+              answer:
+                "A full Next.js 16 codebase with auth, database, payments, CMS, email, 100+ UI components, AI integrations, and deployment configs. You clone the repo and own the code forever.",
+            },
+            {
+              question: "Is there a free version?",
+              answer:
+                "Yes — Shipkit Bones is free and open source on GitHub. The paid version adds the full stack: database, payments, CMS, AI, and 100+ premium components.",
+            },
+            {
+              question: "Do I get updates?",
+              answer:
+                "Forever. You own the code, so you merge updates when you want. No recurring fees.",
+            },
+          ],
+        }}
+      />
       <div className="mx-auto max-w-3xl text-center">
         <h1 className="mb-4 text-4xl font-bold">One price. Full stack. Ship this week.</h1>
         <p className="mb-8 text-xl text-muted-foreground">
