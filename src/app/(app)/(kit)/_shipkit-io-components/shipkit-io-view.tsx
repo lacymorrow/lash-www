@@ -52,7 +52,46 @@ export const metadata: Metadata = constructMetadata({
 export function ShipkitIoView() {
   return (
     <>
-      <JsonLd organization website />
+      <JsonLd
+        organization
+        website
+        product={{
+          name: "Shipkit - Next.js SaaS Boilerplate",
+          description:
+            "The complete Next.js 16 stack with auth, payments, database, CMS, AI, and 100+ components. Ship your SaaS in days, not months.",
+          image: `${siteConfig.url}/app/og-image.png`,
+          price: "249",
+          priceCurrency: "USD",
+        }}
+        faq={{
+          questions: [
+            {
+              question: "What do I actually get?",
+              answer:
+                "A full Next.js 16 codebase. Auth (Better Auth + OAuth), database (Postgres + Drizzle), payments (LemonSqueezy), CMS (Payload), email (Resend), 100+ UI components (shadcn/ui), AI integrations, and deployment configs. You clone the repo and own the code forever.",
+            },
+            {
+              question: "Is this a template or a framework?",
+              answer:
+                "Neither. It's a working app. Dashboard, landing pages, auth flows, admin panel. All built. Modify whatever you want, delete what you don't. There's no lock-in because it's just Next.js, TypeScript, and standard libraries.",
+            },
+            {
+              question: "Is there a free version?",
+              answer:
+                "Yes — Shipkit Bones is free and open source on GitHub (github.com/shipkit-io/bones). It's the core Next.js setup with auth and basic components. The paid version adds the full stack: database, payments, CMS, AI, and 100+ premium components.",
+            },
+            {
+              question: "Do I get updates?",
+              answer: "Forever. You own the code, so you merge updates when you want.",
+            },
+            {
+              question: "Can non-developers use this?",
+              answer:
+                "There's a visual editor (Builder.io) and CMS (Payload) for managing content without code. For the rest, AI tools like Cursor can handle most setup and customization if you give them the right context. Shipkit includes that context.",
+            },
+          ],
+        }}
+      />
       <div className="flex flex-col gap-16 overflow-hidden">
         <ParticlesHero quantity={50} speed={80}>
           <div className="absolute left-1/2 top-0 -translate-x-1/2 blur-3xl" aria-hidden="true">

@@ -149,15 +149,22 @@ export function JsonLd({
         inLanguage: "en-US",
       },
       product && {
-        "@type": "Product",
+        "@type": ["Product", "SoftwareApplication"],
         "@id": `${siteConfig.url}/#product`,
         name: product.name,
         description: product.description,
         image: product.image,
+        applicationCategory: "DeveloperApplication",
+        operatingSystem: "Any",
         offers: {
           "@type": "Offer",
           price: product.price,
           priceCurrency: product.priceCurrency,
+          availability: "https://schema.org/InStock",
+          url: siteConfig.url,
+        },
+        brand: {
+          "@id": `${siteConfig.url}/#organization`,
         },
       },
       faq && {
