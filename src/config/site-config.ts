@@ -215,7 +215,7 @@ export const siteConfig: SiteConfig = {
     twitter_follow: "https://twitter.com/intent/follow?screen_name=lacybuilds",
     x: "https://x.com/lacybuilds",
     x_follow: "https://x.com/intent/follow?screen_name=lacybuilds",
-    github: "https://github.com/lacymorrow/shipkit",
+    github: "https://github.com/shipkit-io/bones",
   },
 
   // Configure social profiles here. Leave any you don't use as empty strings.
@@ -233,9 +233,9 @@ export const siteConfig: SiteConfig = {
   },
 
   repo: {
-    owner: "lacymorrow",
-    name: "shipkit",
-    url: "https://github.com/lacymorrow/shipkit",
+    owner: "shipkit-io",
+    name: "bones",
+    url: "https://github.com/shipkit-io/bones",
     format: {
       // Placeholder format functions - assigned below
       clone: () => "",
