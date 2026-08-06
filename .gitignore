@@ -35,6 +35,13 @@ env
 *.env*
 !.env.example
 
+# Secret-scan hygiene (LAC-3163)
+# .specstory persists chat transcripts that captured live tokens in past commits.
+.specstory/
+# repomix outputs bundle repo contents and have leaked secrets historically.
+.repomix-output.*
+repomix-output.*
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -1,4 +1,4 @@
-import { ArrowRight, Box, Code2, GitBranch, Layers, Palette, Shield, Zap } from "lucide-react";
+import { ArrowRight, Box, Code2, Layers, Palette, Rocket, Shield, Zap } from "lucide-react";
 import {
   PageHeader,
   PageHeaderDescription,
@@ -86,8 +86,8 @@ export default function FeaturesPage() {
           {/* CTA Section */}
           <div className="mt-20 text-center">
             <div className="inline-flex items-center rounded-full bg-secondary p-1">
-              <GitBranch className="mr-2 h-5 w-5" />
-              <span className="px-2 py-1 text-sm font-medium">Open Source</span>
+              <Rocket className="mr-2 h-5 w-5" />
+              <span className="px-2 py-1 text-sm font-medium">Ship Faster</span>
             </div>
             <h2 className="mb-8 mt-4 text-3xl font-bold">Ready to Start Building?</h2>
             <div className="flex flex-col justify-center gap-4 sm:flex-row">

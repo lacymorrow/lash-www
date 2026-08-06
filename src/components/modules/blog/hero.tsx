@@ -14,8 +14,8 @@ export const BlogHero = () => {
           </h1>
         </div>
         <p className="mt-4 text-base leading-7 text-muted-foreground">
-          Shipkit is an open source starter template made with Next.js, React, and Tailwindcss.
-          Subscribe to our newsletter to get the latest updates or follow us on{" "}
+          Shipkit is a starter template made with Next.js, React, and Tailwind CSS. Subscribe to our
+          newsletter to get the latest updates or follow us on{" "}
           <Link
             href={siteConfig.links.x}
             className="text-primary underline hover:text-primary/70"
