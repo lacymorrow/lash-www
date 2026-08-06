@@ -12,6 +12,7 @@ as live until each provider confirms rotation. Blocks any future flip of
 `lacymorrow/shipkit` to public (see also [LAC-3147](/LAC/issues/LAC-3147)).
 
 Report artifact (secrets redacted from ticket, raw JSON stays on Lacy's box):
+
 - `$PAPERCLIP_SCRATCH_DIR/shipkit-gitleaks.json` (per-run scratch) or regenerate:
   ```bash
   gitleaks git --no-banner --report-format json --report-path /tmp/shipkit-gitleaks.json
@@ -21,18 +22,18 @@ Report artifact (secrets redacted from ticket, raw JSON stays on Lacy's box):
 
 Anchored to commit `348add72` (2024-12-03) unless noted.
 
-| Provider          | File(s)                                                | Rule                    |
-| ----------------- | ------------------------------------------------------ | ----------------------- |
-| Anthropic         | env/.env.production, env/.env.local.off                | anthropic-api-key       |
-| OpenAI            | env/.env.production, env/.env.local.off                | openai-api-key          |
-| GCP               | env/.env.production, env/.env.local.off                | gcp-api-key             |
-| Discord           | env/.env.production, env/.env.local.off                | discord-client-secret   |
-| GitHub PAT        | env/.env.local.off                                     | github-pat              |
-| Sentry            | env/.env.sentry-build-plugin, env/.env.local.off,      | sentry-org-token        |
-|                   | .env.sentry-build-plugin (commit bd8a2224)             |                         |
-| Private key       | env/.env.production, env/.env.local.off (1730-char PEM)| private-key             |
-| Sourcegraph (x16) | .specstory/history/2025-06-*.md (commit 8d4b036d)      | sourcegraph-access-token|
-| Stripe            | .specstory/history/2025-06-17_22-55Z-*.md              | stripe-access-token     |
+| Provider          | File(s)                                                 | Rule                     |
+| ----------------- | ------------------------------------------------------- | ------------------------ |
+| Anthropic         | env/.env.production, env/.env.local.off                 | anthropic-api-key        |
+| OpenAI            | env/.env.production, env/.env.local.off                 | openai-api-key           |
+| GCP               | env/.env.production, env/.env.local.off                 | gcp-api-key              |
+| Discord           | env/.env.production, env/.env.local.off                 | discord-client-secret    |
+| GitHub PAT        | env/.env.local.off                                      | github-pat               |
+| Sentry            | env/.env.sentry-build-plugin, env/.env.local.off,       | sentry-org-token         |
+|                   | .env.sentry-build-plugin (commit bd8a2224)              |                          |
+| Private key       | env/.env.production, env/.env.local.off (1730-char PEM) | private-key              |
+| Sourcegraph (x16) | .specstory/history/2025-06-\*.md (commit 8d4b036d)      | sourcegraph-access-token |
+| Stripe            | .specstory/history/2025-06-17_22-55Z-\*.md              | stripe-access-token      |
 
 Lower priority / triage: 36 JWTs, 177 generic-api-key hits (most in
 `logflare.log`, `.repomix-output.txt`, `docs/waitlist.mdx`, `.env.example` —
@@ -88,6 +89,7 @@ git push --force --mirror
 ```
 
 After push, every clone must be reset:
+
 ```bash
 git fetch --all
 git reset --hard origin/main
