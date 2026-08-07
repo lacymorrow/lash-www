@@ -72,3 +72,7 @@ public/workbox*
 
 # AI development configs
 .hive-mind/
+.vercel
+
+# AI assistant transcripts (may contain secrets)
+.specstory/
