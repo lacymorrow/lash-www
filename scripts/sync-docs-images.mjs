@@ -21,6 +21,14 @@ if (!existsSync(from)) {
   process.exit(0);
 }
 
-mkdirSync(dirname(to), { recursive: true });
-cpSync(from, to, { recursive: true });
-console.log("[docs-images] docs/images -> public/docs/images");
+/*
+ * Both providers serve these from their own public/ directory: Next.js from
+ * public/docs/images, Holocron from docs-site/public/docs/images.
+ */
+const targets = [to, join(repoRoot, "docs-site", "public", "docs", "images")];
+
+for (const target of targets) {
+  mkdirSync(dirname(target), { recursive: true });
+  cpSync(from, target, { recursive: true });
+  console.log(`[docs-images] docs/images -> ${target.replace(`${repoRoot}/`, "")}`);
+}

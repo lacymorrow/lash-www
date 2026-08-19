@@ -83,8 +83,19 @@ groups.sort((a, b) => {
   return a.group.localeCompare(b.group);
 });
 
+/*
+ * Docs are written with absolute /docs/... links because the fumadocs provider
+ * mounts at /docs. Holocron serves from its own root and is proxied back under
+ * /docs by next.config.ts, so those links resolve correctly in the browser —
+ * Holocron's build-time checker just can't see the proxy prefix. Declaring them
+ * as knownPaths keeps real broken links reportable instead of drowning in 131
+ * false positives.
+ */
+const knownPaths = ["/docs", ...pages.map((page) => `/docs/${page.slug}`)];
+
 const config = {
   $schema: "https://holocron.so/docs.json",
+  knownPaths,
   name: "Shipkit",
   favicon: "/favicon.ico",
   colors: { primary: "#6366f1" },
