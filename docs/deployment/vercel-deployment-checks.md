@@ -1,3 +1,7 @@
+---
+title: "Vercel Deployment Checks"
+description: "ShipKit includes a GitHub Actions workflow that health-checks every Vercel deployment before it goes live. If the deployed app returns a 500, the old..."
+---
 # Vercel Deployment Checks
 
 ShipKit includes a GitHub Actions workflow that health-checks every Vercel deployment before it goes live. If the deployed app returns a 500, the old production stays up and the broken deploy never gets promoted.

@@ -32,6 +32,7 @@
     "baseUrl": ".",
     "paths": {
       "@payload-config": ["./src/payload.config.ts"],
+      "@/.source/*": ["./.source/*"],
       "@/public/*": ["./public/*"],
       "@/*": ["./src/*"]
     }
@@ -61,6 +62,7 @@
     "tests",
     "public",
     "packages",
+    "docs-site",
     "cli",
     "debug/**/*.ts",
     "scripts",
