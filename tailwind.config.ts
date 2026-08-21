@@ -7,12 +7,7 @@ import tailwindcssAnimate from "tailwindcss-animate";
 
 const config = {
   darkMode: ["class"],
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx,md,mdx}",
-    "./content/**/*.{md,mdx}",
-    "./node_modules/fumadocs-ui/dist/**/*.js",
-    "./mdx-components.tsx",
-  ],
+  content: ["./src/**/*.{js,jsx,ts,tsx,md,mdx}", "./content/**/*.{md,mdx}", "./mdx-components.tsx"],
   // Performance optimizations
   safelist: [
     // Add any dynamic classes that might not be detected during build

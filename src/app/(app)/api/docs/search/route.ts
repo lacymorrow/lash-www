@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { searchDocs } from "@/lib/docs";
 import { openai } from "@/lib/open-ai";
-import { DocsSearchService } from "@/server/services/docs-search";
 import { ErrorService } from "@/server/services/error-service";
 import { rateLimitService } from "@/server/services/rate-limit-service";
 
@@ -117,14 +117,12 @@ export async function POST(req: Request) {
     const acceptHeader = req.headers.get("accept");
     if (acceptHeader?.includes("application/json")) {
       // Search documentation
-      const searchService = DocsSearchService.getInstance();
-      const searchResults = await searchService.search(query, limit);
+      const searchResults = searchDocs(query, limit);
       return NextResponse.json({ results: searchResults }, { headers: rateLimitHeaders });
     }
 
     // Search documentation for streaming response
-    const searchService = DocsSearchService.getInstance();
-    const searchResults = await searchService.search(query, limit);
+    const searchResults = searchDocs(query, limit);
 
     // If OpenAI isn't configured, fall back to returning JSON results
     if (!openai) {

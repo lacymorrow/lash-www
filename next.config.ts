@@ -1,5 +1,8 @@
+import path from "node:path";
+import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
 import { buildInfo } from "@/config/build-info";
+import { holocronUrl, isHolocronProvider } from "@/config/docs-provider";
 import {
   buildTimeFeatureFlags,
   buildTimeFeatures,
@@ -95,6 +98,19 @@ const nextConfig: NextConfig = {
    */
   rewrites() {
     return Promise.resolve([
+      /*
+       * Docs provider: "holocron".
+       * Holocron is a standalone Vite/RSC app with no static-export mode, so it
+       * cannot be embedded in a Next.js route. When selected, proxy /docs to the
+       * running Holocron server instead of rendering the in-app fumadocs route.
+       * See src/config/docs-provider.ts.
+       */
+      ...(isHolocronProvider
+        ? [
+            { source: "/docs", destination: holocronUrl },
+            { source: "/docs/:path*", destination: `${holocronUrl}/:path*` },
+          ]
+        : []),
       {
         source: `/${POSTHOG_RELAY_SLUG}/static/:path*`,
         destination: "https://us-assets.i.posthog.com/static/:path*",
@@ -402,4 +418,57 @@ const nextConfig: NextConfig = {
  * The utility handles loading and applying functions exported from files
  * in the specified directory (default: src/config/nextjs).
  */
-export default withPlugins(nextConfig);
+/*
+ * Generates the fumadocs collections into `.source` (the fumadocs-mdx default,
+ * which its CLI also uses). Resolved in app code via the "@/.source/*" tsconfig path.
+ */
+const withMDX = createMDX();
+
+const DOCS_DIR = path.join(process.cwd(), "docs");
+
+/*
+ * Confine the fumadocs MDX loader to /docs.
+ *
+ * Two MDX pipelines coexist: fumadocs owns the documentation, @next/mdx owns
+ * app-level .mdx routes such as src/app/(app)/(legal)/*\/page.mdx. Both register
+ * a rule matching /\.mdx?$/, so without this the loaders chain and app routes
+ * fail with "Unexpected FunctionDeclaration ... only import/exports are supported".
+ * The mirrored guard lives in src/config/nextjs/with-mdx.ts.
+ */
+interface WebpackRuleLike {
+  use?: unknown;
+  include?: unknown;
+}
+
+interface WebpackConfigLike {
+  module?: { rules?: unknown[] };
+}
+
+function scopeFumadocsToDocsDir(config: NextConfig): NextConfig {
+  const previousWebpack = config.webpack;
+
+  config.webpack = (webpackConfig, options) => {
+    const result = (
+      previousWebpack ? previousWebpack(webpackConfig, options) : webpackConfig
+    ) as WebpackConfigLike;
+
+    for (const entry of result.module?.rules ?? []) {
+      if (!entry || typeof entry !== "object") continue;
+      const rule = entry as WebpackRuleLike;
+
+      const uses: unknown[] = Array.isArray(rule.use) ? rule.use : rule.use ? [rule.use] : [];
+      const isFumadocsRule = uses.some((use) => {
+        const loader = typeof use === "string" ? use : (use as { loader?: string } | null)?.loader;
+        return typeof loader === "string" && loader.includes("fumadocs-mdx");
+      });
+
+      if (isFumadocsRule) rule.include = DOCS_DIR;
+    }
+
+    return result;
+  };
+
+  return config;
+}
+
+export default scopeFumadocsToDocsDir(withMDX(withPlugins(nextConfig)));

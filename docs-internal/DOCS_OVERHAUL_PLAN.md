@@ -1,3 +1,7 @@
+---
+title: "ShipKit Docs Overhaul Plan"
+description: "Current index is okay but has broken links and some fluff. Rewrite to be:"
+---
 # ShipKit Docs Overhaul Plan
 
 ## Principles
@@ -272,4 +276,4 @@ Screenshots go in `docs/images/` and get referenced in the relevant `.mdx` files
 
 ## Progress Tracking
 
-Progress is tracked in `docs/DOCS_OVERHAUL_PROGRESS.md`.
+Progress is tracked in `docs-internal/DOCS_OVERHAUL_PROGRESS.md`.
