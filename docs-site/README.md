@@ -38,31 +38,22 @@ Set `DOCS_HOLOCRON_URL` to that deployment's origin.
 
 ## Status
 
-`npm run dev` works — every route serves 200 and the content renders.
+Both `npm run dev` and `npm run build` are green — 0 broken links, 0 broken
+assets, 0 MDX errors across all 74 pages.
 
-`npm run build` currently **fails on content errors**, and they are real:
-
-- **15 broken internal links** across 6 pages (e.g. `/contributing`,
-  `/integrations/infrastructure/aws-s3`, `/reference/snippets` — pages that do
-  not exist). Fumadocs does not link-check, so these have been broken silently.
-- **1 unsupported component**: `<FileTree>` in `docs/development/web-workers.mdx`.
-  It is a Shipkit component; Holocron ships its own component set and has no
-  equivalent.
-
-To preview the built site before those are fixed:
-
-```bash
-HOLOCRON_SKIP_BUILD_ERRORS=true npm run build
-```
-
-Fixing the 15 links is worthwhile regardless of which provider ships — they are
-broken under fumadocs too, just unreported.
+Holocron link-checks the content at build time, which fumadocs does not. That
+check earned its keep: it found 15 genuinely broken links (`/contributing`,
+`/integrations/infrastructure/aws-s3`, `/reference/snippets`, ...) that had been
+broken silently under fumadocs. They are fixed. Worth re-running this build
+after any docs change even if you ship the fumadocs provider.
 
 ## Caveats
 
 - **Shipkit's app-wired MDX components do not exist here.** Holocron renders MDX
-  with its own component set, so `<SiteName />` (used in `docs/index.mdx`) and
-  any future `<SecretGenerator />` / `<AskAiButtons />` usage will not resolve.
-  Keep app-specific components out of docs intended for this provider.
+  with its own component set, so `<SiteName />`, `<SecretGenerator />`,
+  `<AskAiButtons />` and `<FileTree />` will not resolve. No doc uses them today
+  — keep it that way, or the holocron provider breaks.
+- **Internal notes live in `docs-internal/`, not `docs/`.** Everything under
+  `docs/` is published by both providers.
 - Holocron is single-maintainer and pre-1.0; `@holocron.so/vite` is pinned to a
   caret range on 0.30.x.

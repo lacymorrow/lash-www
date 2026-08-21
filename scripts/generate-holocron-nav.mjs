@@ -91,7 +91,16 @@ groups.sort((a, b) => {
  * as knownPaths keeps real broken links reportable instead of drowning in 131
  * false positives.
  */
-const knownPaths = ["/docs", ...pages.map((page) => `/docs/${page.slug}`)];
+const knownPaths = [
+  "/docs",
+  ...pages.flatMap((page) => {
+    const paths = [`/docs/${page.slug}`];
+    // fumadocs maps foo/index.mdx to /docs/foo, so the directory form is a real
+    // URL that content links to and must be declared too.
+    if (page.isIndex) paths.push(`/docs/${page.slug.replace(/\/?index$/, "")}`);
+    return paths;
+  }),
+].filter((path) => path !== "/docs/");
 
 const config = {
   $schema: "https://holocron.so/docs.json",
