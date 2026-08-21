@@ -2,6 +2,7 @@
 title: "Rebranding Guide"
 description: "This guide explains how to rebrand the Shipkit boilerplate to your own project name and branding."
 ---
+
 # Rebranding Guide
 
 This guide explains how to rebrand the Shipkit boilerplate to your own project name and branding.

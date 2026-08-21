@@ -54,7 +54,9 @@ export default function withMDXConfig(nextConfig: NextConfig): NextConfig {
   const previousWebpack = config.webpack;
 
   config.webpack = (webpackConfig, options) => {
-    const result = (previousWebpack ? previousWebpack(webpackConfig, options) : webpackConfig) as WebpackConfigLike;
+    const result = (
+      previousWebpack ? previousWebpack(webpackConfig, options) : webpackConfig
+    ) as WebpackConfigLike;
 
     for (const entry of result.module?.rules ?? []) {
       if (!entry || typeof entry !== "object") continue;

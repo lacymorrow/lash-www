@@ -2,6 +2,7 @@
 title: "ShipKit Docs Overhaul Plan"
 description: "Current index is okay but has broken links and some fluff. Rewrite to be:"
 ---
+
 # ShipKit Docs Overhaul Plan
 
 ## Principles

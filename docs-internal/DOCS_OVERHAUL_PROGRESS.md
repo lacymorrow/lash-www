@@ -2,6 +2,7 @@
 title: "Docs Overhaul Progress"
 description: "1. b2da7327 — docs: add overhaul plan and progress tracker"
 ---
+
 # Docs Overhaul Progress
 
 ## Phase 1: Fix the Rot (README + broken links)
