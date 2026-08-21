@@ -55,5 +55,6 @@ after any docs change even if you ship the fumadocs provider.
   — keep it that way, or the holocron provider breaks.
 - **Internal notes live in `docs-internal/`, not `docs/`.** Everything under
   `docs/` is published by both providers.
-- Holocron is single-maintainer and pre-1.0; `@holocron.so/vite` is pinned to a
-  caret range on 0.30.x.
+- Holocron is single-maintainer and pre-1.0, and this build is a required CI
+  gate, so `@holocron.so/vite` is pinned to an exact version. Bump it
+  deliberately.

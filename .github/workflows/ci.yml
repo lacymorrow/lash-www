@@ -8,6 +8,7 @@
 #   test-integration— vitest integration suite (real Postgres service)
 #   test-e2e        — Playwright against `bun dev` (real Postgres service)
 #   build           — production build (catches client-bundle / SSR regressions)
+#   docs-links      — Holocron build; link-checks docs/ (fumadocs does not)
 
 name: CI
 
@@ -162,6 +163,26 @@ jobs:
             playwright-report/
           retention-days: 7
 
+  # The Holocron docs build is the only thing that link-checks docs/.
+  # The default fumadocs provider renders broken links without complaint, so
+  # this job is the gate that keeps them out — it caught 15 pre-existing 404s
+  # when the provider was introduced. See docs-site/README.md.
+  docs-links:
+    name: Docs link check (Holocron build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install docs-site dependencies
+        working-directory: docs-site
+        run: npm ci
+      - name: Build docs-site
+        working-directory: docs-site
+        run: npm run build
+
   # Aggregate "everything must pass" job — wire this as the
   # required check in branch protection rules rather than wiring each
   # job individually. Lets us add/rename jobs without re-configuring
@@ -169,7 +190,7 @@ jobs:
   ci-pass:
     name: CI pass
     runs-on: ubuntu-latest
-    needs: [typecheck, lint, test-unit, test-integration, build, test-e2e]
+    needs: [typecheck, lint, test-unit, test-integration, build, test-e2e, docs-links]
     if: always()
     steps:
       - name: Fail if any required job failed
