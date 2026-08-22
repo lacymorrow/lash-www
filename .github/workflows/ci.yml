@@ -6,7 +6,7 @@
 #   lint            — biome + eslint + prettier
 #   test-unit       — vitest unit suite (no DB)
 #   test-integration— vitest integration suite (real Postgres service)
-#   test-e2e        — Playwright against `bun dev` (real Postgres service)
+#   test-e2e        — Playwright against a production build (`next start`, real Postgres service)
 #   build           — production build (catches client-bundle / SSR regressions)
 #   docs-links      — Holocron build; link-checks docs/ (fumadocs does not)
 
@@ -122,7 +122,9 @@ jobs:
   test-e2e:
     name: E2E (Playwright)
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # Includes a production build (~15-25 min) before the Playwright run —
+    # keep this above the build job's timeout plus test time.
+    timeout-minutes: 50
     needs: [test-unit, test-integration]
     services:
       postgres:
@@ -151,6 +153,11 @@ jobs:
         with:
           bun-version: ${{ env.BUN_VERSION }}
       - run: bun install --frozen-lockfile
+      # playwright.config.ts runs `bun run start` under CI (LAC-2687), which
+      # needs a production build in .next. Jobs run on separate runners, so
+      # the build job's output is not available here — build in-job (LAC-3399).
+      - name: Build production bundle for `next start`
+        run: bun run build
       - name: Install Playwright browsers
         run: bunx playwright install --with-deps chromium
       - run: bun run test:e2e
