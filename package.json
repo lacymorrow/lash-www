@@ -90,7 +90,7 @@
     "@builder.io/dev-tools": "1.26.12",
     "@builder.io/react": "9.1.0",
     "@builder.io/sdk": "6.2.0",
-    "@c15t/nextjs": "^2.1.0",
+    "@c15t/nextjs": "^2.2.0",
     "@clerk/nextjs": "^6.37.4",
     "@emblemvault/ask-ai": "^0.1.1",
     "@formkit/auto-animate": "^0.9.0",
