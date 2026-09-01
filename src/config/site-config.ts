@@ -220,7 +220,10 @@ export const siteConfig: SiteConfig = {
   email: {
     support: "support@lash.lacy.sh",
     team: "team@lash.lacy.sh",
-    noreply: "noreply@lash.lacy.sh",
+    // LAC-3578: contact form sends via the verified shipkit.io Resend domain
+    // (consolidated). lash.lacy.sh is not verified on the shipkit Resend team,
+    // so the from-address must be @shipkit.io to avoid a 403.
+    noreply: "noreply@shipkit.io",
     domain: "lash.lacy.sh",
     legal: "legal@lash.lacy.sh",
     privacy: "privacy@lash.lacy.sh",
