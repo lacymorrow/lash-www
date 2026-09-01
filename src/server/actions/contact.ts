@@ -26,8 +26,12 @@ export async function submitContactForm(formData: FormData) {
     // Send email
     const result = await resend.emails.send({
       from: `Contact Form <${siteConfig.email.noreply}>`,
-      to: [siteConfig.email.support],
-      subject: "New Contact Form Submission",
+      // LAC-3578: siteConfig.email.support (support@lash.lacy.sh) has no MX
+      // record and is undeliverable, so form notifications would be silently
+      // dropped. Route to the owner-monitored shipkit.io inbox instead. The
+      // submitter's address is preserved in replyTo below.
+      to: ["feedback@shipkit.io"],
+      subject: `New Contact Form Submission — ${siteConfig.name}`,
       replyTo: validatedData.contactInfo,
       html: `
                 <h2>New Contact Form Submission</h2>
