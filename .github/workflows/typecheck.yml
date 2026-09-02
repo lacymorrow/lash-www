@@ -40,5 +40,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # next-env.d.ts and .next/types are gitignored; without them tsc can't
+      # resolve image imports (*.png/*.jpg) or typed routes. `next typegen`
+      # generates both in a few seconds without building the app.
+      - name: Generate Next.js types
+        run: pnpm exec next typegen
+
       - name: Typecheck
         run: pnpm typecheck
