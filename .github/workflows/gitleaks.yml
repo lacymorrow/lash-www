@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           # Need history so gitleaks can walk the PR range or push delta.
           fetch-depth: 0
@@ -72,7 +72,7 @@ jobs:
         # "Artifact storage quota has been hit"). See LAC-3321.
         if: always()
         continue-on-error: true
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: gitleaks-diff-sarif
           path: gitleaks.sarif
@@ -86,7 +86,7 @@ jobs:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Install gitleaks
@@ -108,7 +108,7 @@ jobs:
         # Record-only; never fail on infra/quota hiccups. See LAC-3321.
         if: always()
         continue-on-error: true
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: gitleaks-history-sarif
           path: gitleaks-history.sarif
