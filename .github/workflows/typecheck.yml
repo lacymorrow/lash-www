@@ -1,0 +1,50 @@
+# TypeScript type check
+#
+# LAC-3685: type checking moved out of the Vercel build. Inside `next build`
+# on Vercel's 4-core/8GB build machines the "Running TypeScript" phase OOMs
+# (SIGKILL) or hangs into the 45-min build timeout whenever no warm build
+# cache is restored, so `next.config.ts` sets
+# `typescript.ignoreBuildErrors: true` and this workflow is the enforcement
+# point instead. A standalone `tsc --noEmit` is cheap (~30s, ~2 GB).
+
+name: Typecheck
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: typecheck-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # next-env.d.ts and .next/types are gitignored; without them tsc can't
+      # resolve image imports (*.png/*.jpg) or typed routes. `next typegen`
+      # generates both in a few seconds without building the app.
+      - name: Generate Next.js types
+        run: pnpm exec next typegen
+
+      - name: Typecheck
+        run: pnpm typecheck
