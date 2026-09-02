@@ -145,11 +145,13 @@ const nextConfig: NextConfig = {
 
 	typescript: {
 		/*
-	  !! WARNING !!
-	  * Dangerously allow production builds to successfully complete even if
-	  * your project has type errors.
-	*/
-		ignoreBuildErrors: false,
+		 * Type checking is enforced by CI (.github/workflows/typecheck.yml), not
+		 * during `next build`. A cold-cache full check needs more memory/time than
+		 * Vercel's 4-core/8GB/45-min build machines provide (LAC-3685): builds
+		 * either OOM (SIGKILL) or hit the 45-minute timeout in the
+		 * "Running TypeScript" phase whenever no warm .tsbuildinfo is restored.
+		 */
+		ignoreBuildErrors: true,
 	},
 
 	// Configure `pageExtensions` to include markdown and MDX files
