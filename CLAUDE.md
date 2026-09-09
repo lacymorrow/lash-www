@@ -286,16 +286,16 @@ Always run `bun run lint` and `bun run typecheck` before committing changes.
 
 ## Scaffolding New ShipKit Sites
 
-Use the ShipKit CLI to create new sites from this template:
+Use the ShipKit CLI to create new sites from this template. The CLI lives in its own repo: [lacymorrow/shipkit-cli](https://github.com/lacymorrow/shipkit-cli), published to npm as `create-shipkit`.
 
 ### Using the CLI
 
 ```bash
 # From anywhere — interactive
-cd cli && bun run build && node dist/index.js create my-new-site
+npx create-shipkit my-new-site
 
 # Non-interactive (CI/agent)
-node cli/dist/index.js create my-new-site --yes
+npx create-shipkit create my-new-site --yes
 ```
 
 ### Manual Steps (if CLI unavailable)
@@ -324,22 +324,15 @@ bun dev
 
 ```bash
 # Via CLI (creates PR branch)
-node cli/dist/index.js sync --yes
+npx create-shipkit sync --yes
 
 # Via npm script (from within a ShipKit project)
 bun run upstream:pull
 
 # Direct merge (no PR)
-node cli/dist/index.js sync --yes --direct
+npx create-shipkit sync --yes --direct
 ```
 
 ### CLI Development
 
-The CLI lives in `cli/` and uses Commander + @clack/prompts:
-
-```bash
-cd cli
-bun install
-bun run build   # Builds to cli/dist/index.js
-bun run dev     # Watch mode
-```
+The CLI is developed in [lacymorrow/shipkit-cli](https://github.com/lacymorrow/shipkit-cli) (Commander + @clack/prompts, tsup build).

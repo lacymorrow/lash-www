@@ -8,11 +8,10 @@
 # Bun note: the npm ecosystem drives Bun projects — Dependabot reads bun.lock.
 version: 2
 updates:
-  # App + CLI JavaScript dependencies (root package.json and cli/package.json)
+  # App JavaScript dependencies (root package.json)
   - package-ecosystem: "npm"
     directories:
       - "/"
-      - "/cli"
     schedule:
       interval: "weekly"
       day: "monday"

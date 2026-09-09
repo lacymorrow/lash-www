@@ -19,8 +19,9 @@ Every Monday it opens grouped pull requests:
 - **Major bumps** — opened individually so each gets a deliberate human review.
 - **GitHub Actions** — one PR for workflow action updates.
 
-It covers both the root app (`package.json`) and the CLI (`cli/package.json`), and it
-reads Bun's `bun.lock` via the `npm` ecosystem.
+It covers the root app (`package.json`) and reads Bun's `bun.lock` via the `npm`
+ecosystem. The CLI now lives in [lacymorrow/shipkit-cli](https://github.com/lacymorrow/shipkit-cli)
+with its own dependency updates.
 
 ### Reviewing a Dependabot PR
 
