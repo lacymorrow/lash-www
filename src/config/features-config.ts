@@ -152,6 +152,9 @@ buildTimeFeatures.BUILDER_ENABLED =
 buildTimeFeatures.MDX_ENABLED = !envIsTrue("DISABLE_MDX");
 buildTimeFeatures.PWA_ENABLED = !envIsTrue("DISABLE_PWA");
 
+// evlog logging/audit trial (off by default; enable via ENABLE_EVLOG — LAC-3361)
+buildTimeFeatures.EVLOG_ENABLED = envIsTrue("ENABLE_EVLOG");
+
 // Developer tools (off by default; enable via ENABLE_DEVTOOLS)
 buildTimeFeatures.DEVTOOLS_ENABLED = envIsTrue("ENABLE_DEVTOOLS");
 buildTimeFeatures.DEVTOOLS_FONT_SELECTOR_ENABLED = buildTimeFeatures.DEVTOOLS_ENABLED;
