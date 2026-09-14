@@ -300,9 +300,17 @@ const nextConfig: NextConfig = {
      */
     webpackMemoryOptimizations: true,
 
-    // Memory optimization for builds - Uncomment if experiencing memory issues
+    /*
+     * "Collecting page data" spawns one worker per CPU minus one (3 on Vercel's
+     * 4-core/8GB box), and each worker loads the whole route graph, Payload
+     * and Drizzle included. Three of them plus the main process exceed 8GB and
+     * the container OOM-kills the build (LAC-3871): cold builds of an
+     * unmodified main failed the same way. One worker fits. Static generation
+     * takes a little longer; a build that finishes beats one that does not.
+     */
+    cpus: 1,
+
     // webpackBuildWorker: false, // Disable for low memory
-    // cpus: 1, // Limit concurrent operations
     // workerThreads: false, // Disable worker threads
     // ppr: true,
   },
