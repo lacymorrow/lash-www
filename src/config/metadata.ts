@@ -4,9 +4,7 @@ import type { Twitter } from "next/dist/lib/metadata/types/twitter-types";
 import { siteConfig } from "./site-config";
 
 // Helper function to safely extract the default title string
-const getDefaultTitleString = (
-  title: Metadata["title"],
-): string | undefined => {
+const getDefaultTitleString = (title: Metadata["title"]): string | undefined => {
   if (typeof title === "string") {
     return title;
   }
@@ -19,7 +17,7 @@ const getDefaultTitleString = (
 const defaultOpenGraph: OpenGraph = {
   type: "website",
   locale: siteConfig.metadata.locale,
-  url: siteConfig.url,
+  url: "./",
   title: siteConfig.title,
   description: siteConfig.description,
   siteName: siteConfig.title,
@@ -68,17 +66,33 @@ export const defaultMetadata: Metadata = {
   generator: siteConfig.metadata.generator,
   keywords: siteConfig.metadata.keywords,
   referrer: siteConfig.metadata.referrer,
-  robots: siteConfig.metadata.robots,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
   alternates: siteConfig.metadata.alternates,
   openGraph: defaultOpenGraph,
   twitter: defaultTwitter,
   appleWebApp: siteConfig.metadata.appleWebApp,
   appLinks: siteConfig.metadata.appLinks,
-  archives: [siteConfig.metadata.blogPath],
+  archives: siteConfig.metadata.blogPath ? [siteConfig.metadata.blogPath] : [],
   assets: [siteConfig.metadata.assetsPath],
   bookmarks: [siteConfig.metadata.bookmarksPath],
   category: siteConfig.metadata.category,
   classification: siteConfig.metadata.classification,
+  // Repository discovery meta tags
+  other: {
+    repository: siteConfig.repo.url,
+    source: siteConfig.repo.url,
+    "ai:description": siteConfig.description,
+  },
 };
 
 export const metadata: Metadata = defaultMetadata;
@@ -99,6 +113,23 @@ export const viewport: Viewport = {
   ],
 };
 
+export interface HeadLinkHint {
+  rel: string;
+  href: string;
+  crossOrigin?: "anonymous" | "use-credentials";
+}
+
+// Shared head link hints used by both App and Pages routers
+export const headLinkHints: readonly HeadLinkHint[] = [
+  { rel: "preconnect", href: "https://fonts.googleapis.com" },
+  { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+  { rel: "dns-prefetch", href: "https://vercel.com" },
+  { rel: "dns-prefetch", href: "https://api.github.com" },
+  { rel: "dns-prefetch", href: "https://cdn.jsdelivr.net" },
+  // Repository discovery (vcs-git convention)
+  { rel: "vcs-git", href: siteConfig.repo.url },
+] as const;
+
 type ConstructMetadataProps = Metadata & {
   images?: { url: string; width: number; height: number; alt: string }[];
   noIndex?: boolean;
@@ -118,57 +149,46 @@ export const constructMetadata = ({
     ...metadata,
     openGraph: {
       ...defaultOpenGraph,
+      ...(metadata.openGraph ?? {}),
       // Assign the extracted title string or fallback
       title: metaTitleString ?? defaultMetaTitleString,
       // Ensure description is not null
-      description:
-        (metadata.description ?? defaultMetadata.description) || undefined,
-      images: images.length > 0 ? images : defaultOpenGraph.images,
+      description: metadata.description ?? defaultMetadata.description ?? undefined,
+      images: images.length > 0 ? images : (metadata.openGraph?.images ?? defaultOpenGraph.images),
     },
     twitter: {
       ...defaultTwitter,
       // Assign the extracted title string or fallback
       title: metaTitleString ?? defaultMetaTitleString,
       // Ensure description is not null
-      description:
-        (metadata.description ?? defaultMetadata.description) || undefined,
+      description: metadata.description ?? defaultMetadata.description ?? undefined,
       images: images.length > 0 ? images : defaultTwitter.images,
     },
     robots: noIndex ? { index: false, follow: true } : defaultMetadata.robots,
   };
 };
 
-// ======== Head Link Hints (preconnect / dns-prefetch) =========
-
-export type HeadLinkHint = {
-  rel: "preconnect" | "dns-prefetch";
-  href: string;
-  crossOrigin?: "" | "anonymous" | "use-credentials";
-};
-
-export const headLinkHints: HeadLinkHint[] = [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-];
-
 // Route-specific metadata for better CTR
 export const routeMetadata = {
   home: {
     title: `${siteConfig.title} - ${siteConfig.tagline}`,
-    description: `A beautiful AI terminal for your code. Type commands or talk naturally — lash figures out the rest. Works with Claude Code, Gemini CLI, Codex, and more.`,
+    description:
+      "A beautiful AI terminal for your code. Type commands or talk naturally, lash figures out the rest. Works with Claude Code, Gemini CLI, Codex, and more.",
   },
   features: {
     title: `Features | ${siteConfig.title}`,
     description: `Shell mode, agent mode, auto mode, smart reroute, live indicators, and preheated AI agents. See what ${siteConfig.title} can do.`,
   },
   pricing: {
-    title: siteConfig.title + " - Free and open source",
-    description:
-      siteConfig.title +
-      " is free, open source, and works with any AI CLI tool. No API keys needed.",
+    title: `${siteConfig.title} - Free and open source`,
+    description: `${siteConfig.title} is free, open source, and works with any AI CLI tool. No API keys needed.`,
   },
   docs: {
     title: `Documentation | ${siteConfig.title}`,
     description: `Get started with ${siteConfig.title}. Installation, configuration, supported tools, and shell mode reference.`,
+  },
+  faq: {
+    title: `FAQ | ${siteConfig.title}`,
+    description: `Common questions about ${siteConfig.title}: installation, supported AI tools, shell mode, and what to expect.`,
   },
 };

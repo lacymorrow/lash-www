@@ -57,7 +57,6 @@ interface SiteConfig {
     productNames: {
       // TODO: Remove these once we have a proper product name
       bones: string;
-      muscles: string;
       brains: string;
       main: string;
     };
@@ -69,9 +68,6 @@ interface SiteConfig {
     databaseName: string;
   };
 
-  // Social media profiles
-  social?: Partial<Record<string, string>>;
-
   // External links
   links: {
     twitter: string;
@@ -79,6 +75,25 @@ interface SiteConfig {
     x: string;
     x_follow: string;
     github: string;
+  };
+
+  // Social profiles (single source of truth for top networks)
+  /**
+   * Centralized social links for the project/org. Empty strings mean "disabled".
+   * Use helper utilities to get an enabled list for rendering.
+   */
+  social: {
+    github?: string;
+    twitter?: string;
+    x?: string;
+    linkedin?: string;
+    instagram?: string;
+    facebook?: string;
+    youtube?: string;
+    tiktok?: string;
+    discord?: string;
+    dribbble?: string;
+    threads?: string;
   };
 
   // Repository information
@@ -121,9 +136,7 @@ interface SiteConfig {
   // E-commerce store configuration
   store: {
     id: string;
-    products: {
-      [key: string]: string;
-    };
+    products: Record<string, string>;
   };
 
   // SEO and metadata
@@ -152,7 +165,7 @@ interface SiteConfig {
     appLinks: Metadata["appLinks"];
     assetsPath: string;
     bookmarksPath: string;
-    blogPath: string;
+    blogPath?: string;
   };
 
   // Application settings
@@ -186,7 +199,6 @@ export const siteConfig: SiteConfig = {
     projectSlug: "lash",
     productNames: {
       bones: "Bones",
-      muscles: "Muscles",
       brains: "Brains",
       main: "Lash",
     },
@@ -204,6 +216,20 @@ export const siteConfig: SiteConfig = {
     x: "https://x.com/lacybuilds",
     x_follow: "https://x.com/intent/follow?screen_name=lacybuilds",
     github: "https://github.com/lacymorrow/lash",
+  },
+
+  // Configure social profiles here. Leave any you don't use as empty strings.
+  social: {
+    github: "https://github.com/lacymorrow",
+    x: "https://x.com/lacybuilds",
+    linkedin: "",
+    instagram: "",
+    facebook: "",
+    youtube: "",
+    tiktok: "",
+    discord: "",
+    dribbble: "",
+    threads: "",
   },
 
   repo: {
@@ -228,7 +254,7 @@ export const siteConfig: SiteConfig = {
     legal: "legal@lash.lacy.sh",
     privacy: "privacy@lash.lacy.sh",
     // Placeholder format function - assigned below
-    format: (type) => "",
+    format: (_type) => "",
   },
 
   creator: {
@@ -248,7 +274,7 @@ export const siteConfig: SiteConfig = {
   store: {
     id: "lash",
     products: {
-      // Lash is free and open source — no paid products
+      // Lash is free and open source, no paid products
       lash: "",
     },
   },
@@ -270,7 +296,7 @@ export const siteConfig: SiteConfig = {
       dark: "black",
     },
     locale: "en-US",
-    generator: "Next.js", // Use Next.js as generator
+    generator: "Next.js",
     referrer: "origin-when-cross-origin",
     category: "technology", // Use technology as category
     classification: "Business Software",
@@ -311,7 +337,7 @@ export const siteConfig: SiteConfig = {
     appLinks: {},
     assetsPath: "/assets",
     bookmarksPath: "/",
-    blogPath: "/blog",
+    // blogPath is now conditionally added below
   },
 
   manifest: {
@@ -348,41 +374,36 @@ export const siteConfig: SiteConfig = {
 
 // Assign dynamic values AFTER the main object is defined
 siteConfig.repo.format = {
-  clone: () =>
-    `https://github.com/${siteConfig.repo.owner}/${siteConfig.repo.name}.git`,
-  ssh: () =>
-    `git@github.com:${siteConfig.repo.owner}/${siteConfig.repo.name}.git`,
+  clone: () => `https://github.com/${siteConfig.repo.owner}/${siteConfig.repo.name}.git`,
+  ssh: () => `git@github.com:${siteConfig.repo.owner}/${siteConfig.repo.name}.git`,
 };
 
-siteConfig.email.format = (
-  type: Exclude<keyof SiteConfig["email"], "format">,
-) => siteConfig.email[type];
+siteConfig.email.format = (type: Exclude<keyof SiteConfig["email"], "format">) =>
+  siteConfig.email[type];
 
 siteConfig.payload.adminTitleSuffix = ` - ${siteConfig.title} CMS`;
 
 // siteConfig.manifest.startUrl = routes.home; // Uncomment and import routes if needed
 
 // Make sure alternates exists before assigning canonical
-if (!siteConfig.metadata.alternates) {
-  siteConfig.metadata.alternates = {};
+siteConfig.metadata.alternates ??= {};
+siteConfig.metadata.alternates.canonical = "./";
+// Advertise RSS feed for SEO and feed discovery (only when blog is enabled)
+if (process.env.NEXT_PUBLIC_HAS_BLOG === "true") {
+  siteConfig.metadata.alternates.types = {
+    ...(siteConfig.metadata.alternates?.types ?? {}),
+    "application/rss+xml": `${siteConfig.url}/rss.xml`,
+  };
 }
-siteConfig.metadata.alternates.canonical = siteConfig.url;
 
 // Check appleWebApp is an object before assigning title
-if (
-  siteConfig.metadata.appleWebApp &&
-  typeof siteConfig.metadata.appleWebApp === "object"
-) {
+if (siteConfig.metadata.appleWebApp && typeof siteConfig.metadata.appleWebApp === "object") {
   siteConfig.metadata.appleWebApp.title = siteConfig.title;
 }
 
 // Ensure appLinks and appLinks.web are objects before assigning url
-if (!siteConfig.metadata.appLinks) {
-  siteConfig.metadata.appLinks = {};
-}
-if (!siteConfig.metadata.appLinks.web) {
-  siteConfig.metadata.appLinks.web = { url: "", should_fallback: false }; // Initialize web if needed
-}
+siteConfig.metadata.appLinks ??= {};
+siteConfig.metadata.appLinks.web ??= { url: "", should_fallback: false }; // Initialize web if needed
 // Check type again after potential initialization
 if (
   siteConfig.metadata.appLinks?.web &&
@@ -395,7 +416,10 @@ if (
 // Update paths to be absolute URLs based on siteConfig.url
 siteConfig.metadata.assetsPath = `${siteConfig.url}/assets`;
 siteConfig.metadata.bookmarksPath = `${siteConfig.url}/`;
-siteConfig.metadata.blogPath = `${siteConfig.url}/blog`;
+
+if (process.env.NEXT_PUBLIC_HAS_BLOG === "true") {
+  siteConfig.metadata.blogPath = `${siteConfig.url}/blog`;
+}
 
 // Freeze the object to prevent accidental modifications later (optional)
 // Object.freeze(siteConfig);

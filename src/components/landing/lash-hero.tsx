@@ -2,8 +2,8 @@
 
 import { Link } from "@/components/primitives/link-with-transition";
 import { Button } from "@/components/ui/button";
-import AnimatedGradientText from "@/components/ui/animated-gradient-text";
-import AnimatedShinyText from "@/components/ui/animated-shiny-text";
+import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
+import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { BackgroundSpacetime } from "@/components/ui/backgrounds/background-spacetime";
 import { cn } from "@/lib/utils";
 import { LashTuiHeaderText } from "@/components/landing/lash-tui-header-text";
