@@ -7,9 +7,13 @@
  *   - Missing SEO title/description (LAC-1513)
  */
 import { expect, test } from "@playwright/test";
+import { routes } from "@/config/routes";
 
-const CHECKOUT_URL =
-  "https://shipkit.lemonsqueezy.com/checkout/buy/20b5b59e-b4c4-43b0-9979-545f90c76f28";
+const CHECKOUT_URL = routes.external.buy;
+
+// Lash is free and open source: routes.external.buy points at the GitHub repo,
+// not a hosted checkout. These assertions only apply to sites that sell.
+const SELLS_A_PRODUCT = /(lemonsqueezy\.com|stripe\.com|polar\.sh)/i.test(CHECKOUT_URL);
 
 // /docs is a Fumadocs route that 404s in dev for unknown reasons; tracked
 // as task #24 (e2e follow-ups). When fixed, add it back to this list.
@@ -32,6 +36,11 @@ test.describe("Marketing pages return a non-5xx", () => {
 });
 
 test.describe("Checkout link is reachable", () => {
+  test.skip(
+    !SELLS_A_PRODUCT,
+    "Site has no hosted checkout (routes.external.buy is not a provider URL)"
+  );
+
   test("LemonSqueezy checkout URL returns 200 (not 403/404)", async ({ request }) => {
     // HEAD first to avoid downloading HTML; fall back to GET if HEAD isn't allowed
     let response = await request.fetch(CHECKOUT_URL, { method: "HEAD" });

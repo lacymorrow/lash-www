@@ -13,10 +13,20 @@
  * markup.
  */
 import { expect, test } from "@playwright/test";
+import { routes } from "@/config/routes";
 
 const CHECKOUT_HREF_RE = /^https:\/\/([a-z0-9-]+\.)?(lemonsqueezy\.com|stripe\.com|polar\.sh)\//i;
 
+// Lash is free and open source: routes.external.buy points at the GitHub repo,
+// not a hosted checkout. These assertions only apply to sites that sell.
+const SELLS_A_PRODUCT = CHECKOUT_HREF_RE.test(routes.external.buy);
+
 test.describe("Pricing CTA points at a real checkout URL", () => {
+  test.skip(
+    !SELLS_A_PRODUCT,
+    "Site has no hosted checkout (routes.external.buy is not a provider URL)"
+  );
+
   test("/pricing primary CTA is a real https checkout link", async ({ page }) => {
     const response = await page.goto("/pricing");
     expect(response?.status()).toBe(200);
