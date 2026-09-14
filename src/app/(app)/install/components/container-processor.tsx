@@ -147,7 +147,11 @@ export const ContainerProcessor = ({
                   className="max-h-96 overflow-y-auto rounded-md bg-slate-950 p-4 font-mono text-xs text-slate-50"
                 >
                   {logs.map((log, index) => (
-                    <div key={`log-${index}-${log.timestamp}`} className="pb-1">
+                    <div
+                      // biome-ignore lint/suspicious/noArrayIndexKey: log entries are append-only; timestamps can collide
+                      key={`log-${index}-${log.timestamp}`}
+                      className="pb-1"
+                    >
                       <span className="text-slate-400">
                         [{new Date(log.timestamp).toLocaleTimeString()}]
                       </span>{" "}
@@ -225,7 +229,11 @@ export const ContainerProcessor = ({
                   className="mt-2 max-h-96 overflow-y-auto rounded-md bg-slate-950 p-4 font-mono text-xs text-slate-50"
                 >
                   {logs.map((log, index) => (
-                    <div key={`log-${index}-${log.timestamp}`} className="pb-1">
+                    <div
+                      // biome-ignore lint/suspicious/noArrayIndexKey: log entries are append-only; timestamps can collide
+                      key={`log-${index}-${log.timestamp}`}
+                      className="pb-1"
+                    >
                       <span className="text-slate-400">
                         [{new Date(log.timestamp).toLocaleTimeString()}]
                       </span>{" "}

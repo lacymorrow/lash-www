@@ -50,8 +50,7 @@ const _createLogger =
 
     const error = args.find((arg) => arg instanceof Error);
     const metadata = args.find((arg) => typeof arg === "object" && !(arg instanceof Error)) as
-      | Record<string, unknown>
-      | undefined;
+      Record<string, unknown> | undefined;
 
     if (evlogLog) {
       // evlog has no "log" level; console.log-style calls map to info. evlog
@@ -82,7 +81,7 @@ const _createLogger =
 
     span.end();
 
-    const consoleMethod = console[level] ?? console.log;
+    const consoleMethod = (console[level] ?? console.log).bind(console);
     consoleMethod(...args);
   };
 

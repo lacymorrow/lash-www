@@ -42,7 +42,7 @@ function filterForMDXComponents(module: Record<string, any>): MDXComponents {
       // Only include valid React component types
       return isValidElementType(value);
     })
-  ) as MDXComponents;
+  );
 }
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (

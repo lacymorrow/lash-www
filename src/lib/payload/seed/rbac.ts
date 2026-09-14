@@ -114,7 +114,7 @@ export async function seedRbac() {
             rolePerms &&
             // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- intentional boolean OR
             ((permission?.action && rolePerms.actions.includes(permission.action)) ||
-              (rolePerms.actions.includes("manage" as Action) && permission?.action === "manage"))
+              (rolePerms.actions.includes("manage") && permission?.action === "manage"))
           );
         });
 

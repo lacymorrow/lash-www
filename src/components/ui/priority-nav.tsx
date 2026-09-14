@@ -90,6 +90,7 @@ export const PriorityNav: React.FC<PriorityNavProps> = ({ navLinks, className, i
       >
         {navLinks.map((link, i) => (
           <span
+            // biome-ignore lint/suspicious/noArrayIndexKey: hidden measurement clones; hrefs may repeat
             key={`measure-${i}-${link.href}`}
             data-measure-item
             className={cn("whitespace-nowrap text-sm", itemClassName)}

@@ -31,13 +31,7 @@ import { LOCAL_STORAGE_KEYS } from "@/config/local-storage-keys";
 import { cn } from "@/lib/utils";
 
 type ToolCategory =
-  | "Formatters"
-  | "Testing"
-  | "Generators"
-  | "Converters"
-  | "Security"
-  | "Design"
-  | "AI";
+  "Formatters" | "Testing" | "Generators" | "Converters" | "Security" | "Design" | "AI";
 
 interface Tool {
   title: string;

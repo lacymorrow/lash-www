@@ -34,8 +34,7 @@ interface FooterGroup {
 }
 
 type FooterElement =
-  | { type: "group"; content: FooterGroup }
-  | { type: "node"; content: React.ReactNode };
+  { type: "group"; content: FooterGroup } | { type: "node"; content: React.ReactNode };
 
 const defaultGroups: FooterElement[] = [
   {
@@ -163,8 +162,7 @@ export const Footer: React.FC<FooterProps> = ({
               {groups
                 .filter((el) => el.type === "group")
                 .map((element) => {
-                  // We already filtered, so this cast is safe
-                  const group = (element as { type: "group"; content: FooterGroup }).content;
+                  const group = element.content;
                   return (
                     <AccordionItem value={group.header.label} key={uuid()}>
                       <AccordionTrigger className="font-semibold">

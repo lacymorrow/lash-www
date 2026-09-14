@@ -53,6 +53,7 @@ export function Terminal({ output, className }: TerminalProps) {
       <div className="p-4 font-mono text-sm leading-5 text-[#D4D4D4]">
         {processedOutput.map((line, i) => (
           <div
+            // biome-ignore lint/suspicious/noArrayIndexKey: terminal output lines are append-only and have no stable id
             key={`${i}-${line.slice(0, 20)}`}
             className="min-h-[6px]"
             // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted internal HTML source

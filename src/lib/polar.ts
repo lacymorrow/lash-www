@@ -449,7 +449,7 @@ export const fetchPolarProducts = async () => {
 
     // Call the Polar API to fetch products
     // Using a more generic approach to handle potential SDK differences
-    const response = await polarClient.products.list({} as any);
+    const response = await polarClient.products.list({});
 
     // Extract products from the response
     const products = extractProductsFromResponse(response);

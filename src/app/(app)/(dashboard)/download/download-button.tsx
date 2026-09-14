@@ -32,7 +32,7 @@ export const DownloadButton = ({ userId }: DownloadButtonProps) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            click here
+            open the download link
           </a>
         </p>
       )}

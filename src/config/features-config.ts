@@ -98,7 +98,7 @@ function mirrorPublicEnvVariables(): Record<`NEXT_PUBLIC_${string}`, string> {
     }
   }
 
-  return mirrored as Record<`NEXT_PUBLIC_${string}`, string>;
+  return mirrored;
 }
 
 // Execute mirroring immediately so feature detection below can see NEXT_PUBLIC_* keys

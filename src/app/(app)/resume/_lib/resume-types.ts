@@ -88,10 +88,4 @@ export interface ResumeLanguage {
 }
 
 export type SectionKey =
-  | "work"
-  | "projects"
-  | "skills"
-  | "education"
-  | "interests"
-  | "awards"
-  | "references";
+  "work" | "projects" | "skills" | "education" | "interests" | "awards" | "references";

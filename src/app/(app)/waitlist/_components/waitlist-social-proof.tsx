@@ -119,6 +119,7 @@ export function WaitlistSocialProof() {
                   <div className="mb-4 flex items-center gap-1">
                     {Array.from({ length: testimonial.rating }).map((_, i) => (
                       <Star
+                        // biome-ignore lint/suspicious/noArrayIndexKey: static star rating, index is the only identity
                         key={`star-${testimonial.name}-${i}`}
                         className="h-4 w-4 fill-yellow-400 text-yellow-400"
                       />
