@@ -210,7 +210,7 @@ npx shadcn add @shipkit/cms-pages
 
 **Installs to:**
 
-- `app/(cms)/[...slug]/page.tsx` — Unified catch-all handler
+- `app/(app)/[...slug]/page.tsx`: unified catch-all handler (lives under `(app)` so the sync root layout can send a real 404)
 - `app/(cms)/layout.tsx` — Conditional Payload layout (tree-shakes when disabled)
 - `app/(cms)/payload-root-layout.tsx` — Payload CSS/config loader
 - `app/(cms)/payload-blocks.tsx` — Block renderer (Hero, Content, Features, Testimonials)
@@ -221,7 +221,7 @@ npx shadcn add @shipkit/cms-pages
 
 ```
 Request to /<any-path>
-  -> (cms)/[...slug] catches it
+  -> (app)/[...slug] catches it
   -> Checks Payload CMS database for matching page
   -> If not found, falls back to Builder.io API
   -> If neither has content, returns 404
@@ -427,13 +427,13 @@ All blocks install into the `(app)` route group by default. This is required for
 ```
 app/
 ├── (app)/           <- Feature blocks install here
+│   ├── [...slug]/   <- Shared Payload + Builder.io catch-all
 │   ├── faq/
 │   ├── docs/
 │   ├── blog/
 │   ├── builder.io/
 │   └── (authentication)/
-├── (cms)/       <- CMS pages block installs here
-│   ├── [...slug]/   <- Shared Payload + Builder.io catch-all
+├── (cms)/       <- Payload admin + REST API only
 │   ├── cms/         <- Payload admin panel
 │   └── cms-api/     <- Payload REST API
 └── layout.tsx

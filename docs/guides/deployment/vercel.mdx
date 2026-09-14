@@ -86,8 +86,9 @@ src/app/
 │   ├── (admin)/           # Admin panel
 │   ├── (demo)/            # Demo/example pages
 │   ├── (legal)/           # Terms, privacy
+│   ├── [...slug]/         # CMS catch-all: renders Payload / Builder.io pages
 │   └── @modal/            # Parallel route slot (intercepted auth modals)
-└── (cms)/                 # Payload CMS catch-all — [...slug] renders CMS pages
+└── (cms)/                 # Payload admin UI (/cms) and REST API (/cms-api)
 ```
 
 Route groups `(name)` are stripped from the URL, so **two pages in different groups can resolve to the same path**. Next.js fails the build with:
@@ -100,7 +101,7 @@ Rules to avoid collisions:
 
 1. **`/` is owned by `(app)/(kit)/page.tsx`.** If your downstream adds its own landing group (e.g. `(main)/page.tsx`), delete or move the upstream one — don't keep both.
 2. Before adding a page in a new group, check every group for the same resolved path: `find src/app -name "page.tsx" | grep -v node_modules`.
-3. The `(cms)` catch-all `[...slug]` is lower priority than static routes, so it won't conflict at build time — but a static page shadows the CMS page at the same URL.
+3. The `(app)` catch-all `[...slug]` is lower priority than static routes, so it won't conflict at build time. A static page still shadows the CMS page at the same URL.
 4. Keep downstream-specific pages in a clearly-named group (e.g. `(site)`) rather than editing upstream groups; this makes upstream merges cleaner.
 
 ## Parallel Route Slots and `default.tsx`

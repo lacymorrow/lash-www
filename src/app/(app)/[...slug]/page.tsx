@@ -1,3 +1,13 @@
+/**
+ * Unified CMS catch-all (Payload CMS + Builder.io).
+ *
+ * This lives under (app), not (cms), on purpose. The (cms) layout wraps its
+ * children in Payload's admin RootLayout, which streams its shell and commits
+ * HTTP 200 before this page can call notFound(), so every unknown URL became a
+ * soft 404 whenever Payload was enabled (LAC-3870). The (app) root layout is
+ * synchronous, so the existence decision below settles the status first.
+ * Only /cms (admin UI) and /cms-api need Payload's RootLayout.
+ */
 import { env } from "@/env";
 import { RenderBuilderContent } from "@/lib/builder-io/builder-io";
 import { getPayloadClient } from "@/lib/payload/payload";
@@ -8,7 +18,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import type { PageBlock } from "@/types/blocks";
-import { BlockRenderer } from "../payload-blocks";
+import { BlockRenderer } from "@/app/(cms)/payload-blocks";
 
 if (env.NEXT_PUBLIC_FEATURE_BUILDER_ENABLED && env.NEXT_PUBLIC_BUILDER_API_KEY) {
   builder.init(env.NEXT_PUBLIC_BUILDER_API_KEY);
@@ -145,7 +155,7 @@ export async function generateMetadata({
     // Return empty metadata — do NOT call notFound() here.
     // Calling notFound() in generateMetadata causes Next.js to inject
     // robots:noindex automatically, which leaks onto /docs pages due to
-    // the (cms)/[...slug] catch-all overlapping with (app)/docs/[[...slug]].
+    // this [...slug] catch-all overlapping with docs/[[...slug]].
     return {};
   }
 

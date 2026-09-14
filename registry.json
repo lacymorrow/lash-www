@@ -597,9 +597,9 @@
       ],
       "files": [
         {
-          "path": "src/app/(cms)/[...slug]/page.tsx",
+          "path": "src/app/(app)/[...slug]/page.tsx",
           "type": "registry:page",
-          "target": "~/src/app/(cms)/[...slug]/page.tsx"
+          "target": "~/src/app/(app)/[...slug]/page.tsx"
         },
         {
           "path": "src/app/(cms)/layout.tsx",
