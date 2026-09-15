@@ -26,55 +26,47 @@ export const LashHero = () => {
     setSelectedInstall(installKey);
 
     // #region agent log
-    void fetch(
-      "http://127.0.0.1:7242/ingest/a184f37b-d283-49ed-9107-d1b87c6acc55",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sessionId: "debug-session",
-          runId: "pre-fix",
-          hypothesisId: "H2",
-          location: "src/components/landing/lash-hero.tsx:handleSelectInstall",
-          message: "Install option selected",
-          data: {
-            installKey,
-          },
-          timestamp: Date.now(),
-        }),
-      },
-    ).catch(() => {
+    void fetch("http://127.0.0.1:7242/ingest/a184f37b-d283-49ed-9107-d1b87c6acc55", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId: "debug-session",
+        runId: "pre-fix",
+        hypothesisId: "H2",
+        location: "src/components/landing/lash-hero.tsx:handleSelectInstall",
+        message: "Install option selected",
+        data: {
+          installKey,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {
       /* agent log best-effort */
     });
     // #endregion
   };
 
   const handleInstallCommandClick = () => {
-    const command =
-      installCommands[selectedInstall as keyof typeof installCommands];
+    const command = installCommands[selectedInstall as keyof typeof installCommands];
     void copyToClipboard(command);
 
     // #region agent log
-    void fetch(
-      "http://127.0.0.1:7242/ingest/a184f37b-d283-49ed-9107-d1b87c6acc55",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sessionId: "debug-session",
-          runId: "pre-fix",
-          hypothesisId: "H1",
-          location:
-            "src/components/landing/lash-hero.tsx:handleInstallCommandClick",
-          message: "Install command clicked",
-          data: {
-            selectedInstall,
-            command,
-          },
-          timestamp: Date.now(),
-        }),
-      },
-    ).catch(() => {
+    void fetch("http://127.0.0.1:7242/ingest/a184f37b-d283-49ed-9107-d1b87c6acc55", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId: "debug-session",
+        runId: "pre-fix",
+        hypothesisId: "H1",
+        location: "src/components/landing/lash-hero.tsx:handleInstallCommandClick",
+        message: "Install command clicked",
+        data: {
+          selectedInstall,
+          command,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {
       /* agent log best-effort */
     });
     // #endregion
@@ -86,7 +78,7 @@ export const LashHero = () => {
         "h-screen",
         "relative overflow-hidden",
         "bg-gradient-to-b from-slate-950/20 via-slate-950/50 to-slate-900/30",
-        "py-24 md:py-36",
+        "py-24 md:py-36"
       )}
       aria-label="Lash hero section"
     >
@@ -97,14 +89,10 @@ export const LashHero = () => {
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-3xl text-center">
           {/* Accessible heading for screen readers */}
-          <h1 className="sr-only">
-            Lash — a beautiful AI terminal for your code
-          </h1>
+          <h1 className="sr-only">Lash — a beautiful AI terminal for your code</h1>
           <AnimatedGradientText className="mb-6 bg-black/30 text-xs text-white/80 dark:text-white/80">
             <AnimatedShinyText className="flex items-center gap-2 text-[11px] tracking-wide">
-              <span className="text-white/80">
-                The AI Shell for your terminal
-              </span>
+              <span className="text-white/80">The AI Shell for your terminal</span>
               <GithubVersion />
             </AnimatedShinyText>
           </AnimatedGradientText>
@@ -114,8 +102,8 @@ export const LashHero = () => {
           </div>
 
           <p className="mx-auto mt-6 max-w-xl text-pretty text-base text-slate-300 sm:text-lg">
-            The AI Shell for any terminal. Type shell commands or chat naturally
-            with your command line anywhere.
+            The AI Shell for any terminal. Type shell commands or chat naturally with your command
+            line anywhere.
           </p>
 
           <div className="mx-auto mt-8 flex w-full flex-col items-center justify-center gap-3 sm:flex-row">
@@ -140,7 +128,7 @@ export const LashHero = () => {
             <button
               type="button"
               onClick={handleInstallCommandClick}
-              className="group flex items-center gap-2 cursor-copy rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-slate-300 shadow-sm backdrop-blur transition-all duration-300 hover:border-white/20 hover:bg-white/[0.07] hover:shadow-lg"
+              className="group flex cursor-copy items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-slate-300 shadow-sm backdrop-blur transition-all duration-300 hover:border-white/20 hover:bg-white/[0.07] hover:shadow-lg"
               aria-label={
                 isCopied
                   ? `Copied: ${installCommands[selectedInstall as keyof typeof installCommands]}`
@@ -148,16 +136,9 @@ export const LashHero = () => {
               }
             >
               <code className="select-all transition-colors duration-300 group-hover:text-white">
-                {
-                  installCommands[
-                    selectedInstall as keyof typeof installCommands
-                  ]
-                }
+                {installCommands[selectedInstall as keyof typeof installCommands]}
               </code>
-              <span
-                className="flex h-4 w-4 items-center justify-center"
-                aria-hidden="true"
-              >
+              <span className="flex h-4 w-4 items-center justify-center" aria-hidden="true">
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div
                     key={isCopied ? "check" : "copy"}
@@ -172,9 +153,7 @@ export const LashHero = () => {
                     }}
                     className={cn(
                       "flex items-center justify-center",
-                      isCopied
-                        ? "text-emerald-200"
-                        : "text-slate-200 opacity-80",
+                      isCopied ? "text-emerald-200" : "text-slate-200 opacity-80"
                     )}
                   >
                     {isCopied ? (
@@ -193,6 +172,7 @@ export const LashHero = () => {
             </span>
           </div>
 
+          {/* biome-ignore lint/a11y/useSemanticElements: role="group" for install-method toggle buttons; no trivial native equivalent (fieldset would ripple styling) */}
           <div
             className="mx-auto mt-3 flex items-center justify-center gap-2"
             role="group"
@@ -207,7 +187,7 @@ export const LashHero = () => {
                 "rounded-full border px-3 py-1 text-[10px] font-medium transition-all duration-200 ease-out",
                 selectedInstall === "brew"
                   ? "scale-105 border-white/20 bg-white/10 text-white shadow-md"
-                  : "scale-100 border-white/5 bg-white/5 text-slate-400 hover:scale-[1.02] hover:border-white/10 hover:bg-white/[0.07] hover:text-slate-300 hover:shadow-sm active:scale-95",
+                  : "scale-100 border-white/5 bg-white/5 text-slate-400 hover:scale-[1.02] hover:border-white/10 hover:bg-white/[0.07] hover:text-slate-300 hover:shadow-sm active:scale-95"
               )}
             >
               brew
@@ -221,7 +201,7 @@ export const LashHero = () => {
                 "rounded-full border px-3 py-1 text-[10px] font-medium transition-all duration-200 ease-out",
                 selectedInstall === "npm"
                   ? "scale-105 border-white/20 bg-white/10 text-white shadow-md"
-                  : "scale-100 border-white/5 bg-white/5 text-slate-400 hover:scale-[1.02] hover:border-white/10 hover:bg-white/[0.07] hover:text-slate-300 hover:shadow-sm active:scale-95",
+                  : "scale-100 border-white/5 bg-white/5 text-slate-400 hover:scale-[1.02] hover:border-white/10 hover:bg-white/[0.07] hover:text-slate-300 hover:shadow-sm active:scale-95"
               )}
             >
               npm

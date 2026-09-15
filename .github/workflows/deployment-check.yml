@@ -16,6 +16,12 @@ name: Deployment Check
 on:
   deployment_status:
 
+# createCommitStatus (Report check result step) needs statuses:write.
+# Without this the job's default read-only token 403s and fails the gate
+# even when the health check itself passed.
+permissions:
+  statuses: write
+
 jobs:
   smoke-test:
     # Only run when the deployment is ready (not pending/failed)
@@ -79,12 +85,17 @@ jobs:
         with:
           script: |
             const state = '${{ job.status }}' === 'success' ? 'success' : 'failure';
-            await github.rest.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: context.sha,
-              state,
-              target_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
-              context: 'Deployment Check: Health',
-              description: state === 'success' ? 'Deployment is healthy' : 'Deployment returned 5xx',
-            });
+            try {
+              await github.rest.repos.createCommitStatus({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                sha: context.sha,
+                state,
+                target_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+                context: 'Deployment Check: Health',
+                description: state === 'success' ? 'Deployment is healthy' : 'Deployment returned 5xx',
+              });
+            } catch (err) {
+              // Never fail the deploy gate on a status-reporting hiccup (e.g. token perms).
+              core.warning(`Could not post commit status: ${err.message}`);
+            }
