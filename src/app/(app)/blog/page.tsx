@@ -26,7 +26,7 @@ const BlogPage = async () => {
   const logSpotPosts: EnhancedBlogPost[] = posts.map((post, index) => ({
     ...post,
     badge: post.badge || `v1.${index.toString().padStart(2, "0")}`,
-    authors: post.authors || [
+    authors: post.authors ?? [
       {
         name: siteConfig.creator.fullName,
         avatar: siteConfig.creator.avatar,

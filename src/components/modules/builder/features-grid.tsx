@@ -34,9 +34,9 @@ export const FeaturesGrid = ({ title, subtitle, features, columns = 3 }: Feature
             "grid-cols-1 md:grid-cols-2 lg:grid-cols-4": columns === 4,
           })}
         >
-          {features.map((feature, index) => (
+          {features.map((feature) => (
             <div
-              key={index}
+              key={feature.title}
               className="p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow"
             >
               {feature.icon && (

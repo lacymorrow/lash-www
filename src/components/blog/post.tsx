@@ -22,8 +22,8 @@ export const BlogPostComponent = ({ post, children }: BlogPostProps) => {
 	const displayDate = formatDateForBlog(post.publishedAt);
 
 	// Determine which authors to display (prefer new system)
-	const authorsToDisplay = post.authorObjects || post.authors;
-	const singleAuthor = post.authorObject || (post.author ? { name: post.author } : null);
+	const authorsToDisplay = post.authorObjects ?? post.authors;
+	const singleAuthor = post.authorObject ?? (post.author ? { name: post.author } : null);
 
 	return (
 		<article className="md:flex">

@@ -96,8 +96,8 @@ export const LoaderLines = ({
       {...props}
     >
       <div className="loader-inner">
-        {[...Array(5)].map((_, i) => (
-          <div key={i} className="loader-line-wrap">
+        {Array.from({ length: 5 }, (_, i) => `loader-line-${i}`).map((id) => (
+          <div key={id} className="loader-line-wrap">
             <div className="loader-line" />
           </div>
         ))}

@@ -40,6 +40,7 @@ export const GitHubConnectDialog = ({
 	// Effect to update input field when dialog opens or username changes
 	useEffect(() => {
 		if (dialogOpen) {
+			// eslint-disable-next-line react-hooks/set-state-in-effect -- the prop seeds an editable input; resetting it on change needs a key on the parent
 			setUsernameInput(githubUsername || "");
 		}
 	}, [dialogOpen, githubUsername]);

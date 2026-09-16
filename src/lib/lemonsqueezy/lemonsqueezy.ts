@@ -213,7 +213,7 @@ export const getLemonSqueezyPaymentStatus = async (userId: string): Promise<bool
     const userOrders =
       orders.data?.data?.filter((order) => {
         const attributes = order.attributes as LemonSqueezyOrderAttributes;
-        const customData = attributes.custom_data || {};
+        const customData = attributes.custom_data ?? {};
 
         // Check if either the user ID matches or the email matches
         return (
@@ -338,7 +338,7 @@ export const hasUserPurchasedProduct = async (
     const userOrders =
       orders.data?.data?.filter((order) => {
         const attributes = order.attributes as LemonSqueezyOrderAttributes;
-        const customData = attributes.custom_data || {};
+        const customData = attributes.custom_data ?? {};
 
         // Check if either the user ID matches or the email matches
         return (
@@ -455,7 +455,7 @@ export const getUserPurchasedProducts = async (userId: string): Promise<any[]> =
     const userOrders =
       orders.data?.data?.filter((order) => {
         const attributes = order.attributes as LemonSqueezyOrderAttributes;
-        const customData = attributes.custom_data || {};
+        const customData = attributes.custom_data ?? {};
 
         // Check if either the user ID matches or the email matches
         return (

@@ -27,7 +27,9 @@ export async function generateStaticParams() {
   const authorIds = new Set<string>();
 
   // Add author IDs from active authors
-  activeAuthors.forEach((author) => authorIds.add(author.id));
+  for (const author of activeAuthors) {
+    authorIds.add(author.id);
+  }
 
   // Add legacy author names that have posts
   posts.forEach((post) => {
@@ -39,7 +41,9 @@ export async function generateStaticParams() {
       authorIds.add(post.authorObject.id);
     }
     if (post.authorObjects) {
-      post.authorObjects.forEach((author) => authorIds.add(author.id));
+      for (const author of post.authorObjects) {
+        authorIds.add(author.id);
+      }
     }
   });
 
@@ -70,7 +74,7 @@ export default async function AuthorPage({ params }: Props) {
   // Filter posts by author (support both legacy and new systems)
   const authorPosts = posts.filter((post) => {
     // Check new author system first
-    if (post.authorObject && post.authorObject.id === authorId) {
+    if (post.authorObject?.id === authorId) {
       return true;
     }
     if (post.authorObjects?.some((a) => a.id === authorId)) {
@@ -88,7 +92,7 @@ export default async function AuthorPage({ params }: Props) {
     return (
       <div className="container py-8">
         <h1 className="text-3xl font-bold mb-4">Author Not Found</h1>
-        <p className="text-muted-foreground mb-4">No posts found for author "{displayName}".</p>
+        <p className="text-muted-foreground mb-4">No posts found for author &quot;{displayName}&quot;.</p>
         <Link href={routes.blog} className="text-blue-600 hover:text-blue-800 underline">
           ← Back to Blog
         </Link>

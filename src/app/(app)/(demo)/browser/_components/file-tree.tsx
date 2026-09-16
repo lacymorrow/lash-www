@@ -38,7 +38,7 @@ const useTree = () => {
   return context;
 };
 
-interface TreeViewComponentProps extends HTMLAttributes<HTMLDivElement> {}
+type TreeViewComponentProps = HTMLAttributes<HTMLDivElement>;
 
 type Direction = "rtl" | "ltr" | undefined;
 

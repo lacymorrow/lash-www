@@ -153,7 +153,7 @@ export const Footer: FC<FooterProps> = ({
                 .filter((el) => el.type === "group")
                 .map((element) => {
                   // We already filtered, so this cast is safe
-                  const group = (element as { type: "group"; content: FooterGroup }).content;
+                  const group = (element).content;
                   return (
                     <AccordionItem value={group.header.label} key={uuid()}>
                       <AccordionTrigger className="font-semibold">

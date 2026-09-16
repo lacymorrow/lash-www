@@ -36,6 +36,7 @@ export const TextGenerateEffect = ({
         {wordsArray.map((word, idx) => {
           return (
             <motion.span
+              // biome-ignore lint/suspicious/noArrayIndexKey: words repeat within a sentence, so the index disambiguates them
               key={word + idx}
               className="text-black opacity-0 dark:text-white"
               style={{

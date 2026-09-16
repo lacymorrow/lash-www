@@ -47,7 +47,7 @@ export const BackgroundSpacetime: React.FC = () => {
           </linearGradient>
         </defs>
         {grid.map((point, index) => (
-          <React.Fragment key={`grid-${index}`}>
+          <React.Fragment key={`grid-${point.x}-${point.y}`}>
             {point.x < cols && (
               <motion.line
                 x1={point.x * gridSize}

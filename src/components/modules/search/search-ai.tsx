@@ -31,6 +31,7 @@ import { routes } from "@/config/routes";
 import { siteConfig } from "@/config/site-config";
 import { useAutoResizeTextarea } from "@/hooks/use-auto-resize-textarea";
 import { cn } from "@/lib/utils";
+import { useMounted } from "@/hooks/use-mounted";
 
 const MIN_HEIGHT = 48;
 const MAX_HEIGHT = 120;
@@ -110,7 +111,8 @@ export const SearchAi = ({
   const [selectedSuggestion, setSelectedSuggestion] = React.useState<string | null>(null);
   const [isAIResponseExpanded, setIsAIResponseExpanded] = React.useState(true);
   const [isSearchResultsExpanded, setIsSearchResultsExpanded] = React.useState(true);
-  const [isClient, setIsClient] = React.useState(false);
+  // Hydration flag. useMounted reads it without a state update in an effect.
+  const isClient = useMounted();
   const [lastSubmittedQuery, setLastSubmittedQuery] = React.useState<string>("");
 
   const { textareaRef, adjustHeight } = useAutoResizeTextarea({
@@ -241,9 +243,6 @@ export const SearchAi = ({
     []
   );
 
-  React.useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const handleModalToggle = () => {
     setOpen(!open);

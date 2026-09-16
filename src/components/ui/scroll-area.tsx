@@ -89,6 +89,7 @@ const ScrollArea = React.forwardRef<
     return (
       <ScrollAreaContext.Provider value={isTouch}>
         {isTouch ? (
+          // biome-ignore lint/a11y/useSemanticElements: role="group" carries the aria-roledescription for the touch scroll area; <fieldset> would be wrong here
           <div
             ref={ref}
             role="group"
@@ -101,6 +102,7 @@ const ScrollArea = React.forwardRef<
               ref={viewportRef}
               data-slot="scroll-area-viewport"
               className={cn("size-full overflow-auto rounded-[inherit]", viewportClassName)}
+              // biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region has to be focusable or it cannot be scrolled from the keyboard
               tabIndex={0}
             >
               {children}

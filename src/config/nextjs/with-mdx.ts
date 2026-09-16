@@ -23,5 +23,5 @@ export default function withMDXConfig(nextConfig: NextConfig): NextConfig {
 			rehypePlugins: [],
 		},
 	});
-	return withMDX(nextConfig) as NextConfig;
+	return withMDX(nextConfig);
 }

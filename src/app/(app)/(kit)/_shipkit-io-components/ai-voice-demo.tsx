@@ -70,7 +70,7 @@ function AudioVisualizer({ stream, simulate = false }: AudioVisualizerProps) {
 
     contextRef.current = ctx;
 
-    const setupAudio = async () => {
+    const setupAudio = () => {
       if (stream) {
         try {
           const context = createAudioContext();
@@ -186,7 +186,7 @@ export function AIVoiceDemo() {
   const audioChunks = useRef<Blob[]>([]);
   const audioContextRef = useRef<AudioContext | null>(null);
 
-  const initializeWorker = useCallback(async () => {
+  const initializeWorker = useCallback(() => {
     try {
       if (!worker.current && hasAcceptedPermissions) {
         setIsLoadingModel(true);
@@ -242,11 +242,13 @@ export function AIVoiceDemo() {
   }, [hasAcceptedPermissions]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- worker setup and stream folding both land after an await or a browser capability check
     void initializeWorker();
   }, [initializeWorker]);
 
   useEffect(() => {
     if (currentStream && !isProcessing) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- worker setup and stream folding both land after an await or a browser capability check
       setTranscript((prev) => {
         const newTranscript = prev ? `${prev}\n${currentStream}` : currentStream;
         return newTranscript;
@@ -316,6 +318,7 @@ export function AIVoiceDemo() {
           setError("Failed to access microphone. Please ensure you have granted permission.");
         });
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- worker setup and stream folding both land after an await or a browser capability check
       setError("Voice recognition is not supported in your browser.");
     }
 
@@ -325,7 +328,7 @@ export function AIVoiceDemo() {
     };
   }, [hasAcceptedPermissions]);
 
-  const startRecording = async () => {
+  const startRecording = () => {
     if (!isWebGPUAvailable) {
       setError("Your browser does not support WebGPU, which is required for voice recognition.");
       return;
@@ -354,8 +357,8 @@ export function AIVoiceDemo() {
         <div className="space-y-4 text-center">
           <h2 className="text-lg font-semibold">Browser Not Supported</h2>
           <p className="text-sm text-muted-foreground">
-            Your browser doesn't support WebGPU, which is required for voice recognition. Please try
-            using Chrome Canary or another WebGPU-enabled browser.
+            Your browser doesn&apos;t support WebGPU, which is required for voice recognition.
+            Please try using Chrome Canary or another WebGPU-enabled browser.
           </p>
         </div>
       </Card>

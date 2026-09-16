@@ -77,7 +77,7 @@ export class BaseService<T extends PgTable> {
       .where(and(...conditions.filter((c): c is SQL<unknown> => !!c)))
       .limit(1);
 
-    return record || null;
+    return record ?? null;
   }
 
   /**
@@ -140,7 +140,7 @@ export class BaseService<T extends PgTable> {
       .where(eq(idColumn, id))
       .returning();
 
-    return record || null;
+    return record ?? null;
   }
 
   /**

@@ -113,7 +113,9 @@ function StepPreview({ step, direction }: { step: Step; direction: 1 | -1 }) {
                 className="object-cover"
               />
             ) : (
-              <video src={step.media.src} controls className="h-full w-full object-cover" />
+              <video src={step.media.src} controls className="h-full w-full object-cover">
+                <track kind="captions" />
+              </video>
             )}
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
@@ -276,7 +278,7 @@ function StepContent({
           >
             {steps.map((step, index) => (
               <StepTab
-                key={index}
+                key={step.title}
                 step={step}
                 isActive={currentStep === index}
                 onClick={() => onStepSelect(index)}
@@ -302,7 +304,9 @@ function StepContent({
                   src={steps[currentStep]?.media?.src}
                   controls
                   className="h-full w-full object-cover"
-                />
+                >
+                  <track kind="captions" />
+                </video>
               )}
             </AspectRatio>
           )}
@@ -422,11 +426,6 @@ export function IntroDisclosure({
     }
   }, [initialCompletedSteps]);
 
-  // Early return if feature should be hidden
-  if (!isVisible || !open) {
-    return null;
-  }
-
   const handleNext = () => {
     setDirection(1);
     setCompletedSteps((prev) => (prev.includes(currentStep) ? prev : [...prev, currentStep]));
@@ -488,6 +487,11 @@ export function IntroDisclosure({
   };
 
   const { handleDragEnd } = useSwipe(handleSwipe);
+
+  // Early return if feature should be hidden. It has to sit below every hook call.
+  if (!isVisible || !open) {
+    return null;
+  }
 
   if (isDesktop) {
     return (
@@ -552,7 +556,7 @@ export function IntroDisclosure({
               <div className="grid grid-cols-2 gap-2 mb-6">
                 {steps.map((step, index) => (
                   <StepTab
-                    key={index}
+                    key={step.title}
                     step={step}
                     isActive={currentStep === index}
                     onClick={() => handleStepSelect(index)}

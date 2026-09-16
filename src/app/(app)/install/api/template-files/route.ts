@@ -16,7 +16,7 @@ async function getDirectoryContents(directoryPath: string) {
     // Check cache first
     if (directoryCache.has(directoryPath)) {
       console.log(`Using cached directory listing for: ${directoryPath}`);
-      return directoryCache.get(directoryPath) || [];
+      return directoryCache.get(directoryPath) ?? [];
     }
 
     // Use the specific template directory instead of potentially the entire project

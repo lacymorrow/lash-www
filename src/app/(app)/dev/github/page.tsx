@@ -32,6 +32,7 @@ export default function DevToolsGitHubPage() {
 
   // Effect to update input field when username changes (e.g., after connect/disconnect)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the prop seeds an editable input; resetting it on change needs a key on the parent
     setUsernameInput(githubUsername || "");
   }, [githubUsername]);
 

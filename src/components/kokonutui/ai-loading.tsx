@@ -129,7 +129,7 @@ export default function AILoadingState({
   className,
 }: AILoadingStateProps) {
   const [sequenceIndex, setSequenceIndex] = useState(0);
-  const [visibleLines, setVisibleLines] = useState<Array<{ text: string; number: number }>>([]);
+  const [visibleLines, setVisibleLines] = useState<{ text: string; number: number }[]>([]);
   const [scrollPosition, setScrollPosition] = useState(0);
   const codeContainerRef = useRef<HTMLDivElement>(null);
   const lineHeight = 28;
@@ -139,7 +139,7 @@ export default function AILoadingState({
 
   useEffect(() => {
     if (!currentSequence) return;
-    const initialLines: Array<{ text: string; number: number }> = [];
+    const initialLines: { text: string; number: number }[] = [];
     for (let i = 0; i < Math.min(5, totalLines); i++) {
       const text = currentSequence.lines[i];
       if (text) {
@@ -149,6 +149,7 @@ export default function AILoadingState({
         });
       }
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- restarts the typing animation when the sequence changes
     setVisibleLines(initialLines);
     setScrollPosition(0);
   }, [sequenceIndex, currentSequence, totalLines]);

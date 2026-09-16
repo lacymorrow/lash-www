@@ -43,16 +43,16 @@ interface ParticlesProps {
   vy?: number;
 }
 function hexToRgb(hex: string): number[] {
-  hex = hex.replace("#", "");
+  const stripped = hex.replace("#", "");
+  const expanded =
+    stripped.length === 3
+      ? stripped
+          .split("")
+          .map((char) => char + char)
+          .join("")
+      : stripped;
 
-  if (hex.length === 3) {
-    hex = hex
-      .split("")
-      .map((char) => char + char)
-      .join("");
-  }
-
-  const hexInt = Number.parseInt(hex, 16);
+  const hexInt = Number.parseInt(expanded, 16);
   const red = (hexInt >> 16) & 255;
   const green = (hexInt >> 8) & 255;
   const blue = hexInt & 255;

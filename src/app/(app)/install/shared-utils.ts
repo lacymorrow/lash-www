@@ -198,7 +198,7 @@ export async function getDirectoryEntries(directoryPath = ""): Promise<any[]> {
 
     // Check cache first
     if (directoryListingCache.has(normalizedPath)) {
-      return directoryListingCache.get(normalizedPath) || [];
+      return directoryListingCache.get(normalizedPath) ?? [];
     }
 
     const response = await fetch(

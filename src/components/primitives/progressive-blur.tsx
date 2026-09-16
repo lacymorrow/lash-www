@@ -1,12 +1,12 @@
 import React from "react";
 
-type ProgressiveBlurProps = {
+interface ProgressiveBlurProps {
   className?: string;
   backgroundColor?: string;
   position?: "top" | "bottom";
   height?: string;
   blurAmount?: string;
-};
+}
 
 const ProgressiveBlur = ({
   className = "",
@@ -52,8 +52,8 @@ const Skiper41 = () => {
         </div>
 
         <div className="mt-24 w-full max-w-lg space-y-20 px-5 text-justify">
-          {Array.from({ length: 10 }).map((_, index) => (
-            <div key={index}>
+          {Array.from({ length: 10 }, (_, i) => `lorem-${i}`).map((id) => (
+            <div key={id}>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati, reiciendis eum
               vitae nostrum, temporibus repudiandae voluptatibus, natus iure ipsa velit odit
               quibusdam illum. Quaerat cumque laudantium libero reprehenderit perferendis quo nulla

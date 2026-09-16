@@ -121,6 +121,7 @@ export const providers: NextAuthConfig["providers"] = [
               placeholder: "Enter your name to continue",
             },
           },
+          // eslint-disable-next-line @typescript-eslint/require-await -- the Auth.js authorize callback signature is async
           async authorize(credentials) {
             if (!credentials?.name || typeof credentials.name !== "string") {
               console.error("Missing name in guest credentials");

@@ -82,7 +82,7 @@ export const defaultAuthor: BlogAuthor = blogAuthors["lacy-morrow"]!;
  * @returns The author object or default author if not found
  */
 export function getAuthorById(authorId: string): BlogAuthor {
-	return blogAuthors[authorId] || defaultAuthor;
+	return blogAuthors[authorId] ?? defaultAuthor;
 }
 
 /**
@@ -95,7 +95,7 @@ export function getAuthorByName(name: string): BlogAuthor {
 	const author = Object.values(blogAuthors).find(
 		(author) => author.name.toLowerCase() === name.toLowerCase()
 	);
-	return author || defaultAuthor;
+	return author ?? defaultAuthor;
 }
 
 /**
@@ -157,7 +157,7 @@ export const authorUtils = {
 	 * Get author's social links
 	 */
 	getSocialLinks: (author: BlogAuthor) => {
-		const links: Array<{ platform: string; url: string; handle: string }> = [];
+		const links: { platform: string; url: string; handle: string }[] = [];
 
 		if (author.twitter) {
 			links.push({

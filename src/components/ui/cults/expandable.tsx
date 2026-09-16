@@ -290,6 +290,7 @@ const ExpandableContent = React.forwardRef<
                 >
                   {React.Children.map(children as React.ReactNode, (child, index) => (
                     <motion.div
+                      // biome-ignore lint/suspicious/noArrayIndexKey: React.Children.map gives no stable identity for arbitrary children
                       key={index}
                       variants={{
                         hidden: { opacity: 0, y: 20 },
@@ -420,9 +421,24 @@ ExpandableCard.displayName = "ExpandableCard";
 // I'm telling you we just have to expand 🤌💵
 const ExpandableTrigger = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ children, ...props }, ref) => {
-    const { toggleExpand } = useExpandable();
+    const { isExpanded, toggleExpand } = useExpandable();
     return (
-      <div ref={ref} onClick={toggleExpand} className="cursor-pointer" {...props}>
+      // biome-ignore lint/a11y/useSemanticElements: the trigger wraps a whole card, which can itself contain buttons and links, so a real <button> would nest interactive content
+      <div
+        ref={ref}
+        role="button"
+        tabIndex={0}
+        aria-expanded={isExpanded}
+        onClick={toggleExpand}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            toggleExpand();
+          }
+        }}
+        className="cursor-pointer"
+        {...props}
+      >
         {children}
       </div>
     );

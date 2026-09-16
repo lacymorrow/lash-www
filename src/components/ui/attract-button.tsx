@@ -81,9 +81,9 @@ export function AttractButton({
       onTouchEnd={handleInteractionEnd}
       {...props}
     >
-      {particles.map((_, index) => (
+      {particles.map((particle, index) => (
         <motion.div
-          key={index}
+          key={particle.id}
           custom={index}
           initial={{ x: particles[index]?.x || 0, y: particles[index]?.y || 0 }}
           animate={particlesControl}

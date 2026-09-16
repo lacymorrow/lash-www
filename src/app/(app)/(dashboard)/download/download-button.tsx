@@ -25,7 +25,7 @@ export const DownloadButton = ({ userId }: DownloadButtonProps) => {
 
       {downloadUrl && (
         <p className="text-sm text-muted-foreground">
-          Download link generated! If it doesn't open automatically,
+          Download link generated! If it doesn&apos;t open automatically,
           <a
             href={downloadUrl}
             className={cn(buttonVariants({ variant: "link" }), "ml-1")}

@@ -196,7 +196,7 @@ export const AIRealtimeWhisperWebGPU = () => {
       {
         <div className="h-full overflow-auto scrollbar-thin flex justify-center items-center flex-col relative">
           <div className="flex flex-col items-center mb-1 max-w-[400px] text-center">
-            <img src="/logo.png" width="50%" height="auto" className="block" />
+            <img src="/logo.png" alt="" width="50%" height="auto" className="block" />
             <h1 className="text-4xl font-bold mb-1">Whisper WebGPU</h1>
             <h2 className="text-xl font-semibold">Real-time in-browser speech recognition</h2>
           </div>
@@ -283,8 +283,8 @@ export const AIRealtimeWhisperWebGPU = () => {
             {status === "loading" && (
               <div className="w-full max-w-[500px] text-left mx-auto p-4">
                 <p className="text-center">{loadingMessage}</p>
-                {progressItems.map(({ file, progress, total }, i) => (
-                  <Progress key={i} text={file} percentage={progress} total={total} />
+                {progressItems.map(({ file, progress, total }) => (
+                  <Progress key={file} text={file} percentage={progress} total={total} />
                 ))}
               </div>
             )}

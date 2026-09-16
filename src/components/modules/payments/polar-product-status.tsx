@@ -68,53 +68,57 @@ export function PolarProductStatus({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Memoize the check function to prevent unnecessary re-renders
-  const checkPurchaseStatus = useCallback(async () => {
-    if (!session?.user?.id) {
+  /*
+   * The check lives inside the effect. As a useCallback it was memoised by hand,
+   * the compiler could not preserve that memoisation, and nothing else called it.
+   */
+  useEffect(() => {
+    const userId = session?.user?.id;
+    if (!userId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- there is nothing to await when the user is signed out
       setIsLoading(false);
       return;
     }
 
-    // Check cache first
-    const cacheKey = `${session.user.id}-${productId}`;
+    const cacheKey = `${userId}-${productId}`;
     const cached = productStatusCache.get(cacheKey);
     const now = Date.now();
 
     if (cached && now - cached.timestamp < CACHE_DURATION) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- a cache hit resolves without a request
       setIsPurchased(cached.data);
       setIsLoading(false);
       return;
     }
 
-    try {
-      setIsLoading(true);
-      const result = await checkUserPurchasedProduct(productId, "polar");
+    let cancelled = false;
 
-      if (result.success) {
-        // Cache the result
-        productStatusCache.set(cacheKey, {
-          data: result.purchased,
-          timestamp: now,
-        });
+    const run = async () => {
+      try {
+        const result = await checkUserPurchasedProduct(productId, "polar");
+        if (cancelled) return;
 
-        setIsPurchased(result.purchased);
-      } else {
-        setError(result.message || "Failed to check purchase status");
+        if (result.success) {
+          productStatusCache.set(cacheKey, { data: result.purchased, timestamp: now });
+          setIsPurchased(result.purchased);
+        } else {
+          setError(result.message || "Failed to check purchase status");
+        }
+      } catch (err) {
+        if (cancelled) return;
+        setError("An error occurred while checking purchase status");
+        console.error(err);
+      } finally {
+        if (!cancelled) setIsLoading(false);
       }
-    } catch (err) {
-      setError("An error occurred while checking purchase status");
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [session?.user?.id, productId]);
+    };
 
-  // Check if user has purchased this product
-  useEffect(() => {
-    if (session?.user?.id) {
-      checkPurchaseStatus();
-    }
-  }, [session?.user?.id, productId, checkPurchaseStatus]);
+    void run();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [session?.user?.id, productId]);
 
   const handlePurchase = async () => {
     if (!session?.user?.id) {
@@ -182,7 +186,9 @@ export function PolarProductStatus({
       <CardContent>
         <div className="space-y-2">
           {productPrice && <p className="font-semibold">{productPrice}</p>}
-          <p className="text-sm text-muted-foreground">You haven't purchased this product yet.</p>
+          <p className="text-sm text-muted-foreground">
+            You haven&apos;t purchased this product yet.
+          </p>
         </div>
       </CardContent>
       <CardFooter>

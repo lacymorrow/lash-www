@@ -20,15 +20,11 @@ interface VercelConnectButtonProps {
 
 export const VercelConnectButton = ({ className, user }: VercelConnectButtonProps) => {
 	const [isLoading, setIsLoading] = useState(false);
-	const [isConnected, setIsConnected] = useState(false);
 	const { update: updateSession } = useSession();
 	const { toast: legacyToast } = useToast();
 
-	useEffect(() => {
-		// Check if the user has a Vercel account
-		const hasVercelAccount = user?.accounts?.some((account) => account.provider === "vercel");
-		setIsConnected(!!hasVercelAccount);
-	}, [user]);
+	// Derived from the prop rather than mirrored into state, so it cannot go stale.
+	const isConnected = !!user?.accounts?.some((account) => account.provider === "vercel");
 
 	if (!process.env.NEXT_PUBLIC_VERCEL_INTEGRATION_SLUG) {
 		return null;

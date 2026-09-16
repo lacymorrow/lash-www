@@ -80,10 +80,10 @@ export function SettingsDialog() {
                     {data.nav.map((item) => (
                       <SidebarMenuItem key={item.name}>
                         <SidebarMenuButton asChild isActive={item.name === "Messages & media"}>
-                          <a href="#">
+                          <button type="button">
                             <item.icon />
                             <span>{item.name}</span>
-                          </a>
+                          </button>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     ))}
@@ -109,8 +109,8 @@ export function SettingsDialog() {
               </div>
             </header>
             <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 pt-0">
-              {Array.from({ length: 10 }).map((_, i) => (
-                <div key={i} className="aspect-video max-w-3xl rounded-xl bg-muted/50" />
+              {Array.from({ length: 10 }, (_, i) => `content-placeholder-${i}`).map((id) => (
+                <div key={id} className="aspect-video max-w-3xl rounded-xl bg-muted/50" />
               ))}
             </div>
           </main>

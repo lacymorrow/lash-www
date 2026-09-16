@@ -167,7 +167,7 @@ buildTimeFeatures.DEVTOOLS_REACT_GRAB_ENABLED =
 
 // ======== AI Provider Detection (for React Grab) =========
 
-type AiProviderMeta = { id: "claude-code" | "codex" | "gemini"; env: string };
+interface AiProviderMeta { id: "claude-code" | "codex" | "gemini"; env: string }
 
 const AI_PROVIDER_CANDIDATES: AiProviderMeta[] = [
 	{ id: "claude-code", env: "ANTHROPIC_API_KEY" },

@@ -39,6 +39,7 @@ export default function SettingsPage() {
         name: session.user.name ?? "",
         bio: session.user.bio ?? "",
       };
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- the session seeds an editable form; resetting it on change needs a key on the parent
       setFormData(initialData);
     }
   }, [session?.user]);

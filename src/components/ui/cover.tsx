@@ -34,6 +34,7 @@ export const Cover = ({
   }, [ref.current]);
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: hover only starts the beam animation
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -88,7 +89,7 @@ export const Cover = ({
       </AnimatePresence>
       {beamPositions.map((position, index) => (
         <Beam
-          key={index}
+          key={`beam-${position}`}
           hovered={hovered}
           duration={Math.random() * 2 + 1}
           delay={Math.random() * 2 + 1}

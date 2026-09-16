@@ -24,6 +24,7 @@ export const BlogAuthors = ({ authors }: BlogAuthorsProps) => {
   if (!authors || authors.length === 0) return null;
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: an avatar stack is a labelled group, not a <fieldset>
     <div className="flex -space-x-2 relative z-0 mt-6" role="group" aria-label="Article authors">
       {authors.map((author, i) => {
         const isNewAuthor = isBlogAuthor(author);

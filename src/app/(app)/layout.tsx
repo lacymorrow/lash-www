@@ -52,6 +52,7 @@ export default async function Layout({
       <head>
         <script
           type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD built from build-time site config, and a <script type="application/ld+json"> has no other way to carry its body
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",

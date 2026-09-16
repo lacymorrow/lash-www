@@ -17,9 +17,7 @@ let containerManagerInstance: ContainerManager | null = null;
 
 // Get or create the container manager instance
 function getContainerManager(): ContainerManager {
-  if (!containerManagerInstance) {
-    containerManagerInstance = new ContainerManager();
-  }
+  containerManagerInstance ??= new ContainerManager();
   return containerManagerInstance;
 }
 
@@ -62,7 +60,7 @@ export const ShadcnCommand = ({
   const makeCommand = useCallback(() => {
     const parts = command.split(" ");
     // If the command already contains npx shadcn@latest, just return it
-    if (parts[0] === "npx" && parts.length > 1 && parts[1] && parts[1].includes("shadcn")) {
+    if (parts[0] === "npx" && parts.length > 1 && parts[1]?.includes("shadcn")) {
       return command;
     }
     // Otherwise, extract just the component name or command parts
@@ -70,22 +68,6 @@ export const ShadcnCommand = ({
     const action = parts.length > 1 ? parts[parts.length - 2] : "add";
     return `npx shadcn@latest ${action} ${componentPart}`;
   }, [command]);
-
-  // Auto-run when container becomes ready
-  useEffect(() => {
-    if (autoRun && containerReady && webContainerSupported && !hasAutoRun.current) {
-      hasAutoRun.current = true;
-      runCommand();
-    }
-
-    // If a command is queued and container becomes ready, execute it
-    if (containerReady && queuedCommand.current) {
-      const pendingCommand = queuedCommand.current;
-      queuedCommand.current = null;
-      setIsCommandQueued(false);
-      executeCommand(pendingCommand);
-    }
-  }, [containerReady, webContainerSupported, autoRun]);
 
   // Update the useEffect for showing logs during web container loading
   useEffect(() => {
@@ -111,7 +93,7 @@ export const ShadcnCommand = ({
 
           // Write to terminal if available
           if (terminalRef.current?.terminal) {
-            terminalRef.current.write(`${window.webContainerLogs}`);
+            terminalRef.current.write(JSON.stringify(window.webContainerLogs ?? []));
           }
         }
       }, TERMINAL_REFRESH_INTERVAL); // Update more frequently for smoother animations
@@ -324,6 +306,23 @@ export const ShadcnCommand = ({
     }
   };
 
+  // Auto-run when the container becomes ready. This has to sit below runCommand
+  // and executeCommand, which it calls.
+  useEffect(() => {
+    if (autoRun && containerReady && webContainerSupported && !hasAutoRun.current) {
+      hasAutoRun.current = true;
+      runCommand();
+    }
+
+    // If a command is queued and container becomes ready, execute it
+    if (containerReady && queuedCommand.current) {
+      const pendingCommand = queuedCommand.current;
+      queuedCommand.current = null;
+      setIsCommandQueued(false);
+      executeCommand(pendingCommand);
+    }
+  }, [containerReady, webContainerSupported, autoRun]);
+
   return (
     <div className="w-full">
       <div className="space-y-4">
@@ -424,7 +423,7 @@ export const ShadcnCommand = ({
               </div>
             </TabsContent>
             <TabsContent value="files" className="mt-2 max-h-[300px] overflow-auto">
-              <FileChangeDisplay changedFiles={changedFiles} onDownloadAll={() => {}} />
+              <FileChangeDisplay changedFiles={changedFiles} />
             </TabsContent>
           </Tabs>
         )}

@@ -73,8 +73,8 @@ export default function AuthorPageLoading() {
 
       {/* Posts List */}
       <div className="grid gap-6">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <Card key={i} className="transition-colors">
+        {Array.from({ length: 3 }, (_, i) => `post-skeleton-${i}`).map((id) => (
+          <Card key={id} className="transition-colors">
             <CardHeader>
               <div className="flex flex-wrap gap-2 mb-2">
                 <Skeleton className="h-6 w-16" />

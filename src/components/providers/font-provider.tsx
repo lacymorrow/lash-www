@@ -8,7 +8,7 @@ import type { HTMLAttributes } from "react";
 import { fontSans, fontSerif } from "@/config/fonts";
 import { cn } from "@/lib/utils";
 
-interface FontProviderProps extends HTMLAttributes<HTMLDivElement> {}
+type FontProviderProps = HTMLAttributes<HTMLDivElement>;
 
 export function FontProvider({ children, className, ...props }: FontProviderProps) {
   return (

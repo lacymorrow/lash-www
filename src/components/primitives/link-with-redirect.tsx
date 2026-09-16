@@ -23,17 +23,17 @@ export const LinkWithRedirect = ({
 	...props
 }: LinkWithRedirectProps) => {
 	const pathname = usePathname();
-	if (!redirectTo && pathname) {
-		redirectTo = pathname;
-	}
+	// Reassigning the prop itself hides where the value came from, and React's
+	// compiler treats props as frozen.
+	const resolvedRedirectTo = redirectTo || pathname;
 
 	// Create a new URL object with the redirectTo path
 	const nextUrl = useMemo(() => {
-		if (redirectTo && typeof window !== "undefined") {
-			return new URL(redirectTo, window.location.origin);
+		if (resolvedRedirectTo && typeof window !== "undefined") {
+			return new URL(resolvedRedirectTo, window.location.origin);
 		}
 		return undefined;
-	}, [redirectTo]);
+	}, [resolvedRedirectTo]);
 
 	const params = new URLSearchParams();
 	params.set(SEARCH_PARAM_KEYS.nextUrl, String(nextUrl));

@@ -28,6 +28,7 @@ import { DialogTitle } from "@/components/ui/dialog";
 import { ShortcutAction } from "@/config/keyboard-shortcuts";
 import { siteConfig } from "@/config/site-config";
 import { cn } from "@/lib/utils";
+import { useMounted } from "@/hooks/use-mounted";
 
 export interface SearchMenuProps extends DialogProps {
   /**
@@ -89,7 +90,8 @@ export function SearchMenu({
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const { setTheme } = useTheme();
-  const [isClient, setIsClient] = React.useState(false);
+  // Hydration flag. useMounted reads it without a state update in an effect.
+  const isClient = useMounted();
 
   useKeyboardShortcut(
     ShortcutAction.OPEN_SEARCH,
@@ -114,9 +116,6 @@ export function SearchMenu({
     command();
   }, []);
 
-  React.useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   return (
     <>

@@ -18,14 +18,11 @@ import {
 import { routes } from "@/config/routes";
 import { SEARCH_PARAM_KEYS } from "@/config/search-param-keys";
 import { cn } from "@/lib/utils";
+import { useMounted } from "@/hooks/use-mounted";
 
 // Simple client-only wrapper component
 const ClientOnly = ({ children }: { children: React.ReactNode }) => {
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
+  const hasMounted = useMounted();
 
   if (!hasMounted) {
     return null;

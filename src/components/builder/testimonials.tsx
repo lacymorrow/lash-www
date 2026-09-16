@@ -41,6 +41,7 @@ export const Testimonials = ({ title, subtitle, testimonials }: TestimonialsProp
 	React.useEffect(() => {
 		if (!emblaApi) return;
 
+		// eslint-disable-next-line react-hooks/set-state-in-effect -- embla emits no event for its initial slide, so the first read has to be manual
 		onSelect(emblaApi);
 		emblaApi.on("select", onSelect);
 		emblaApi.on("reInit", onSelect);
@@ -59,8 +60,8 @@ export const Testimonials = ({ title, subtitle, testimonials }: TestimonialsProp
 				<div className="relative max-w-4xl mx-auto">
 					<div className="overflow-hidden" ref={emblaRef}>
 						<div className="flex">
-							{testimonials.map((testimonial, index) => (
-								<div key={index} className="flex-[0_0_100%] min-w-0 pl-4 relative">
+							{testimonials.map((testimonial) => (
+								<div key={testimonial.author} className="flex-[0_0_100%] min-w-0 pl-4 relative">
 									<div className="bg-white p-8 rounded-lg shadow-sm">
 										<div className="flex items-center mb-6">
 											{testimonial.image && (
@@ -77,7 +78,7 @@ export const Testimonials = ({ title, subtitle, testimonials }: TestimonialsProp
 												<div className="text-gray-600 text-sm">{testimonial.role}</div>
 											</div>
 										</div>
-										<blockquote className="text-lg text-gray-700">"{testimonial.quote}"</blockquote>
+										<blockquote className="text-lg text-gray-700">&quot;{testimonial.quote}&quot;</blockquote>
 									</div>
 								</div>
 							))}

@@ -59,6 +59,7 @@ export const OnboardingWizard = ({
   const [open, setOpen] = useState(!safeOnboardingState.completed);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the stored state seeds a dialog the user then opens and closes locally
     setOpen(!safeOnboardingState.completed);
   }, [safeOnboardingState.completed]);
 

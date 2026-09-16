@@ -125,7 +125,7 @@ export function WaitlistSocialProof() {
                     ))}
                   </div>
                   <p className="mb-6 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-                    "{testimonial.content}"
+                    &quot;{testimonial.content}&quot;
                   </p>
                   <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10">

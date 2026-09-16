@@ -425,6 +425,8 @@ const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
         } // When onSearch is provided, we don't want to filter the options. You can still override it.
         filter={commandFilter()}
       >
+        {/* biome-ignore lint/a11y/noStaticElementInteractions: clicking the field just forwards focus to the input inside it */}
+        {/* biome-ignore lint/a11y/useKeyWithClickEvents: the input inside the field is the keyboard target */}
         <div
           className={cn(
             "min-h-10 rounded-md border border-input text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",

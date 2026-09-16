@@ -77,6 +77,7 @@ export function DocsSearch() {
     try {
       const stored = localStorage.getItem(RECENT_SEARCHES_KEY);
       if (stored) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- reading storage during render would make the server and client markup disagree, and the highlighted row has to reset when the list changes
         setRecentSearches(JSON.parse(stored));
       }
     } catch (error) {
@@ -115,6 +116,7 @@ export function DocsSearch() {
 
   // Reset selection when items change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reading storage during render would make the server and client markup disagree, and the highlighted row has to reset when the list changes
     setSelectedIndex(0);
   }, [totalItems, query]);
 
@@ -331,7 +333,7 @@ export function DocsSearch() {
             )}
 
             {!isLoading && !error && hasSearched && results.length === 0 && (
-              <CommandEmpty>No results found for "{query}"</CommandEmpty>
+              <CommandEmpty>No results found for &quot;{query}&quot;</CommandEmpty>
             )}
 
             {/* Search Results */}

@@ -71,11 +71,13 @@ export default function ProjectsPage() {
   const [newProjectName, setNewProjectName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (selectedTeamId && session?.user?.id) {
-      void loadProjects();
-    }
-  }, [selectedTeamId, session?.user?.id]);
+  const mapProjects = (projectsToMap: any[]) => {
+    return projectsToMap.map((project) => ({
+      ...project,
+      teamId: project.teamId ?? selectedTeamId,
+      team: project.team ?? { id: selectedTeamId, name: "Default Team" },
+    }));
+  };
 
   const loadProjects = async () => {
     if (!selectedTeamId || !session?.user?.id || !session?.user?.name || !session?.user?.email)
@@ -109,13 +111,12 @@ export default function ProjectsPage() {
     }
   };
 
-  const mapProjects = (projectsToMap: any[]) => {
-    return projectsToMap.map((project) => ({
-      ...project,
-      teamId: project.teamId ?? selectedTeamId,
-      team: project.team ?? { id: selectedTeamId, name: "Default Team" },
-    }));
-  };
+  useEffect(() => {
+    if (selectedTeamId && session?.user?.id) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- the loader only sets state after its first await; the rule cannot see through an async function
+      void loadProjects();
+    }
+  }, [selectedTeamId, session?.user?.id]);
 
   const handleCreateProject = async () => {
     if (!session?.user?.id || !selectedTeamId) return;

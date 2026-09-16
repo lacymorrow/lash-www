@@ -49,6 +49,7 @@ export const GitHubConnectButton = ({ className }: { className?: string }) => {
   // Prefill input with current username when opening dialog
   useEffect(() => {
     if (dialogOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- the prop seeds an editable input; resetting it on change needs a key on the parent
       setUsernameInput(githubUsername || "");
     }
   }, [dialogOpen, githubUsername]);

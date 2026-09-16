@@ -194,7 +194,7 @@ export const PrivateRepoDeployButton = () => {
                     <span className="font-mono text-xs">{status.githubRepo?.name}</span>
                   </p>
                   <p className="text-sm">
-                    The Vercel import page should have opened in a new tab. If it didn't, click
+                    The Vercel import page should have opened in a new tab. If it didn&apos;t, click
                     below:
                   </p>
                   <Button
@@ -329,7 +329,7 @@ export const PrivateRepoDeployButton = () => {
                 {isDeploying ? "Deploying..." : "Deploy Shipkit"}
               </Button>
               <p className="text-xs text-center text-muted-foreground">
-                Make sure you've connected your GitHub and Vercel accounts in{" "}
+                Make sure you&apos;ve connected your GitHub and Vercel accounts in{" "}
                 <LinkWithTransition
                   href={routes.settings.account}
                   className="text-primary hover:underline"

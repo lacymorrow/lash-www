@@ -52,6 +52,8 @@
     "eslint.config.mjs",
     "next-env.d.ts",
     "**/*.ts",
+		// TypeScript's ** glob skips dot-directories, so .well-known needs naming
+		"src/app/.well-known/**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
     "**/*.js",

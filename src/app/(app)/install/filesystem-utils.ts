@@ -38,7 +38,7 @@ export function isEssentialPath(
   }
 
   // Check if it's in an essential directory
-  return essentialDirs.some((dir) => normalizedPath.startsWith(dir + "/"));
+  return essentialDirs.some((dir) => normalizedPath.startsWith(`${dir}/`));
 }
 
 /**

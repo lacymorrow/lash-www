@@ -184,8 +184,19 @@ function useToast() {
   if (!isBrowser) {
     return {
       toasts: [],
-      toast: () => ({ id: "", dismiss: () => {}, update: () => {} }),
-      dismiss: () => {},
+      // On the server there is no toast surface, so these stay no-ops.
+      toast: () => ({
+        id: "",
+        dismiss: () => {
+          /* no-op on the server */
+        },
+        update: () => {
+          /* no-op on the server */
+        },
+      }),
+      dismiss: () => {
+        /* no-op on the server */
+      },
     };
   }
 

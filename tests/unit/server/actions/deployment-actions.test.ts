@@ -1,3 +1,6 @@
+// biome-ignore-all lint/suspicious/noThenProperty: the Drizzle query builder is a thenable,
+// so the mocks have to expose then() to stand in for it
+
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import * as deploymentActions from "@/server/actions/deployment-actions";
 import { auth } from "@/server/auth";

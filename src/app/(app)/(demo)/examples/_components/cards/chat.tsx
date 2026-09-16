@@ -117,9 +117,9 @@ export function CardsChat() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {messages.map((message, index) => (
+            {messages.map((message) => (
               <div
-                key={index}
+                key={`${message.role}-${message.content}`}
                 className={cn(
                   "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
                   message.role === "user"

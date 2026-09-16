@@ -5,6 +5,14 @@ import { DocsSearchService } from "@/server/services/docs-search";
 import { ErrorService } from "@/server/services/error-service";
 import { rateLimitService, rateLimits } from "@/server/services/rate-limit-service";
 
+/**
+ * Rate-limit metadata is typed `unknown`, so it cannot go straight into a
+ * header. Take it only when it is already a number.
+ */
+function toCount(value: unknown, fallback: number): number {
+  return typeof value === "number" && Number.isFinite(value) ? value : fallback;
+}
+
 // Sanitize input to prevent prompt injection
 function sanitizeForPrompt(text: string): string {
   // Remove potential prompt injection patterns
@@ -71,9 +79,11 @@ export async function POST(req: Request) {
           {
             status: 429,
             headers: {
-              "X-RateLimit-Limit": String(error.metadata?.limit || aiSearchRateLimit.requests),
-              "X-RateLimit-Remaining": String(error.metadata?.remaining || 0),
-              "X-RateLimit-Reset": String(error.metadata?.reset || 0),
+              "X-RateLimit-Limit": String(
+                toCount(error.metadata?.limit, aiSearchRateLimit.requests)
+              ),
+              "X-RateLimit-Remaining": String(toCount(error.metadata?.remaining, 0)),
+              "X-RateLimit-Reset": String(toCount(error.metadata?.reset, 0)),
               "Retry-After": String(
                 Math.ceil(((error.metadata?.reset as number) || 0) - Date.now() / 1000)
               ),
@@ -192,9 +202,9 @@ export async function POST(req: Request) {
         {
           status: 429,
           headers: {
-            "X-RateLimit-Limit": String(error.metadata?.limit || 10),
-            "X-RateLimit-Remaining": String(error.metadata?.remaining || 0),
-            "X-RateLimit-Reset": String(error.metadata?.reset || 0),
+            "X-RateLimit-Limit": String(toCount(error.metadata?.limit, 10)),
+            "X-RateLimit-Remaining": String(toCount(error.metadata?.remaining, 0)),
+            "X-RateLimit-Reset": String(toCount(error.metadata?.reset, 0)),
             "Retry-After": String(
               Math.ceil(((error.metadata?.reset as number) || 0) - Date.now() / 1000)
             ),

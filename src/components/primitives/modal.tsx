@@ -62,6 +62,7 @@ export function Modal({
 
   // Sync isOpen state with open prop when it changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the prop seeds a dialog the user then opens and closes locally
     setIsOpen(open);
   }, [open]);
 

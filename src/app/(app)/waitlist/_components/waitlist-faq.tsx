@@ -61,7 +61,7 @@ export function WaitlistFAQ() {
               <Accordion type="single" collapsible className="w-full">
                 {faqs.map((faq, index) => (
                   <AccordionItem
-                    key={index}
+                    key={faq.question}
                     value={`item-${index}`}
                     className="border-slate-200 dark:border-slate-700"
                   >
@@ -89,7 +89,7 @@ export function WaitlistFAQ() {
                 Still have questions?
               </h3>
               <p className="text-slate-600 dark:text-slate-300 mb-4">
-                No sales pressure, just honest answers from developers who've been there.
+                No sales pressure, just honest answers from developers who&apos;ve been there.
               </p>
               <a
                 href="mailto:hey@shipkit.io"

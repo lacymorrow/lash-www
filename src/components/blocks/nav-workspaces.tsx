@@ -35,10 +35,10 @@ export function NavWorkspaces({
             <Collapsible key={workspace.name}>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="#">
+                  <button type="button">
                     <span>{workspace.emoji}</span>
                     <span>{workspace.name}</span>
-                  </a>
+                  </button>
                 </SidebarMenuButton>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuAction
@@ -56,10 +56,10 @@ export function NavWorkspaces({
                     {workspace.pages.map((page) => (
                       <SidebarMenuSubItem key={page.name}>
                         <SidebarMenuSubButton asChild>
-                          <a href="#">
+                          <button type="button">
                             <span>{page.emoji}</span>
                             <span>{page.name}</span>
-                          </a>
+                          </button>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}

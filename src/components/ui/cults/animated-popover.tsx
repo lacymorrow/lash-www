@@ -218,6 +218,7 @@ export function PopoverTextarea({ className }: PopoverTextareaProps) {
         "h-full w-full resize-none rounded-md bg-transparent px-4 py-3 text-sm outline-none",
         className
       )}
+      // biome-ignore lint/a11y/noAutofocus: opening the note popover should put the caret in it
       autoFocus
       value={note}
       onChange={(e) => setNote(e.target.value)}

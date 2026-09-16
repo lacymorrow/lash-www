@@ -140,11 +140,11 @@ export const constructMetadata = ({
 
 // ======== Head Link Hints (preconnect / dns-prefetch) =========
 
-export type HeadLinkHint = {
+export interface HeadLinkHint {
   rel: "preconnect" | "dns-prefetch";
   href: string;
   crossOrigin?: "" | "anonymous" | "use-credentials";
-};
+}
 
 export const headLinkHints: HeadLinkHint[] = [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -162,7 +162,7 @@ export const routeMetadata = {
     description: `Shell mode, agent mode, auto mode, smart reroute, live indicators, and preheated AI agents. See what ${siteConfig.title} can do.`,
   },
   pricing: {
-    title: siteConfig.title + " - Free and open source",
+    title: `${siteConfig.title} - Free and open source`,
     description:
       siteConfig.title +
       " is free, open source, and works with any AI CLI tool. No API keys needed.",

@@ -98,12 +98,12 @@ export function getBlogCategories(posts: BlogPost[]): BlogCategory[] {
   // Group posts by category
   for (const post of posts) {
     if (!post.categories?.length) {
-      const uncategorized = categoriesMap.get("Uncategorized") || [];
+      const uncategorized = categoriesMap.get("Uncategorized") ?? [];
       uncategorized.push(post);
       categoriesMap.set("Uncategorized", uncategorized);
     } else {
       for (const category of post.categories) {
-        const categoryPosts = categoriesMap.get(category) || [];
+        const categoryPosts = categoriesMap.get(category) ?? [];
         categoryPosts.push(post);
         categoriesMap.set(category, categoryPosts);
       }

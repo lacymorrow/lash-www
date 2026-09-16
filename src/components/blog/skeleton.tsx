@@ -178,8 +178,8 @@ export const BlogPostListSkeleton = ({
 }) => {
 	return (
 		<div className={cn("space-y-8", className)}>
-			{Array.from({ length: count }).map((_, i) => (
-				<BlogPostListItemSkeleton key={i} />
+			{Array.from({ length: count }, (_, i) => `post-skeleton-${i}`).map((id) => (
+				<BlogPostListItemSkeleton key={id} />
 			))}
 		</div>
 	);

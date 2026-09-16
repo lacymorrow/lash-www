@@ -89,7 +89,7 @@ function extractTitleFromH1(content: string): string | null {
 
   // Look for the first H1 tag in the cleaned content
   const h1Match = /^#\s+(.+)$/m.exec(contentWithoutCodeBlocks);
-  if (h1Match && h1Match[1]) {
+  if (h1Match?.[1]) {
     // Clean up the title (remove extra whitespace, emoji, etc.)
     return h1Match[1]
       .trim()
@@ -102,6 +102,7 @@ function extractTitleFromH1(content: string): string | null {
 /*
  * Read and parse MDX file with security validations
  */
+// eslint-disable-next-line @typescript-eslint/require-await -- kept async so the file reads can move off the sync fs API without touching callers
 async function readMdxFile(filePath: string, slug: string) {
   try {
     // Check file size limit (5MB)
@@ -374,6 +375,7 @@ function processDirectory(dir: string): NavSection[] {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/require-await -- the Promise<string[]> signature is the public contract; callers await it
 export async function getAllDocSlugsFromFileSystem(): Promise<string[]> {
   const slugs: string[] = [];
   const rootPath = path.join(process.cwd(), "docs");

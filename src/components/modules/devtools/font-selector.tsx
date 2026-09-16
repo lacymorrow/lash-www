@@ -17,6 +17,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { GOOGLE_FONTS, type FontCategory } from "@/config/fonts";
 import { env } from "@/env";
 import { cn } from "@/lib/utils";
+import { useMounted } from "@/hooks/use-mounted";
 
 interface FontWithCategory {
   family: string;
@@ -68,7 +69,8 @@ export function FontSelector() {
   const [browseError, setBrowseError] = React.useState<string | null>(null);
 
   const [isCuratedList, setIsCuratedList] = React.useState(false);
-  const [mounted, setMounted] = React.useState(false);
+  // Hydration flag. useMounted reads it without a state update in an effect.
+  const mounted = useMounted();
 
   // Apply font globally: injects a <style> tag that forces font-family on all elements.
   // This bypasses next/font scoped class names, Tailwind utilities, and CSS variable
@@ -125,7 +127,6 @@ export function FontSelector() {
 
   // Fetch initial data
   React.useEffect(() => {
-    setMounted(true);
     const fetchInitialData = async () => {
       setInitialLoading(true);
       setInitialError(null);
@@ -167,6 +168,7 @@ export function FontSelector() {
       const fontParts = currentStyle.split(",");
       const firstFont = fontParts[0]?.trim().replace(/['"]/g, "");
       if (firstFont && fontCategories.has(firstFont)) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- picks a default once the font list has loaded, and clears results when the query empties
         setSelectedFont(firstFont);
         return;
       }
@@ -204,6 +206,7 @@ export function FontSelector() {
   // Search effect
   React.useEffect(() => {
     if (!debouncedSearchQuery) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- picks a default once the font list has loaded, and clears results when the query empties
       setSearchResults([]);
       return;
     }

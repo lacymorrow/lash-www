@@ -1,12 +1,12 @@
 import { getPayloadContent } from "@/lib/utils/get-payload-content";
 import { FeaturesCardsClient } from "./features-cards-client";
 
-type StaticFeature = {
+interface StaticFeature {
   name: string;
   description: string;
   category: string;
   order?: number;
-};
+}
 
 async function getFeatures() {
   try {

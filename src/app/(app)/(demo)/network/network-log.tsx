@@ -15,7 +15,7 @@ interface NetworkRequest {
   id: string;
   name: string;
   status: RequestStatus;
-  type: RequestType | string;
+  type: string;
   size: string;
   time: number;
   level?: LogLevel;
@@ -141,6 +141,7 @@ export const NetworkLog = ({
   }, [simulateRequests]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the prop seeds a panel the user then controls locally; resetting it needs a key on the parent
     setIsSearchOpen(showSearch);
   }, [showSearch]);
 

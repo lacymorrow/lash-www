@@ -35,7 +35,7 @@ function MobileTocInner({ headings }: MobileTocProps) {
   }
 
   return (
-    <div className="xl:hidden mb-8" role="complementary" aria-label="Mobile table of contents">
+    <aside className="xl:hidden mb-8" aria-label="Mobile table of contents">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
           <Button
@@ -63,7 +63,7 @@ function MobileTocInner({ headings }: MobileTocProps) {
           </div>
         </CollapsibleContent>
       </Collapsible>
-    </div>
+    </aside>
   );
 }
 

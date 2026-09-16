@@ -9,6 +9,7 @@ interface SitemapEntry {
   priority?: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/require-await -- the Promise<SitemapEntry[]> signature is the public contract; app/sitemap.ts awaits it
 export async function generateSitemapEntries(): Promise<SitemapEntry[]> {
   const entries: SitemapEntry[] = [];
 
