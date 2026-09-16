@@ -155,7 +155,7 @@ export const headLinkHints: HeadLinkHint[] = [
 export const routeMetadata = {
   home: {
     title: `${siteConfig.title} - ${siteConfig.tagline}`,
-    description: `A beautiful AI terminal for your code. Type commands or talk naturally — lash figures out the rest. Works with Claude Code, Gemini CLI, Codex, and more.`,
+    description: "A beautiful AI terminal for your code. Type commands or talk naturally — lash figures out the rest. Works with Claude Code, Gemini CLI, Codex, and more.",
   },
   features: {
     title: `Features | ${siteConfig.title}`,

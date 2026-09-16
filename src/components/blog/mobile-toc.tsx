@@ -82,7 +82,7 @@ function MobileTocErrorFallback({
 			<div className="border rounded-lg p-4 bg-muted/30">
 				<div className="text-center">
 					<p className="text-sm text-muted-foreground mb-2">Failed to load table of contents</p>
-					<button
+					<button type="button"
 						onClick={resetErrorBoundary}
 						className="text-xs text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1"
 					>

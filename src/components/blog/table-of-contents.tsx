@@ -147,7 +147,7 @@ function TOCErrorFallback({
 			</div>
 			<div className="p-4 text-center">
 				<p className="text-sm text-muted-foreground mb-2">Failed to load table of contents</p>
-				<button onClick={resetErrorBoundary} className="text-xs text-primary hover:underline">
+				<button type="button" onClick={resetErrorBoundary} className="text-xs text-primary hover:underline">
 					Try again
 				</button>
 			</div>
