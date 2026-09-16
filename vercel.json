@@ -11,9 +11,9 @@
     }
   ],
 
-  "buildCommand": "pnpm run build:vercel",
-  "devCommand": "pnpm run dev",
-  "installCommand": "pnpm install",
+  "buildCommand": "bun run build:vercel",
+  "devCommand": "bun run dev",
+  "installCommand": "bun install",
   "cleanUrls": true,
   "trailingSlash": false,
 
