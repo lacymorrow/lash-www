@@ -587,7 +587,7 @@ export function IntroDisclosure({
                         <ExternalLinkIcon className="h-4 w-4" />
                       </a>
                     ) : (
-                      <button onClick={steps[currentStep]?.action?.onClick}>
+                      <button type="button" onClick={steps[currentStep]?.action?.onClick}>
                         {steps[currentStep]?.action?.label}
                       </button>
                     )}

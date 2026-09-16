@@ -233,7 +233,7 @@ export const AIRealtimeWhisperWebGPU = () => {
                   from the internet after the model has loaded!
                 </p>
 
-                <button
+                <button type="button"
                   className="border px-4 py-2 rounded-lg bg-blue-400 text-white hover:bg-blue-500 disabled:bg-blue-100 disabled:cursor-not-allowed select-none"
                   onClick={() => {
                     worker.current.postMessage({ type: "load" });
@@ -269,7 +269,7 @@ export const AIRealtimeWhisperWebGPU = () => {
                     recorderRef.current?.start();
                   }}
                 />
-                <button
+                <button type="button"
                   className="border rounded-lg px-2 absolute right-2"
                   onClick={() => {
                     recorderRef.current?.stop();

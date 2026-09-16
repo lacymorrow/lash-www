@@ -144,7 +144,7 @@ function TOCErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
         {error instanceof Error && (
           <p className="text-xs text-muted-foreground mb-3">{error.message}</p>
         )}
-        <button onClick={resetErrorBoundary} className="text-xs text-primary hover:underline">
+        <button type="button" onClick={resetErrorBoundary} className="text-xs text-primary hover:underline">
           Try again
         </button>
       </div>
