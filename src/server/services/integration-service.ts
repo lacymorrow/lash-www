@@ -50,9 +50,7 @@ export async function getIntegrationStatuses(): Promise<CategorizedIntegrationSt
 
   // Helper function to add status to a category
   const addStatus = (category: string, status: IntegrationStatus) => {
-    if (!categorizedStatuses[category]) {
-      categorizedStatuses[category] = [];
-    }
+    categorizedStatuses[category] ??= [];
     categorizedStatuses[category].push(status);
   };
 

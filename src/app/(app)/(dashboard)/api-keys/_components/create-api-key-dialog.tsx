@@ -182,7 +182,7 @@ export function CreateApiKeyDialog({ onSubmit, userId }: CreateApiKeyDialogProps
           <div className="py-4">
             <Alert className="mb-4">
               <AlertDescription>
-                Make sure to copy your API key now. You won't be able to see it again.
+                Make sure to copy your API key now. You won&apos;t be able to see it again.
               </AlertDescription>
             </Alert>
 

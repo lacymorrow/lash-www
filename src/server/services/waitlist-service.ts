@@ -53,7 +53,7 @@ export async function getWaitlistEntryByEmail(email: string): Promise<WaitlistEn
       .where(eq(waitlistEntries.email, email))
       .limit(1);
 
-    return entry || null;
+    return entry ?? null;
   }, null);
 }
 

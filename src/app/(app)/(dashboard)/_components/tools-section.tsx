@@ -386,6 +386,7 @@ export const ToolsSection = () => {
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reading localStorage during render would make the server and client markup disagree
       setStarredTools(new Set(JSON.parse(stored)));
     }
   }, []);
@@ -608,9 +609,9 @@ const ToolCardContent = ({
     <CardContent className="flex-1 flex flex-col">
       <CardDescription className="flex-1 line-clamp-3">{tool.description}</CardDescription>
       <div className="mt-3 flex flex-wrap gap-1">
-        {tool.keywords.slice(0, 6).map((keyword, index) => (
+        {tool.keywords.slice(0, 6).map((keyword) => (
           <span
-            key={`${keyword}-${index}`}
+            key={keyword}
             className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground"
           >
             {keyword}

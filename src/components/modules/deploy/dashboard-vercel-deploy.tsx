@@ -105,6 +105,7 @@ export const DashboardVercelDeploy = ({
   // Check for pending GitHub invitation when dialog opens
   useEffect(() => {
     if (open && isVercelConnected) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- marks the check as in flight before the request that resolves it
       setPendingInvitation((prev) => ({
         ...prev,
         isChecking: true,

@@ -76,6 +76,7 @@ export const usePermission = ({ resource, action, context }: UsePermissionOption
       return;
     }
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the check only sets state after its first await; the rule cannot see through an async function
     void checkPermission();
   }, [status, checkPermission]);
 

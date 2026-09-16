@@ -34,9 +34,7 @@ export function useLocalStorage<T>(
   const setValue = useCallback(
     (value: T | ((val: T) => T)) => {
       try {
-        setStoredValue((prev) =>
-          value instanceof Function ? (value as (val: T) => T)(prev) : value
-        );
+        setStoredValue((prev) => (value instanceof Function ? value(prev) : value));
       } catch (error) {
         console.warn(`Error setting localStorage key "${key}":`, error);
       }
@@ -45,6 +43,7 @@ export function useLocalStorage<T>(
   );
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- re-reads storage when the key changes; reading during render would make the server and client markup disagree
     setStoredValue(readValue());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);

@@ -43,9 +43,13 @@ export default function TeamsPage() {
   const [newTeamName, setNewTeamName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  /*
+   * No setIsLoading(true) here: isLoading already starts true, and setting it
+   * synchronously from the mount effect costs an extra render pass. The manual
+   * refresh paths set it before calling this.
+   */
   const loadTeams = useCallback(async () => {
     if (!session?.user?.id) return;
-    setIsLoading(true);
     try {
       const teams = await fetchUserTeams();
       setTeams(teams);
@@ -63,6 +67,7 @@ export default function TeamsPage() {
 
   useEffect(() => {
     if (session?.user?.id) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- the loader only sets state after its first await; the rule cannot see through an async function
       void loadTeams();
     }
   }, [session?.user?.id, loadTeams]);
@@ -89,6 +94,7 @@ export default function TeamsPage() {
 
     try {
       await deleteTeam(team.team.id);
+      setIsLoading(true);
       await loadTeams();
 
       toast({
@@ -126,6 +132,7 @@ export default function TeamsPage() {
           description: "Team created successfully",
         });
       }
+      setIsLoading(true);
       await loadTeams();
       setShowAddDialog(false);
       setShowEditDialog(false);

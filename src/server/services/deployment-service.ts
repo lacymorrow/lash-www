@@ -185,7 +185,7 @@ class DeploymentService {
       .where(and(eq(deployments.id, deploymentId), eq(deployments.userId, userId)))
       .returning();
 
-    return updatedDeployment || null;
+    return updatedDeployment ?? null;
   }
 
   /**
@@ -236,7 +236,7 @@ class DeploymentService {
       .where(and(eq(deployments.id, deploymentId), eq(deployments.userId, userId)))
       .returning();
 
-    return canceledDeployment || null;
+    return canceledDeployment ?? null;
   }
 
   /**

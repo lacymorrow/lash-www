@@ -44,9 +44,9 @@ const features = [
         pauseOnHover
         className="absolute top-10 [--duration:20s] [mask-image:linear-gradient(to_top,transparent_40%,#000_100%)]"
       >
-        {files.map((f, idx) => (
+        {files.map((f) => (
           <figure
-            key={idx}
+            key={f.name}
             className={cn(
               "relative w-32 cursor-pointer overflow-hidden rounded-xl border p-4",
               "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
@@ -107,8 +107,8 @@ const features = [
 export const FeaturesGrid = () => {
   return (
     <BentoGrid className="">
-      {features.map((feature, idx) => (
-        <BentoCard key={idx} {...feature} />
+      {features.map((feature) => (
+        <BentoCard key={feature.name} {...feature} />
       ))}
     </BentoGrid>
   );

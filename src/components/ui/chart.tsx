@@ -79,6 +79,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 
   return (
     <style
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: CSS custom properties generated from the chart config the developer passes in, which is the only way to scope them per chart id
       dangerouslySetInnerHTML={{
         __html: Object.entries(THEMES)
           .map(

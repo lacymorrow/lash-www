@@ -20,8 +20,11 @@ export const LoaderBouncingShapes = () => {
   useEffect(() => {
     const shapes = shapesRef.current.filter(Boolean);
 
-    shapes.forEach((shape, index) => {
-      if (!shape) return;
+    const intervals: ReturnType<typeof setInterval>[] = [];
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
+
+    for (const shape of shapes) {
+      if (!shape) continue;
 
       const interval = setInterval(() => {
         const classList = shape.classList;
@@ -40,22 +43,33 @@ export const LoaderBouncingShapes = () => {
           ["--color", COLORS[Math.floor(Math.random() * COLORS.length)] || ""],
         ];
 
-        styles.forEach(([property, value]) => {
+        for (const [property, value] of styles) {
           if (value && property) shape.style.setProperty(property, value);
-        });
+        }
 
         // Animate
         if (!classList.contains("bounce-up")) {
           classList.add("bounce-up");
         }
         classList.replace("bounce-down", "bounce-up");
-        setTimeout(() => {
-          classList.replace("bounce-up", "bounce-down");
-        }, 400);
+        timeouts.push(
+          setTimeout(() => {
+            classList.replace("bounce-up", "bounce-down");
+          }, 400)
+        );
       }, 740);
 
-      return () => clearInterval(interval);
-    });
+      intervals.push(interval);
+    }
+
+    return () => {
+      for (const interval of intervals) {
+        clearInterval(interval);
+      }
+      for (const timeout of timeouts) {
+        clearTimeout(timeout);
+      }
+    };
   }, []);
 
   return (
@@ -140,12 +154,12 @@ export const LoaderBouncingShapes = () => {
 				}
 			`}</style>
       <div className="loader">
-        {[...Array(3)].map((_, i) => (
+        {Array.from({ length: 3 }, (_, i) => ({ id: `shape-${i}`, index: i })).map(({ id, index }) => (
           <div
-            key={i}
+            key={id}
             ref={(el) => {
               if (el) {
-                shapesRef.current[i] = el;
+                shapesRef.current[index] = el;
               }
             }}
             className="shape"

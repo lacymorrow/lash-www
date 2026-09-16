@@ -179,6 +179,7 @@ const Carousel = forwardRef<
       >
         <div
           {...props}
+          // biome-ignore lint/a11y/noNoninteractiveTabindex: the container owns the arrow-key handler, so it has to be reachable by keyboard
           tabIndex={0}
           ref={ref}
           onKeyDownCapture={handleKeyDown}
@@ -267,20 +268,23 @@ const SliderThumbItem = forwardRef<
     <div
       {...props}
       ref={ref}
-      onClick={() => onThumbClick(index)}
       className={cn(
         "flex min-w-0 shrink-0 grow-0 basis-1/3 bg-background p-1",
         `${orientation === "vertical" ? "pb-1" : "pr-1"}`,
         className
       )}
     >
-      <div
+      <button
+        type="button"
+        onClick={() => onThumbClick(index)}
+        aria-label={`Go to slide ${index + 1}`}
+        aria-current={isSlideActive}
         className={`relative aspect-square h-20 w-full rounded-md opacity-50 transition-opacity ${
           isSlideActive ? "!opacity-100" : ""
         }`}
       >
         {children}
-      </div>
+      </button>
     </div>
   );
 });

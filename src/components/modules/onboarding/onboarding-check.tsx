@@ -30,24 +30,20 @@ export function OnboardingCheck({
   forceEnabled = false,
 }: OnboardingCheckProps) {
   const userId = user?.id ?? "";
-  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
   const [onboardingState, _setOnboardingState] = useLocalStorage<{
     completed: boolean;
     currentStep: number;
     steps: Record<string, boolean>;
   } | null>(`onboarding-${userId}`, null);
 
-  useEffect(() => {
-    // Only show onboarding if:
-    // 1. User has purchased the starter kit (or is admin via forceEnabled)
-    // 2. Onboarding hasn't been completed yet
-    // 3. We have a valid userId
-    if ((hasPurchased || forceEnabled) && userId && !onboardingState?.completed) {
-      setShowOnboarding(true);
-    } else {
-      setShowOnboarding(false);
-    }
-  }, [hasPurchased, forceEnabled, userId, onboardingState]);
+  /*
+   * Derived rather than mirrored into state from an effect. Show onboarding
+   * when the user has purchased the starter kit (or is an admin via
+   * forceEnabled), onboarding is not already complete, and we have a userId.
+   */
+  const showOnboarding =
+    !dismissed && (hasPurchased || forceEnabled) && !!userId && !onboardingState?.completed;
 
   // Onboarding requires both Vercel and GitHub integrations to be configured.
   // Without both, the wizard steps can't function — hide it regardless of admin status.
@@ -64,7 +60,7 @@ export function OnboardingCheck({
   }
 
   const handleOnboardingComplete = () => {
-    setShowOnboarding(false);
+    setDismissed(true);
   };
 
   return (

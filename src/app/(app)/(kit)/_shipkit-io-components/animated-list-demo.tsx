@@ -88,6 +88,7 @@ export function AnimatedListDemo({ className }: { className?: string }) {
     >
       <AnimatedList>
         {notifications.map((item, idx) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: the demo list repeats the same four notifications ten times, so nothing else is unique
           <Notification {...item} key={idx} />
         ))}
       </AnimatedList>

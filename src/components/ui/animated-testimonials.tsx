@@ -119,6 +119,7 @@ export const AnimatedTestimonials = ({
             <motion.p className="mt-8 text-lg text-gray-500 dark:text-neutral-300">
               {testimonials[active]?.quote?.split(" ").map((word, index) => (
                 <motion.span
+                  // biome-ignore lint/suspicious/noArrayIndexKey: the quote is split into words, which repeat
                   key={index}
                   initial={{
                     filter: "blur(10px)",

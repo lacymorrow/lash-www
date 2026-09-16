@@ -13,9 +13,9 @@ const ScrollFade = () => {
       <div className="rounded-xl border">
         <ScrollArea className="w-62 h-72 rounded-xl">
           <div className="space-y-1 p-1">
-            {Array.from({ length: 11 }).map((_, index) => (
+            {Array.from({ length: 11 }, (_, i) => ({ id: `row-${i}`, index: i })).map(({ id, index }) => (
               <div
-                key={index}
+                key={id}
                 className="text-foreground/30 hover:bg-foreground/10 bg-foreground/5 flex h-10 w-full items-center gap-2 rounded-lg px-4"
               >
                 00{index} <div className="bg-foreground/10 h-px flex-1" />

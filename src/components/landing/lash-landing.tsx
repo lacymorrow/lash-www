@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useCallback } from "react";
 import { LashTuiHeaderText } from "./lash-tui-header-text";
 import { GithubVersion } from "./github-version";
@@ -178,17 +179,17 @@ export function LashLanding() {
       <header className="ll-header">
         <div className="ll-wrap">
           <nav className="ll-nav">
-            <a href="/" className="ll-nav-name">
+            <Link href="/" className="ll-nav-name">
               <span className="ll-nav-bar" />
               lash
-            </a>
+            </Link>
             <div className="ll-nav-right">
               <a href="#how">How it works</a>
               <a href="#tools">Tools</a>
               <a
                 href="https://github.com/lacymorrow/lash"
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
               >
                 GitHub
               </a>
@@ -247,10 +248,10 @@ export function LashLanding() {
                     key={t.id}
                     className={`ll-install-panel${tab === t.id ? " active" : ""}`}
                   >
-                    {t.lines.map((line, i) => (
-                      <code key={i}>
-                        {line.parts.map((part, j) => (
-                          <span key={j} className={part.cls}>
+                    {t.lines.map((line) => (
+                      <code key={line.copy}>
+                        {line.parts.map((part) => (
+                          <span key={`${part.cls}-${part.text}`} className={part.cls}>
                             {part.text}
                           </span>
                         ))}
@@ -266,9 +267,9 @@ export function LashLanding() {
           <section className="ll-demo" id="demo">
             <div className="ll-label">What it looks like</div>
             <div className="ll-demo-lines">
-              {demoLines.map((line, i) =>
+              {demoLines.map((line) =>
                 line.output !== undefined ? (
-                  <div className="ll-dl" key={i}>
+                  <div className="ll-dl" key={line.output}>
                     <div
                       className="ll-dl-bar"
                       style={{ background: "transparent" }}
@@ -281,7 +282,7 @@ export function LashLanding() {
                     </span>
                   </div>
                 ) : (
-                  <div className="ll-dl" key={i}>
+                  <div className="ll-dl" key={line.input}>
                     <div className={`ll-dl-bar ${line.bar}`} />
                     <span className="ll-dl-prompt">&gt;</span>
                     <span className="ll-dl-input">{line.input}</span>
@@ -384,18 +385,18 @@ export function LashLanding() {
               <a
                 href="https://github.com/lacymorrow/lash"
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
               >
                 source
               </a>
               <a
                 href="https://github.com/lacymorrow/lash/issues"
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
               >
                 issues
               </a>
-              <a href="https://lacy.sh" target="_blank" rel="noopener">
+              <a href="https://lacy.sh" target="_blank" rel="noopener noreferrer">
                 lacy shell
               </a>
             </div>

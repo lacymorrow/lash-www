@@ -32,8 +32,10 @@ export interface LoaderAtomsProps
 export const LoaderAtoms = React.forwardRef<HTMLDivElement, LoaderAtomsProps>(
   ({ className, size, color, label, ...props }, ref) => {
     return (
+      // biome-ignore lint/a11y/useSemanticElements: the output element is for form results, this is a live region wrapping a spinner
       <div
         ref={ref}
+        role="status"
         aria-live="polite"
         aria-label={label || "Loading"}
         className={cn("relative", className)}
@@ -49,3 +51,5 @@ export const LoaderAtoms = React.forwardRef<HTMLDivElement, LoaderAtomsProps>(
     );
   }
 );
+
+LoaderAtoms.displayName = "LoaderAtoms";

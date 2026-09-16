@@ -161,7 +161,7 @@ export function ShipkitIoView() {
 
           <BlurFade delay={1} duration={1} inView>
             <SectionCopy>
-              You don't need to build auth again. Or wire up payments. Or configure a CMS. Or set up email templates. Shipkit handles the first three months of infrastructure work so you can focus on the part that actually matters.
+              You don&apos;t need to build auth again. Or wire up payments. Or configure a CMS. Or set up email templates. Shipkit handles the first three months of infrastructure work so you can focus on the part that actually matters.
             </SectionCopy>
           </BlurFade>
         </Section>
@@ -242,7 +242,7 @@ export function ShipkitIoView() {
                       <span>ROI Calculator</span>
                     </div>
                     <p className="text-lg text-gray-600 dark:text-gray-300">
-                      Auth setup, payment integration, CMS, email system, dashboard UI, AI hooks. That's 2-3 months of plumbing before you write a single line of product code. Or just clone Shipkit.
+                      Auth setup, payment integration, CMS, email system, dashboard UI, AI hooks. That&apos;s 2-3 months of plumbing before you write a single line of product code. Or just clone Shipkit.
                     </p>
                   </div>
                   <ROICalculator />
@@ -256,7 +256,7 @@ export function ShipkitIoView() {
               <SectionBadge>FAQ</SectionBadge>
               <SectionHeader>Common Questions</SectionHeader>
               <SectionCopy>
-                Can't find what you're looking for? Reach out on
+                Can&apos;t find what you&apos;re looking for? Reach out on
                 <Link
                   className={cn(buttonVariants({ variant: "link", size: "lg" }), "px-1")}
                   href={routes.external.email}
@@ -279,7 +279,7 @@ export function ShipkitIoView() {
                   href={routes.external.email}
                   className={cn(buttonVariants({ variant: "link", size: "sm" }), "px-1")}
                 >
-                  Let's chat →
+                  Let&apos;s chat →
                 </Link>
               </SectionCopy>
             </BlurFade>
@@ -301,7 +301,7 @@ export function ShipkitIoView() {
                 <SectionContent>
                   <div className="text-center max-w-2xl mx-auto mb-8">
                     <SectionCopy className="mb-6">
-                      Battle-tested by developers launching their own products. Get a stack that's
+                      Battle-tested by developers launching their own products. Get a stack that&apos;s
                       ready to scale with rock-solid code and best practices in place.
                     </SectionCopy>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -499,7 +499,7 @@ export function ShipkitIoView() {
                   <span>Practical AI Integration</span>
                 </SectionBadge>
                 <SectionCopy>
-                  Don't just integrate AI - make it your competitive advantage. Launch with
+                  Don&apos;t just integrate AI - make it your competitive advantage. Launch with
                   production-ready AI features that your users will love.
                 </SectionCopy>
               </Section>
@@ -707,7 +707,7 @@ export function ShipkitIoView() {
                 <div className="max-w-4xl mx-auto">
                   <div className="text-center mb-12">
                     <p className="text-lg text-gray-600 dark:text-gray-300">
-                      See how {siteConfig.name}'s AI features compare to building from scratch
+                      See how {siteConfig.name}&apos;s AI features compare to building from scratch
                     </p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
@@ -783,7 +783,7 @@ export function ShipkitIoView() {
                         <span>ROI Calculator</span>
                       </div>
                       <p className="text-lg text-gray-600 dark:text-gray-300">
-                        See exactly how much time and money you'll save with {siteConfig.name}
+                        See exactly how much time and money you&apos;ll save with {siteConfig.name}
                       </p>
                     </div>
                     <ROICalculator />
@@ -802,7 +802,7 @@ export function ShipkitIoView() {
                   <ComparisonTable />
                   <div className="mt-8 text-center">
                     <p className="text-sm text-gray-500 mb-4">
-                      Don't waste months reinventing the wheel. Get a production-ready stack today.
+                      Don&apos;t waste months reinventing the wheel. Get a production-ready stack today.
                     </p>
                     <div className="flex justify-center gap-4">
                       <Link
@@ -860,9 +860,9 @@ export function ShipkitIoView() {
                         </div>
                       </div>
                       <blockquote className="text-lg mb-4">
-                        "{siteConfig.name} saved us 4 months of development time. The AI features
+                        &quot;{siteConfig.name} saved us 4 months of development time. The AI features
                         alone would have taken us months to build properly. We closed our seed round
-                        2 weeks after launch."
+                        2 weeks after launch.&quot;
                       </blockquote>
                       <div className="flex items-center gap-2">
                         <StarFilledIcon className="h-4 w-4 text-yellow-400" />
@@ -909,8 +909,8 @@ export function ShipkitIoView() {
                         </div>
                       </div>
                       <blockquote className="text-lg mb-4">
-                        "We went from idea to paying customers in 3 weeks. The authentication and
-                        payment systems worked flawlessly from day one. Best investment we've made."
+                        &quot;We went from idea to paying customers in 3 weeks. The authentication and
+                        payment systems worked flawlessly from day one. Best investment we&apos;ve made.&quot;
                       </blockquote>
                       <div className="flex items-center gap-2">
                         <StarFilledIcon className="h-4 w-4 text-yellow-400" />
@@ -1014,7 +1014,7 @@ export function ShipkitIoView() {
 
               <Section>
                 <SectionBadge>Showcase</SectionBadge>
-                <SectionHeader>We can't wait to see what you build</SectionHeader>
+                <SectionHeader>We can&apos;t wait to see what you build</SectionHeader>
                 <ExampleMasonry />
               </Section>
 
@@ -1029,7 +1029,7 @@ export function ShipkitIoView() {
               <Section>
                 <SectionHeader>Made with you in mind</SectionHeader>
                 <SectionCopy>
-                  {siteConfig.name} isn't just for Developers.
+                  {siteConfig.name} isn&apos;t just for Developers.
                   <br />
                   We include tools for Marketers, Designers, and Founders. Export Figma directly
                   into React components, drag-and-drop code using Builder, and manage your

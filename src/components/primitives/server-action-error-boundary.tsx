@@ -153,8 +153,8 @@ const DefaultServerActionErrorFallback: React.FC<{
 				<div className="space-y-2">
 					<h4 className="text-sm font-medium">Suggested solutions:</h4>
 					<ul className="text-sm text-muted-foreground space-y-1">
-						{getErrorSolution().map((solution, index) => (
-							<li key={index} className="flex items-start gap-2">
+						{getErrorSolution().map((solution) => (
+							<li key={solution} className="flex items-start gap-2">
 								<span className="text-xs mt-1">•</span>
 								<span>{solution}</span>
 							</li>
@@ -321,7 +321,7 @@ export function useDetectCorporateEnvironment() {
 	const [isChecking, setIsChecking] = React.useState(true);
 
 	React.useEffect(() => {
-		const checkCorporateEnvironment = async () => {
+		const checkCorporateEnvironment = () => {
 			try {
 				// Check for common corporate proxy indicators
 				const indicators = [

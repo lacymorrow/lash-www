@@ -13,8 +13,10 @@ export const WavesBackground: React.FC = () => {
 
     const ctx = canvas.getContext("2d")!;
     let time = 0;
-    const width = (canvas.width = window.innerWidth);
-    const height = (canvas.height = window.innerHeight);
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const width = canvas.width;
+    const height = canvas.height;
 
     // Generate many more layers with extreme parameters
     const generateLayers = () => {

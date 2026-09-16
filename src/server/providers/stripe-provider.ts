@@ -522,6 +522,7 @@ export class StripeProvider extends BasePaymentProvider {
    * Note: Stripe doesn't have a simple "list all products" approach for checkout
    * This would typically be configured in your application with specific price IDs
    */
+  // eslint-disable-next-line @typescript-eslint/require-await -- implements the PaymentProvider interface, which declares this async
   async listProducts(): Promise<ProductData[]> {
     try {
       this.checkProviderReady();

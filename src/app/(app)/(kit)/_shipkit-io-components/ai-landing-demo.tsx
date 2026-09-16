@@ -10,29 +10,23 @@ import { useWebGPUAvailability } from "@/lib/utils/webgpu";
 
 function TypingAnimation({ simulate = false }: { simulate?: boolean }) {
   const [text, setText] = useState("Hi! I'm an AI assistant...");
-  const dotCount = useRef<number>(0);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const animate = useCallback(() => {
+  /*
+   * An interval rather than a self-scheduling setTimeout: the recursive call
+   * referenced `animate` inside its own useCallback initializer, and the dot
+   * counter lived in a ref only so the recursion could see it.
+   */
+  useEffect(() => {
     if (!simulate) return;
 
-    dotCount.current = (dotCount.current + 1) % 4;
-    const dots = ".".repeat(dotCount.current);
-    setText(`Hi! I'm an AI assistant${dots}`);
+    let dotCount = 0;
+    const interval = setInterval(() => {
+      dotCount = (dotCount + 1) % 4;
+      setText(`Hi! I'm an AI assistant${".".repeat(dotCount)}`);
+    }, 500);
 
-    timeoutRef.current = setTimeout(animate, 500);
+    return () => clearInterval(interval);
   }, [simulate]);
-
-  useEffect(() => {
-    if (simulate) {
-      animate();
-    }
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [animate, simulate]);
 
   return (
     <div className="flex min-h-[100px] items-start gap-3 rounded-lg bg-muted/50 p-4">
@@ -52,7 +46,7 @@ export function AILandingDemo() {
   const [isLoadingModel, setIsLoadingModel] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
   const [progressItems, setProgressItems] = useState<
-    Array<{ file: string; progress: number; total: number }>
+    { file: string; progress: number; total: number }[]
   >([]);
   const worker = useRef<Worker | null>(null);
   const currentMessageRef = useRef<string>("");
@@ -144,7 +138,7 @@ export function AILandingDemo() {
     };
   }, [hasAcceptedPermissions]);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!input.trim() || !worker.current || !hasAcceptedPermissions) return;
 
@@ -176,8 +170,8 @@ export function AILandingDemo() {
         <div className="space-y-4 text-center">
           <h2 className="text-lg font-semibold">Browser Not Supported</h2>
           <p className="text-sm text-muted-foreground">
-            Your browser doesn't support WebGPU, which is required for this demo. Please try using
-            Chrome Canary or another WebGPU-enabled browser.
+            Your browser doesn&apos;t support WebGPU, which is required for this demo. Please try
+            using Chrome Canary or another WebGPU-enabled browser.
           </p>
         </div>
       </Card>

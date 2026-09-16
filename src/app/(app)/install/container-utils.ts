@@ -229,7 +229,7 @@ export class ContainerManager {
       throw new Error("Container is not ready");
     }
 
-    return this.container.fs.readdir("/", { withFileTypes: true });
+    return await this.container.fs.readdir("/", { withFileTypes: true });
   }
 
   async getFileContent(path: string): Promise<string> {

@@ -82,6 +82,7 @@ const {
   : {
       auth: () => Promise.resolve(null),
       handlers: {
+        // eslint-disable-next-line @typescript-eslint/require-await -- Auth.js handlers must be async
         GET: async (request: Request) => {
           const url = new URL(request.url);
           const path = url.pathname;
@@ -100,6 +101,7 @@ const {
             { status: 503 }
           );
         },
+        // eslint-disable-next-line @typescript-eslint/require-await -- Auth.js handlers must be async
         POST: async () =>
           Response.json(
             {

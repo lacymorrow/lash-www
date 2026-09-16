@@ -164,12 +164,8 @@ export function Sidebar({ className, playlists }: SidebarProps) {
           <h2 className="relative px-7 text-lg font-semibold tracking-tight">Playlists</h2>
           <ScrollArea className="h-[300px] px-1">
             <div className="space-y-1 p-2">
-              {playlists?.map((playlist, i) => (
-                <Button
-                  key={`${playlist}-${i}`}
-                  variant="ghost"
-                  className="w-full justify-start font-normal"
-                >
+              {playlists?.map((playlist) => (
+                <Button key={playlist} variant="ghost" className="w-full justify-start font-normal">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"

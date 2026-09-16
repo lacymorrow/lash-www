@@ -42,76 +42,81 @@ export function useSubscription(provider?: SubscriptionProvider) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Memoize the check function to prevent unnecessary re-renders
-  const checkSubscription = useCallback(async () => {
+  /*
+   * The check lives inside the effect. As a useCallback it was memoised by
+   * hand, the compiler could not preserve that memoisation, and nothing else
+   * called it.
+   */
+  useEffect(() => {
     if (status === "loading") return;
 
-    if (!session?.user?.id) {
+    if (status === "unauthenticated" || !session?.user?.id) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- there is nothing to await when the user is signed out
       setHasActiveSubscription(false);
       setIsLoading(false);
+      setError(null);
       return;
     }
 
-    // Check cache first
-    const cacheKey = `${session.user.id}-${provider || "all"}`;
+    const userId = session.user.id;
+    const cacheKey = `${userId}-${provider || "all"}`;
     const cached = subscriptionCache.get(cacheKey);
     const now = Date.now();
 
     if (cached && now - cached.timestamp < CACHE_DURATION) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- a cache hit resolves without a request
       setHasActiveSubscription(cached.data);
       setIsLoading(false);
       return;
     }
 
-    try {
-      /*
-       * Multiple user menus can mount at the same time (header + sidebar).
-       * Share the in-flight request so they do not fan out identical checks.
-       */
-      const pendingRequest =
-        pendingSubscriptionChecks.get(cacheKey) ?? checkSubscriptionStatus(provider);
+    let cancelled = false;
 
-      if (!pendingSubscriptionChecks.has(cacheKey)) {
-        pendingSubscriptionChecks.set(cacheKey, pendingRequest);
-      }
+    const run = async () => {
+      try {
+        /*
+         * Multiple user menus can mount at the same time (header + sidebar).
+         * Share the in-flight request so they do not fan out identical checks.
+         */
+        const pendingRequest =
+          pendingSubscriptionChecks.get(cacheKey) ?? checkSubscriptionStatus(provider);
 
-      const result = await pendingRequest;
+        if (!pendingSubscriptionChecks.has(cacheKey)) {
+          pendingSubscriptionChecks.set(cacheKey, pendingRequest);
+        }
 
-      if (!result.success) {
+        const result = await pendingRequest;
+        if (cancelled) return;
+
+        if (!result.success) {
+          setHasActiveSubscription(false);
+          setError(result.message || "Failed to check subscription");
+          return;
+        }
+
+        subscriptionCache.set(cacheKey, {
+          data: result.hasSubscription,
+          timestamp: now,
+        });
+
+        setHasActiveSubscription(result.hasSubscription);
+        setError(null);
+      } catch (error) {
+        if (cancelled) return;
         setHasActiveSubscription(false);
-        setError(result.message || "Failed to check subscription");
-        return;
+        setError(error instanceof Error ? error.message : JSON.stringify(error));
+      } finally {
+        pendingSubscriptionChecks.delete(cacheKey);
+        if (!cancelled) setIsLoading(false);
       }
+    };
 
-      // Cache the result
-      subscriptionCache.set(cacheKey, {
-        data: result.hasSubscription,
-        timestamp: now,
-      });
+    void run();
 
-      setHasActiveSubscription(result.hasSubscription);
-      setError(null);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      setHasActiveSubscription(false);
-      setError(errorMessage);
-    } finally {
-      pendingSubscriptionChecks.delete(cacheKey);
-      setIsLoading(false);
-    }
-  }, [session?.user?.id, status, provider]); // Only depend on stable values
-
-  useEffect(() => {
-    // Only run if we have a stable user ID and status is not loading
-    if (status !== "loading" && session?.user?.id) {
-      checkSubscription();
-    } else if (status === "unauthenticated") {
-      // Clear state when user is not authenticated
-      setHasActiveSubscription(false);
-      setIsLoading(false);
-      setError(null);
-    }
-  }, [session?.user?.id, status, provider, checkSubscription]);
+    return () => {
+      cancelled = true;
+    };
+  }, [session?.user?.id, status, provider]);
 
   return {
     hasActiveSubscription,

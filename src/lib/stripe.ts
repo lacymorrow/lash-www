@@ -57,7 +57,7 @@ const initializeStripeClient = (): Stripe | null => {
  * Get Stripe client instance
  */
 export const getStripeClient = (): Stripe | null => {
-  return stripeInstance || initializeStripeClient();
+  return stripeInstance ?? initializeStripeClient();
 };
 
 /**
@@ -178,7 +178,7 @@ export const getStripePaymentStatus = async (userId: string): Promise<boolean> =
     });
 
     // If we have a payment record with Stripe as the processor, return true
-    if (payment && payment.processor === "stripe" && payment.status === "completed") {
+    if (payment?.processor === "stripe" && payment.status === "completed") {
       logger.debug("Found completed Stripe payment in database", { userId });
       return true;
     }

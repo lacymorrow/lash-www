@@ -190,6 +190,7 @@ export function useDocsSearch(options: UseDocsSearchOptions = {}): UseDocsSearch
         void search(query);
       }, debounceDelay);
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- clears results the debounce would otherwise leave stale once the query empties
       setResults([]);
       setError(null);
       setHasSearched(false);

@@ -4,7 +4,7 @@ import { getPayloadContent } from "@/lib/utils/get-payload-content";
 import type { FeatureCategory, FeaturePlan } from "@/types/feature";
 import { FeatureCard } from "./feature-card";
 
-type PayloadFeature = {
+interface PayloadFeature {
   id?: number;
   name: string;
   description: string;
@@ -13,7 +13,7 @@ type PayloadFeature = {
   icon?: string | null;
   order?: number | null;
   badge?: "new" | "popular" | "pro" | null;
-};
+}
 
 export async function FeaturesGridDynamic() {
   let features: PayloadFeature[] = [];

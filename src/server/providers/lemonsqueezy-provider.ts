@@ -690,7 +690,7 @@ export class LemonSqueezyProvider extends BasePaymentProvider {
       .from(payments)
       .where(eq(payments.orderId, order.orderId))
       .limit(1)
-      .then((rows) => rows[0] || null);
+      .then((rows) => rows[0] ?? null);
 
     if (existingPayment) {
       logger.debug(`Order ${order.orderId} already exists`);
@@ -770,6 +770,7 @@ export class LemonSqueezyProvider extends BasePaymentProvider {
    * Handle a webhook event
    * @param event The webhook event
    */
+  // eslint-disable-next-line @typescript-eslint/require-await -- implements the PaymentProvider interface, which declares this async
   async handleWebhookEvent(event: any): Promise<void> {
     try {
       this.checkProviderReady();
@@ -799,6 +800,7 @@ export class LemonSqueezyProvider extends BasePaymentProvider {
    * @param options Checkout options
    * @returns The checkout URL
    */
+  // eslint-disable-next-line @typescript-eslint/require-await -- implements the PaymentProvider interface, which declares this async
   async createCheckoutUrl(options: CheckoutOptions): Promise<string | null> {
     try {
       this.checkProviderReady();

@@ -4,6 +4,7 @@ import { existsSync } from "fs";
 import { join } from "path";
 
 // Detect whether the project uses /app or /src/app structure
+// eslint-disable-next-line @typescript-eslint/require-await -- the Promise<string> signature is the public contract; callers await it
 export async function detectDirectoryStructure(): Promise<string> {
   try {
     // Check if src/app exists

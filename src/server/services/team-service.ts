@@ -132,7 +132,7 @@ export class TeamService extends BaseService<typeof teams> {
       });
 
       return (personalTeams || [])
-        .filter((tm) => tm.team && tm.team.type === "personal" && !tm.team.deletedAt)
+        .filter((tm) => tm.team?.type === "personal" && !tm.team.deletedAt)
         .map((tm) => tm.team);
     } catch (error) {
       logger.error("Error getting personal teams", {
@@ -321,7 +321,7 @@ export class TeamService extends BaseService<typeof teams> {
 
       // Filter out deleted teams and map to the required format
       return (userTeams || [])
-        .filter((ut) => ut.team && ut.team.deletedAt === null)
+        .filter((ut) => ut.team?.deletedAt === null)
         .map(({ team, role }) => ({
           team: { ...team, type: team.type },
           role,

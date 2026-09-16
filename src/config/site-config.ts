@@ -121,9 +121,7 @@ interface SiteConfig {
   // E-commerce store configuration
   store: {
     id: string;
-    products: {
-      [key: string]: string;
-    };
+    products: Record<string, string>;
   };
 
   // SEO and metadata
@@ -363,9 +361,7 @@ siteConfig.payload.adminTitleSuffix = ` - ${siteConfig.title} CMS`;
 // siteConfig.manifest.startUrl = routes.home; // Uncomment and import routes if needed
 
 // Make sure alternates exists before assigning canonical
-if (!siteConfig.metadata.alternates) {
-  siteConfig.metadata.alternates = {};
-}
+siteConfig.metadata.alternates ??= {};
 siteConfig.metadata.alternates.canonical = siteConfig.url;
 
 // Check appleWebApp is an object before assigning title
@@ -377,12 +373,8 @@ if (
 }
 
 // Ensure appLinks and appLinks.web are objects before assigning url
-if (!siteConfig.metadata.appLinks) {
-  siteConfig.metadata.appLinks = {};
-}
-if (!siteConfig.metadata.appLinks.web) {
-  siteConfig.metadata.appLinks.web = { url: "", should_fallback: false }; // Initialize web if needed
-}
+siteConfig.metadata.appLinks ??= {};
+siteConfig.metadata.appLinks.web ??= { url: "", should_fallback: false }; // Initialize web if needed
 // Check type again after potential initialization
 if (
   siteConfig.metadata.appLinks?.web &&

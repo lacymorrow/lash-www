@@ -49,7 +49,7 @@ const _createLogger =
 
     span.end();
 
-    const consoleMethod = console[level] ?? console.log;
+    const consoleMethod = (console[level] ?? console.log).bind(console);
     consoleMethod(...args);
   };
 
@@ -143,5 +143,5 @@ export function panic(...message: unknown[]) {
   error(...message);
   // process.exit(1) is not supported in Edge Runtime
   // Throwing an error instead to halt execution
-  throw new Error("Panic: " + message.join(" "));
+  throw new Error(`Panic: ${message.join(" ")}`);
 }

@@ -168,25 +168,7 @@ export async function runInstallCommand(
  * Preserves ANSI control sequences for proper terminal rendering
  */
 export function processTerminalOutput(output: string): string {
-  if (!output) return "";
-  return output;
-
-  // Skip any debug logging messages about ANSI sequences
-  const cleanedOutput = output
-    .split("\n")
-    .filter((line) => {
-      return (
-        !line.includes("Detected ANSI control sequence") &&
-        !line.includes("not considering as completion")
-      );
-    })
-    .join("\n");
-
-  // Remove repetitive command output prefixes
-  const withoutPrefixes = cleanedOutput.replace(/^npx .+ output:\s*/gm, "");
-
-  // Remove excessive empty lines
-  const withoutExcessiveEmptyLines = withoutPrefixes.replace(/\n\s*\n\s*\n+/g, "\n\n");
-
-  return withoutExcessiveEmptyLines;
+  // Pass the output through untouched. Filtering progress lines and collapsing
+  // blank runs ate ANSI cursor moves, which broke live progress rendering.
+  return output || "";
 }

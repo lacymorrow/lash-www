@@ -404,7 +404,7 @@ export const getPolarPaymentStatus = async (userId: string): Promise<boolean> =>
     });
 
     // If we have a payment record with Polar as the processor, return true
-    if (payment && payment.processor === "polar" && payment.status === "completed") {
+    if (payment?.processor === "polar" && payment.status === "completed") {
       return true;
     }
 
@@ -449,7 +449,7 @@ export const fetchPolarProducts = async () => {
 
     // Call the Polar API to fetch products
     // Using a more generic approach to handle potential SDK differences
-    const response = await polarClient.products.list({} as any);
+    const response = await polarClient.products.list({});
 
     // Extract products from the response
     const products = extractProductsFromResponse(response);
@@ -529,6 +529,7 @@ export const getOrderById = async (orderId: string): Promise<PolarOrder | null> 
 /**
  * Process a webhook event from Polar
  */
+// eslint-disable-next-line @typescript-eslint/require-await -- webhook processors are awaited by the route handler and this one short-circuits when Polar is off
 export const processPolarWebhook = async (event: any) => {
   if (!env.NEXT_PUBLIC_FEATURE_POLAR_ENABLED) {
     logger.warn("Received Polar webhook, but Polar feature is disabled. Skipping processing.", {
@@ -612,7 +613,7 @@ export const createCheckoutUrl = async (options: {
     const response = await polarClient.checkouts.create({
       productId: options.productId,
       customerEmail: options.email,
-      metadata: options.metadata || {},
+      metadata: options.metadata ?? {},
     } as any);
 
     // Extract URL from response

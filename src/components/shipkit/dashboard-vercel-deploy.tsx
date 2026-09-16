@@ -165,7 +165,7 @@ export const DashboardVercelDeploy = ({
 					</div>
 
 					<p className="text-xs text-center text-muted-foreground">
-						Ensure you've connected GitHub and Vercel in{" "}
+						Ensure you&apos;ve connected GitHub and Vercel in{" "}
 						<LinkWithTransition
 							href="/settings/accounts"
 							className="text-primary hover:underline"

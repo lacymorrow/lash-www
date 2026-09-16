@@ -206,7 +206,7 @@ export default async function CheckoutSuccessPage({
           <div className="mb-8 text-center">
             <h2 className="mb-2 text-4xl font-semibold">Welcome aboard</h2>
             <p className="text-muted-foreground">
-              Your purchase was successful, we can't wait to see what you build.
+              Your purchase was successful, we can&apos;t wait to see what you build.
             </p>
             {accessGranted && (
               <p className="mt-2 text-sm text-green-500">✓ Access granted successfully</p>

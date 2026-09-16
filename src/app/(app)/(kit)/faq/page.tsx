@@ -10,13 +10,13 @@ import { getPayloadContent } from "@/lib/utils/get-payload-content";
 import type { Faq } from "@/payload-types";
 
 // Define types for static content structure
-type StaticFaq = {
+interface StaticFaq {
   id?: string;
   question: string;
   answer: string;
   category: string;
   order?: number;
-};
+}
 
 const getAnswerText = (answer: unknown): string => {
   if (typeof answer === "string") return answer;

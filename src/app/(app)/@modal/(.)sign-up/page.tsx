@@ -15,6 +15,7 @@ export default function Page() {
     const skip = sessionStorage.getItem("skipAuthModal") === "true";
     if (skip) {
       sessionStorage.removeItem("skipAuthModal");
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reads and clears a one-shot sessionStorage flag, which cannot happen during render
       setShouldSkip(true);
     }
   }, []);

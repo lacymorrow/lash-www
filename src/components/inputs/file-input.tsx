@@ -15,6 +15,52 @@ import { logger } from "@/lib/logger";
 import { cn } from "@/lib/utils";
 import { uploadFileAction } from "@/server/actions/file";
 
+/**
+ * A real component rather than a render function on the parent. As a closure it
+ * read the file input's ref while the parent was still rendering.
+ */
+const FileList = ({
+  fileList,
+  isUploaded = false,
+  onRemove,
+}: {
+  fileList: File[] | string[];
+  isUploaded?: boolean;
+  onRemove?: (index: number) => void;
+}) => (
+  <div className="space-y-2">
+    <h3 className="text-lg font-medium">{isUploaded ? "Uploaded files" : "Selected files"}</h3>
+    <ul className="space-y-1">
+      {fileList.map((file, index) => (
+        <li
+          key={typeof file === "string" ? file : file.name}
+          className={`flex items-center justify-between rounded-md px-4 py-2 ${
+            isUploaded ? "bg-green-100" : "bg-muted"
+          }`}
+        >
+          <div className="truncate">{typeof file === "string" ? file : file.name}</div>
+          {!isUploaded && (
+            <div className="flex items-center space-x-2">
+              <div className="text-sm text-muted-foreground">
+                {((file as File).size / 1024 / 1024).toFixed(2)} MB
+              </div>
+              <button
+                type="button"
+                onClick={() => onRemove?.(index)}
+                className="text-muted-foreground hover:text-foreground"
+                aria-label={`Remove ${(file as File).name}`}
+              >
+                <X size={16} />
+              </button>
+            </div>
+          )}
+          {isUploaded && <div className="text-sm text-green-600">Uploaded</div>}
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+
 export default function FileInput() {
   const [files, setFiles] = useState<File[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
@@ -130,43 +176,10 @@ export default function FileInput() {
     }
   };
 
-  const renderFileList = (fileList: File[] | string[], isUploaded = false) => (
-    <div className="space-y-2">
-      <h3 className="text-lg font-medium">{isUploaded ? "Uploaded files" : "Selected files"}</h3>
-      <ul className="space-y-1">
-        {fileList.map((file, index) => (
-          <li
-            key={index}
-            className={`flex items-center justify-between rounded-md px-4 py-2 ${
-              isUploaded ? "bg-green-100" : "bg-muted"
-            }`}
-          >
-            <div className="truncate">{typeof file === "string" ? file : file.name}</div>
-            {!isUploaded && (
-              <div className="flex items-center space-x-2">
-                <div className="text-sm text-muted-foreground">
-                  {((file as File).size / 1024 / 1024).toFixed(2)} MB
-                </div>
-                <button
-                  type="button"
-                  onClick={() => removeFile(index)}
-                  className="text-muted-foreground hover:text-foreground"
-                  aria-label={`Remove ${(file as File).name}`}
-                >
-                  <X size={16} />
-                </button>
-              </div>
-            )}
-            {isUploaded && <div className="text-sm text-green-600">Uploaded</div>}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-
   return (
     <form onSubmit={handleSubmit}>
       <div className="mx-auto w-full max-w-md space-y-4">
+        {/* biome-ignore lint/a11y/noStaticElementInteractions: a drop target; the labelled file input inside it is the keyboard path */}
         <div
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
@@ -198,8 +211,8 @@ export default function FileInput() {
             onChange={handleFileSelect}
           />
         </div>
-        {files.length > 0 && renderFileList(files)}
-        {uploadedFiles.length > 0 && renderFileList(uploadedFiles, true)}
+        {files.length > 0 && <FileList fileList={files} onRemove={removeFile} />}
+        {uploadedFiles.length > 0 && <FileList fileList={uploadedFiles} isUploaded />}
         <button
           type="submit"
           className={cn(buttonVariants({ variant: "default" }), "mt-4")}

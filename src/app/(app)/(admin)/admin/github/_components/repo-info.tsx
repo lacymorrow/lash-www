@@ -141,7 +141,7 @@ export async function RepoInfoContent() {
   );
 }
 
-export default async function RepoInfo() {
+export default function RepoInfo() {
   return (
     <div className="space-y-8">
       <RepoInfoContent />

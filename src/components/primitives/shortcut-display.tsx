@@ -100,6 +100,7 @@ export const ShortcutDisplay = ({
   return (
     <Component className={finalClassName}>
       {parts.map((part, index) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: parts are literal key fragments that repeat, e.g. the two + separators in Ctrl+Shift+K
         <React.Fragment key={index}>{part}</React.Fragment>
       ))}
     </Component>

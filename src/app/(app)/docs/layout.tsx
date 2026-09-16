@@ -11,7 +11,7 @@ interface DocsLayoutProps {
 }
 
 export default async function DocsLayout({ children }: DocsLayoutProps) {
-  const navigation = await getDocsNavigation();
+  const navigation = getDocsNavigation();
   const navLinks = [
     { href: routes.docs, label: "Docs" },
     { href: routes.features, label: "Features" },

@@ -65,9 +65,10 @@ export function FileBrowser() {
   const [selectedFileStats, setSelectedFileStats] = useState<any>(null);
   const [expandedPaths, setExpandedPaths] = useState<string[]>([]);
 
+  // loading already starts true, so flipping it synchronously from the mount
+  // effect only costs an extra render pass.
   const loadFiles = useCallback(async () => {
     try {
-      setLoading(true);
       const result = await getFileTree();
 
       if (result.error) {
@@ -104,6 +105,7 @@ export function FileBrowser() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the loader only sets state after its first await; the rule cannot see through an async function
     loadFiles();
   }, [loadFiles]);
 

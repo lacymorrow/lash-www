@@ -38,7 +38,7 @@ export async function getRecentLogs(days = 7): Promise<RequestLog[]> {
   }
 
   // Get all logs
-  const logs = await Promise.all(keys.map((key) => redis?.lrange(key, 0, -1) ?? []));
+  const logs = await Promise.all(keys.map(async (key) => (await redis?.lrange(key, 0, -1)) ?? []));
 
   // Parse and flatten logs
   return logs

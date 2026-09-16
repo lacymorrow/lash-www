@@ -11,6 +11,7 @@ export const DownloadSubmitButton = ({ children, ...props }: ButtonProps) => {
 
   useEffect(() => {
     if (!pending) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- the flag has to clear the moment the form stops pending, and there is no event to hang that on
       setTimeoutElapsed(false);
       return;
     }

@@ -567,7 +567,7 @@ const PaymentService = {
             status: data.status,
             processor: data.processor || "unknown",
             isFreeProduct: data.isFreeProduct || false,
-            metadata: JSON.stringify(data.metadata || {}),
+            metadata: JSON.stringify(data.metadata ?? {}),
             createdAt: new Date(),
             updatedAt: new Date(),
           })
@@ -638,7 +638,7 @@ const PaymentService = {
         .from(payments)
         .where(eq(payments.orderId, orderId))
         .limit(1)
-        .then((rows) => rows[0] || null);
+        .then((rows) => rows[0] ?? null);
     }, null);
   },
 
@@ -720,7 +720,7 @@ const PaymentService = {
             status: payment.status as "paid" | "refunded" | "pending",
             productName,
             variantName,
-            purchaseDate: payment.purchasedAt || new Date(payment.createdAt),
+            purchaseDate: payment.purchasedAt ?? new Date(payment.createdAt),
             processor: payment.processor || "unknown",
             isFreeProduct,
             isInDatabase: true,

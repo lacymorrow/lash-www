@@ -13,7 +13,7 @@ export const Pages: CollectionConfig = {
     useAsTitle: "title",
     defaultColumns: ["title", "slug", "publishedAt"],
     preview: (doc) => {
-      if (!doc.slug) return "";
+      if (typeof doc.slug !== "string" || !doc.slug) return "";
       return `${BASE_URL}/preview/pages/${doc.slug}`;
     },
   },

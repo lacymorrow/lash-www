@@ -93,7 +93,7 @@ export async function getDirectoryEntries(directoryPath: string): Promise<string
     // Check cache first
     if (directoryListingCache.has(normalizedPath)) {
       logInfo(`Using cached directory listing for: ${normalizedPath}`);
-      return directoryListingCache.get(normalizedPath) || [];
+      return directoryListingCache.get(normalizedPath) ?? [];
     }
 
     const response = await fetch(

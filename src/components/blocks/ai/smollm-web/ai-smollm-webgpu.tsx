@@ -289,8 +289,8 @@ export const AISmollmWebGPU = () => {
         <>
           <div className="w-full max-w-[500px] text-left mx-auto p-4 bottom-0 mt-auto">
             <p className="text-center mb-1">{loadingMessage}</p>
-            {progressItems.map(({ file, progress, total }, i) => (
-              <Progress key={i} text={file} percentage={progress} total={total} />
+            {progressItems.map(({ file, progress, total }) => (
+              <Progress key={file} text={file} percentage={progress} total={total} />
             ))}
           </div>
         </>
@@ -304,14 +304,15 @@ export const AISmollmWebGPU = () => {
           <Chat messages={messages} />
           {messages.length === 0 && (
             <div>
-              {EXAMPLES.map((msg, i) => (
-                <div
-                  key={i}
-                  className="m-1 border dark:border-gray-600 rounded-md p-2 bg-gray-100 dark:bg-gray-700 cursor-pointer"
+              {EXAMPLES.map((msg) => (
+                <button
+                  type="button"
+                  key={msg}
+                  className="m-1 block w-full rounded-md border p-2 text-left bg-gray-100 dark:border-gray-600 dark:bg-gray-700"
                   onClick={() => onEnter(msg)}
                 >
                   {msg}
-                </div>
+                </button>
               ))}
             </div>
           )}
@@ -335,15 +336,16 @@ export const AISmollmWebGPU = () => {
                 {!isRunning && (
                   <>
                     <span className="mr-1">&#41;.</span>
-                    <span
-                      className="underline cursor-pointer"
+                    <button
+                      type="button"
+                      className="underline"
                       onClick={() => {
                         worker.current.postMessage({ type: "reset" });
                         setMessages([]);
                       }}
                     >
                       Reset
-                    </span>
+                    </button>
                   </>
                 )}
               </>

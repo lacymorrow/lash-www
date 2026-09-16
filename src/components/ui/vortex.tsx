@@ -83,17 +83,15 @@ export const Vortex = (props: VortexProps) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    let x, y, vx, vy, life, ttl, speed, radius, hue;
-
-    x = rand(canvas.width);
-    y = center[1] + randRange(rangeY);
-    vx = 0;
-    vy = 0;
-    life = 0;
-    ttl = baseTTL + rand(rangeTTL);
-    speed = baseSpeed + rand(rangeSpeed);
-    radius = baseRadius + rand(rangeRadius);
-    hue = baseHue + rand(rangeHue);
+    const x = rand(canvas.width);
+    const y = center[1] + randRange(rangeY);
+    const vx = 0;
+    const vy = 0;
+    const life = 0;
+    const ttl = baseTTL + rand(rangeTTL);
+    const speed = baseSpeed + rand(rangeSpeed);
+    const radius = baseRadius + rand(rangeRadius);
+    const hue = baseHue + rand(rangeHue);
 
     particleProps.set([x, y, vx, vy, life, ttl, speed, radius, hue], i);
   };
@@ -123,28 +121,27 @@ export const Vortex = (props: VortexProps) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const i2 = 1 + i,
-      i3 = 2 + i,
-      i4 = 3 + i,
-      i5 = 4 + i,
-      i6 = 5 + i,
-      i7 = 6 + i,
-      i8 = 7 + i,
-      i9 = 8 + i;
-    let n, x, y, vx, vy, life, ttl, speed, x2, y2, radius, hue;
+    const i2 = 1 + i;
+    const i3 = 2 + i;
+    const i4 = 3 + i;
+    const i5 = 4 + i;
+    const i6 = 5 + i;
+    const i7 = 6 + i;
+    const i8 = 7 + i;
+    const i9 = 8 + i;
 
-    x = particleProps[i] || 0;
-    y = particleProps[i2] || 0;
-    n = noise3D(x * xOff, y * yOff, tick * zOff) * noiseSteps * TAU;
-    vx = lerp(particleProps[i3] || 0, Math.cos(n), 0.5);
-    vy = lerp(particleProps[i4] || 0, Math.sin(n), 0.5);
-    life = particleProps[i5] || 0;
-    ttl = particleProps[i6] || 100;
-    speed = particleProps[i7] || 1;
-    x2 = x + vx * speed;
-    y2 = y + vy * speed;
-    radius = particleProps[i8] || 1;
-    hue = particleProps[i9] || 0;
+    const x = particleProps[i] || 0;
+    const y = particleProps[i2] || 0;
+    const n = noise3D(x * xOff, y * yOff, tick * zOff) * noiseSteps * TAU;
+    const vx = lerp(particleProps[i3] || 0, Math.cos(n), 0.5);
+    const vy = lerp(particleProps[i4] || 0, Math.sin(n), 0.5);
+    let life = particleProps[i5] || 0;
+    const ttl = particleProps[i6] || 100;
+    const speed = particleProps[i7] || 1;
+    const x2 = x + vx * speed;
+    const y2 = y + vy * speed;
+    const radius = particleProps[i8] || 1;
+    const hue = particleProps[i9] || 0;
 
     drawParticle(x, y, x2, y2, life || 0, ttl || 100, radius || 1, hue || 0, ctx);
 

@@ -116,12 +116,15 @@ export function NavActions() {
         <PopoverContent className="w-56 overflow-hidden rounded-lg p-0" align="end">
           <Sidebar collapsible="none" className="bg-transparent">
             <SidebarContent>
-              {data.map((group, index) => (
-                <SidebarGroup key={index} className="border-b last:border-none">
+              {data.map((group) => (
+                <SidebarGroup
+                  key={group.map((item) => item.label).join("-")}
+                  className="border-b last:border-none"
+                >
                   <SidebarGroupContent className="gap-0">
                     <SidebarMenu>
-                      {group.map((item, index) => (
-                        <SidebarMenuItem key={index}>
+                      {group.map((item) => (
+                        <SidebarMenuItem key={item.label}>
                           <SidebarMenuButton>
                             <item.icon /> <span>{item.label}</span>
                           </SidebarMenuButton>

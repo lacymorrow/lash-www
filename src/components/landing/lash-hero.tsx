@@ -193,6 +193,7 @@ export const LashHero = () => {
             </span>
           </div>
 
+          {/* biome-ignore lint/a11y/useSemanticElements: a toolbar of toggle buttons is role="group", not a <fieldset> of form controls */}
           <div
             className="mx-auto mt-3 flex items-center justify-center gap-2"
             role="group"

@@ -231,6 +231,7 @@ export const FileUploader = forwardRef<
 			>
 				<div
 					ref={ref}
+					// biome-ignore lint/a11y/noNoninteractiveTabindex: the container owns the arrow-key handler, so it has to be reachable by keyboard
 					tabIndex={0}
 					onKeyDownCapture={handleKeyDown}
 					className={cn("grid w-full overflow-hidden focus:outline-none", className, {

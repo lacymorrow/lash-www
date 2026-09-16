@@ -108,7 +108,7 @@ interface ParsedCommit {
 }
 
 function parseConventional(message: string): ParsedCommit | null {
-  const match = message.match(/^(\w+)(?:\(([^)]+)\))?(!?):\s*(.+)/);
+  const match = /^(\w+)(?:\(([^)]+)\))?(!?):\s*(.+)/.exec(message);
   if (!match) return null;
   return {
     type: match[1]!.toLowerCase(),
