@@ -55,10 +55,6 @@ interface SiteConfig {
     projectName: string;
     projectSlug: string;
     productNames: {
-      // TODO: Remove these once we have a proper product name
-      bones: string;
-      muscles: string;
-      brains: string;
       main: string;
     };
     domain: string;
