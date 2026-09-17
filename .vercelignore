@@ -32,13 +32,9 @@ node_modules/playwright
 **/__tests__/**
 **/__mocks__/**
 # docs/ is build input: src/lib/docs.ts reads process.cwd()/docs at build time
-# and /docs prerenders from it. It is excluded here on purpose, not by accident.
-# The 78 files in docs/ are Shipkit's documentation, inherited from the fork: 66
-# of them describe a Next.js starter kit with Payload CMS, Stripe and Auth.js.
-# Lash is a terminal shell. Shipping them built /docs/features/payments as "Lash
-# Documentation", which is worse than the empty page it replaced. Remove this
-# line once docs/ actually documents Lash.
-docs/**
+# and /docs prerenders from it. It holds Lash's own documentation now, so it has
+# to ship. It was excluded for a while because it still held Shipkit's docs from
+# the fork; those are deleted, not hidden.
 /*.md
 !/README.md
 

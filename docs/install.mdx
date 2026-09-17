@@ -1,0 +1,54 @@
+---
+title: Install
+description: Install Lash with Homebrew, npm, or the install script.
+---
+
+# Install
+
+```bash
+brew install lacymorrow/tap/lash
+```
+
+Or with npm, or bun, pnpm, yarn:
+
+```bash
+npm install -g lashcode
+```
+
+Or the script, which downloads the release binary for your platform:
+
+```bash
+curl -fsSL https://lash.lacy.sh/install | bash
+```
+
+Then run `lash` in any project directory.
+
+## Where it goes
+
+The script installs the `lash` binary to `$HOME/.lash/bin` and adds that directory to your
+`PATH` in your shell config.
+
+```bash
+# somewhere else
+LASH_INSTALL_DIR=/usr/local/bin curl -fsSL https://lash.lacy.sh/install | bash
+
+# a specific version
+curl -fsSL https://lash.lacy.sh/install | bash -s -- --version 1.7.13
+
+# leave my shell config alone
+curl -fsSL https://lash.lacy.sh/install | bash -s -- --no-modify-path
+```
+
+Lash does not replace OpenCode. Different binary name, different directory. If you have
+both, both work.
+
+## Providers
+
+Lash ships no keys and no hosted models. It reads the same provider configuration OpenCode
+does, so if you already have OpenCode set up, Lash picks it up. If not, the
+[provider docs](https://opencode.ai/docs/providers) apply unchanged.
+
+## Upgrading
+
+Homebrew and npm upgrade the way you would expect. The install script replaces whatever is
+in the install directory, and exits early if the version you asked for is already there.
