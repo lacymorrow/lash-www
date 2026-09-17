@@ -3,18 +3,19 @@ import { PricingSectionSingle } from "@/components/blocks/pricing-section-single
 import { Link } from "@/components/primitives/link";
 import { constructMetadata } from "@/config/metadata";
 import { routes } from "@/config/routes";
+import { siteConfig } from "@/config/site-config";
 import { singlePlan } from "@/content/pricing/pricing-content";
 import { FAQ } from "../_shipkit-io-components/faq";
 export const metadata: Metadata = constructMetadata({
-  title: "Pricing & Plans - Start Building Today | Shipkit",
+  title: `Pricing | ${siteConfig.title}`,
   description:
-    "Transparent, flexible pricing for teams of all sizes. Launch your app with confidence using Shipkit's powerful features. Free tier available, no credit card required.",
+    "Lash is free and open source under the MIT license. Bring your own key for any of 15+ AI providers, with no seat count and no credit card.",
   openGraph: {
-    title: "Pricing & Plans - Start Building Today | Shipkit",
+    title: `Pricing | ${siteConfig.title}`,
     description:
-      "Transparent, flexible pricing for teams of all sizes. Launch your app with confidence using Shipkit's powerful features. Free tier available, no credit card required.",
+      "Lash is free and open source under the MIT license. Bring your own key for any of 15+ AI providers, with no seat count and no credit card.",
     type: "website",
-    siteName: "Shipkit",
+    siteName: siteConfig.title,
     locale: "en_US",
   },
 });

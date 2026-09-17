@@ -43,9 +43,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!post) {
     return constructMetadata({
-      title: "Post Not Found | Shipkit Blog",
+      title: `Post Not Found | ${siteConfig.title} Blog`,
       description:
-        "The blog post you're looking for could not be found. Browse our other articles for app development insights and guides.",
+        "The blog post you're looking for could not be found. Browse the rest of the blog for release notes and guides.",
     });
   }
 
@@ -56,10 +56,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   ogUrl.searchParams.set("url", siteConfig.url.replace(/https?:\/\//, ""));
 
   return constructMetadata({
-    title: `${post.title} | Shipkit Blog`,
+    title: `${post.title} | ${siteConfig.title} Blog`,
     description:
       post.description ||
-      "Read this comprehensive guide on app development best practices, tips, and insights from the Shipkit team.",
+      `Notes, guides, and release details from the ${siteConfig.title} team.`,
     images: [
       {
         url: ogUrl.toString(),

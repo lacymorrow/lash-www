@@ -12,6 +12,7 @@ import {
 } from "@/config/blog-authors";
 import { constructMetadata } from "@/config/metadata";
 import { routes } from "@/config/routes";
+import { siteConfig } from "@/config/site-config";
 import { getBlogPosts } from "@/lib/blog";
 import { formatDate } from "@/lib/utils/format-date";
 
@@ -59,8 +60,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const displayName = authorUtils.getDisplayName(author);
 
   return constructMetadata({
-    title: `Posts by ${displayName} | Shipkit Blog`,
-    description: `Read all blog posts written by ${displayName}. Discover insights, tutorials, and best practices for app development.`,
+    title: `Posts by ${displayName} | ${siteConfig.title} Blog`,
+    description: `Every post written by ${displayName} on the ${siteConfig.title} blog.`,
   });
 }
 

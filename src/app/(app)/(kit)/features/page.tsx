@@ -9,26 +9,26 @@ import { FeaturesTable } from "../_shipkit-io-components/features-table";
 export const metadata: Metadata = constructMetadata({
   title: `${siteConfig.title} Features & Capabilities`,
   description:
-    "Explore Shipkit's powerful features: Next.js 14, TypeScript, Payload CMS, Auth.js, Builder.io, and more. Everything you need to build modern, scalable applications.",
+    "Multi-provider AI support, MCP tools built in, session management, a plugin system, and a terminal UI that stays out of the way.",
   openGraph: {
     title: `${siteConfig.title} Features & Capabilities`,
     description:
-      "Explore Shipkit's powerful features: Next.js 14, TypeScript, Payload CMS, Auth.js, Builder.io, and more. Everything you need to build modern, scalable applications.",
+      "Multi-provider AI support, MCP tools built in, session management, a plugin system, and a terminal UI that stays out of the way.",
     type: "website",
     siteName: siteConfig.title,
     locale: "en_US",
   },
   keywords: [
-    "Next.js",
-    "TypeScript",
-    "Payload CMS",
-    "Auth.js",
-    "Builder.io",
-    "App Development",
-    "Web Development",
-    "Full Stack Framework",
+    "AI shell",
+    "terminal",
+    "AI coding agent",
+    "CLI",
+    "MCP",
+    "Model Context Protocol",
+    "Claude",
+    "GPT",
+    "Gemini",
     "Developer Tools",
-    "Application Builder",
   ],
 });
 
