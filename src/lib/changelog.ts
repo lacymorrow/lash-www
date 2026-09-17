@@ -31,7 +31,10 @@ interface GitHubTag {
 // Config
 // ---------------------------------------------------------------------------
 const REPO_OWNER = process.env.GITHUB_REPO_OWNER ?? "lacymorrow";
-const REPO_NAME = process.env.GITHUB_REPO_NAME ?? "shipkit";
+// Inherited from the Shipkit fork, this pointed at lacymorrow/shipkit, which is
+// private: every unauthenticated fetch 404d and the page rendered its empty
+// state. lacymorrow/lash is public and is the repo this site ships.
+const REPO_NAME = process.env.GITHUB_REPO_NAME ?? "lash";
 const GITHUB_API = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`;
 const COMMITS_PER_PAGE = 100;
 const MAX_PAGES = 5; // 500 commits max

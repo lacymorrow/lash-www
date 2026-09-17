@@ -31,9 +31,12 @@ node_modules/playwright
 **/test/**
 **/__tests__/**
 **/__mocks__/**
-docs/**
-*.md
-!README.md
+# docs/ is build input, not documentation-for-humans: src/lib/docs.ts reads it
+# from process.cwd()/docs at build time and /docs prerenders from that. Ignoring
+# it shipped an empty docs site with 78 pages missing. Only strip markdown that
+# nothing reads at build time.
+/*.md
+!/README.md
 
 # IDE and config files
 .vscode
