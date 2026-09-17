@@ -5,8 +5,10 @@
  * Usage: curl -fsSL https://lash.lacy.sh/install | bash
  */
 
+// `lash` is the repo's default branch and its working branch. This pointed at
+// `dev`, which is upstream's branch name and is not where our changes land.
 const INSTALL_SCRIPT_URL =
-  "https://raw.githubusercontent.com/lacymorrow/lash/dev/install";
+  "https://raw.githubusercontent.com/lacymorrow/lash/lash/install";
 
 export async function GET() {
   const res = await fetch(INSTALL_SCRIPT_URL, {
