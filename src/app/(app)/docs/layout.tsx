@@ -14,8 +14,7 @@ export default async function DocsLayout({ children }: DocsLayoutProps) {
   const navigation = getDocsNavigation();
   const navLinks = [
     { href: routes.docs, label: "Docs" },
-    { href: routes.features, label: "Features" },
-    { href: routes.pricing, label: "Pricing" },
+    { href: "/changelog", label: "Changelog" },
   ];
 
   return (

@@ -1,82 +1,95 @@
 ---
-title: Shipkit Documentation
-description: Next.js 15 starter kit with auth, payments, CMS, email, AI, and analytics. All feature-flagged.
+title: Overview
+description: A fork of OpenCode that adds a shell mode, so one prompt can run a command, call an agent, or decide for itself.
 ---
 
-# <SiteName /> Documentation
+# Lash
 
-Next.js 15 starter kit. Enable features by setting env vars — no code changes needed.
+Lash is a fork of [OpenCode](https://github.com/anomalyco/opencode). Everything OpenCode
+does, Lash does: 15+ model providers, MCP tools, sessions, agents, the TUI. Those are
+documented at [opencode.ai/docs](https://opencode.ai/docs), and that documentation is
+accurate for Lash.
 
-## Getting Started
+This page covers only what Lash adds on top.
 
-- [Quick Start](/docs/getting-started) — clone, install, run
-- [Environment Variables](/docs/getting-started/environment) — configure features
-- [Deploy to Vercel](/docs/getting-started/deploy)
-- [Setup Wizard](/docs/getting-started/setup-wizard)
-- [File Structure](/docs/getting-started/file-structure)
+The short version: OpenCode gives you an agent in your terminal. Lash gives you an agent
+and a shell in the same prompt, and lets you stop deciding which one you meant.
 
-## Features
+## Execution modes
 
-| Feature | Guide | What it does |
-|---------|-------|-------------|
-| Authentication | [Guide](/docs/features/authentication) | Auth.js v5, Better Auth, Clerk, Supabase, Stack. OAuth, magic links, credentials, guest. |
-| Payments | [Guide](/docs/features/payments) | Lemon Squeezy, Stripe, Polar. Unified PaymentService across all providers. |
-| CMS | [Guide](/docs/features/cms) | Payload CMS v3. Collections, media, admin panel. |
-| Visual Builder | [Guide](/docs/features/visual-builder) | Builder.io drag-and-drop page editing. |
-| Database | [Guide](/docs/features/database) | PostgreSQL + Drizzle ORM. Migrations, seeding, studio. |
-| Email | [Guide](/docs/features/email) | Resend. Transactional email + magic link auth. |
-| AI | [Guide](/docs/features/ai) | Browser-based SmolLM (WebGPU) + OpenAI/Anthropic cloud. |
-| Analytics | [Guide](/docs/features/analytics) | PostHog, Umami, Google Analytics, Statsig, DataFast. |
-| Storage | [Guide](/docs/features/storage) | AWS S3, Vercel Blob. |
-| Waitlist | [Guide](/docs/features/waitlist) | Pre-launch signup collection. |
+The prompt has three modes. `ctrl+space` cycles them.
 
-## Integrations
+| Mode | Icon | What a line of input does |
+| --- | --- | --- |
+| Auto | `∞` | Runs as a shell command. If the shell chokes on it, hands it to the agent. |
+| Shell | `>` | Runs as a shell command. Always. |
+| Agent | `◆` | Goes to the agent. Always. |
 
-### Auth Providers
-[Auth.js](/docs/integrations/authentication/auth-js) · [Better Auth](/docs/integrations/authentication/better-auth) · [Clerk](/docs/integrations/authentication/clerk) · [Supabase](/docs/integrations/authentication/supabase) · [Stack](/docs/integrations/authentication/stack)
+Auto is the default, and it is the reason the fork exists. You type `git status` and it
+runs. You type `fix the build error in src/index.ts` and the agent takes it. You do not
+prefix, toggle, or think about it.
 
-### Payment Providers
-[Lemon Squeezy](/docs/integrations/payments/lemonsqueezy) · [Stripe](/docs/integrations/payments/stripe) · [Polar](/docs/integrations/payments/polar)
+To run one command without leaving the mode you are in, prefix it with `!`.
 
-### Analytics
-[PostHog](/docs/integrations/analytics/posthog) · [Umami](/docs/integrations/analytics/umami) · [Google Analytics](/docs/integrations/analytics/google-analytics) · [Google Tag Manager](/docs/integrations/analytics/google-tag-manager) · [Statsig](/docs/integrations/analytics/statsig) · [DataFast](/docs/integrations/analytics/datafast)
+If you want a different key, set `mode_toggle` in your keybinds. It takes precedence over
+`ctrl+space`.
 
-### Infrastructure
-[Resend](/docs/integrations/infra/resend) · [AWS S3](/docs/integrations/infra/aws-s3) · [Vercel Blob](/docs/integrations/infra/vercel-blob) · [Upstash Redis](/docs/integrations/infra/upstash-redis)
+## How Auto decides
 
-### Content
-[Payload CMS](/docs/integrations/content/payload-cms) · [Builder.io](/docs/integrations/content/builder-io)
+Auto does not guess up front. It runs your input as a shell command and watches how the
+shell fails.
 
-## Development
+Some failures mean you typed English:
 
-- [Development Guide](/docs/development) — dev server, linting, testing
-- [Feature Flags](/docs/development/feature-flags) — how the flag system works
-- [DevTools](/docs/development/devtools) — built-in development tools
-- [Web Workers](/docs/development/web-workers)
+```
+> make sure the tests pass
+make: *** No rule to make target 'sure'.  Stop.
+```
 
-## Guides
+`No rule to make target` on a line whose second word is `sure` is not a build problem. It
+is a sentence. Lash reroutes it to the agent and you see the answer, not the error.
 
-- [Caching](/docs/guides/caching)
-- [Content Management](/docs/guides/content-management)
-- [Error Handling](/docs/guides/error-handling)
-- [Middleware](/docs/guides/middleware)
-- [Rebranding](/docs/guides/rebranding)
-- [Server Actions](/docs/guides/proxy-safe-server-actions)
-- [Webhooks](/docs/guides/webhooks)
-- [Multi-Zone Deployment](/docs/guides/deployment/multi-zone)
+The signals it watches for are shell parse and syntax errors, `command not found`,
+unknown-option and unknown-subcommand errors from tools like git, go, cargo, docker and
+kubectl, and a list of words that are ordinary in English but odd as the second token of a
+command.
 
-## Reference
+A command that fails for a real reason still fails. `git psuh` gets you git's error, not a
+conversation about it.
 
-- [Components](/docs/reference/components)
-- [Code Snippets](/docs/reference/snippets/snippet-intro)
+## The two bars
 
-## Stack
+The prompt draws two vertical bars down its left edge instead of one.
 
-- **Framework**: Next.js 15 (App Router)
-- **Language**: TypeScript
-- **Package Manager**: Bun (also supports npm, yarn)
-- **Database**: PostgreSQL + Drizzle ORM
-- **UI**: Tailwind CSS + Shadcn/UI
-- **CMS**: Payload CMS v3
-- **Visual Builder**: Builder.io
-- **Email**: Resend
+The outer bar is the agent color. The inner bar is the execution mode color. Together they
+tell you, without reading anything, which agent is live and whether the next line is going
+to the shell or the model. The mode icon sits in the prompt as well, but the bar is what
+you catch out of the corner of your eye.
+
+## The working directory follows you
+
+`cd` inside shell mode changes the directory for everything after it, and the footer shows
+where you are.
+
+This sounds obvious and is not. Each shell command normally runs in its own process, so a
+`cd` would evaporate the moment the command exited. Lash tracks the directory across
+commands and propagates it back to the UI, so a session behaves like a terminal rather than
+a series of unrelated one-shot commands.
+
+The change is also published as an `EventCwdUpdated` event on the JS SDK, if you are
+building something that needs to follow along.
+
+## Tab
+
+Tab completes shell paths and commands. Shift+Tab cycles agents.
+
+Upstream maps Tab to the agent cycle. Lash moves it, because in a prompt where half of what
+you type is a shell command, Tab completing a path is worth more than Tab switching models.
+
+## Versions
+
+Lash versions independently of upstream. Released as `lashcode` on npm and
+`lacymorrow/tap/lash` on Homebrew, and it installs alongside OpenCode rather than over it:
+different binary name, different install directory. Running both is fine.
+
+See [Install](/docs/install) to get it, or the [changelog](/changelog) for what shipped.

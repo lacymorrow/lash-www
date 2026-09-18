@@ -186,6 +186,7 @@ export function LashLanding() {
             <div className="ll-nav-right">
               <a href="#how">How it works</a>
               <a href="#tools">Tools</a>
+              <Link href="/docs">Docs</Link>
               <a
                 href="https://github.com/lacymorrow/lash"
                 target="_blank"
@@ -396,6 +397,8 @@ export function LashLanding() {
               >
                 issues
               </a>
+              <Link href="/docs">docs</Link>
+              <Link href="/changelog">changelog</Link>
               <a href="https://lacy.sh" target="_blank" rel="noopener noreferrer">
                 lacy shell
               </a>
