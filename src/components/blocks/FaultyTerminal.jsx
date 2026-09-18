@@ -264,7 +264,11 @@ export default function FaultyTerminal(props) {
     tint = "#ffffff",
     mouseReact = true,
     mouseStrength = 0.2,
-    dpr = Math.min(window.devicePixelRatio || 1, 2),
+    // A default parameter is evaluated on every render, including the server
+    // render Next does for client components during prerender, so this cannot
+    // reach for `window` unguarded. It threw ReferenceError and failed the
+    // build the moment /_not-found started prerendering for real.
+    dpr = typeof window === "undefined" ? 1 : Math.min(window.devicePixelRatio || 1, 2),
     pageLoadAnimation = true,
     brightness = 1,
     className,
