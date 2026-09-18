@@ -12,8 +12,8 @@ export interface NavLink {
 	authVisibility?: "authenticated" | "unauthenticated";
 }
 
+/** The site is the landing page, the docs and the changelog. Nothing else has a page. */
 export const defaultNavLinks: NavLink[] = [
-	{ href: routes.faq, label: "Faqs" },
-	{ href: routes.features, label: "Features" },
-	{ href: routes.pricing, label: "Pricing" },
+	{ href: routes.docs, label: "Docs" },
+	{ href: "/changelog", label: "Changelog" },
 ];

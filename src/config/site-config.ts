@@ -55,10 +55,6 @@ interface SiteConfig {
     projectName: string;
     projectSlug: string;
     productNames: {
-      // TODO: Remove these once we have a proper product name
-      bones: string;
-      muscles: string;
-      brains: string;
       main: string;
     };
     domain: string;
@@ -177,15 +173,12 @@ export const siteConfig: SiteConfig = {
   url: "https://lash.lacy.sh",
   ogImage: "https://lash.lacy.sh/app/og-image.png",
   description:
-    "A beautiful AI terminal for your code. Shell first, AI second. Type commands or talk naturally — lash figures out the rest.",
+    "A beautiful AI terminal for your code. Shell first, AI second. Type commands or talk naturally, and lash figures out which one you meant.",
 
   branding: {
     projectName: "Lash",
     projectSlug: "lash",
     productNames: {
-      bones: "Bones",
-      muscles: "Muscles",
-      brains: "Brains",
       main: "Lash",
     },
     domain: "lash.lacy.sh",
@@ -246,7 +239,7 @@ export const siteConfig: SiteConfig = {
   store: {
     id: "lash",
     products: {
-      // Lash is free and open source — no paid products
+      // Lash is free and open source, so there are no paid products
       lash: "",
     },
   },
