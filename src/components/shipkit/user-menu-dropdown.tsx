@@ -98,9 +98,7 @@ export function UserMenuDropdown({
       >
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">
-              {user?.name ?? "Guest User"}
-            </p>
+            <p className="text-sm font-medium leading-none">{user?.name ?? "Guest User"}</p>
             <p className="text-xs leading-none text-muted-foreground">
               {user?.email || "Not signed in"}
             </p>
@@ -158,17 +156,13 @@ export function UserMenuDropdown({
                 <Link href={item.href}>
                   {item.icon && <span className="mr-2">{item.icon}</span>}
                   {item.label}
-                  {item.shortcut && (
-                    <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>
-                  )}
+                  {item.shortcut && <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>}
                 </Link>
               ) : (
                 <>
                   {item.icon && <span className="mr-2">{item.icon}</span>}
                   {item.label}
-                  {item.shortcut && (
-                    <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>
-                  )}
+                  {item.shortcut && <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>}
                 </>
               )}
             </DropdownMenuItem>
@@ -184,30 +178,18 @@ export function UserMenuDropdown({
                 <span>Theme</span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
-                <DropdownMenuRadioGroup
-                  value={theme || "system"}
-                  onValueChange={handleThemeChange}
-                >
-                  <DropdownMenuRadioItem
-                    value="light"
-                    className="flex items-center gap-2"
-                  >
+                <DropdownMenuRadioGroup value={theme || "system"} onValueChange={handleThemeChange}>
+                  <DropdownMenuRadioItem value="light" className="flex items-center gap-2">
                     <SunIcon className="size-4" />
                     <span>Light</span>
                     <DropdownMenuShortcut>⌘L</DropdownMenuShortcut>
                   </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem
-                    value="dark"
-                    className="flex items-center gap-2"
-                  >
+                  <DropdownMenuRadioItem value="dark" className="flex items-center gap-2">
                     <MoonIcon className="size-4" />
                     <span>Dark</span>
                     <DropdownMenuShortcut>⇧⌘D</DropdownMenuShortcut>
                   </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem
-                    value="system"
-                    className="flex items-center gap-2"
-                  >
+                  <DropdownMenuRadioItem value="system" className="flex items-center gap-2">
                     <DesktopIcon className="size-4" />
                     <span>System</span>
                     <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
@@ -219,10 +201,7 @@ export function UserMenuDropdown({
         )}
 
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="text-red-600 dark:text-red-400"
-          onClick={handleSignOut}
-        >
+        <DropdownMenuItem className="text-red-600 dark:text-red-400" onClick={handleSignOut}>
           <ExitIcon className="mr-2 size-4" />
           Sign out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>

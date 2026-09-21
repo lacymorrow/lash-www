@@ -10,7 +10,7 @@ export const BlogBadge = ({ label, className }: BlogBadgeProps) => {
   return (
     <span
       className={cn(
-        "inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-sky-100 text-sky-800 border border-sky-200",
+        "inline-flex items-center rounded-md border border-sky-200 bg-sky-100 px-2.5 py-0.5 text-xs font-medium text-sky-800",
         className
       )}
     >

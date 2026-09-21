@@ -4,9 +4,7 @@ import type { Twitter } from "next/dist/lib/metadata/types/twitter-types";
 import { siteConfig } from "./site-config";
 
 // Helper function to safely extract the default title string
-const getDefaultTitleString = (
-  title: Metadata["title"],
-): string | undefined => {
+const getDefaultTitleString = (title: Metadata["title"]): string | undefined => {
   if (typeof title === "string") {
     return title;
   }
@@ -121,8 +119,7 @@ export const constructMetadata = ({
       // Assign the extracted title string or fallback
       title: metaTitleString ?? defaultMetaTitleString,
       // Ensure description is not null
-      description:
-        (metadata.description ?? defaultMetadata.description) || undefined,
+      description: (metadata.description ?? defaultMetadata.description) || undefined,
       images: images.length > 0 ? images : defaultOpenGraph.images,
     },
     twitter: {
@@ -130,8 +127,7 @@ export const constructMetadata = ({
       // Assign the extracted title string or fallback
       title: metaTitleString ?? defaultMetaTitleString,
       // Ensure description is not null
-      description:
-        (metadata.description ?? defaultMetadata.description) || undefined,
+      description: (metadata.description ?? defaultMetadata.description) || undefined,
       images: images.length > 0 ? images : defaultTwitter.images,
     },
     robots: noIndex ? { index: false, follow: true } : defaultMetadata.robots,
@@ -155,7 +151,8 @@ export const headLinkHints: HeadLinkHint[] = [
 export const routeMetadata = {
   home: {
     title: `${siteConfig.title} - ${siteConfig.tagline}`,
-    description: "A beautiful AI terminal for your code. Type commands or talk naturally — lash figures out the rest. Works with Claude Code, Gemini CLI, Codex, and more.",
+    description:
+      "A beautiful AI terminal for your code. Type commands or talk naturally — lash figures out the rest. Works with Claude Code, Gemini CLI, Codex, and more.",
   },
   features: {
     title: `Features | ${siteConfig.title}`,

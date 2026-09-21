@@ -245,13 +245,17 @@
       "title": "Docs",
       "description": "Full documentation system with sidebar navigation, search, and MDX rendering.",
       "categories": ["shipkit", "docs"],
-      "dependencies": [
-        "next-mdx-remote",
-        "remark-gfm",
-        "gray-matter",
-        "zod"
+      "dependencies": ["next-mdx-remote", "remark-gfm", "gray-matter", "zod"],
+      "registryDependencies": [
+        "cn",
+        "routes-config",
+        "accordion",
+        "scroll-area",
+        "skeleton",
+        "badge",
+        "command",
+        "input"
       ],
-      "registryDependencies": ["cn", "routes-config", "accordion", "scroll-area", "skeleton", "badge", "command", "input"],
       "files": [
         {
           "path": "src/app/(app)/docs/layout.tsx",
@@ -322,13 +326,18 @@
       "title": "Blog",
       "description": "Complete blog system with MDX posts, author profiles, categories, sidebar, and feed-style timeline layout.",
       "categories": ["shipkit", "blog"],
-      "dependencies": [
-        "gray-matter",
-        "next-mdx-remote",
-        "remark-gfm",
-        "lucide-react"
+      "dependencies": ["gray-matter", "next-mdx-remote", "remark-gfm", "lucide-react"],
+      "registryDependencies": [
+        "cn",
+        "routes-config",
+        "badge",
+        "button",
+        "input",
+        "scroll-area",
+        "separator",
+        "sheet",
+        "skeleton"
       ],
-      "registryDependencies": ["cn", "routes-config", "badge", "button", "input", "scroll-area", "separator", "sheet", "skeleton"],
       "files": [
         {
           "path": "src/app/(app)/blog/layout.tsx",
@@ -459,11 +468,7 @@
       "title": "Builder.io",
       "description": "Visual page builder integration with Builder.io for no-code content editing.",
       "categories": ["shipkit", "cms", "builder"],
-      "dependencies": [
-        "@builder.io/react",
-        "@builder.io/sdk",
-        "@builder.io/dev-tools"
-      ],
+      "dependencies": ["@builder.io/react", "@builder.io/sdk", "@builder.io/dev-tools"],
       "registryDependencies": ["cn"],
       "files": [
         {
@@ -530,11 +535,16 @@
       "title": "CMS Pages",
       "description": "Shared catch-all route that renders dynamic pages from Payload CMS and/or Builder.io with automatic fallback.",
       "categories": ["shipkit", "cms"],
-      "dependencies": [
-        "@builder.io/sdk",
-        "uuid"
+      "dependencies": ["@builder.io/sdk", "uuid"],
+      "registryDependencies": [
+        "cn",
+        "features-config",
+        "builder-io",
+        "button",
+        "card",
+        "carousel",
+        "avatar"
       ],
-      "registryDependencies": ["cn", "features-config", "builder-io", "button", "card", "carousel", "avatar"],
       "files": [
         {
           "path": "src/app/(cms)/[...slug]/page.tsx",
@@ -600,14 +610,19 @@
       "title": "Auth",
       "description": "Full authentication system with NextAuth.js v5, multi-provider OAuth, credentials, magic link, and guest access.",
       "categories": ["shipkit", "auth"],
-      "dependencies": [
-        "next-auth@5",
-        "@auth/drizzle-adapter",
-        "bcryptjs",
-        "zod",
-        "zsa"
+      "dependencies": ["next-auth@5", "@auth/drizzle-adapter", "bcryptjs", "zod", "zsa"],
+      "registryDependencies": [
+        "cn",
+        "routes-config",
+        "features-config",
+        "button",
+        "input",
+        "card",
+        "separator",
+        "form",
+        "label",
+        "tooltip"
       ],
-      "registryDependencies": ["cn", "routes-config", "features-config", "button", "input", "card", "separator", "form", "label", "tooltip"],
       "files": [
         {
           "path": "src/app/(app)/(authentication)/layout.tsx",

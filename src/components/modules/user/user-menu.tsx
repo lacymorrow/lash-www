@@ -203,7 +203,7 @@ export const UserMenu = ({
   return (
     <div
       className={cn(
-        "relative rounded-full flex items-center justify-center aspect-square",
+        "relative flex aspect-square items-center justify-center rounded-full",
         size === "sm" ? "size-9" : "size-9"
       )}
     >
@@ -247,7 +247,7 @@ export const UserMenu = ({
               href={signInRedirectUrl}
               className={cn(
                 buttonVariants({ variant: "ghost", size: "icon" }),
-                "rounded-full cursor-pointer"
+                "cursor-pointer rounded-full"
               )}
             >
               <UserIcon className="size-6" />

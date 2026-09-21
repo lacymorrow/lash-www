@@ -11,21 +11,21 @@ import type React from "react";
 import { siteConfig } from "@/config/site-config";
 
 export const Link = ({ children, ...props }: React.ComponentProps<typeof NextLink>) => {
-	if (typeof props.href !== "string") {
-		props.href = "#";
-	}
+  if (typeof props.href !== "string") {
+    props.href = "#";
+  }
 
-	if (siteConfig?.behavior?.pageTransitions) {
-		const { prefetch: incomingPrefetch, ...restRaw } = props;
-		const rest = restRaw as Omit<React.ComponentProps<typeof NextLink>, "prefetch">;
-		const normalizedPrefetch: boolean | undefined =
-			typeof incomingPrefetch === "boolean" ? incomingPrefetch : undefined;
-		return (
-			<TransitionsLink prefetch={normalizedPrefetch} {...rest}>
-				{children}
-			</TransitionsLink>
-		);
-	}
+  if (siteConfig?.behavior?.pageTransitions) {
+    const { prefetch: incomingPrefetch, ...restRaw } = props;
+    const rest = restRaw as Omit<React.ComponentProps<typeof NextLink>, "prefetch">;
+    const normalizedPrefetch: boolean | undefined =
+      typeof incomingPrefetch === "boolean" ? incomingPrefetch : undefined;
+    return (
+      <TransitionsLink prefetch={normalizedPrefetch} {...rest}>
+        {children}
+      </TransitionsLink>
+    );
+  }
 
-	return <NextLink {...props}>{children}</NextLink>;
+  return <NextLink {...props}>{children}</NextLink>;
 };

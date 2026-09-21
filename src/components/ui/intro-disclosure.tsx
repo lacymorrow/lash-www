@@ -96,14 +96,14 @@ function StepPreview({ step, direction }: { step: Step; direction: 1 | -1 }) {
   return (
     <motion.div
       {...slideInOut(direction)}
-      className="relative h-full w-full   overflow-hidden rounded-sm rounded-rb-lg rounded-tl-xl ring-2 ring-black/10 dark:ring-black/10 dark:ring-offset-black ring-offset-8"
+      className="rounded-rb-lg relative h-full w-full overflow-hidden rounded-sm rounded-tl-xl ring-2 ring-black/10 ring-offset-8 dark:ring-black/10 dark:ring-offset-black"
     >
       {step.media ? (
-        <div className="relative bg-black h-full w-full">
+        <div className="relative h-full w-full bg-black">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={controls}
-            className="h-full w-full max-h-[700px]"
+            className="h-full max-h-[700px] w-full"
           >
             {step.media.type === "image" ? (
               <Image
@@ -125,7 +125,7 @@ function StepPreview({ step, direction }: { step: Step; direction: 1 | -1 }) {
             className="absolute bottom-0 left-0 right-0 p-6"
           >
             <h3 className="mb-2 text-2xl font-semibold text-white">{step.title}</h3>
-            <p className="text-white hidden md:block">{step.full_description}</p>
+            <p className="hidden text-white md:block">{step.full_description}</p>
           </motion.div>
         </div>
       ) : (
@@ -153,21 +153,21 @@ function StepTab({ step, isActive, onClick, isCompleted }: StepTabProps) {
       {...hoverScale}
       onClick={onClick}
       className={cn(
-        "flex flex-col items-start rounded-lg px-4 py-2 text-left transition-colors w-full",
-        isActive ? "bg-muted border border-border" : "hover:bg-muted/70",
+        "flex w-full flex-col items-start rounded-lg px-4 py-2 text-left transition-colors",
+        isActive ? "border border-border bg-muted" : "hover:bg-muted/70",
         "relative"
       )}
       aria-current={isActive ? "step" : undefined}
       aria-label={`${step.title}${isCompleted ? " (completed)" : ""}`}
     >
       <div className="mb-1 text-sm font-medium">{step.title}</div>
-      <div className="text-xs hidden md:block text-muted-foreground line-clamp-2">
+      <div className="line-clamp-2 hidden text-xs text-muted-foreground md:block">
         {step.short_description}
       </div>
       {isCompleted && (
         <motion.div {...fadeInScale} className="absolute right-2 top-2">
           <div className="rounded-full bg-primary p-1">
-            <CheckIcon className="w-2 h-2 text-primary-foreground" />
+            <CheckIcon className="h-2 w-2 text-primary-foreground" />
           </div>
         </motion.div>
       )}
@@ -243,11 +243,11 @@ function StepContent({
 
     if (action.href) {
       return (
-        <Button asChild className="w-full " size="sm" variant="link">
+        <Button asChild className="w-full" size="sm" variant="link">
           <a href={action.href} target="_blank" rel="noopener noreferrer">
             <span className="flex items-center gap-2">
               {action.label}
-              <ExternalLinkIcon className="w-4 h-4" />
+              <ExternalLinkIcon className="h-4 w-4" />
             </span>
           </a>
         </Button>
@@ -267,14 +267,14 @@ function StepContent({
   };
 
   return (
-    <div className="flex h-full flex-col max-w-3xl mx-auto">
+    <div className="mx-auto flex h-full max-w-3xl flex-col">
       {isDesktop && (
-        <div className="flex-1  px-2 py-3">
+        <div className="flex-1 px-2 py-3">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-            className="space-y-2 flex flex-col justify-center items-center px-1"
+            className="flex flex-col items-center justify-center space-y-2 px-1"
           >
             {steps.map((step, index) => (
               <StepTab
@@ -289,15 +289,15 @@ function StepContent({
         </div>
       )}
       <AnimatePresence mode="wait" initial={false}>
-        <motion.div key={currentStep} {...slideInOut(direction)} className="mt-6 space-y-4 ">
+        <motion.div key={currentStep} {...slideInOut(direction)} className="mt-6 space-y-4">
           {!isDesktop && steps[currentStep]?.media && (
-            <AspectRatio ratio={16 / 9} className="lg:overflow-hidden rounded-lg bg-muted ">
+            <AspectRatio ratio={16 / 9} className="rounded-lg bg-muted lg:overflow-hidden">
               {steps[currentStep]?.media?.type === "image" ? (
                 <Image
                   src={steps[currentStep]?.media?.src || "/placeholder.svg"}
                   alt={steps[currentStep]?.media?.alt || ""}
                   fill
-                  className="object-cover "
+                  className="object-cover"
                 />
               ) : (
                 <video
@@ -312,7 +312,7 @@ function StepContent({
           )}
 
           {steps[currentStep]?.action ? (
-            <div className=" px-2">{renderActionButton(steps[currentStep]?.action)}</div>
+            <div className="px-2">{renderActionButton(steps[currentStep]?.action)}</div>
           ) : (
             <div className="h-10" />
           )}
@@ -325,7 +325,7 @@ function StepContent({
             <Button
               variant="ghost"
               onClick={onSkip}
-              className="text-muted-foreground hover:bg-card rounded-full"
+              className="rounded-full text-muted-foreground hover:bg-card"
             >
               Skip all
             </Button>
@@ -356,7 +356,7 @@ function StepContent({
             </div>
             {/* Don't show again checkbox */}
           </div>
-          <div className="flex items-center space-x-2 pb-4 px-4">
+          <div className="flex items-center space-x-2 px-4 pb-4">
             <Checkbox
               id="skipNextTime"
               checked={skipNextTime}
@@ -496,18 +496,18 @@ export function IntroDisclosure({
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-5xl p-0 gap-0 overflow-hidden " onKeyDown={handleKeyDown}>
-          <DialogHeader className="p-6 space-y-2 bg-muted border-b border-border">
+        <DialogContent className="max-w-5xl gap-0 overflow-hidden p-0" onKeyDown={handleKeyDown}>
+          <DialogHeader className="space-y-2 border-b border-border bg-muted p-6">
             <DialogTitle>Feature Tour</DialogTitle>
             {showProgressBar && (
-              <div className="flex mt-2 w-full justify-center  ">
-                <Progress value={((currentStep + 1) / steps.length) * 100} className="  h-1 " />
+              <div className="mt-2 flex w-full justify-center">
+                <Progress value={((currentStep + 1) / steps.length) * 100} className="h-1" />
               </div>
             )}
           </DialogHeader>
 
-          <div className="grid grid-cols-2 h-full">
-            <div className="p-2 pr-[18px] ">
+          <div className="grid h-full grid-cols-2">
+            <div className="p-2 pr-[18px]">
               <StepContent
                 steps={steps}
                 currentStep={currentStep}
@@ -535,15 +535,15 @@ export function IntroDisclosure({
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerContent className="h-[95vh] max-h-[95vh] ">
+      <DrawerContent className="h-[95vh] max-h-[95vh]">
         <motion.div
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           onDragEnd={handleDragEnd}
           onKeyDown={handleKeyDown}
-          className="h-full flex flex-col max-w-3xl mx-auto"
+          className="mx-auto flex h-full max-w-3xl flex-col"
         >
-          <DrawerHeader className="text-left  pb-4 space-y-4">
+          <DrawerHeader className="space-y-4 pb-4 text-left">
             {showProgressBar && (
               <Progress value={((currentStep + 1) / steps.length) * 100} className="mb-4" />
             )}
@@ -551,9 +551,9 @@ export function IntroDisclosure({
           </DrawerHeader>
 
           <div className="flex-1 overflow-y-auto">
-            <div className="p-4 space-y-4 pb-32">
+            <div className="space-y-4 p-4 pb-32">
               {/* Step tabs */}
-              <div className="grid grid-cols-2 gap-2 mb-6">
+              <div className="mb-6 grid grid-cols-2 gap-2">
                 {steps.map((step, index) => (
                   <StepTab
                     key={step.title}
@@ -565,14 +565,14 @@ export function IntroDisclosure({
                 ))}
               </div>
               {/* Preview */}
-              <div className="relative aspect-[16/9] ring-2 ring-border ring-offset-8 ring-offset-background rounded-lg overflow-hidden">
+              <div className="relative aspect-[16/9] overflow-hidden rounded-lg ring-2 ring-border ring-offset-8 ring-offset-background">
                 {steps[currentStep] && (
                   <StepPreview step={steps[currentStep]} direction={direction} />
                 )}
               </div>
 
               {/* Step content */}
-              <div className="space-y-4 border border-border p-3 rounded-lg">
+              <div className="space-y-4 rounded-lg border border-border p-3">
                 <p className="text-muted-foreground">{steps[currentStep]?.short_description}</p>
                 {steps[currentStep]?.action && (
                   <Button
@@ -604,11 +604,11 @@ export function IntroDisclosure({
           {/* Fixed bottom navigation */}
           <div className="absolute bottom-0 left-0 right-0 border-t bg-background">
             <div className="p-4">
-              <div className="flex items-center justify-between mb-4">
+              <div className="mb-4 flex items-center justify-between">
                 <Button
                   variant="ghost"
                   onClick={onSkip}
-                  className="text-muted-foreground hover:bg-card rounded-full"
+                  className="rounded-full text-muted-foreground hover:bg-card"
                 >
                   Skip all
                 </Button>

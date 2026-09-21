@@ -24,7 +24,7 @@ export const NotFoundTerminalBackground = () => {
         pageLoadAnimation={true}
         brightness={1}
         style={{}}
-        className="h-full w-full pointer-events-none"
+        className="pointer-events-none h-full w-full"
       />
     </div>
   );

@@ -538,7 +538,7 @@ export async function getUserPaymentStatus(): Promise<boolean> {
 
 export async function checkUserPurchasedProduct(
   productId: string,
-  provider?: string,
+  provider?: string
 ): Promise<{ success: boolean; purchased: boolean; message?: string }> {
   const session = await getSession();
   if (!session?.user?.id) return { success: false, purchased: false };

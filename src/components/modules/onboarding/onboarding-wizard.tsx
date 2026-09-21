@@ -155,7 +155,7 @@ export const OnboardingWizard = ({
             </div>
             <div className="rounded-lg bg-primary/10 p-3 text-center">
               <h3 className="font-semibold">Almost there!</h3>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="mt-1 text-sm text-muted-foreground">
                 Once deployed, your site will be available at your custom domain or a
                 Vercel-provided URL.
               </p>

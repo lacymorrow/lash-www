@@ -339,15 +339,12 @@ export const siteConfig: SiteConfig = {
 
 // Assign dynamic values AFTER the main object is defined
 siteConfig.repo.format = {
-  clone: () =>
-    `https://github.com/${siteConfig.repo.owner}/${siteConfig.repo.name}.git`,
-  ssh: () =>
-    `git@github.com:${siteConfig.repo.owner}/${siteConfig.repo.name}.git`,
+  clone: () => `https://github.com/${siteConfig.repo.owner}/${siteConfig.repo.name}.git`,
+  ssh: () => `git@github.com:${siteConfig.repo.owner}/${siteConfig.repo.name}.git`,
 };
 
-siteConfig.email.format = (
-  type: Exclude<keyof SiteConfig["email"], "format">,
-) => siteConfig.email[type];
+siteConfig.email.format = (type: Exclude<keyof SiteConfig["email"], "format">) =>
+  siteConfig.email[type];
 
 siteConfig.payload.adminTitleSuffix = ` - ${siteConfig.title} CMS`;
 
@@ -358,10 +355,7 @@ siteConfig.metadata.alternates ??= {};
 siteConfig.metadata.alternates.canonical = siteConfig.url;
 
 // Check appleWebApp is an object before assigning title
-if (
-  siteConfig.metadata.appleWebApp &&
-  typeof siteConfig.metadata.appleWebApp === "object"
-) {
+if (siteConfig.metadata.appleWebApp && typeof siteConfig.metadata.appleWebApp === "object") {
   siteConfig.metadata.appleWebApp.title = siteConfig.title;
 }
 

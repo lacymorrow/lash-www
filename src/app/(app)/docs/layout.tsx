@@ -31,7 +31,7 @@ export default async function DocsLayout({ children }: DocsLayoutProps) {
         </aside>
 
         {/* Main content */}
-        <main className="relative py-6 lg:py-8 container mx-auto w-full min-w-0">
+        <main className="container relative mx-auto w-full min-w-0 py-6 lg:py-8">
           {/* Content */}
           {children}
         </main>

@@ -97,12 +97,8 @@
           "name": "shipkit_account_userId_shipkit_user_id_fk",
           "tableFrom": "shipkit_account",
           "tableTo": "shipkit_user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -110,10 +106,7 @@
       "compositePrimaryKeys": {
         "shipkit_account_provider_providerAccountId_pk": {
           "name": "shipkit_account_provider_providerAccountId_pk",
-          "columns": [
-            "provider",
-            "providerAccountId"
-          ]
+          "columns": ["provider", "providerAccountId"]
         }
       },
       "uniqueConstraints": {},
@@ -198,12 +191,8 @@
           "name": "shipkit_api_key_user_id_shipkit_user_id_fk",
           "tableFrom": "shipkit_api_key",
           "tableTo": "shipkit_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -211,12 +200,8 @@
           "name": "shipkit_api_key_project_id_shipkit_project_id_fk",
           "tableFrom": "shipkit_api_key",
           "tableTo": "shipkit_project",
-          "columnsFrom": [
-            "project_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["project_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -286,12 +271,8 @@
           "name": "shipkit_authenticator_userId_shipkit_user_id_fk",
           "tableFrom": "shipkit_authenticator",
           "tableTo": "shipkit_user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -299,19 +280,14 @@
       "compositePrimaryKeys": {
         "shipkit_authenticator_userId_credentialID_pk": {
           "name": "shipkit_authenticator_userId_credentialID_pk",
-          "columns": [
-            "userId",
-            "credentialID"
-          ]
+          "columns": ["userId", "credentialID"]
         }
       },
       "uniqueConstraints": {
         "shipkit_authenticator_credentialID_unique": {
           "name": "shipkit_authenticator_credentialID_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "credentialID"
-          ]
+          "columns": ["credentialID"]
         }
       },
       "policies": {},
@@ -403,12 +379,8 @@
           "name": "shipkit_credit_transaction_user_id_shipkit_user_id_fk",
           "tableFrom": "shipkit_credit_transaction",
           "tableTo": "shipkit_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -557,12 +529,8 @@
           "name": "shipkit_deployments_user_id_shipkit_user_id_fk",
           "tableFrom": "shipkit_deployments",
           "tableTo": "shipkit_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -872,9 +840,7 @@
         "shipkit_plan_variantId_unique": {
           "name": "shipkit_plan_variantId_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "variantId"
-          ]
+          "columns": ["variantId"]
         }
       },
       "policies": {},
@@ -954,12 +920,8 @@
           "name": "shipkit_post_createdById_shipkit_user_id_fk",
           "tableFrom": "shipkit_post",
           "tableTo": "shipkit_user",
-          "columnsFrom": [
-            "createdById"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["createdById"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1018,12 +980,8 @@
           "name": "shipkit_project_member_project_id_shipkit_project_id_fk",
           "tableFrom": "shipkit_project_member",
           "tableTo": "shipkit_project",
-          "columnsFrom": [
-            "project_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["project_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1031,12 +989,8 @@
           "name": "shipkit_project_member_user_id_shipkit_user_id_fk",
           "tableFrom": "shipkit_project_member",
           "tableTo": "shipkit_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1095,12 +1049,8 @@
           "name": "shipkit_project_team_id_shipkit_team_id_fk",
           "tableFrom": "shipkit_project",
           "tableTo": "shipkit_team",
-          "columnsFrom": [
-            "team_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["team_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1141,12 +1091,8 @@
           "name": "shipkit_role_permission_role_id_shipkit_role_id_fk",
           "tableFrom": "shipkit_role_permission",
           "tableTo": "shipkit_role",
-          "columnsFrom": [
-            "role_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["role_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1154,12 +1100,8 @@
           "name": "shipkit_role_permission_permission_id_shipkit_permission_id_fk",
           "tableFrom": "shipkit_role_permission",
           "tableTo": "shipkit_permission",
-          "columnsFrom": [
-            "permission_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["permission_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1167,10 +1109,7 @@
       "compositePrimaryKeys": {
         "shipkit_role_permission_role_id_permission_id_pk": {
           "name": "shipkit_role_permission_role_id_permission_id_pk",
-          "columns": [
-            "role_id",
-            "permission_id"
-          ]
+          "columns": ["role_id", "permission_id"]
         }
       },
       "uniqueConstraints": {},
@@ -1258,12 +1197,8 @@
           "name": "shipkit_session_userId_shipkit_user_id_fk",
           "tableFrom": "shipkit_session",
           "tableTo": "shipkit_user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1322,12 +1257,8 @@
           "name": "shipkit_team_member_user_id_shipkit_user_id_fk",
           "tableFrom": "shipkit_team_member",
           "tableTo": "shipkit_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1335,12 +1266,8 @@
           "name": "shipkit_team_member_team_id_shipkit_team_id_fk",
           "tableFrom": "shipkit_team_member",
           "tableTo": "shipkit_team",
-          "columnsFrom": [
-            "team_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["team_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1457,12 +1384,8 @@
           "name": "shipkit_temporary_link_user_id_shipkit_user_id_fk",
           "tableFrom": "shipkit_temporary_link",
           "tableTo": "shipkit_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1532,12 +1455,8 @@
           "name": "shipkit_user_credit_user_id_shipkit_user_id_fk",
           "tableFrom": "shipkit_user_credit",
           "tableTo": "shipkit_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1547,9 +1466,7 @@
         "shipkit_user_credit_user_id_unique": {
           "name": "shipkit_user_credit_user_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "user_id"
-          ]
+          "columns": ["user_id"]
         }
       },
       "policies": {},
@@ -1620,12 +1537,8 @@
           "name": "shipkit_user_file_user_id_shipkit_user_id_fk",
           "tableFrom": "shipkit_user_file",
           "tableTo": "shipkit_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1765,10 +1678,7 @@
       "compositePrimaryKeys": {
         "shipkit_verificationToken_identifier_token_pk": {
           "name": "shipkit_verificationToken_identifier_token_pk",
-          "columns": [
-            "identifier",
-            "token"
-          ]
+          "columns": ["identifier", "token"]
         }
       },
       "uniqueConstraints": {},
@@ -1922,9 +1832,7 @@
         "shipkit_waitlist_entry_email_unique": {
           "name": "shipkit_waitlist_entry_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -1974,10 +1882,7 @@
     "public.team_type": {
       "name": "team_type",
       "schema": "public",
-      "values": [
-        "personal",
-        "workspace"
-      ]
+      "values": ["personal", "workspace"]
     }
   },
   "schemas": {},

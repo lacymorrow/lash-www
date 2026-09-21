@@ -38,7 +38,6 @@ const installTabs = [
       },
     ],
   },
-
 ];
 
 const demoLines: DemoLine[] = [
@@ -165,12 +164,10 @@ export function LashLanding() {
   }, [tab, copyToClipboard]);
 
   const copyCta = useCallback(() => {
-    void navigator.clipboard
-      .writeText("brew install lacymorrow/tap/lash")
-      .then(() => {
-        setCtaCopied(true);
-        setTimeout(() => setCtaCopied(false), 1500);
-      });
+    void navigator.clipboard.writeText("brew install lacymorrow/tap/lash").then(() => {
+      setCtaCopied(true);
+      setTimeout(() => setCtaCopied(false), 1500);
+    });
   }, []);
 
   return (
@@ -214,9 +211,8 @@ export function LashLanding() {
             </h1>
             <p className="ll-hero-desc ll-reveal ll-reveal-d2">
               An open source AI coding agent that lives in your terminal.{" "}
-              <strong>15+ AI providers.</strong>{" "}
-              <strong>MCP tools built in.</strong> Free, fast, and
-              provider-agnostic.
+              <strong>15+ AI providers.</strong> <strong>MCP tools built in.</strong> Free, fast,
+              and provider-agnostic.
             </p>
 
             <div className="ll-install ll-reveal ll-reveal-d3">
@@ -225,7 +221,7 @@ export function LashLanding() {
                   <button
                     type="button"
                     key={t.id}
-                    className={`ll-install-tab${tab === t.id ? " active" : ""}`}
+                    className={`ll-install-tab${tab === t.id ? "active" : ""}`}
                     role="tab"
                     aria-selected={tab === t.id}
                     onClick={() => setTab(t.id)}
@@ -245,10 +241,7 @@ export function LashLanding() {
                   {isCopied ? "copied" : "copy"}
                 </button>
                 {installTabs.map((t) => (
-                  <div
-                    key={t.id}
-                    className={`ll-install-panel${tab === t.id ? " active" : ""}`}
-                  >
+                  <div key={t.id} className={`ll-install-panel${tab === t.id ? "active" : ""}`}>
                     {t.lines.map((line) => (
                       <code key={line.copy}>
                         {line.parts.map((part) => (
@@ -271,14 +264,9 @@ export function LashLanding() {
               {demoLines.map((line) =>
                 line.output !== undefined ? (
                   <div className="ll-dl" key={line.output}>
-                    <div
-                      className="ll-dl-bar"
-                      style={{ background: "transparent" }}
-                    />
+                    <div className="ll-dl-bar" style={{ background: "transparent" }} />
                     <span />
-                    <span
-                      className={`ll-dl-out${line.reroute ? " reroute" : ""}`}
-                    >
+                    <span className={`ll-dl-out${line.reroute ? "reroute" : ""}`}>
                       {line.output}
                     </span>
                   </div>
@@ -287,11 +275,9 @@ export function LashLanding() {
                     <div className={`ll-dl-bar ${line.bar}`} />
                     <span className="ll-dl-prompt">&gt;</span>
                     <span className="ll-dl-input">{line.input}</span>
-                    <span className={`ll-dl-tag ${line.tagCls}`}>
-                      {line.tag}
-                    </span>
+                    <span className={`ll-dl-tag ${line.tagCls}`}>{line.tag}</span>
                   </div>
-                ),
+                )
               )}
             </div>
           </section>
@@ -307,10 +293,9 @@ export function LashLanding() {
               Ship faster.
             </h2>
             <p className="ll-how-desc">
-              Lash is an open source AI coding agent that lives in your
-              terminal. Connect to any AI provider, use MCP tools to interact
-              with your codebase, and get work done without leaving the command
-              line.
+              Lash is an open source AI coding agent that lives in your terminal. Connect to any AI
+              provider, use MCP tools to interact with your codebase, and get work done without
+              leaving the command line.
             </p>
             <div className="ll-how-grid">
               {features.map((f) => (
@@ -334,10 +319,7 @@ export function LashLanding() {
               {tools.map((tool) => (
                 <div className="ll-tool-row" key={tool.name}>
                   <div className="ll-tool-name">
-                    <span
-                      className="ll-dot"
-                      style={{ background: tool.color }}
-                    />
+                    <span className="ll-dot" style={{ background: tool.color }} />
                     {tool.name}
                   </div>
                   <div className="ll-tool-cmd">{tool.cmd}</div>
@@ -346,9 +328,11 @@ export function LashLanding() {
               ))}
             </div>
             <p className="ll-tools-note">
-              Lash works alongside other AI CLI tools. Use it standalone, or
-              pair it with <a href="https://lacy.sh" className="ll-link">Lacy Shell</a> for
-              automatic routing.
+              Lash works alongside other AI CLI tools. Use it standalone, or pair it with{" "}
+              <a href="https://lacy.sh" className="ll-link">
+                Lacy Shell
+              </a>{" "}
+              for automatic routing.
             </p>
           </section>
 
@@ -370,9 +354,7 @@ export function LashLanding() {
               onClick={copyCta}
             >
               <span className="ll-p">$ </span>
-              {ctaCopied
-                ? "copied to clipboard"
-                : "brew install lacymorrow/tap/lash"}
+              {ctaCopied ? "copied to clipboard" : "brew install lacymorrow/tap/lash"}
             </button>
           </section>
         </div>
