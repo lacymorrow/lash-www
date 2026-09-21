@@ -103,7 +103,7 @@ export function BetterAuthOAuthButtons({
   return (
     <div
       className={cn(
-        "flex gap-xs w-full",
+        "flex w-full gap-xs",
         variant === "icons" ? "flex-row justify-center" : "flex-col items-stretch",
         className
       )}

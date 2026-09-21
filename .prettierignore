@@ -1,5 +1,9 @@
 node_modules
 .next
+.vercel
+.turbo
 build
 dist
+public/workers
+test-results
 src/app/\(demo\)/**/*

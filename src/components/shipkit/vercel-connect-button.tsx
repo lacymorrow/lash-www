@@ -14,116 +14,116 @@ import { disconnectAccount, markVercelConnectionAttempt } from "@/server/actions
 import type { User } from "@/types/user";
 
 interface VercelConnectButtonProps {
-	className?: string;
-	user?: User;
+  className?: string;
+  user?: User;
 }
 
 export const VercelConnectButton = ({ className, user }: VercelConnectButtonProps) => {
-	const [isLoading, setIsLoading] = useState(false);
-	const { update: updateSession } = useSession();
-	const { toast: legacyToast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const { update: updateSession } = useSession();
+  const { toast: legacyToast } = useToast();
 
-	// Derived from the prop rather than mirrored into state, so it cannot go stale.
-	const isConnected = !!user?.accounts?.some((account) => account.provider === "vercel");
+  // Derived from the prop rather than mirrored into state, so it cannot go stale.
+  const isConnected = !!user?.accounts?.some((account) => account.provider === "vercel");
 
-	if (!process.env.NEXT_PUBLIC_VERCEL_INTEGRATION_SLUG) {
-		return null;
-	}
+  if (!process.env.NEXT_PUBLIC_VERCEL_INTEGRATION_SLUG) {
+    return null;
+  }
 
-	const handleConnect = async () => {
-		try {
-			setIsLoading(true);
+  const handleConnect = async () => {
+    try {
+      setIsLoading(true);
 
-			// Record the connection attempt in the database
-			await markVercelConnectionAttempt();
+      // Record the connection attempt in the database
+      await markVercelConnectionAttempt();
 
-			// the integration URL slug from vercel
-			const client_slug = process.env.NEXT_PUBLIC_VERCEL_INTEGRATION_SLUG;
+      // the integration URL slug from vercel
+      const client_slug = process.env.NEXT_PUBLIC_VERCEL_INTEGRATION_SLUG;
 
-			// create a CSRF token and store it locally
-			const state = crypto.randomBytes(16).toString("hex");
-			localStorage.setItem("latestCSRFToken", state);
+      // create a CSRF token and store it locally
+      const state = crypto.randomBytes(16).toString("hex");
+      localStorage.setItem("latestCSRFToken", state);
 
-			// Get the origin for the callback URL
-			const origin = window.location.origin;
+      // Get the origin for the callback URL
+      const origin = window.location.origin;
 
-			// Create the redirect URI
-			const redirectUri = `${origin}/connect/vercel/auth`;
+      // Create the redirect URI
+      const redirectUri = `${origin}/connect/vercel/auth`;
 
-			// redirect the user to vercel with the callback URL
-			// Use redirectUri as the parameter name for consistency with the OAuth spec
-			const link = `https://vercel.com/integrations/${client_slug}/new?state=${state}&redirect_uri=${encodeURIComponent(redirectUri)}`;
-			window.location.assign(link);
-		} catch (error) {
-			legacyToast({
-				title: "Error",
-				description: error instanceof Error ? error.message : "Failed to connect to Vercel",
-				variant: "destructive",
-			});
-			setIsLoading(false);
-		}
-	};
+      // redirect the user to vercel with the callback URL
+      // Use redirectUri as the parameter name for consistency with the OAuth spec
+      const link = `https://vercel.com/integrations/${client_slug}/new?state=${state}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+      window.location.assign(link);
+    } catch (error) {
+      legacyToast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to connect to Vercel",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+    }
+  };
 
-	const handleDisconnect = async () => {
-		if (isLoading) return;
+  const handleDisconnect = async () => {
+    if (isLoading) return;
 
-		setIsLoading(true);
-		try {
-			const result = await disconnectAccount("vercel");
+    setIsLoading(true);
+    try {
+      const result = await disconnectAccount("vercel");
 
-			if (!result.success) {
-				toast.error(result.error ?? "Failed to disconnect Vercel account");
-				return;
-			}
+      if (!result.success) {
+        toast.error(result.error ?? "Failed to disconnect Vercel account");
+        return;
+      }
 
-			toast.success(result.message);
+      toast.success(result.message);
 
-			// Force a full session update to ensure the UI reflects the change
-			await updateSession({ force: true });
-		} catch (error) {
-			console.error("Disconnect Vercel error:", error);
-			toast.error("An unexpected error occurred");
-		} finally {
-			setIsLoading(false);
-		}
-	};
+      // Force a full session update to ensure the UI reflects the change
+      await updateSession({ force: true });
+    } catch (error) {
+      console.error("Disconnect Vercel error:", error);
+      toast.error("An unexpected error occurred");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-	return (
-		<>
-			{isConnected ? (
-				<div className={cn("flex flex-col items-center justify-center gap-1", className)}>
-					<Link
-						href="https://vercel.com/dashboard"
-						className={cn(buttonVariants({ variant: "outline", size: "lg" }), "w-full")}
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<IconBrandVercelFilled className="mr-2 h-4 w-4" />
-						View Vercel Dashboard
-					</Link>
-					<Tooltip delayDuration={200}>
-						<TooltipTrigger asChild>
-							<Button
-								onClick={() => void handleDisconnect()}
-								variant="link"
-								size="sm"
-								disabled={isLoading}
-								className="text-muted-foreground"
-							>
-								Connected - Click to disconnect
-							</Button>
-						</TooltipTrigger>
-						<TooltipContent>
-							<p>Remove Vercel account connection</p>
-						</TooltipContent>
-					</Tooltip>
-				</div>
-			) : (
-				<Button onClick={handleConnect} disabled={isLoading} className={cn("", className)}>
-					<IconBrandVercelFilled className="mr-2 h-4 w-4" />
-					{isLoading ? "Connecting..." : "Connect Vercel"}
-				</Button>
-			)}
-		</>
-	);
+  return (
+    <>
+      {isConnected ? (
+        <div className={cn("flex flex-col items-center justify-center gap-1", className)}>
+          <Link
+            href="https://vercel.com/dashboard"
+            className={cn(buttonVariants({ variant: "outline", size: "lg" }), "w-full")}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <IconBrandVercelFilled className="mr-2 h-4 w-4" />
+            View Vercel Dashboard
+          </Link>
+          <Tooltip delayDuration={200}>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={() => void handleDisconnect()}
+                variant="link"
+                size="sm"
+                disabled={isLoading}
+                className="text-muted-foreground"
+              >
+                Connected - Click to disconnect
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Remove Vercel account connection</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+      ) : (
+        <Button onClick={handleConnect} disabled={isLoading} className={cn("", className)}>
+          <IconBrandVercelFilled className="mr-2 h-4 w-4" />
+          {isLoading ? "Connecting..." : "Connect Vercel"}
+        </Button>
+      )}
+    </>
+  );
 };

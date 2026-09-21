@@ -38,7 +38,7 @@ export default async function SignUpPage() {
           </div>
           {siteConfig.title}
         </div>
-        <div className="text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-2 text-center text-xs text-muted-foreground">
           <span aria-hidden="true">&gt;</span>
           <span>Login and sign-up are not available at this time.</span>
         </div>

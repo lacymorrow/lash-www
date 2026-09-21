@@ -109,7 +109,7 @@ export const Header: React.FC<HeaderProps> = ({
     return (
       <header className={cn(headerVariants({ variant: "minimal" }), className)}>
         <nav className="container flex items-center justify-between gap-md">
-          <div className="flex items-center gap-2 md:gap-4 shrink-0">
+          <div className="flex shrink-0 items-center gap-2 md:gap-4">
             <Link
               href={logoHref}
               className="flex items-center gap-2 text-lg font-semibold md:mr-6 md:text-base"
@@ -144,8 +144,8 @@ export const Header: React.FC<HeaderProps> = ({
         variant === "floating" && styles.header,
         variant === "floating" && isOpaque && styles.opaque,
         variant === "floating" &&
-        isOpaque &&
-        "-top-[12px] [--header-background:#fafafc70] dark:[--header-background:#1c1c2270]",
+          isOpaque &&
+          "-top-[12px] [--header-background:#fafafc70] dark:[--header-background:#1c1c2270]",
         className
       )}
     >
@@ -161,7 +161,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div
           className={cn(
             "flex items-center gap-2 md:gap-4",
-            isLogoOnly ? "justify-center shrink-0" : "justify-start min-w-0 flex-1"
+            isLogoOnly ? "shrink-0 justify-center" : "min-w-0 flex-1 justify-start"
           )}
         >
           {!isLogoOnly && (
@@ -248,14 +248,14 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="block whitespace-nowrap">{logoText}</span>
           </Link>
 
-          <div className="hidden md:flex min-w-0 flex-1">
+          <div className="hidden min-w-0 flex-1 md:flex">
             <PriorityNav navLinks={navLinks} />
           </div>
         </div>
 
         {!isLogoOnly && (
           <>
-            <div className="flex items-center gap-2 lg:gap-4 shrink-0">
+            <div className="flex shrink-0 items-center gap-2 lg:gap-4">
               {/* Search */}
               {searchVariant === "menu" && (
                 <SearchMenu
@@ -268,7 +268,7 @@ export const Header: React.FC<HeaderProps> = ({
               {searchVariant === "ai" && (
                 <SearchAi
                   buttonText={searchPlaceholder}
-                  className="hidden md:flex min-w-[40px]"
+                  className="hidden min-w-[40px] md:flex"
                   collapsible
                 />
               )}

@@ -6,34 +6,34 @@ type LogLevel = "log" | "info" | "error" | "warn" | "debug";
 type Metadata = Record<string, unknown>;
 
 const createLogFunction =
-	(level: LogLevel) =>
-	(message: string, metadata?: Metadata, error: Error | null = null): void => {
-		const span: Span = tracer.startSpan(`log.${level}`);
-		span.setAttribute("log.message", message);
-		span.setAttribute("log.level", level);
+  (level: LogLevel) =>
+  (message: string, metadata?: Metadata, error: Error | null = null): void => {
+    const span: Span = tracer.startSpan(`log.${level}`);
+    span.setAttribute("log.message", message);
+    span.setAttribute("log.level", level);
 
-		if (error) {
-			span.recordException(error);
-			span.setStatus({ code: SpanStatusCode.ERROR });
-		}
+    if (error) {
+      span.recordException(error);
+      span.setStatus({ code: SpanStatusCode.ERROR });
+    }
 
-		if (metadata) {
-			Object.entries(metadata).forEach(([key, value]) => {
-				span.setAttribute(`log.metadata.${key}`, JSON.stringify(value));
-			});
-		}
+    if (metadata) {
+      Object.entries(metadata).forEach(([key, value]) => {
+        span.setAttribute(`log.metadata.${key}`, JSON.stringify(value));
+      });
+    }
 
-		span.end();
+    span.end();
 
-		// Use console[level] if it exists, otherwise fall back to console.log
-		const consoleMethod = (console[level] ?? console.log).bind(console);
-		consoleMethod(message, ...(error ? [error] : []), metadata);
-	};
+    // Use console[level] if it exists, otherwise fall back to console.log
+    const consoleMethod = (console[level] ?? console.log).bind(console);
+    consoleMethod(message, ...(error ? [error] : []), metadata);
+  };
 
 export const otelLogger = {
-	log: createLogFunction("log"),
-	info: createLogFunction("info"),
-	error: createLogFunction("error"),
-	warn: createLogFunction("warn"),
-	debug: createLogFunction("debug"),
+  log: createLogFunction("log"),
+  info: createLogFunction("info"),
+  error: createLogFunction("error"),
+  warn: createLogFunction("warn"),
+  debug: createLogFunction("debug"),
 };

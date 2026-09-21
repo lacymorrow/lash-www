@@ -14,7 +14,7 @@ export default function GlobalError({
       <body className="bg-background">
         <ErrorBoundary
           fallback={({ error, retry }) => (
-            <div className="h-screen w-screen flex items-center justify-center">
+            <div className="flex h-screen w-screen items-center justify-center">
               <div className="text-center">
                 <h1 className="text-2xl font-bold">Something went wrong.</h1>
                 {process.env.NODE_ENV === "development" && (
@@ -22,7 +22,9 @@ export default function GlobalError({
                     <pre>{error.message}</pre>
                   </div>
                 )}
-                <button type="button" onClick={retry}>Try again</button>
+                <button type="button" onClick={retry}>
+                  Try again
+                </button>
               </div>
             </div>
           )}

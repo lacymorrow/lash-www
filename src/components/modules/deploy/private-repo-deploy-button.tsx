@@ -132,7 +132,7 @@ export const PrivateRepoDeployButton = () => {
       case "idle":
         return null;
       default:
-        return <Clock className="h-5 w-5 text-blue-500 animate-spin" />;
+        return <Clock className="h-5 w-5 animate-spin text-blue-500" />;
     }
   };
 
@@ -150,7 +150,7 @@ export const PrivateRepoDeployButton = () => {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
+    <Card className="mx-auto w-full max-w-2xl">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Github className="h-5 w-5" />
@@ -264,7 +264,7 @@ export const PrivateRepoDeployButton = () => {
                     </Button>
                   </div>
                   {status.vercelProject.deploymentUrl && (
-                    <div className="flex items-center justify-between mt-2">
+                    <div className="mt-2 flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">Live Site</span>
                       <Button variant="ghost" size="sm" asChild>
                         <a
@@ -324,11 +324,11 @@ export const PrivateRepoDeployButton = () => {
               />
             </div>
 
-            <div className="pt-4 space-y-3">
+            <div className="space-y-3 pt-4">
               <Button onClick={handleDeploy} disabled={isDeploying} className="w-full">
                 {isDeploying ? "Deploying..." : "Deploy Shipkit"}
               </Button>
-              <p className="text-xs text-center text-muted-foreground">
+              <p className="text-center text-xs text-muted-foreground">
                 Make sure you&apos;ve connected your GitHub and Vercel accounts in{" "}
                 <LinkWithTransition
                   href={routes.settings.account}

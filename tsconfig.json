@@ -22,14 +22,8 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "target": "ES2022",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "ES2022"
-    ],
-    "types": [
-      "node"
-    ],
+    "lib": ["dom", "dom.iterable", "ES2022"],
+    "types": ["node"],
     "plugins": [
       {
         "name": "next"
@@ -37,23 +31,17 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@payload-config": [
-        "./src/payload.config.ts"
-      ],
-      "@/public/*": [
-        "./public/*"
-      ],
-      "@/*": [
-        "./src/*"
-      ]
+      "@payload-config": ["./src/payload.config.ts"],
+      "@/public/*": ["./public/*"],
+      "@/*": ["./src/*"]
     }
   },
   "include": [
     "eslint.config.mjs",
     "next-env.d.ts",
     "**/*.ts",
-		// TypeScript's ** glob skips dot-directories, so .well-known needs naming
-		"src/app/.well-known/**/*.ts",
+    // TypeScript's ** glob skips dot-directories, so .well-known needs naming
+    "src/app/.well-known/**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
     "**/*.js",

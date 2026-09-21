@@ -13,8 +13,8 @@ import { routes } from "@/config/routes";
  * serialization issues between Server and Client Components.
  */
 export async function downloadRepo() {
-	// Redirect to the download route handler
-	redirect(routes.api.download);
+  // Redirect to the download route handler
+  redirect(routes.api.download);
 }
 
 /**
@@ -27,7 +27,7 @@ export async function downloadRepo() {
  * serialization issues between Server and Client Components.
  */
 export async function downloadRepoAnonymously(formData: FormData) {
-	const email = formData.get("email");
-	const emailParam = typeof email === "string" ? email : "";
-	redirect(`${routes.api.download}?email=${encodeURIComponent(emailParam)}`);
+  const email = formData.get("email");
+  const emailParam = typeof email === "string" ? email : "";
+  redirect(`${routes.api.download}?email=${encodeURIComponent(emailParam)}`);
 }

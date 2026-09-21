@@ -8,5 +8,3 @@ All notable changes to this project will be documented in this file.
 - Various improvements and docs updates since last tag
 
 Previous tag: v2.1.1 (monorepo tag history)
-
-
