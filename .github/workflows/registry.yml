@@ -27,4 +27,8 @@ jobs:
           node-version: 22
       - run: bash scripts/registry-check.sh
       - uses: oven-sh/setup-bun@v2
+      # The closure check reads the Bones file tree through `gh api`, and gh
+      # needs an explicit token inside Actions even for a public repo.
       - run: bun scripts/registry-closure.ts
+        env:
+          GH_TOKEN: ${{ github.token }}

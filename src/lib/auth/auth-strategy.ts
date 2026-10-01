@@ -12,14 +12,14 @@ export type AuthStrategy = "clerk" | "stack" | "authjs" | "better-auth" | "guest
  * copies it at build time); the server can read either, and falls back to the
  * raw variable in scripts and tests where next.config never ran.
  *
- * The accepted values are the `AUTH_STRATEGY` enum in `src/env.ts`. The result
- * is widened to `AuthStrategy` so a project whose `env.ts` predates one of the
- * strategies (a Bones checkout before the `clerk` item, say) still compiles.
+ * The accepted values are the `AUTH_STRATEGY` enum in `src/env.ts`, which is a
+ * subset of `AuthStrategy`. The declared return type does the widening, so a
+ * project whose `env.ts` predates one of the strategies (a Bones checkout from
+ * before the `clerk` item, say) still compiles.
  */
 function configuredStrategy(): AuthStrategy | undefined {
   const isServer = typeof window === "undefined";
-  const configured = env.NEXT_PUBLIC_AUTH_STRATEGY ?? (isServer ? env.AUTH_STRATEGY : undefined);
-  return configured as AuthStrategy | undefined;
+  return env.NEXT_PUBLIC_AUTH_STRATEGY ?? (isServer ? env.AUTH_STRATEGY : undefined);
 }
 
 /**

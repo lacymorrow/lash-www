@@ -15,6 +15,7 @@
  *   BONES_DIR=~/repo/bones bun scripts/...      # local Bones checkout (default: fetch tree from GitHub)
  *   BONES_REF=lac/bones-seams                   # ref inside BONES_DIR to compare against (default origin/main)
  */
+import { $ } from "bun";
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 
@@ -33,11 +34,11 @@ async function bonesFiles(): Promise<Set<string>> {
   const dir = process.env.BONES_DIR;
   if (dir) {
     const ref = process.env.BONES_REF ?? "origin/main";
-    const out = await Bun.$`git -C ${dir} ls-tree -r ${ref} --name-only`.text();
+    const out = await $`git -C ${dir} ls-tree -r ${ref} --name-only`.text();
     return new Set(out.split("\n").filter(Boolean));
   }
   const out =
-    await Bun.$`gh api repos/shipkit-io/bones/git/trees/main?recursive=1 --jq '.tree[].path'`.text();
+    await $`gh api repos/shipkit-io/bones/git/trees/main?recursive=1 --jq '.tree[].path'`.text();
   return new Set(out.split("\n").filter(Boolean));
 }
 
@@ -51,7 +52,7 @@ function resolveImport(from: string, spec: string): string | null {
   const candidates = [
     base,
     ...exts.map((e) => base + e),
-    ...exts.map((e) => join(base, "index" + e)),
+    ...exts.map((e) => join(base, `index${e}`)),
   ];
   for (const c of candidates) {
     const full = join(root, c);
@@ -103,6 +104,13 @@ function shippedBy(
   return acc;
 }
 
+/**
+ * Files no item can ship and Bones' git tree will never contain: they are
+ * written by `scripts/prebuild-content.mjs`, which runs on postinstall and on
+ * every build, so they exist in any checkout by the time anything imports them.
+ */
+const isGenerated = (f: string) => f.startsWith("src/lib/generated/");
+
 const bones = await bonesFiles();
 const need = new Map<string, string[]>();
 let failures = 0;
@@ -113,7 +121,7 @@ for (const item of registry.items) {
     item.files.map((f) => f.path),
     bones
   );
-  const missing = [...reach].filter((f) => !own.has(f) && !bones.has(f)).sort();
+  const missing = [...reach].filter((f) => !own.has(f) && !bones.has(f) && !isGenerated(f)).sort();
   const inBones = [...reach].filter((f) => !own.has(f) && bones.has(f)).length;
   for (const f of missing) need.set(f, [...(need.get(f) ?? []), item.name]);
   if (missing.length) {
