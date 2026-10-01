@@ -119,6 +119,11 @@ jobs:
     needs: [typecheck, lint]
     env:
       AUTH_SECRET: ci-only-secret-do-not-use-in-prod
+      # `next build` runs with NODE_ENV=production, where src/config/secrets.ts
+      # refuses to derive secrets from the public BASE_URL. AUTH_SECRET alone is
+      # not enough: the escape hatch needs either APP_SECRET or all three of
+      # AUTH_SECRET, PAYLOAD_SECRET and BETTER_AUTH_SECRET.
+      APP_SECRET: ci-only-secret-do-not-use-in-prod
       SKIP_ENV_VALIDATION: "1"
     steps:
       - uses: actions/checkout@v7
@@ -155,6 +160,9 @@ jobs:
       USE_EXTERNAL_DB: "1"
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/shipkit_e2e
       AUTH_SECRET: ci-only-secret-do-not-use-in-prod
+      # This job builds too (see the build step below), so it needs the same
+      # production-mode secret the build job does.
+      APP_SECRET: ci-only-secret-do-not-use-in-prod
       SKIP_ENV_VALIDATION: "1"
       CI: "true"
     steps:

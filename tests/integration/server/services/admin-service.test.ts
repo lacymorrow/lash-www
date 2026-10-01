@@ -3,7 +3,9 @@
  * Testcontainers DB. Sets up the SPEC for plan 011 (isAdmin refactor).
  *
  * isAdmin() has 4 layered checks (any one → true):
- *   1. adminConfig.isAdminByEmailConfig — static env-driven list/domain
+ *   1. adminConfig.isAdminByEmailConfig — static env-driven list/domain, but
+ *      only for an account whose email is verified (LAC-3811: a config match
+ *      alone used to grant admin to anyone who could present the address)
  *   2. DB `users.role === "admin"` lookup by lowercased email
  *   3. RBAC permission check ("system", "admin") for the resolved userId
  *   4. Payload CMS user existence
@@ -41,10 +43,41 @@ describe("isAdmin", () => {
     expect(await isAdmin({ email: 12345 as never })).toBe(false);
   });
 
-  it("returns true when email matches the static admin email list (config check)", async () => {
+  it("returns true when the static config matches an account with a verified email", async () => {
     const spy = vi.spyOn(adminConfig, "isAdminByEmailConfig").mockReturnValue(true);
     try {
-      expect(await isAdmin({ email: "anything@example.com" })).toBe(true);
+      const db = getTestDb();
+      await db.insert(users).values({
+        id: "config-verified",
+        email: "config-verified@shipkit.test",
+        role: "user",
+        emailVerified: new Date(),
+      });
+
+      expect(await isAdmin({ email: "config-verified@shipkit.test" })).toBe(true);
+    } finally {
+      spy.mockRestore();
+    }
+  });
+
+  it("refuses a static config match that no verified account owns (LAC-3811)", async () => {
+    const spy = vi.spyOn(adminConfig, "isAdminByEmailConfig").mockReturnValue(true);
+    try {
+      // No row at all: nobody ever proved they own this address.
+      expect(await isAdmin({ email: "unowned@shipkit.test" })).toBe(false);
+
+      // Row exists but the address is unverified, so it is still unproven.
+      // emailVerified must be set to null explicitly: the column defaults to
+      // CURRENT_TIMESTAMP, so an omitted value inserts a *verified* user.
+      const db = getTestDb();
+      await db.insert(users).values({
+        id: "config-unverified",
+        email: "config-unverified@shipkit.test",
+        role: "user",
+        emailVerified: null,
+      });
+
+      expect(await isAdmin({ email: "config-unverified@shipkit.test" })).toBe(false);
     } finally {
       spy.mockRestore();
     }
