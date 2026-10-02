@@ -8,10 +8,17 @@
 # Bun note: the npm ecosystem drives Bun projects — Dependabot reads bun.lock.
 version: 2
 updates:
-  # App JavaScript dependencies (root package.json)
+  # App JavaScript dependencies (root package.json) plus the standalone docs
+  # build (docs-site/package.json).
+  #
+  # docs-site is listed explicitly because it is a separate npm project with its
+  # own package-lock.json, so the root `overrides` block does not reach it. While
+  # it was missing here it drifted out of the root pin policy and became the
+  # manifest behind 28 of the repo's 29 open Dependabot alerts (see LAC-4093).
   - package-ecosystem: "npm"
     directories:
       - "/"
+      - "/docs-site"
     schedule:
       interval: "monthly"
       day: "monday"

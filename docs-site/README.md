@@ -58,3 +58,11 @@ after any docs change even if you ship the fumadocs provider.
 - Holocron is single-maintainer and pre-1.0, and this build is a required CI
   gate, so `@holocron.so/vite` is pinned to an exact version. Bump it
   deliberately.
+- **This is a separate npm project, so the root `overrides` do not reach it.**
+  It has its own `package-lock.json`, while the root `package.json` `overrides`
+  block only governs the root `bun.lock`. A root-only supply-chain pass silently
+  skips this tree, which is how it ended up behind 28 of the repo's 29 open
+  Dependabot alerts (LAC-4093). Transitive security pins therefore live in
+  `docs-site/package.json` `overrides`, and `.github/dependabot.yml` lists
+  `/docs-site` explicitly. When you pin a transitive package at the root, pin it
+  here too, or confirm this tree does not pull it in.
