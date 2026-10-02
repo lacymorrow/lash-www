@@ -5,20 +5,22 @@
 # batched into a single PR per ecosystem to avoid noise; major bumps open on their
 # own so they get individual review. CI (ci.yml, e2e.yml) gates every PR.
 #
-# Bun note: the npm ecosystem drives Bun projects — Dependabot reads bun.lock.
+# Two JavaScript trees, two package managers, so two entries — they cannot be
+# merged (see LAC-4093):
+#
+#   /           bun.lock           -> package-ecosystem: "bun"
+#   /docs-site  package-lock.json  -> package-ecosystem: "npm"
+#
+# `npm_and_yarn` cannot update `bun.lock`; it hard-errors with
+# `misconfigured_tooling` and aborts during file fetching. Because that abort
+# kills the whole job, any directory sharing an entry with the root is never
+# fetched either — so listing `/docs-site` alongside `/` silently gave it no
+# coverage at all.
 version: 2
 updates:
-  # App JavaScript dependencies (root package.json) plus the standalone docs
-  # build (docs-site/package.json).
-  #
-  # docs-site is listed explicitly because it is a separate npm project with its
-  # own package-lock.json, so the root `overrides` block does not reach it. While
-  # it was missing here it drifted out of the root pin policy and became the
-  # manifest behind 28 of the repo's 29 open Dependabot alerts (see LAC-4093).
-  - package-ecosystem: "npm"
-    directories:
-      - "/"
-      - "/docs-site"
+  # App JavaScript dependencies — root package.json, resolved through bun.lock.
+  - package-ecosystem: "bun"
+    directory: "/"
     schedule:
       interval: "monthly"
       day: "monday"
@@ -47,6 +49,32 @@ updates:
           - "patch"
     # Major bumps of framework-critical packages get opened individually (not
     # grouped), but never auto-batched with the rest — they always need a human.
+
+  # Standalone docs build (docs-site/package.json). Its own npm project with its
+  # own package-lock.json, so the root `overrides` block does not reach it. While
+  # this manifest had no entry here it drifted out of the root pin policy and
+  # became the source of 28 of the repo's 29 open alerts (see LAC-4093).
+  - package-ecosystem: "npm"
+    directory: "/docs-site"
+    schedule:
+      interval: "monthly"
+      day: "monday"
+      time: "06:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+    groups:
+      docs-site-minor-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
   # GitHub Actions used by the workflows in .github/workflows
   - package-ecosystem: "github-actions"
