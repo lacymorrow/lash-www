@@ -4,6 +4,7 @@ import { routes } from "@/config/routes";
 import { SEARCH_PARAM_KEYS } from "@/config/search-param-keys";
 import { logger } from "@/lib/logger";
 import { providers } from "@/server/auth-js/auth-providers.config";
+import { guardResendSignIn } from "@/server/auth-js/magic-link-guard";
 import { db } from "@/server/db";
 import { users } from "@/server/db/schema";
 import { isAdmin } from "@/server/services/admin-service";
@@ -73,12 +74,23 @@ export const authOptions: NextAuthConfig = {
   // 	},
   // },
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account, profile, email }) {
       if (!user.id) return false;
 
       // Handle guest user sign-in
       if (account?.provider === "guest") {
         return true; // Always allow guest sign-in
+      }
+
+      // Magic link (Resend): Auth.js runs this callback before sendVerificationRequest,
+      // so refusing here blocks the email send. Enforces the AUTH_ALLOWED_EMAILS
+      // allowlist and per-address/per-IP rate limits.
+      if (account?.provider === "resend") {
+        const allowed = await guardResendSignIn({
+          email: user.email,
+          isVerificationRequest: email?.verificationRequest === true,
+        });
+        if (!allowed) return false;
       }
 
       /*

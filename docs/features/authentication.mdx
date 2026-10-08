@@ -26,7 +26,12 @@ All OAuth providers have `allowDangerousEmailAccountLinking` enabled, so multipl
 
 ### Email (Magic Link)
 
-Set `NEXT_PUBLIC_FEATURE_AUTH_RESEND_ENABLED=true` and provide `RESEND_API_KEY`. Users receive a magic link to sign in without a password.
+Provide `RESEND_API_KEY` and `RESEND_FROM_EMAIL` and magic link enables automatically, in production too. Users receive a magic link to sign in without a password. `RESEND_FROM_EMAIL` must be a sender on a [Resend-verified domain](https://resend.com/domains). Disable with `DISABLE_AUTH_RESEND=true`.
+
+Because anyone can type an address into the form and make the app email it, two abuse controls run in the Auth.js `signIn` callback before any email is sent:
+
+- **Allowlist**: set `AUTH_ALLOWED_EMAILS` to a comma-separated list of addresses and/or domains (`alice@corp.io, @corp.io`). When set, unknown addresses get `AccessDenied` and no email is sent. Unset means anyone can request a link.
+- **Rate limits**: per-address (3 requests / 15 min) and per-IP (10 requests / 15 min) limits on sign-in email requests. Requires Upstash Redis (`UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN`); without it, limits no-op.
 
 ### Credentials (Email/Password)
 

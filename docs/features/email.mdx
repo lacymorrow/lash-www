@@ -15,12 +15,12 @@ RESEND_AUDIENCE_ID=...  # optional, for audience/list management
 ## What It Does
 
 - Transactional email (welcome, receipts, notifications)
-- Magic link sign-in (when `AUTH_RESEND_ENABLED` — dev only by default)
+- Magic link sign-in (when `AUTH_RESEND_ENABLED`)
 - Audience management for marketing lists
 
 ## Magic Link Auth
 
-Set `RESEND_API_KEY` and the auth system picks it up automatically. Note: Resend-based auth is **development-only** by default to prevent accidental email abuse in production. See [Authentication](/docs/features/authentication) for details.
+Set `RESEND_API_KEY` and `RESEND_FROM_EMAIL` and the auth system picks it up automatically. Magic link works in **production**; the from address must be a sender on a Resend-verified domain. Abuse is controlled by an optional `AUTH_ALLOWED_EMAILS` allowlist and per-address/per-IP rate limits instead of a dev-only guard. See [Authentication](/docs/features/authentication) for details.
 
 ## Domain Setup
 

@@ -1112,6 +1112,11 @@
           "target": "~/src/server/auth-js/auth-providers-utils.ts"
         },
         {
+          "path": "src/server/auth-js/magic-link-guard.ts",
+          "type": "registry:lib",
+          "target": "~/src/server/auth-js/magic-link-guard.ts"
+        },
+        {
           "path": "src/server/actions/auth.ts",
           "type": "registry:lib",
           "target": "~/src/server/actions/auth.ts"

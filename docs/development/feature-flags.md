@@ -78,7 +78,7 @@ If `APP_SECRET` is set, secrets like `PAYLOAD_SECRET` and `BETTER_AUTH_SECRET` a
 | `SUPABASE_AUTH_ENABLED`    | `SUPABASE_URL` + `SUPABASE_ANON_KEY`                                            | `DISABLE_SUPABASE_AUTH=true`    |
 | `AUTH_GUEST_ENABLED`       | `ENABLE_AUTH_GUEST=true`                                                        | —                               |
 | `AUTH_CREDENTIALS_ENABLED` | Payload enabled                                                                 | `DISABLE_AUTH_CREDENTIALS=true` |
-| `AUTH_RESEND_ENABLED`      | `RESEND_API_KEY` (dev only)                                                     | `DISABLE_AUTH_RESEND=true`      |
+| `AUTH_RESEND_ENABLED`      | `RESEND_API_KEY` + `RESEND_FROM_EMAIL`                                          | `DISABLE_AUTH_RESEND=true`      |
 | `AUTH_GITHUB_ENABLED`      | `AUTH_GITHUB_ID` + `AUTH_GITHUB_SECRET`                                         | `DISABLE_AUTH_GITHUB=true`      |
 | `AUTH_GOOGLE_ENABLED`      | `AUTH_GOOGLE_ID` + `AUTH_GOOGLE_SECRET`                                         | `DISABLE_AUTH_GOOGLE=true`      |
 | `AUTH_DISCORD_ENABLED`     | `AUTH_DISCORD_ID` + `AUTH_DISCORD_SECRET`                                       | `DISABLE_AUTH_DISCORD=true`     |

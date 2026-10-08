@@ -19,8 +19,11 @@ RESEND_API_KEY=re_... # Your Resend API key
 
 ```
 RESEND_AUDIENCE_ID=your_audience_id # For audience management
-RESEND_FROM_EMAIL=noreply@yourdomain.com # Default from email
+RESEND_FROM_EMAIL=noreply@yourdomain.com # Default from email; must be a sender on a Resend-verified domain
+AUTH_ALLOWED_EMAILS=alice@corp.io, @corp.io # Optional magic-link sign-in allowlist (addresses/domains)
 ```
+
+Setting `RESEND_API_KEY` + `RESEND_FROM_EMAIL` also enables magic-link sign-in, in production too. See [Authentication](/docs/features/authentication) for the abuse controls (allowlist + rate limits).
 
 ## Setup Instructions
 
