@@ -564,6 +564,15 @@ body {
   color: var(--ll-fg2);
 }
 
+.ll-more {
+  max-width: 680px;
+  margin: 16px auto 0;
+  padding: 0 24px;
+  font-size: 11px;
+  color: var(--ll-fg4);
+  letter-spacing: 0.02em;
+}
+
 /* ── entrance animation ─────────────────────────────────── */
 
 .ll-reveal {
