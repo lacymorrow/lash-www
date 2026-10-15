@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useCallback } from "react";
 import { LashTuiHeaderText } from "./lash-tui-header-text";
+import { MoreByLacy } from "./more-by-lacy";
 import { GithubVersion } from "./github-version";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 
@@ -386,6 +387,7 @@ export function LashLanding() {
               </a>
             </div>
           </div>
+          <MoreByLacy className="ll-more" />
         </div>
       </footer>
     </div>
