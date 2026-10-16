@@ -56,15 +56,15 @@ const SRC = join(__dirname, "..", "..", "..", "..", "src");
  * recurred across three forks (LAC-3811, LAC-3944, LAC-4442).
  */
 const DELETED_MODULES = [
-	"src/server/actions/setup/configure-setup.ts",
-	"src/server/actions/setup.ts",
-	"src/server/actions/vercel.ts",
-	"src/server/actions/github/download-repo.ts",
-	"src/server/actions/chat-actions.ts",
-	"src/server/actions/rbac.ts",
-	"src/server/actions/temporary-links.ts",
-	"src/server/services/temporary-links.ts",
-	"src/server/actions/waitlist-actions.ts",
+  "src/server/actions/setup/configure-setup.ts",
+  "src/server/actions/setup.ts",
+  "src/server/actions/vercel.ts",
+  "src/server/actions/github/download-repo.ts",
+  "src/server/actions/chat-actions.ts",
+  "src/server/actions/rbac.ts",
+  "src/server/actions/temporary-links.ts",
+  "src/server/services/temporary-links.ts",
+  "src/server/actions/waitlist-actions.ts",
 ];
 
 /**
@@ -86,24 +86,65 @@ const SERVICE_MODULES = ["src/server/services/waitlist-service.ts"];
  *     `false` opts out, which is why `getSession(false)` is rejected
  *     separately below rather than counted as a guard here.
  *   - `requireAdmin(` is `getSession()` plus an `isAdmin` check.
- *   - `requireCallerId(`, `requireProjectMember(` and `requireTeamMember(`
- *     are the local helpers in `actions/projects.ts` and `actions/teams.ts`.
- *     Each one calls `getSession()` and throws, and the two membership
- *     helpers additionally authorize the caller against the project or team
- *     being mutated. They are listed by name because this test reads only the
- *     exported function's own body, not the helpers it calls.
+ *
+ * The local helpers in `actions/projects.ts` and `actions/teams.ts`
+ * (`requireCallerId`, `requireProjectMember`, `requireTeamMember`) used to be
+ * listed here by name, because this test read only the exported function's own
+ * body. Trusting a name is weak: any helper called `requireCallerId` vouched
+ * for itself whether or not it checked anything. `effectiveBody` below folds
+ * in the helper's actual body instead, so the guard has to be real.
  */
 const AUTH_MARKERS = [
-	/\bauth\s*\(/,
-	/\bgetSession\s*\(/,
-	/\brequireAdmin\s*\(/,
-	/\brequireCallerId\s*\(/,
-	/\brequireProjectMember\s*\(/,
-	/\brequireTeamMember\s*\(/,
-	/\bgetServerSession\s*\(/,
-	/\bisAdmin\s*\(/,
-	/\bErrorService\.throwUnauthorized\s*\(/,
+  /\bauth\s*\(/,
+  /\bgetSession\s*\(/,
+  /\brequireAdmin\s*\(/,
+  /\bgetServerSession\s*\(/,
+  /\bisAdmin\s*\(/,
+  /\bErrorService\.throwUnauthorized\s*\(/,
 ];
+
+/**
+ * Every module-local function or arrow in the file, exported or not, so an
+ * export's guard can be followed into the helper that actually performs it.
+ */
+function localHelperBodies(source: ts.SourceFile): Map<string, string> {
+  const bodies = new Map<string, string>();
+  for (const statement of source.statements) {
+    if (ts.isFunctionDeclaration(statement) && statement.name) {
+      bodies.set(statement.name.text, statement.getText(source));
+    } else if (ts.isVariableStatement(statement)) {
+      for (const declaration of statement.declarationList.declarations) {
+        if (ts.isIdentifier(declaration.name) && declaration.initializer) {
+          bodies.set(declaration.name.text, declaration.getText(source));
+        }
+      }
+    }
+  }
+  return bodies;
+}
+
+/**
+ * The export's own body, plus the bodies of every module-local helper it
+ * reaches. Followed to a fixed point rather than one level, because the real
+ * chain is two deep: `updateProject` calls `requireProjectMember`, which calls
+ * `requireCallerId`, and only that last one calls `getSession`.
+ */
+function effectiveBody(actionExport: ActionExport, helpers: Map<string, string>): string {
+  const seen = new Set<string>([actionExport.name]);
+  let text = actionExport.body;
+
+  for (;;) {
+    let grew = false;
+    for (const [name, body] of helpers) {
+      if (seen.has(name)) continue;
+      if (!new RegExp(`\\b${name}\\s*\\(`).test(text)) continue;
+      seen.add(name);
+      text += `\n${body}`;
+      grew = true;
+    }
+    if (!grew) return text;
+  }
+}
 
 /** `getSession(false)` returns null instead of throwing, so it gates nothing. */
 const UNPROTECTED_SESSION = /\bgetSession\s*\(\s*false\s*\)/;
@@ -116,40 +157,40 @@ const IDENTITY_PARAM_NAMES = new Set(["userid", "useremail", "email", "requestin
  * `<repo-relative path>::<export name>`.
  */
 const PUBLIC_BY_DESIGN: Record<string, string> = {
-	// Authentication entry points. These are what you call to *get* a session,
-	// so requiring one is circular. Credential handling and rate limiting live
-	// in the auth service behind them.
-	"src/server/actions/auth.ts::signInWithOAuthAction":
-		"starts an OAuth redirect; no session exists yet",
-	"src/server/actions/auth.ts::signInAction": "sign-in entry point; no session exists yet",
-	"src/server/actions/auth.ts::signInWithCredentialsAction":
-		"sign-in entry point; no session exists yet",
-	"src/server/actions/auth.ts::signUpWithCredentialsAction":
-		"sign-up entry point; no session exists yet",
-	"src/server/actions/auth.ts::signOutAction":
-		"clears the session cookie; safe with or without one",
-	"src/server/actions/auth.ts::forgotPasswordAction":
-		"password reset request; no session exists yet",
-	"src/server/actions/auth.ts::resetPasswordAction":
-		"password reset redemption; authorized by the emailed token",
+  // Authentication entry points. These are what you call to *get* a session,
+  // so requiring one is circular. Credential handling and rate limiting live
+  // in the auth service behind them.
+  "src/server/actions/auth.ts::signInWithOAuthAction":
+    "starts an OAuth redirect; no session exists yet",
+  "src/server/actions/auth.ts::signInAction": "sign-in entry point; no session exists yet",
+  "src/server/actions/auth.ts::signInWithCredentialsAction":
+    "sign-in entry point; no session exists yet",
+  "src/server/actions/auth.ts::signUpWithCredentialsAction":
+    "sign-up entry point; no session exists yet",
+  "src/server/actions/auth.ts::signOutAction":
+    "clears the session cookie; safe with or without one",
+  "src/server/actions/auth.ts::forgotPasswordAction":
+    "password reset request; no session exists yet",
+  "src/server/actions/auth.ts::resetPasswordAction":
+    "password reset redemption; authorized by the emailed token",
 
-	// Public forms on marketing pages. Anonymous visitors are the intended
-	// callers. Each writes to one place and returns nothing readable, so the
-	// exposure is spam volume, not data.
-	"src/server/actions/contact.ts::submitContactForm":
-		"public contact form; emails support and returns no data",
-	"src/server/actions/feedback-actions.ts::submitFeedback":
-		"public feedback widget; write-only into the feedback table",
-	"src/server/actions/subscribe.ts::addContactToAudience":
-		"public newsletter opt-in; write-only into the Resend audience",
+  // Public forms on marketing pages. Anonymous visitors are the intended
+  // callers. Each writes to one place and returns nothing readable, so the
+  // exposure is spam volume, not data.
+  "src/server/actions/contact.ts::submitContactForm":
+    "public contact form; emails support and returns no data",
+  "src/server/actions/feedback-actions.ts::submitFeedback":
+    "public feedback widget; write-only into the feedback table",
+  "src/server/actions/subscribe.ts::addContactToAudience":
+    "public newsletter opt-in; write-only into the Resend audience",
 
-	// Public widgets on marketing pages in this fork. Anonymous visitors are
-	// the intended callers; both are write-only and return no readable data,
-	// so the exposure is spam volume rather than disclosure.
-	"src/server/actions/resend-actions.ts::sendFeedback":
-		"public feedback widget; emails support and returns nothing",
-	"src/server/actions/resend-actions.ts::addAudienceUser":
-		"public newsletter opt-in; write-only into the Resend audience",
+  // Public widgets on marketing pages in this fork. Anonymous visitors are
+  // the intended callers; both are write-only and return no readable data,
+  // so the exposure is spam volume rather than disclosure.
+  "src/server/actions/resend-actions.ts::sendFeedback":
+    "public feedback widget; emails support and returns nothing",
+  "src/server/actions/resend-actions.ts::addAudienceUser":
+    "public newsletter opt-in; write-only into the Resend audience",
 };
 
 /**
@@ -157,27 +198,27 @@ const PUBLIC_BY_DESIGN: Record<string, string> = {
  * `<repo-relative path>::<export name>::<param name>`.
  */
 const IDENTITY_PARAM_ALLOWLIST: Record<string, string> = {
-	"src/app/(app)/(admin)/admin/github/actions.ts::revokeGitHubAccessAction::userId":
-		"admin acting on another user; the action checks isAdmin() on the session first",
-	"src/server/actions/subscribe.ts::addContactToAudience::email":
-		"the subscriber's own address is the payload of a public opt-in form, not an identity claim",
-	"src/server/actions/contact.ts::submitContactForm::formData":
-		"FormData from a public form; no identity is read out of it",
-	"src/server/actions/resend-actions.ts::addAudienceUser::email":
-		"the subscriber's own address is the payload of a public opt-in form, not an identity claim",
+  "src/app/(app)/(admin)/admin/github/actions.ts::revokeGitHubAccessAction::userId":
+    "admin acting on another user; the action checks isAdmin() on the session first",
+  "src/server/actions/subscribe.ts::addContactToAudience::email":
+    "the subscriber's own address is the payload of a public opt-in form, not an identity claim",
+  "src/server/actions/contact.ts::submitContactForm::formData":
+    "FormData from a public form; no identity is read out of it",
+  "src/server/actions/resend-actions.ts::addAudienceUser::email":
+    "the subscriber's own address is the payload of a public opt-in form, not an identity claim",
 };
 
 function walk(dir: string): string[] {
-	const out: string[] = [];
-	for (const entry of readdirSync(dir, { withFileTypes: true })) {
-		const full = join(dir, entry.name);
-		if (entry.isDirectory()) {
-			out.push(...walk(full));
-		} else if (/\.tsx?$/.test(entry.name) && !/\.d\.ts$/.test(entry.name)) {
-			out.push(full);
-		}
-	}
-	return out;
+  const out: string[] = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      out.push(...walk(full));
+    } else if (/\.tsx?$/.test(entry.name) && !/\.d\.ts$/.test(entry.name)) {
+      out.push(full);
+    }
+  }
+  return out;
 }
 
 /**
@@ -187,223 +228,223 @@ function walk(dir: string): string[] {
  * read as if it did.
  */
 function isServerActionModule(source: ts.SourceFile): boolean {
-	const first = source.statements[0];
-	if (!first || !ts.isExpressionStatement(first)) return false;
-	const expr = first.expression;
-	return ts.isStringLiteral(expr) && expr.text === "use server";
+  const first = source.statements[0];
+  if (!first || !ts.isExpressionStatement(first)) return false;
+  const expr = first.expression;
+  return ts.isStringLiteral(expr) && expr.text === "use server";
 }
 
 interface ActionExport {
-	name: string;
-	body: string;
-	params: string[];
+  name: string;
+  body: string;
+  params: string[];
 }
 
 function collectExports(source: ts.SourceFile): ActionExport[] {
-	const found: ActionExport[] = [];
+  const found: ActionExport[] = [];
 
-	const paramNames = (params: readonly ts.ParameterDeclaration[]): string[] => {
-		const names: string[] = [];
-		for (const param of params) {
-			if (ts.isIdentifier(param.name)) {
-				names.push(param.name.text);
-			} else if (ts.isObjectBindingPattern(param.name)) {
-				for (const element of param.name.elements) {
-					const key = element.propertyName ?? element.name;
-					if (ts.isIdentifier(key)) names.push(key.text);
-				}
-			}
-		}
-		return names;
-	};
+  const paramNames = (params: readonly ts.ParameterDeclaration[]): string[] => {
+    const names: string[] = [];
+    for (const param of params) {
+      if (ts.isIdentifier(param.name)) {
+        names.push(param.name.text);
+      } else if (ts.isObjectBindingPattern(param.name)) {
+        for (const element of param.name.elements) {
+          const key = element.propertyName ?? element.name;
+          if (ts.isIdentifier(key)) names.push(key.text);
+        }
+      }
+    }
+    return names;
+  };
 
-	for (const statement of source.statements) {
-		const exported = ts
-			.getModifiers(statement as ts.HasModifiers)
-			?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword);
-		if (!exported) continue;
+  for (const statement of source.statements) {
+    const exported = ts
+      .getModifiers(statement as ts.HasModifiers)
+      ?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword);
+    if (!exported) continue;
 
-		if (ts.isFunctionDeclaration(statement) && statement.name) {
-			found.push({
-				name: statement.name.text,
-				body: statement.getText(source),
-				params: paramNames(statement.parameters),
-			});
-			continue;
-		}
+    if (ts.isFunctionDeclaration(statement) && statement.name) {
+      found.push({
+        name: statement.name.text,
+        body: statement.getText(source),
+        params: paramNames(statement.parameters),
+      });
+      continue;
+    }
 
-		if (ts.isVariableStatement(statement)) {
-			for (const declaration of statement.declarationList.declarations) {
-				if (!ts.isIdentifier(declaration.name)) continue;
-				const initializer = declaration.initializer;
-				const params =
-					initializer && (ts.isArrowFunction(initializer) || ts.isFunctionExpression(initializer))
-						? paramNames(initializer.parameters)
-						: [];
-				found.push({
-					name: declaration.name.text,
-					body: declaration.getText(source),
-					params,
-				});
-			}
-		}
-	}
+    if (ts.isVariableStatement(statement)) {
+      for (const declaration of statement.declarationList.declarations) {
+        if (!ts.isIdentifier(declaration.name)) continue;
+        const initializer = declaration.initializer;
+        const params =
+          initializer && (ts.isArrowFunction(initializer) || ts.isFunctionExpression(initializer))
+            ? paramNames(initializer.parameters)
+            : [];
+        found.push({
+          name: declaration.name.text,
+          body: declaration.getText(source),
+          params,
+        });
+      }
+    }
+  }
 
-	return found;
+  return found;
 }
 
 const serverActionModules = walk(SRC)
-	.map((file) => {
-		const text = readFileSync(file, "utf8");
-		const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true);
-		return {
-			path: relative(join(__dirname, "..", "..", "..", ".."), file)
-				.split(sep)
-				.join("/"),
-			source,
-		};
-	})
-	.filter(({ source }) => isServerActionModule(source))
-	.sort((a, b) => a.path.localeCompare(b.path));
+  .map((file) => {
+    const text = readFileSync(file, "utf8");
+    const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true);
+    return {
+      path: relative(join(__dirname, "..", "..", "..", ".."), file)
+        .split(sep)
+        .join("/"),
+      source,
+    };
+  })
+  .filter(({ source }) => isServerActionModule(source))
+  .sort((a, b) => a.path.localeCompare(b.path));
 
 describe("server action auth coverage", () => {
-	it("finds the server action modules it is supposed to be guarding", () => {
-		// A broken walk or a broken directive check would silently pass every
-		// assertion below by finding nothing. Fail loudly instead.
-		expect(serverActionModules.length).toBeGreaterThan(5);
-	});
+  it("finds the server action modules it is supposed to be guarding", () => {
+    // A broken walk or a broken directive check would silently pass every
+    // assertion below by finding nothing. Fail loudly instead.
+    expect(serverActionModules.length).toBeGreaterThan(5);
+  });
 
-	it.each(serverActionModules.map(({ path }) => path))(
-		"%s: every export resolves the caller from the session or is documented as public",
-		(path) => {
-			const entry = serverActionModules.find((candidate) => candidate.path === path);
-			if (!entry) throw new Error(`lost module ${path}`);
+  it.each(serverActionModules.map(({ path }) => path))(
+    "%s: every export resolves the caller from the session or is documented as public",
+    (path) => {
+      const entry = serverActionModules.find((candidate) => candidate.path === path);
+      if (!entry) throw new Error(`lost module ${path}`);
 
-			const offenders = collectExports(entry.source)
-				.filter((actionExport) => !AUTH_MARKERS.some((marker) => marker.test(actionExport.body)))
-				.filter((actionExport) => !PUBLIC_BY_DESIGN[`${path}::${actionExport.name}`])
-				.map((actionExport) => actionExport.name);
+      const offenders = collectExports(entry.source)
+        .filter((actionExport) => {
+          const body = effectiveBody(actionExport, localHelperBodies(entry.source));
+          return !AUTH_MARKERS.some((marker) => marker.test(body));
+        })
+        .filter((actionExport) => !PUBLIC_BY_DESIGN[`${path}::${actionExport.name}`])
+        .map((actionExport) => actionExport.name);
 
-			expect(
-				offenders,
-				`${path} exports ${offenders.join(", ")} as unauthenticated POST endpoint(s). Resolve the caller with auth(), or add the export to PUBLIC_BY_DESIGN with a reason.`
-			).toEqual([]);
-		}
-	);
+      expect(
+        offenders,
+        `${path} exports ${offenders.join(", ")} as unauthenticated POST endpoint(s). Resolve the caller with auth(), or add the export to PUBLIC_BY_DESIGN with a reason.`
+      ).toEqual([]);
+    }
+  );
 
-	it.each(serverActionModules.map(({ path }) => path))(
-		"%s: no export takes a caller identity from the wire",
-		(path) => {
-			const entry = serverActionModules.find((candidate) => candidate.path === path);
-			if (!entry) throw new Error(`lost module ${path}`);
+  it.each(serverActionModules.map(({ path }) => path))(
+    "%s: no export takes a caller identity from the wire",
+    (path) => {
+      const entry = serverActionModules.find((candidate) => candidate.path === path);
+      if (!entry) throw new Error(`lost module ${path}`);
 
-			const offenders: string[] = [];
-			for (const actionExport of collectExports(entry.source)) {
-				for (const param of actionExport.params) {
-					if (!IDENTITY_PARAM_NAMES.has(param.toLowerCase())) continue;
-					if (IDENTITY_PARAM_ALLOWLIST[`${path}::${actionExport.name}::${param}`]) continue;
-					offenders.push(`${actionExport.name}(${param})`);
-				}
-			}
+      const offenders: string[] = [];
+      for (const actionExport of collectExports(entry.source)) {
+        for (const param of actionExport.params) {
+          if (!IDENTITY_PARAM_NAMES.has(param.toLowerCase())) continue;
+          if (IDENTITY_PARAM_ALLOWLIST[`${path}::${actionExport.name}::${param}`]) continue;
+          offenders.push(`${actionExport.name}(${param})`);
+        }
+      }
 
-			expect(
-				offenders,
-				`${path} takes a caller identity as a parameter in ${offenders.join(", ")}. Read the id off the session instead, or add it to IDENTITY_PARAM_ALLOWLIST with a reason.`
-			).toEqual([]);
-		}
-	);
+      expect(
+        offenders,
+        `${path} takes a caller identity as a parameter in ${offenders.join(", ")}. Read the id off the session instead, or add it to IDENTITY_PARAM_ALLOWLIST with a reason.`
+      ).toEqual([]);
+    }
+  );
 });
 
 describe("unprotected session lookups", () => {
-	it.each(serverActionModules.map(({ path }) => path))(
-		"%s: no export gates itself on getSession(false)",
-		(path) => {
-			const entry = serverActionModules.find((candidate) => candidate.path === path);
-			if (!entry) throw new Error(`lost module ${path}`);
+  it.each(serverActionModules.map(({ path }) => path))(
+    "%s: no export gates itself on getSession(false)",
+    (path) => {
+      const entry = serverActionModules.find((candidate) => candidate.path === path);
+      if (!entry) throw new Error(`lost module ${path}`);
 
-			const offenders = collectExports(entry.source)
-				.filter((actionExport) => UNPROTECTED_SESSION.test(actionExport.body))
-				.map((actionExport) => actionExport.name);
+      const offenders = collectExports(entry.source)
+        .filter((actionExport) => UNPROTECTED_SESSION.test(actionExport.body))
+        .map((actionExport) => actionExport.name);
 
-			expect(
-				offenders,
-				`${path} calls getSession(false) in ${offenders.join(", ")}, which returns null instead of throwing. Call getSession() so the request is rejected.`
-			).toEqual([]);
-		}
-	);
+      expect(
+        offenders,
+        `${path} calls getSession(false) in ${offenders.join(", ")}, which returns null instead of throwing. Call getSession() so the request is rejected.`
+      ).toEqual([]);
+    }
+  );
 });
 
 describe("deleted ShipKit action modules stay deleted", () => {
-	// Each of these was an unauthenticated action module with no live caller in
-	// this fork, so it was deleted rather than guarded: dead code cannot be
-	// audited, and the upstream template keeps reintroducing it. Re-adding one,
-	// rather than syncing the upstream fix, is how this class recurred across
-	// three forks (LAC-3811, LAC-3944, LAC-4442).
-	const deleted = DELETED_MODULES;
+  // Each of these was an unauthenticated action module with no live caller in
+  // this fork, so it was deleted rather than guarded: dead code cannot be
+  // audited, and the upstream template keeps reintroducing it. Re-adding one,
+  // rather than syncing the upstream fix, is how this class recurred across
+  // three forks (LAC-3811, LAC-3944, LAC-4442).
+  const deleted = DELETED_MODULES;
 
-	it.each(deleted)("%s does not exist", (path) => {
-		const full = join(__dirname, "..", "..", "..", "..", path);
-		expect(existsSync(full), `${path} is back`).toBe(false);
-	});
+  it.each(deleted)("%s does not exist", (path) => {
+    const full = join(__dirname, "..", "..", "..", "..", path);
+    expect(existsSync(full), `${path} is back`).toBe(false);
+  });
 });
 
 describe("service modules are not server actions", () => {
-	// A `"use server"` directive on a service module publishes every export in
-	// it, including the plain data readers a service is made of. These two had
-	// it, which put a full waitlist dump and arbitrary temporary-link creation
-	// on the wire. Services are called from server code; they need no directive.
-	const services = SERVICE_MODULES;
+  // A `"use server"` directive on a service module publishes every export in
+  // it, including the plain data readers a service is made of. These two had
+  // it, which put a full waitlist dump and arbitrary temporary-link creation
+  // on the wire. Services are called from server code; they need no directive.
+  const services = SERVICE_MODULES;
 
-	it.each(services)("%s has no \"use server\" directive", (path) => {
-		const present = serverActionModules.some((entry) => entry.path === path);
-		expect(present, `${path} declares "use server" and publishes every export`).toBe(false);
-	});
+  it.each(services)('%s has no "use server" directive', (path) => {
+    const present = serverActionModules.some((entry) => entry.path === path);
+    expect(present, `${path} declares "use server" and publishes every export`).toBe(false);
+  });
 });
 
 /** `admin-config.ts` with comments stripped, so prose is not read as code. */
 const adminConfigCode = (): string =>
-	readFileSync(join(SRC, "config", "admin-config.ts"), "utf8")
-		.replace(/\/\*[\s\S]*?\*\//g, "")
-		.replace(/\/\/[^\n]*/g, "");
+  readFileSync(join(SRC, "config", "admin-config.ts"), "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/\/\/[^\n]*/g, "");
 
 describe("admin configuration", () => {
-	it("ships no default admin emails or domains", () => {
-		// Hardcoded defaults meant an unset ADMIN_EMAIL/ADMIN_DOMAIN granted
-		// standing admin on production to the template author, inherited by
-		// every fork. Read the values, not the prose: the file explains the
-		// old defaults by name, so a bare substring match on the whole text
-		// reports its own documentation.
-		const code = adminConfigCode();
-		expect(code).not.toMatch(/@gmail\.com/);
-		expect(code).not.toMatch(/lacymorrow\.com/);
-		expect(code).not.toMatch(/me@/);
-	});
+  it("ships no default admin emails or domains", () => {
+    // Hardcoded defaults meant an unset ADMIN_EMAIL/ADMIN_DOMAIN granted
+    // standing admin on production to the template author, inherited by
+    // every fork. Read the values, not the prose: the file explains the
+    // old defaults by name, so a bare substring match on the whole text
+    // reports its own documentation.
+    const code = adminConfigCode();
+    expect(code).not.toMatch(/@gmail\.com/);
+    expect(code).not.toMatch(/lacymorrow\.com/);
+    expect(code).not.toMatch(/me@/);
+  });
 
-	it("compares the admin domain exactly, not by suffix", () => {
-		// endsWith("@" + domain) accepted attacker@evil-lacymorrow.com. The file
-		// names the old comparison in a comment to explain itself, so strip
-		// comments first rather than matching its own documentation.
-		expect(adminConfigCode()).not.toMatch(/endsWith\s*\(/);
-	});
+  it("compares the admin domain exactly, not by suffix", () => {
+    // endsWith("@" + domain) accepted attacker@evil-lacymorrow.com. The file
+    // names the old comparison in a comment to explain itself, so strip
+    // comments first rather than matching its own documentation.
+    expect(adminConfigCode()).not.toMatch(/endsWith\s*\(/);
+  });
 });
 
 describe("oauth account linking", () => {
-	const authConfig = readFileSync(
-		join(SRC, "server", "auth-js", "auth.config.ts"),
-		"utf8"
-	);
+  const authConfig = readFileSync(join(SRC, "server", "auth-js", "auth.config.ts"), "utf8");
 
-	it("gates account linking on a provider-verified email", () => {
-		// This fork keeps allowDangerousEmailAccountLinking: true on purpose,
-		// so one person with one email gets one account across providers. That
-		// is only safe because the signIn callback refuses to attach a new
-		// provider to an existing account unless the provider asserts it
-		// verified the address. The flag is harmless; losing the gate is not,
-		// so the gate is what this asserts.
-		expect(authConfig).toMatch(/providerAssertsVerifiedEmail\s*\(/);
-	});
+  it("gates account linking on a provider-verified email", () => {
+    // This fork keeps allowDangerousEmailAccountLinking: true on purpose,
+    // so one person with one email gets one account across providers. That
+    // is only safe because the signIn callback refuses to attach a new
+    // provider to an existing account unless the provider asserts it
+    // verified the address. The flag is harmless; losing the gate is not,
+    // so the gate is what this asserts.
+    expect(authConfig).toMatch(/providerAssertsVerifiedEmail\s*\(/);
+  });
 
-	it("refuses the link when the provider has not verified the email", () => {
-		expect(authConfig).toMatch(/!providerAssertsVerifiedEmail\s*\([\s\S]{0,400}?return false/);
-	});
+  it("refuses the link when the provider has not verified the email", () => {
+    expect(authConfig).toMatch(/!providerAssertsVerifiedEmail\s*\([\s\S]{0,400}?return false/);
+  });
 });
