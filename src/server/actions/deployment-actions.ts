@@ -131,26 +131,26 @@ export async function createDeployment(
 /**
  * Update an existing deployment
  */
+/*
+ * SECURITY (LAC-3944): this took an optional `userId` "for background tasks",
+ * and supplying it skipped the session check entirely. Being a `"use server"`
+ * export, that made it an unauthenticated write to any user's deployment.
+ * Nothing legitimate used it: every background caller in this repo calls
+ * `deploymentService.updateDeployment` directly, which is still the way to
+ * act outside a request. The parameter is gone.
+ */
 export async function updateDeployment(
   id: string,
-  data: Parameters<typeof deploymentService.updateDeployment>[2],
-  userId?: string
+  data: Parameters<typeof deploymentService.updateDeployment>[2]
 ): Promise<Deployment | null> {
-  // Use provided userId (for background tasks) or get from auth
-  let effectiveUserId = userId;
-
-  if (!effectiveUserId) {
-    const session = await auth();
-    if (!session?.user?.id) {
-      throw new Error("Unauthorized");
-    }
-    effectiveUserId = session.user.id;
+  const session = await auth();
+  if (!session?.user?.id) {
+    throw new Error("Unauthorized");
   }
 
-  const result = await deploymentService.updateDeployment(id, effectiveUserId, data);
+  const result = await deploymentService.updateDeployment(id, session.user.id, data);
 
-  // Only revalidate when called from a request context (not from background tasks)
-  if (result && !userId) {
+  if (result) {
     revalidatePath(routes.app.deployments);
   }
 
