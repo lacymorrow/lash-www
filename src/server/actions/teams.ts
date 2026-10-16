@@ -7,6 +7,7 @@
  */
 
 import { revalidatePath, revalidateTag } from "next/cache";
+import { getSession } from "@/server/lib/auth";
 import { cacheService } from "@/server/services/cache-service";
 import { ErrorService } from "@/server/services/error-service";
 import { metrics, metricsService } from "@/server/services/metrics-service";
@@ -16,11 +17,44 @@ import { ValidationService } from "@/server/services/validation-service";
 import { createTeamSchema, teamIdSchema, teamMemberSchema, updateTeamSchema } from "./schemas";
 
 /**
+ * Every export below is a POST endpoint reachable by action id. They had rate
+ * limiting and schema validation but no authentication, and `createTeam` took
+ * the owner's id as its first argument, so the caller named themselves. The
+ * rate limit keyed on `teamId`, which an attacker simply rotates. See LAC-3944.
+ *
+ * The caller now comes from the session, and every team-scoped action requires
+ * the caller to be a member of the team it mutates.
+ */
+
+/** The caller's own id, or throw. `getSession()` rejects anonymous requests. */
+const requireCallerId = async (): Promise<string> => {
+  const session = await getSession();
+  const callerId = session?.user?.id;
+  if (!callerId) {
+    throw new Error("Unauthorized");
+  }
+  return callerId;
+};
+
+/** Membership of the team is the authorization check for changing it. */
+const requireTeamMember = async (teamId: string): Promise<string> => {
+  const callerId = await requireCallerId();
+  const members = await teamService.getTeamMembers(teamId);
+  if (!members?.some((member) => member.userId === callerId)) {
+    throw new Error("Unauthorized: not a member of this team");
+  }
+  return callerId;
+};
+
+/**
  * Creates a new team and assigns the user as the owner.
  * @returns The created team with its members
  */
-export async function createTeam(userId: string, name: string) {
+export async function createTeam(name: string) {
   try {
+    // The owner is whoever is signed in, not whoever the request claims.
+    const userId = await requireCallerId();
+
     // Rate limiting
     await rateLimitService.checkLimit(userId, "createTeam", rateLimits.web.forms);
 
@@ -62,6 +96,8 @@ export async function createTeam(userId: string, name: string) {
  */
 export async function updateTeam(teamId: string, data: { name?: string }) {
   try {
+    await requireTeamMember(teamId);
+
     // Rate limiting
     await rateLimitService.checkLimit(teamId, "updateTeam", rateLimits.web.forms);
 
@@ -103,6 +139,8 @@ export async function updateTeam(teamId: string, data: { name?: string }) {
  */
 export async function deleteTeam(teamId: string) {
   try {
+    await requireTeamMember(teamId);
+
     // Rate limiting
     await rateLimitService.checkLimit(teamId, "deleteTeam", rateLimits.web.forms);
 
@@ -144,15 +182,17 @@ export async function deleteTeam(teamId: string) {
  * Adds a member to a team.
  * @returns The created team member
  */
-export async function addTeamMember(teamId: string, userId: string, role: string) {
+export async function addTeamMember(teamId: string, memberUserId: string, role: string) {
   try {
+    await requireTeamMember(teamId);
+
     // Rate limiting
     await rateLimitService.checkLimit(teamId, "addTeamMember", rateLimits.web.forms);
 
     // Validation
     await ValidationService.validateOrThrow(teamMemberSchema, {
       teamId,
-      userId,
+      userId: memberUserId,
       role,
     });
 
@@ -160,7 +200,7 @@ export async function addTeamMember(teamId: string, userId: string, role: string
     const startTime = Date.now();
 
     // Add member
-    const member = await teamService.addTeamMember(teamId, userId, role);
+    const member = await teamService.addTeamMember(teamId, memberUserId, role);
 
     // Metrics end
     await metricsService.recordTiming(metrics.api.latency, startTime);
@@ -168,7 +208,7 @@ export async function addTeamMember(teamId: string, userId: string, role: string
 
     // Invalidate cache
     await cacheService.delete(`team:${teamId}:members`);
-    await cacheService.delete(`user:${userId}:teams`);
+    await cacheService.delete(`user:${memberUserId}:teams`);
 
     revalidatePath("/");
     return member;
@@ -182,15 +222,17 @@ export async function addTeamMember(teamId: string, userId: string, role: string
  * Removes a member from a team.
  * @returns True if removed successfully
  */
-export async function removeTeamMember(teamId: string, userId: string) {
+export async function removeTeamMember(teamId: string, memberUserId: string) {
   try {
+    await requireTeamMember(teamId);
+
     // Rate limiting
     await rateLimitService.checkLimit(teamId, "removeTeamMember", rateLimits.web.forms);
 
     // Validation
     await ValidationService.validateOrThrow(teamMemberSchema, {
       teamId,
-      userId,
+      userId: memberUserId,
       role: "member", // Role is required by schema but not needed for removal
     });
 
@@ -198,7 +240,7 @@ export async function removeTeamMember(teamId: string, userId: string) {
     const startTime = Date.now();
 
     // Remove member
-    const success = await teamService.removeTeamMember(teamId, userId);
+    const success = await teamService.removeTeamMember(teamId, memberUserId);
 
     // Metrics end
     await metricsService.recordTiming(metrics.api.latency, startTime);
@@ -206,10 +248,10 @@ export async function removeTeamMember(teamId: string, userId: string) {
 
     // Invalidate cache
     await cacheService.delete(`team:${teamId}:members`);
-    await cacheService.delete(`user:${userId}:teams`);
+    await cacheService.delete(`user:${memberUserId}:teams`);
 
     // Revalidate Next.js cache using tags
-    revalidateTag(`user-teams-${userId}`, "max");
+    revalidateTag(`user-teams-${memberUserId}`, "max");
     revalidateTag("teams", "max");
     revalidatePath("/");
 
@@ -224,15 +266,17 @@ export async function removeTeamMember(teamId: string, userId: string) {
  * Updates a team member's role.
  * @returns The updated team member
  */
-export async function updateTeamMemberRole(teamId: string, userId: string, role: string) {
+export async function updateTeamMemberRole(teamId: string, memberUserId: string, role: string) {
   try {
+    await requireTeamMember(teamId);
+
     // Rate limiting
     await rateLimitService.checkLimit(teamId, "updateTeamMemberRole", rateLimits.web.forms);
 
     // Validation
     await ValidationService.validateOrThrow(teamMemberSchema, {
       teamId,
-      userId,
+      userId: memberUserId,
       role,
     });
 
@@ -240,7 +284,7 @@ export async function updateTeamMemberRole(teamId: string, userId: string, role:
     const startTime = Date.now();
 
     // Update member role
-    const member = await teamService.updateTeamMemberRole(teamId, userId, role);
+    const member = await teamService.updateTeamMemberRole(teamId, memberUserId, role);
 
     // Metrics end
     await metricsService.recordTiming(metrics.api.latency, startTime);

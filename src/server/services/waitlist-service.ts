@@ -1,4 +1,17 @@
-"use server";
+/*
+ * No `"use server"` directive here, deliberately (LAC-3944).
+ *
+ * This is a service, not an action module. The directive used to sit at the
+ * top of this file, which published every export below as a POST endpoint
+ * keyed by action id - including `getWaitlistEntries`, an unpaginated dump of
+ * every signup with its email address, and `getWaitlistEntryByEmail`, which
+ * confirmed whether a given address was on the list. A route group or an admin
+ * layout gates the page that renders a service's data; it does not gate an
+ * action, so the directive put the whole table on the wire.
+ *
+ * Call these from a Server Component, or from a server action that has already
+ * resolved the caller.
+ */
 
 import { count, desc, eq } from "drizzle-orm";
 import { safeDbExecute } from "@/server/db";

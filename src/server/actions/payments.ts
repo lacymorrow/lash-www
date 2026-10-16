@@ -35,7 +35,7 @@ import { env } from "@/env";
 import { logger } from "@/lib/logger";
 import { redirect } from "@/lib/utils/redirect";
 import { db } from "@/server/db";
-import { payments, users } from "@/server/db/schema";
+import { payments } from "@/server/db/schema";
 import { getSession, requireAdmin } from "@/server/lib/auth";
 import { getProvider } from "@/server/providers";
 import { isAdmin } from "@/server/services/admin-service";
@@ -46,59 +46,30 @@ import type { ImportProvider, ImportStats } from "@/types/payments";
 // Rate limiting service instance - prevents API abuse
 const rateLimitService = new RateLimitService();
 
-async function findOrCreateUser(email: string) {
-  if (!db) throw new Error("Database not initialized");
-  let user = await db.query.users.findFirst({
-    where: eq(users.email, email.toLowerCase()),
-  });
-
-  if (!user) {
-    const [newUser] = await db
-      .insert(users)
-      .values({
-        email: email.toLowerCase(),
-        name: null,
-        emailVerified: new Date(), // Consider email verified since they made a purchase
-      })
-      .returning();
-    user = newUser;
-  }
-
-  return user;
-}
 
 /**
- * Creates a payment record from LemonSqueezy webhook and grants user access
+ * Records a completed LemonSqueezy order for the signed-in user.
  *
- * @param data - Payment data from LemonSqueezy webhook
- * @param data.orderId - LemonSqueezy order ID
- * @param data.orderIdentifier - Order identifier for lookup
- * @param data.userId - Optional user ID (from custom data or session)
- * @param data.userEmail - User email for account lookup
- * @param data.customData - Custom data passed during checkout
+ * SECURITY (LAC-3944): this used to take the whole order off the wire -
+ * `status`, `total`, `userId`, `userEmail` - and write a `completed` payment
+ * row whenever `status === "paid"`. It is a `"use server"` export, so it was
+ * an unauthenticated POST endpoint: anyone could grant themselves (or a
+ * brand-new user, which it created on demand) a paid entitlement for free.
+ * Same
+ * class as LAC-4323.
  *
- * @returns Success status and optional error message
+ * The client now supplies only the order identifier, which is an opaque
+ * lookup key rather than a claim. Everything written to the database comes
+ * from the LemonSqueezy API, and the order must belong to the session user's
+ * own email address, so a valid identifier belonging to someone else is no
+ * use either.
  *
- * @remarks
- * This is typically called from webhook handlers after payment verification.
- * It handles user account creation if needed and grants appropriate access.
- *
- * @security No authentication required as this is called from webhooks
- * @security Payment data must be verified before calling this action
+ * This is a confirmation path, not the source of truth. A signature-verified
+ * webhook is still the right place to record orders; until one exists, the
+ * admin import (`importPayments`) remains the backstop for anything the
+ * browser never reported.
  */
-export async function createLemonSqueezyPayment(data: {
-  orderId: string;
-  orderIdentifier: string;
-  userId?: string;
-  userEmail?: string;
-  customData?: {
-    user_id?: string;
-    user_email?: string;
-  };
-  status: string;
-  total: number;
-  productName: string;
-}) {
+export async function createLemonSqueezyPayment(data: { orderId: string }) {
   // Check if the LemonSqueezy feature is enabled
   if (!env.NEXT_PUBLIC_FEATURE_LEMONSQUEEZY_ENABLED) {
     logger.error("LemonSqueezy feature is disabled. Cannot create payment.");
@@ -108,112 +79,114 @@ export async function createLemonSqueezyPayment(data: {
   const requestId = crypto.randomUUID();
   const startTime = Date.now();
 
-  logger.info("LemonSqueezy payment creation request received", {
-    requestId,
-    timestamp: new Date().toISOString(),
-    orderId: data.orderId,
-    userId: data.userId,
-    status: data.status,
-  });
-
   try {
-    // Check if database is initialized
+    const session = await getSession();
+    const userId = session?.user?.id;
+    const sessionEmail = session?.user?.email?.toLowerCase().trim();
+
+    if (!userId || !sessionEmail) {
+      throw new Error("User not authenticated");
+    }
+
     if (!db) {
       logger.error("Database not initialized", { requestId });
       throw new Error("Database not initialized");
     }
 
-    // Only process paid orders
-    if (data.status !== "paid") {
-      logger.warn("Order not paid", {
-        requestId,
-        orderId: data.orderId,
-        status: data.status,
-      });
-      throw new Error("Order not paid");
+    const orderId = data.orderId?.trim();
+    if (!orderId) {
+      throw new Error("Order ID is required");
     }
 
-    // Use either the session user ID or the custom data user ID
-    let actualUserId = data.userId || data.customData?.user_id;
-    const userEmail = data.userEmail || data.customData?.user_email;
+    logger.info("LemonSqueezy payment confirmation requested", {
+      requestId,
+      orderId,
+      userId,
+    });
 
-    if (!actualUserId && userEmail) {
-      const user = await findOrCreateUser(userEmail);
-      if (user) {
-        actualUserId = user.id;
-      }
-    }
-
-    if (!actualUserId) {
-      logger.error("No user ID or email found", {
-        requestId,
-        orderId: data.orderId,
-        userId: data.userId,
-        userEmail: data.userEmail,
-        customData: data.customData,
-      });
-      throw new Error("No user ID or email found");
-    }
-
-    // Check if this order already exists (duplicate prevention)
+    // Duplicate check before spending an API call.
     const existingPayment = await db.query.payments.findFirst({
-      where: eq(payments.orderId, data.orderId),
+      where: eq(payments.orderId, orderId),
     });
 
     if (existingPayment) {
       logger.info("Payment already exists", {
         requestId,
-        orderId: data.orderId,
+        orderId,
         paymentId: existingPayment.id,
       });
       return { success: true, paymentId: existingPayment.id };
     }
 
-    // Create payment using the existing service method
+    /*
+     * Ask LemonSqueezy what it has for *this* user's email. Filtering the
+     * lookup by the session address is what stops a caller from claiming
+     * someone else's order id: an order that is not on their own email is
+     * simply not in the result set.
+     */
+    const provider = getProvider("lemonsqueezy");
+    if (!provider) {
+      throw new Error("LemonSqueezy provider is not configured");
+    }
+
+    const orders = await provider.getOrdersByEmail(sessionEmail);
+    const order = orders.find((candidate) => candidate.orderId === orderId);
+
+    if (!order) {
+      logger.warn("Refused payment confirmation: order not found for this user", {
+        requestId,
+        orderId,
+        userId,
+      });
+      throw new Error("Order not found");
+    }
+
+    if (order.status !== "paid") {
+      logger.warn("Refused payment confirmation: order is not paid", {
+        requestId,
+        orderId,
+        status: order.status,
+      });
+      throw new Error("Order not paid");
+    }
+
+    // Every value below comes from the provider, not from the request.
     const payment = await PaymentService.createPayment({
-      userId: actualUserId,
-      orderId: data.orderId,
-      amount: data.total,
+      userId,
+      orderId: order.orderId,
+      amount: Math.round(order.amount * 100), // stored in cents, as the import path does
       status: "completed",
       processor: "lemonsqueezy",
       metadata: {
-        // Store product information at top level for easy access
-        productName: data.productName || "Unknown Product",
-        product_name: data.productName || "Unknown Product",
-
-        // Store order details
-        orderIdentifier: data.orderIdentifier,
-        userEmail: data.userEmail || data.customData?.user_email,
-        customData: data.customData,
+        productName: order.productName,
+        product_name: order.productName,
+        orderIdentifier: order.orderId,
+        processorOrderId: order.id,
+        userEmail: order.userEmail,
+        purchaseDate: order.purchaseDate,
       },
     });
 
     if (!payment) {
-      logger.error("Failed to create payment", {
-        requestId,
-        orderId: data.orderId,
-        userId: actualUserId,
-      });
+      logger.error("Failed to create payment", { requestId, orderId, userId });
       throw new Error("Failed to create payment");
     }
 
-    const processingTime = Date.now() - startTime;
     logger.info("LemonSqueezy payment created successfully", {
       requestId,
-      orderId: data.orderId,
-      userId: actualUserId,
+      orderId,
+      userId,
       paymentId: payment.id,
-      processingTime,
+      processingTime: Date.now() - startTime,
     });
 
     return { success: true, paymentId: payment.id };
   } catch (error) {
-    const processingTime = Date.now() - startTime;
     logger.error("Error creating LemonSqueezy payment", {
       requestId,
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,
-      processingTime,
+      processingTime: Date.now() - startTime,
     });
     throw error;
   }
