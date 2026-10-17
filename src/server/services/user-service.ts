@@ -99,7 +99,11 @@ export class UserService extends BaseService<typeof users> {
     });
 
     if (!dbUser) {
-      // No user with this email - create new user
+      // No user with this email - create new user.
+      // emailVerified stays null: the caller hands us a profile, not proof
+      // that this address was confirmed. Whoever can prove it stamps the
+      // column. Passed explicitly because a database created before
+      // LAC-4100 still defaults the column to now.
       const [newUser] = await db
         .insert(users)
         .values({
@@ -107,6 +111,7 @@ export class UserService extends BaseService<typeof users> {
           email: normalizedEmail,
           name: authUser.name ?? null,
           image: authUser.image ?? null,
+          emailVerified: null,
           createdAt: new Date(),
           updatedAt: new Date(),
         })
@@ -506,6 +511,11 @@ export class UserService extends BaseService<typeof users> {
         logger.info("User not found by email, creating new user.", { email: normalizedEmail });
         const newUserId = crypto.randomUUID();
 
+        // emailVerified stays null. The callers here are payment webhooks,
+        // and the address on an order is whatever the buyer typed into the
+        // provider's checkout — a payment is not proof of ownership. Signing
+        // in through the magic link stamps the column. Passed explicitly
+        // because a database created before LAC-4100 still defaults it to now.
         const [newUserRecord] = await tx
           .insert(users)
           .values({
@@ -513,9 +523,9 @@ export class UserService extends BaseService<typeof users> {
             email: normalizedEmail,
             name: userData?.name ?? null,
             image: userData?.image ?? null,
+            emailVerified: null,
             createdAt: new Date(),
             updatedAt: new Date(),
-            // emailVerified might need specific handling depending on requirements
           })
           .returning();
 

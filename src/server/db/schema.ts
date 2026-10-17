@@ -137,10 +137,16 @@ export const users = createTable("user", {
     .$defaultFn(() => crypto.randomUUID()),
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull().unique(),
+  // NULL means "nobody has proved they own this address", and that has to be
+  // what an insert gets for free. This column used to default to
+  // CURRENT_TIMESTAMP, so any writer that omitted it created a pre-verified
+  // account — and `admin-service.isAdmin()` grants admin on an
+  // ADMIN_EMAIL / ADMIN_DOMAINS match only when this column is set (LAC-3811).
+  // No default, so the safe answer is the one you get by saying nothing.
   emailVerified: timestamp("email_verified", {
     mode: "date",
     withTimezone: true,
-  }).default(sql`CURRENT_TIMESTAMP`),
+  }),
   // Better Auth models email verification as a boolean. Auth.js keeps the
   // timestamp above; both columns stay so either strategy can read its own.
   emailVerifiedFlag: boolean("email_verified_flag").default(false),

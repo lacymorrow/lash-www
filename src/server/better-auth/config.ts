@@ -155,7 +155,8 @@ export const auth = (() => {
             Promise.resolve({
               data: {
                 ...user,
-                // Auth.js defaults the timestamp to now; only stamp it when verified.
+                // Keep the Auth.js timestamp in step with Better Auth's
+                // boolean, so either strategy reads the same answer.
                 emailVerifiedAt: user.emailVerified ? new Date() : null,
               },
             }),

@@ -29,13 +29,17 @@ export async function addCollaboratorAction(githubUsername: string) {
     const trimmed = githubUsername.trim();
     await grantGitHubAccess({ githubUsername: trimmed });
 
-    // Insert a stub user so the invite can be revoked before acceptance
+    // Insert a stub user so the invite can be revoked before acceptance.
+    // emailVerified stays null: this is a synthetic placeholder address and
+    // nobody has signed in through it yet. Passed explicitly because a
+    // database created before LAC-4100 still defaults the column to now.
     await db
       ?.insert(users)
       .values({
         email: pendingCollaboratorEmail(trimmed),
         name: trimmed,
         githubUsername: trimmed,
+        emailVerified: null,
       })
       .onConflictDoUpdate({
         target: users.email,

@@ -14,6 +14,7 @@
  * on the real DB. Check #1 is exercised by spying on the config.
  */
 
+import { eq } from "drizzle-orm";
 import { describe, expect, it, vi } from "vitest";
 import { adminConfig } from "@/config/admin-config";
 import { users } from "@/server/db/schema";
@@ -67,8 +68,6 @@ describe("isAdmin", () => {
       expect(await isAdmin({ email: "unowned@shipkit.test" })).toBe(false);
 
       // Row exists but the address is unverified, so it is still unproven.
-      // emailVerified must be set to null explicitly: the column defaults to
-      // CURRENT_TIMESTAMP, so an omitted value inserts a *verified* user.
       const db = getTestDb();
       await db.insert(users).values({
         id: "config-unverified",
@@ -78,6 +77,33 @@ describe("isAdmin", () => {
       });
 
       expect(await isAdmin({ email: "config-unverified@shipkit.test" })).toBe(false);
+    } finally {
+      spy.mockRestore();
+    }
+  });
+
+  it("refuses a static config match for a row that never set emailVerified (LAC-4100)", async () => {
+    const spy = vi.spyOn(adminConfig, "isAdminByEmailConfig").mockReturnValue(true);
+    try {
+      // The column used to default to CURRENT_TIMESTAMP, so omitting it
+      // inserted an account whose email already counted as verified — and
+      // that is the single input this admin check reads. Unverified has to be
+      // what you get by not saying anything, or every future writer that
+      // forgets to opt out mints an admin.
+      const db = getTestDb();
+      await db.insert(users).values({
+        id: "config-omitted",
+        email: "config-omitted@shipkit.test",
+        role: "user",
+      });
+
+      const row = await db.query.users.findFirst({
+        where: eq(users.email, "config-omitted@shipkit.test"),
+        columns: { emailVerified: true },
+      });
+      expect(row?.emailVerified).toBeNull();
+
+      expect(await isAdmin({ email: "config-omitted@shipkit.test" })).toBe(false);
     } finally {
       spy.mockRestore();
     }

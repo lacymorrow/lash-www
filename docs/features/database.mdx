@@ -29,6 +29,29 @@ The main schema lives at `src/server/db/schema.ts`. It defines tables for users,
 
 Payload CMS has its own schema management — it handles migrations for its collections separately. Both share the same database.
 
+### Upgrading an existing database
+
+`users.email_verified` no longer defaults to `CURRENT_TIMESTAMP`. It defaults to NULL, so a row
+that never says anything about verification reads as unverified. This matters because
+`isAdmin()` grants admin on an `ADMIN_EMAIL` / `ADMIN_DOMAINS` match only for an account whose
+email is verified; under the old default, any insert that omitted the column produced an account
+that satisfied that check.
+
+Fresh installs get the new column from `db:push`. A database created before this change keeps the
+old default until you run `bun run db:push`, which emits:
+
+```sql
+ALTER TABLE "your_prefix_user" ALTER COLUMN "email_verified" DROP DEFAULT;
+```
+
+Existing rows are untouched. If some were created by an insert that omitted the column, they are
+marked verified without anyone having proved ownership, and clearing them is a judgment call:
+
+```sql
+-- Review before running. This unverifies every account that has no sign-in on record.
+SELECT id, email, email_verified FROM "your_prefix_user" WHERE email_verified IS NOT NULL;
+```
+
 ## Usage
 
 ```typescript
