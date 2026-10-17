@@ -1082,6 +1082,11 @@
           "target": "~/src/app/(app)/(authentication)/_components/auth-branding.tsx"
         },
         {
+          "path": "src/app/(app)/(authentication)/_components/auth-unavailable.tsx",
+          "type": "registry:component",
+          "target": "~/src/app/(app)/(authentication)/_components/auth-unavailable.tsx"
+        },
+        {
           "path": "src/app/(app)/(authentication)/_hooks/use-auth-form.ts",
           "type": "registry:hook",
           "target": "~/src/app/(app)/(authentication)/_hooks/use-auth-form.ts"
@@ -1140,6 +1145,11 @@
           "path": "src/hooks/use-redirect-after-sign-in.ts",
           "type": "registry:hook",
           "target": "~/src/hooks/use-redirect-after-sign-in.ts"
+        },
+        {
+          "path": "src/lib/auth/auth-ui-availability.ts",
+          "type": "registry:lib",
+          "target": "~/src/lib/auth/auth-ui-availability.ts"
         },
         {
           "path": "src/lib/schemas/auth.ts",
