@@ -14,7 +14,10 @@ concurrency:
 jobs:
   setup:
     name: Setup
-    if: vars.NEON_PROJECT_ID != ''
+    # Billing gate first (LAC-4925): Actions billing is a permanent WONTFIX, so
+    # this would refuse to start if NEON_PROJECT_ID were ever set. Both other
+    # jobs `needs: setup`, so gating here skips the whole workflow.
+    if: ${{ vars.ACTIONS_BILLING_OK == 'true' && vars.NEON_PROJECT_ID != '' }}
     outputs:
       branch: ${{ steps.branch_name.outputs.current_branch }}
     runs-on: ubuntu-latest

@@ -14,9 +14,10 @@ Install it once, then retry the commit:
   macOS:   brew install gitleaks
   Linux:   see https://github.com/gitleaks/gitleaks#installing
 
-CI (.github/workflows/gitleaks.yml) will still scan the PR delta, so the
-missing hook does not silently let a secret through — but local scanning
-catches it before it hits any remote.
+There is NO CI backstop. .github/workflows/gitleaks.yml is gated off because
+Actions billing is a permanent WONTFIX (LAC-4925), so this hook and
+`bun run verify:pr` are the only secret scans between you and the remote.
+Install it; do not skip past this.
 EOM
   exit 1
 fi

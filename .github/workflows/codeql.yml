@@ -9,6 +9,9 @@ on:
 jobs:
   analyze:
     name: Analyze ${{ matrix.language }}
+    # Gated off: Actions billing is a permanent WONTFIX (LAC-4925). This was
+    # failing its weekly cron and emailing a failure every Monday.
+    if: ${{ vars.ACTIONS_BILLING_OK == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:

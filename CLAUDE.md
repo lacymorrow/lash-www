@@ -193,13 +193,18 @@ Shipkit uses environment variables for feature toggles:
 - **Button-like links** - Use `<Link className={cn(buttonVariants(...))} ...>`
 - **Multi-zone navigation** - Use anchor tags (`<a>`) for cross-zone links
 
-### CI Minutes and Local Verification
+### CI: GitHub Actions is off, `bun run verify:pr` is the gate
 
-GitHub Actions minutes are billed on this private repo, and automated upstream syncs and agent-authored PRs burn them on checks that were already run locally.
+**Every Actions job that fires on a PR, a push, or a schedule is gated off and will not run.** Actions billing is a permanent WONTFIX on this account (no paid GitHub billing, ever), so on a private repo every job refused to start in ~3s with `steps=0` and every PR was red regardless of the code. LAC-4925 replaced it. Full detail: [`docs/development/ci-local-verify.mdx`](./docs/development/ci-local-verify.mdx).
 
-- **Run `bun run verify` before opening a PR** - `scripts/verify.sh` runs typecheck, lint, unit and node tests, a production build, and a `next start` smoke (`--routes "/ /blog /blog/nope-xyz=404 /nope-404=404"` to customize). Paste its Markdown summary in the PR body.
-- **Skip Actions when you verified locally** - put `[skip ci]` in the commit message (GitHub-native; also skips gitleaks, so run `gitleaks protect --staged` locally). Vercel still builds, and the Deployment Check smoke still runs because it triggers off the Vercel deployment.
-- **Cheap jobs run on every PR, expensive ones on demand** - `ci.yml` runs typecheck, lint, and unit tests on every PR; integration, production build, Playwright e2e, and the docs link check run on pushes to `main` and on PRs labeled `ci:full`. Add the label for changes to auth, payments, the build pipeline, or docs routing.
+Gated: `ci.yml`, `gitleaks.yml`, `registry.yml`, `codeql.yml`, `deployment-check.yml`, `db-neon-branch-on-pr.yaml`. Deliberately **not** gated, because they never fire on their own and so never produce a red check: `deploy-to-production.yml`, `init-upstream.yml`, `sync-upstream.yml` (all `workflow_dispatch` only) and `claude.yml` (fires only on an explicit `@claude` mention). Those four still need Actions minutes, so **they will fail if you trigger them**, including the `@claude` PR-review path, which means there is no working bot reviewer on this repo.
+
+- **Run `bun run verify:pr` after pushing, instead of `bun run verify`** - it runs the same checks and then publishes the result as the `local-verify` commit status on the PR head, so the PR carries a real green check. It refuses to post if the working tree differs from `HEAD` or if `HEAD` is not the PR head, because a status on a commit you did not test is a lie. Re-run after every push: a status is bound to one commit.
+- **`bun run verify` alone is still fine for a local loop** - `scripts/verify.sh` runs typecheck, lint, unit and node tests, a secret scan, the registry check, a production build, and a `next start` smoke (`--routes "/ /blog /blog/nope-xyz=404 /nope-404=404"` to customize). It prints what it did _not_ cover; read that line before trusting a pass.
+- **A green `local-verify` is advisory, not an enforcement gate** - it is self-reported from a developer machine, and on a free plan this repo has no branch protection at all (`/branches/main/protection` and `/rulesets` both 403 "Upgrade to GitHub Pro"), so no check here can be _required_ under any route. It tells you the checks ran. It does not stop a merge.
+- **Not covered locally** - integration tests (needs a Postgres service), Playwright e2e, the docs link check, and the deployed-URL smoke. Nothing currently checks the live Vercel deployment. Do not read a green `local-verify` as evidence that prod is up.
+- **`[skip ci]` is no longer needed** - the jobs skip themselves now. Harmless to keep in existing commit templates.
+- **If Actions minutes ever come back** - set the repo variable `ACTIONS_BILLING_OK=true` and the entire suite turns back on. Nothing was deleted; the minutes policy (cheap tier per PR, `ci:full` label for the expensive tier) is still in `ci.yml`.
 - **Suspense and loading files** - never add `loading.tsx` or `<Suspense>` above a page that calls `notFound()`; the shell streams a 200 first (see `tests/node/app/no-loading-above-not-found.test.ts`).
 
 ### Database Best Practices

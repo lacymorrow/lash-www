@@ -1,6 +1,19 @@
 # CI gate. See plans/MASTER-TEST-PLAN.md (Phase 6) for the rationale.
 #
-# Minutes policy (Actions minutes are billed on this private repo):
+# EVERY JOB HERE IS GATED OFF. See docs/development/ci-local-verify.mdx.
+# Actions billing is a permanent WONTFIX on this account (LAC-2960 closed
+# `done` 2026-10-15: no paid GitHub billing, ever), so on a private repo every
+# job refuses to start in ~3s with steps=0. Jobs below carry
+# `vars.ACTIONS_BILLING_OK == 'true'` so they skip instead of failing: a job
+# whose `if` is false is never dispatched to a runner, so it costs nothing and
+# renders neutral rather than red. Nothing here is deleted; set the repo
+# variable ACTIONS_BILLING_OK=true to turn the whole suite back on if the
+# account ever gets paid minutes.
+#
+# The real gate is now `bun run verify:pr`, which runs these same checks
+# locally and publishes the result as the `local-verify` commit status (LAC-4925).
+#
+# Minutes policy, for whenever ACTIONS_BILLING_OK is true again:
 #   - Cheap jobs (typecheck, lint, unit) run on every PR.
 #   - Expensive jobs (integration, build, e2e, docs-links) run on pushes to main
 #     and on PRs labeled "ci:full". Add the label when a change touches auth,
@@ -42,6 +55,7 @@ env:
 jobs:
   typecheck:
     name: TypeScript
+    if: ${{ vars.ACTIONS_BILLING_OK == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -54,6 +68,7 @@ jobs:
 
   lint:
     name: Lint (biome + eslint + prettier)
+    if: ${{ vars.ACTIONS_BILLING_OK == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -66,6 +81,7 @@ jobs:
 
   test-unit:
     name: Unit tests (mocked db)
+    if: ${{ vars.ACTIONS_BILLING_OK == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -81,7 +97,7 @@ jobs:
 
   test-integration:
     name: Integration tests (real Postgres)
-    if: ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'ci:full') }}
+    if: ${{ vars.ACTIONS_BILLING_OK == 'true' && (github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'ci:full')) }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     services:
@@ -113,7 +129,7 @@ jobs:
 
   build:
     name: Production build
-    if: ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'ci:full') }}
+    if: ${{ vars.ACTIONS_BILLING_OK == 'true' && (github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'ci:full')) }}
     runs-on: ubuntu-latest
     timeout-minutes: 25
     needs: [typecheck, lint]
@@ -135,7 +151,7 @@ jobs:
 
   test-e2e:
     name: E2E (Playwright)
-    if: ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'ci:full') }}
+    if: ${{ vars.ACTIONS_BILLING_OK == 'true' && (github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'ci:full')) }}
     runs-on: ubuntu-latest
     # Includes a production build (~15-25 min) before the Playwright run —
     # keep this above the build job's timeout plus test time.
@@ -194,7 +210,7 @@ jobs:
   # when the provider was introduced. See docs-site/README.md.
   docs-links:
     name: Docs link check (Holocron build)
-    if: ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'ci:full') }}
+    if: ${{ vars.ACTIONS_BILLING_OK == 'true' && (github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'ci:full')) }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -217,7 +233,11 @@ jobs:
     name: CI pass
     runs-on: ubuntu-latest
     needs: [typecheck, lint, test-unit, test-integration, build, test-e2e, docs-links]
-    if: always()
+    # `always()` is kept so a skipped expensive tier still reports pass, but the
+    # billing gate comes first: without it this job would be the one thing that
+    # still claims a runner (and therefore still goes red) while every job it
+    # depends on skips.
+    if: ${{ always() && vars.ACTIONS_BILLING_OK == 'true' }}
     steps:
       # Skipped jobs (expensive suite not requested) are fine; failures and
       # cancellations are not.

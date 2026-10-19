@@ -66,6 +66,12 @@
     "debug/**/*.ts",
     "scripts",
     "src/app/(app)/(demo)/examples/**/*",
-    "src/workers/**/*.ts"
+    "src/workers/**/*.ts",
+    // Never typecheck build output. `include` globs `**/*.js`, and `.gitignore`
+    // ignores every `dist/`, so any build artifact left in the tree got
+    // typechecked: a stray `cli/dist/index.js` produced 19 TS7006 errors here
+    // with zero tracked files behind them. No `dist/` file is tracked in this
+    // repo, so this excludes nothing real.
+    "**/dist"
   ]
 }

@@ -26,6 +26,9 @@ permissions:
 jobs:
   scan-diff:
     name: Scan new commits
+    # Gated off: Actions billing is a permanent WONTFIX (LAC-4925). Run
+    # `gitleaks protect --staged` locally instead; `bun run verify:pr` does.
+    if: ${{ vars.ACTIONS_BILLING_OK == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -83,7 +86,7 @@ jobs:
     name: Scan full history (report-only)
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    if: ${{ vars.ACTIONS_BILLING_OK == 'true' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
     continue-on-error: true
     steps:
       - uses: actions/checkout@v7

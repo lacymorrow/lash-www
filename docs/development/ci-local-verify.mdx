@@ -1,0 +1,113 @@
+---
+title: "CI: local verification"
+description: "GitHub Actions is gated off on this repo. bun run verify:pr is the gate instead."
+---
+
+# CI: local verification
+
+**Every GitHub Actions job that fires on a PR, a push, or a schedule is gated off and will not run.** `bun run verify:pr` replaced it. Four manual/on-demand workflows are deliberately left ungated and are listed under [Turning Actions back on](#turning-actions-back-on); they will still fail if you trigger them.
+
+## Why
+
+GitHub Actions billing is a permanent constraint on this account, not an open bug. The decision is no paid GitHub billing, ever. On a private repo with no paid minutes, Actions does not degrade gracefully: every job refuses to start in about three seconds with `steps=0`, so the workflow reports failure without running a single step.
+
+Measured on 2026-10-19 before this change:
+
+- Zero successful workflow runs across the previous 60 runs, on any workflow.
+- 59 of shipkit's open PRs could not go green. 172 of 262 open PRs across the account were more than 7 days old.
+- Every PR showed four or five red X's that carried no information about the code.
+
+That is worse than having no CI. A red check that is always red trains everyone to ignore checks.
+
+## The constraint that shaped the fix
+
+This repo has **no branch protection at all**. On a free plan, both endpoints refuse:
+
+```
+GET /repos/lacymorrow/shipkit/branches/main/protection  -> 403
+GET /repos/lacymorrow/shipkit/rulesets                  -> 403
+"Upgrade to GitHub Pro or make this repository public to enable this feature."
+```
+
+So there are no required status checks, and there never were. Merges already happen with CI fully red.
+
+This matters because it rules out the expensive options. A self-hosted runner would produce a trustworthy, GitHub-orchestrated check, but with no branch protection that check still cannot be _required_, so its enforcement value over a locally published status is zero. It would cost arbitrary PR code executing on a laptop, fork-PR gating discipline, and checks that hang _pending_ whenever the machine is asleep. Paying a real security cost for zero enforcement gain is a bad trade.
+
+Making the repo public would make minutes free, but shipkit is the premium paid product. That is permanently unavailable here, independent of any secret-scrubbing work.
+
+So the goal is not the strongest gate. On this plan every check is advisory no matter what. The goal is **an honest signal for the least cost.**
+
+## How it works
+
+`bun run verify:pr` runs the checks locally and publishes the result to the PR head commit through the GitHub commit Statuses API. That API needs no runner and burns no Actions minutes.
+
+```bash
+git push                      # the status binds to a pushed commit
+bun run verify:pr             # full run: build + route smoke
+bun run verify:pr --no-build  # faster; the status lists what was skipped
+```
+
+The PR then carries a `local-verify` check, plus one comment holding the full result table. The check's "Details" link points at that comment.
+
+### What it refuses to do
+
+Two guards are the difference between a real signal and theater:
+
+1. **Clean tree required.** If tracked files differ from `HEAD`, it refuses. A status naming a commit while testing uncommitted code is a lie. `--allow-dirty` overrides, and then the status and the comment both say `[dirty tree]`, so the deviation is visible rather than hidden. Harness-local `.claude/` config is exempt because it cannot affect a build.
+2. **`HEAD` must be the PR head.** If you have not pushed, it refuses rather than certifying a commit GitHub has never seen.
+
+A status is bound to one commit, so **re-run it after every push.** An older green check does not carry forward.
+
+If the run is killed partway through (session teardown, `Ctrl-C`, an OOM on a long build), an `EXIT` trap lands an `error` state saying so. A `pending` status that never resolves would be worse than a red one: it reads as "still running" forever, and waiting never fixes it. An `error` here means the run died, not that the code is bad. Re-run it.
+
+## What a green `local-verify` actually means
+
+The checks named in the PR comment passed on someone's machine, against that exact commit, with a clean tree. That is the whole claim.
+
+Read the limits honestly:
+
+- **It is self-reported.** Anyone with push access can post one by hand without running anything. The threat model that makes this acceptable: push access to this repo is the owner and the owner's agents, who are already trusted. Fork PRs cannot post a status at all because they have no token, which is the correct outcome rather than a gap.
+- **It is advisory.** With no branch protection, nothing can be required. The check tells you the work was verified. It does not stop a merge.
+- **It is not complete.** `verify.sh` prints what it did not cover, and you should read that line before trusting a pass.
+- **It inherits the machine it ran on.** This is the structural weakness of a local gate and it has no clean fix. A clean container runs the repo; your machine runs the repo plus whatever else is in the directory. Untracked and gitignored files can both _cause_ failures the repo does not have and _mask_ failures it does.
+
+  This is not hypothetical. The first run of this gate failed typecheck with 19 `TS7006` errors from `cli/dist/index.js`, a file that is untracked, gitignored, and left over from unrelated work in a shared checkout. Zero tracked files were behind any of them. The repo was fine; the machine was not. That is also why `tsconfig.json` now excludes `**/dist`: `include` globs `**/*.js`, so any build artifact sitting in the tree was being typechecked.
+
+  Practical mitigations, in order of strength: run from a clean `git worktree` for anything load-bearing, check `git status --porcelain --ignored=matching` when a failure looks unrelated to your diff, and distrust a failure whose file path you do not recognize before you distrust your own change.
+
+### Not covered locally
+
+These gated jobs needed infrastructure the script does not stand up:
+
+| Gated job              | Why not local                                     |
+| ---------------------- | ------------------------------------------------- |
+| Integration tests      | needs a real Postgres service                     |
+| Playwright e2e         | needs a browser matrix against a production build |
+| Docs link check        | needs a Holocron build                            |
+| Deployment Check smoke | hits the deployed Vercel URL, not a local server  |
+
+The last one leaves a real gap: **nothing currently checks the live deployment.** Do not read a green `local-verify` as evidence that production is up.
+
+## Turning Actions back on
+
+Nothing was deleted. Every job carries one guard:
+
+```yaml
+if: ${{ vars.ACTIONS_BILLING_OK == 'true' }}
+```
+
+A job whose `if` is false is never dispatched to a runner, so it costs nothing and renders neutral instead of red. Set the repo variable `ACTIONS_BILLING_OK=true` and the entire suite turns back on, minutes policy intact: cheap tier (typecheck, lint, unit) on every PR, expensive tier on pushes to `main` or PRs labeled `ci:full`.
+
+Gated workflows: `ci.yml`, `gitleaks.yml`, `registry.yml`, `codeql.yml`, `deployment-check.yml`, `db-neon-branch-on-pr.yaml`.
+
+**Not** gated, on purpose: `deploy-to-production.yml`, `init-upstream.yml` and `sync-upstream.yml` are `workflow_dispatch` only, and `claude.yml` fires only on an explicit `@claude` mention. None of them fire on their own, so none of them produce a red check, and gating them would only hide a manual action you deliberately took. They do still need Actions minutes, so **they fail if you trigger them.** That includes the `@claude` PR-review path, so there is no working bot reviewer on this repo: agent or human review is the only review.
+
+Because `gitleaks.yml` and `registry.yml` are off, their checks moved into `verify.sh`: a gitleaks scan of the branch delta against `main`, plus the registry check and closure scripts. Those run on plain `bun run verify` too.
+
+## Route per repo
+
+| Repo class                                      | Route                                                      |
+| ----------------------------------------------- | ---------------------------------------------------------- |
+| shipkit, and every private repo on this account | local pre-merge gates, this page                           |
+| bones and other already-public repos            | public repo, Actions minutes are free there, nothing to do |
+| any repo                                        | self-hosted runners rejected, see above                    |

@@ -18,8 +18,16 @@ on:
 
 jobs:
   smoke-test:
-    # Only run when the deployment is ready (not pending/failed)
-    if: github.event.deployment_status.state == 'success'
+    # Gated off: Actions billing is a permanent WONTFIX (LAC-4925). This is the
+    # job in that issue's evidence (run 39290877696, steps=0, ~3s).
+    #
+    # This one leaves a real gap: `bun run verify:pr` smokes a local
+    # `next start`, not the deployed Vercel URL, so nothing currently checks
+    # the live deployment. Tracked separately; do not treat a green
+    # `local-verify` as evidence that prod is up.
+    #
+    # Second condition: only run when the deployment is ready (not pending/failed).
+    if: ${{ vars.ACTIONS_BILLING_OK == 'true' && github.event.deployment_status.state == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Get deployment URL

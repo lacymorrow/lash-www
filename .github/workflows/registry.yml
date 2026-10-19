@@ -19,6 +19,9 @@ on:
 
 jobs:
   check:
+    # Gated off: Actions billing is a permanent WONTFIX (LAC-4925).
+    # `bun run verify:pr` runs the registry check locally.
+    if: ${{ vars.ACTIONS_BILLING_OK == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
