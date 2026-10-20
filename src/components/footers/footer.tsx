@@ -56,7 +56,6 @@ const defaultGroups: FooterElement[] = [
           ? [{ href: routes.blog, label: "Blog" }]
           : []),
         { href: routes.contact, label: "Support" },
-        { href: routes.auth.signIn, label: "Sign in" },
       ],
     },
   },
