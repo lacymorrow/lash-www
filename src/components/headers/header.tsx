@@ -23,6 +23,7 @@ import { PriorityNav } from "@/components/ui/priority-nav";
 import { routes } from "@/config/routes";
 import { siteConfig } from "@/config/site-config";
 import { useSignInRedirectUrl } from "@/hooks/use-auth-redirect";
+import { hasUsableAuthControls } from "@/lib/auth/auth-ui-availability";
 import { cn } from "@/lib/utils";
 import styles from "@/styles/header.module.css";
 import type { User } from "@/types/user";
@@ -95,6 +96,8 @@ export const Header: React.FC<HeaderProps> = ({
 
   const isLogoOnly = variant === "logo-only";
   const isLoggedIn = !!session?.user || !!user;
+  // Sites with no sign-in method (no database, no provider) get no login UI.
+  const showAuth = hasUsableAuthControls();
   const scrollY = typeof y === "number" ? y : 0;
   const isOpaque =
     variant === "floating" && typeof opaqueOnScroll === "number" && scrollY > opaqueOnScroll;
@@ -211,6 +214,7 @@ export const Header: React.FC<HeaderProps> = ({
                       >
                         {`Get ${siteConfig.title}`}
                       </Link>
+                      {showAuth && (
                       <Link
                         href={signInRedirectUrl}
                         className={cn(
@@ -220,6 +224,7 @@ export const Header: React.FC<HeaderProps> = ({
                       >
                         Login
                       </Link>
+                      )}
                     </>
                   )}
                   {isLoggedIn && (
@@ -275,7 +280,7 @@ export const Header: React.FC<HeaderProps> = ({
 
               {!isLoggedIn && <ThemeToggle variant="ghost" size="icon" className="rounded-full" />}
 
-              <UserMenu user={user} />
+              {showAuth && <UserMenu user={user} />}
 
               {!isLoggedIn &&
                 (animatedCTAOnScroll ? (
@@ -300,7 +305,9 @@ export const Header: React.FC<HeaderProps> = ({
                               sideOffset={3}
                               className="-mt-3 select-none border-none bg-transparent p-0 text-xs text-muted-foreground shadow-none data-[state=delayed-open]:animate-fadeDown"
                             >
-                              <LoginButton className="hover:text-foreground">or Login</LoginButton>
+                              {showAuth && (
+                                <LoginButton className="hover:text-foreground">or Login</LoginButton>
+                              )}
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
