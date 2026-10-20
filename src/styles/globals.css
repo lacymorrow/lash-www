@@ -45,8 +45,11 @@ a[href^="tel:"] {
   --ll-violet: #a78bfa;
   --ll-blue: #60a5fa;
 
-  font-family:
-    var(--font-mono), "JetBrains Mono", "SF Mono", "Fira Code", monospace;
+  /* Was `var(--font-mono), "JetBrains Mono", ...`, but --font-mono was never set
+     on <html>, so under Tailwind v3 the declaration was invalid and the page
+     inherited the body font (Poppins). Tailwind v4 defines --font-mono, which
+     would switch the whole page to monospace. Pin the rendered behaviour. */
+  font-family: inherit;
   background: var(--ll-black);
   color: var(--ll-fg);
   font-size: 14px;

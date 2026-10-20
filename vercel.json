@@ -12,7 +12,7 @@
   ],
   "buildCommand": "bun run build:vercel",
   "devCommand": "bun run dev",
-  "installCommand": "bun install --frozen-lockfile",
+  "installCommand": "bun install",
   "cleanUrls": true,
   "trailingSlash": false,
   "functions": {

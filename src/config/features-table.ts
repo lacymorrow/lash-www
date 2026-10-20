@@ -97,7 +97,8 @@ const table = {
   },
 
   // UI and theme
-  LIGHT_MODE: { label: "Light mode", disable: "DISABLE_LIGHT_MODE" },
+  // lash.lacy.sh is dark-only (its palette has no light variant): opt in rather than opt out.
+  LIGHT_MODE: { label: "Light mode", enable: "ENABLE_LIGHT_MODE", disable: "DISABLE_LIGHT_MODE" },
   DARK_MODE: { label: "Dark mode", disable: "DISABLE_DARK_MODE" },
   HAPTICS: { label: "Haptics", disable: "DISABLE_HAPTICS" },
 
