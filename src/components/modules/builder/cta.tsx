@@ -1,7 +1,6 @@
 "use client";
 
 import { Builder } from "@builder.io/react";
-import * as React from "react";
 import { Button } from "@/components/ui/button";
 
 interface CTAButton {
@@ -42,7 +41,7 @@ export const CTA = ({
       )}
 
       {/* Content */}
-      <div className="container relative z-10 mx-auto px-4">
+      <div className="relative z-10 container mx-auto px-4">
         <div className="mx-auto max-w-3xl text-center">
           <h2
             className={`mb-6 text-3xl font-bold md:text-4xl ${
@@ -55,11 +54,11 @@ export const CTA = ({
             {description}
           </p>
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
-            <Button asChild variant={primaryButton.variant || "default"} size="lg">
+            <Button asChild variant={primaryButton.variant ?? "default"} size="lg">
               <a href={primaryButton.link}>{primaryButton.text}</a>
             </Button>
             {secondaryButton && (
-              <Button asChild variant={secondaryButton.variant || "outline"} size="lg">
+              <Button asChild variant={secondaryButton.variant ?? "outline"} size="lg">
                 <a href={secondaryButton.link}>{secondaryButton.text}</a>
               </Button>
             )}

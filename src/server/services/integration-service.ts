@@ -26,7 +26,7 @@ export async function getIntegrationStatuses(): Promise<CategorizedIntegrationSt
   const session = await auth();
 
   // Authorization still makes sense here, as only admins should see this.
-  if (!isAdmin({ email: session?.user?.email })) {
+  if (!(await isAdmin({ email: session?.user?.email }))) {
     return {
       Authorization: [
         {
@@ -230,8 +230,8 @@ export async function getIntegrationStatuses(): Promise<CategorizedIntegrationSt
 
   // === Developer Tools & API ===
   const githubToken = !!env.GITHUB_ACCESS_TOKEN;
-  const githubOwner = env.GITHUB_REPO_OWNER || "lacymorrow";
-  const githubRepo = env.GITHUB_REPO_NAME || "shipkit";
+  const githubOwner = env.GITHUB_REPO_OWNER ?? "lacymorrow";
+  const githubRepo = env.GITHUB_REPO_NAME ?? "shipkit";
   addStatus("Developer Tools & API", {
     name: "GitHub API",
     enabled: githubToken,

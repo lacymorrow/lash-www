@@ -58,9 +58,9 @@ function ensureCacheSize(): void {
     entries.sort((a, b) => a[1].timestamp - b[1].timestamp);
 
     const toRemove = entries.slice(0, headingCache.size - MAX_CACHE_SIZE + 1);
-    for (const [key] of toRemove) {
+    toRemove.forEach(([key]) => {
       headingCache.delete(key);
-    }
+    });
   }
 }
 
@@ -92,7 +92,6 @@ export function extractHeadings(content: string): Heading[] {
   const headingRegex = /^(#{1,6})\s+(.+)$/gm;
   const headings: Heading[] = [];
   let match: RegExpExecArray | null = headingRegex.exec(content);
-
   while (match !== null) {
     const level = match[1]?.length ?? 0;
     const text = match[2]?.trim() ?? "";
@@ -103,7 +102,6 @@ export function extractHeadings(content: string): Heading[] {
       text,
       level,
     });
-
     match = headingRegex.exec(content);
   }
 

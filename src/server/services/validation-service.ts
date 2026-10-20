@@ -66,11 +66,12 @@ export class ValidationService {
   static async validateOrThrow<T>(schema: z.ZodType<T>, data: unknown): Promise<T> {
     const result = await ValidationService.validate(schema, data);
     if (!result.success) {
-      // result.error is a plain ValidationError object. Throwing it directly
-      // loses the stack and breaks anything that checks `instanceof Error`.
-      const error = new Error(result.error?.message ?? "Validation failed");
-      Object.assign(error, { code: result.error?.code, fieldErrors: result.error?.fieldErrors });
-      throw error;
+      const errorInfo = result.error;
+      const validationError = new Error(errorInfo?.message ?? "Validation failed");
+      if (errorInfo) {
+        Object.assign(validationError, errorInfo);
+      }
+      throw validationError;
     }
     return result.data as T;
   }

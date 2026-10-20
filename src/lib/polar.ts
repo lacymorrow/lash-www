@@ -228,11 +228,11 @@ const mapToPolarOrder = (order: any): PolarOrder => {
 
   // Extract subscription-related information
   const isSubscription = !!(
-    order.isSubscription ||
-    order.is_recurring ||
-    order.subscriptionId ||
-    order.subscription_id ||
-    (order.subscription_status && order.subscription_status !== "canceled") ||
+    order.isSubscription ??
+    order.is_recurring ??
+    order.subscriptionId ??
+    order.subscription_id ??
+    (order.subscription_status && order.subscription_status !== "canceled") ??
     (order.attributes?.subscription_status && order.attributes.subscription_status !== "canceled")
   );
 
@@ -254,15 +254,15 @@ const mapToPolarOrder = (order: any): PolarOrder => {
   amount = amount / 100;
 
   // Generate a unique ID for the order if one doesn't exist
-  const id = order.id || `polar-${order.orderId || Date.now()}`;
+  const id = order.id ?? `polar-${order.orderId ?? Date.now()}`;
 
   // Extract order ID with fallbacks
-  const orderId = order.orderId || order.order_id || order.id || `polar-${Date.now()}`;
+  const orderId = order.orderId ?? order.order_id ?? order.id ?? `polar-${Date.now()}`;
 
   // Extract user email and name with fallbacks
-  const userEmail = order.customer?.email || order.email || order.userEmail || "Unknown email";
+  const userEmail = order.customer?.email ?? order.email ?? order.userEmail ?? "Unknown email";
 
-  const userName = order.customer?.name || order.customer?.displayName || order.userName || null;
+  const userName = order.customer?.name ?? order.customer?.displayName ?? order.userName ?? null;
 
   // Extract product name with enhanced fallback hierarchy
   // Priority: product.name > variant.name > productName > description > "Unknown Product"
@@ -319,20 +319,20 @@ const mapToPolarOrder = (order: any): PolarOrder => {
   }
 
   // Extract purchase date
-  const purchaseDate = order.created_at || order.createdAt || order.date || new Date();
+  const purchaseDate = order.created_at ?? order.createdAt ?? order.date ?? new Date();
 
   // Extract discount code
-  const discountCode = order.discount_code || order.discountCode || order.coupon || null;
+  const discountCode = order.discount_code ?? order.discountCode ?? order.coupon ?? null;
 
   // Extract status with fallbacks or defaults
-  const rawStatus = order.status || order.orderStatus || "pending";
+  const rawStatus = order.status ?? order.orderStatus ?? "pending";
   const status = mapPolarOrderStatus(rawStatus);
 
   // Extract subscription end date with fallbacks
   const subscriptionEndDate =
-    order.subscription_end_date ||
-    order.expiresAt ||
-    order.attributes?.subscription_end_date ||
+    order.subscription_end_date ??
+    order.expiresAt ??
+    order.attributes?.subscription_end_date ??
     order.attributes?.expiresAt;
 
   // Return mapped order with enhanced subscription data
@@ -351,7 +351,7 @@ const mapToPolarOrder = (order: any): PolarOrder => {
       // Enhance attributes with subscription information
       isSubscription,
       is_recurring: isSubscription || order.is_recurring,
-      subscription_status: order.subscription_status || order.attributes?.subscription_status,
+      subscription_status: order.subscription_status ?? order.attributes?.subscription_status,
       subscription_end_date: subscriptionEndDate,
     },
   };
@@ -529,7 +529,8 @@ export const getOrderById = async (orderId: string): Promise<PolarOrder | null> 
 /**
  * Process a webhook event from Polar
  */
-// eslint-disable-next-line @typescript-eslint/require-await -- webhook processors are awaited by the route handler and this one short-circuits when Polar is off
+// Async signature kept stable for callers that await this API.
+// eslint-disable-next-line @typescript-eslint/require-await
 export const processPolarWebhook = async (event: any) => {
   if (!env.NEXT_PUBLIC_FEATURE_POLAR_ENABLED) {
     logger.warn("Received Polar webhook, but Polar feature is disabled. Skipping processing.", {
@@ -559,7 +560,7 @@ export const processPolarWebhook = async (event: any) => {
       case "checkout.updated":
         if (event.data.status === "succeeded") {
           // Convert amount to integer cents
-          const amountInCents = convertPriceToIntegerCents(event.data.amount);
+          const _amountInCents = convertPriceToIntegerCents(event.data.amount);
 
           // Create payment record
           // Similar to:
@@ -747,9 +748,9 @@ export const hasUserActiveSubscription = async (userId: string): Promise<boolean
 
       // Basic subscription indicators
       const isSubscriptionType = !!(
-        attr.isSubscription ||
-        attr.is_recurring ||
-        attr.subscriptionId ||
+        attr.isSubscription ??
+        attr.is_recurring ??
+        attr.subscriptionId ??
         attr.subscription_id
       );
 
@@ -764,7 +765,7 @@ export const hasUserActiveSubscription = async (userId: string): Promise<boolean
       // Date validation when applicable
       if (isActive) {
         // Check expiration date if available
-        const endDate = attr.subscription_end_date || attr.expiresAt;
+        const endDate = attr.subscription_end_date ?? attr.expiresAt;
 
         if (endDate) {
           const expirationDate = new Date(endDate);
@@ -848,7 +849,7 @@ export const getUserPurchasedProducts = async (userId: string): Promise<any[]> =
     for (const order of orders) {
       // Only consider paid orders
       if (order.status === "paid") {
-        const productId = order.attributes?.product?.id || "";
+        const productId = order.attributes?.product?.id ?? "";
 
         // Only add each product once
         if (productId && !purchasedProductIds.has(productId)) {

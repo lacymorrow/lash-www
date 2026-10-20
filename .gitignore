@@ -1,5 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+.claude/settings.local.json
+
 # dependencies
 node_modules
 /.pnp
@@ -7,11 +9,15 @@ node_modules
 
 # testing
 /testing-results
+/test-results
 /coverage
 
 # next.js
 /.next/
 /out/
+
+# generated content manifests (created by scripts/prebuild-content.mjs)
+src/lib/generated/
 
 # production
 /build
@@ -29,6 +35,13 @@ env
 *.env*
 !.env.example
 
+# Secret-scan hygiene (LAC-3163)
+# .specstory persists chat transcripts that captured live tokens in past commits.
+.specstory/
+# repomix outputs bundle repo contents and have leaked secrets historically.
+.repomix-output.*
+repomix-output.*
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
@@ -43,8 +56,8 @@ next-env.d.ts
 # Build output
 dist/
 build/
-
 # Cache
+cache/
 .cache/
 .eslintcache
 
@@ -74,5 +87,24 @@ public/workbox*
 .hive-mind/
 .vercel
 
-# AI assistant transcripts (may contain secrets)
-.specstory/
+.gemini/
+gha-creds-*.json
+
+# Tooling output
+.lighthouse/
+.tmp/
+
+# AI
+ai.mdx
+.env*.local
+
+# From bones sync
+.idea/
+env/
+logs
+
+# fumadocs-mdx generated collections
+.source
+
+# mirrored from docs/images by scripts/sync-docs-images.mjs
+public/docs

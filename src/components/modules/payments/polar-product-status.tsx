@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertCircle, CheckCircle, ExternalLink } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth/use-session";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Icons } from "@/components/assets/icons";
@@ -68,57 +68,53 @@ export function PolarProductStatus({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  /*
-   * The check lives inside the effect. As a useCallback it was memoised by hand,
-   * the compiler could not preserve that memoisation, and nothing else called it.
-   */
-  useEffect(() => {
-    const userId = session?.user?.id;
-    if (!userId) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- there is nothing to await when the user is signed out
+  // Memoize the check function to prevent unnecessary re-renders
+  const checkPurchaseStatus = useCallback(async () => {
+    if (!session?.user?.id) {
       setIsLoading(false);
       return;
     }
 
-    const cacheKey = `${userId}-${productId}`;
+    // Check cache first
+    const cacheKey = `${session.user.id}-${productId}`;
     const cached = productStatusCache.get(cacheKey);
     const now = Date.now();
 
     if (cached && now - cached.timestamp < CACHE_DURATION) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- a cache hit resolves without a request
       setIsPurchased(cached.data);
       setIsLoading(false);
       return;
     }
 
-    let cancelled = false;
+    try {
+      setIsLoading(true);
+      const result = await checkUserPurchasedProduct(productId, "polar");
 
-    const run = async () => {
-      try {
-        const result = await checkUserPurchasedProduct(productId, "polar");
-        if (cancelled) return;
+      if (result.success) {
+        // Cache the result
+        productStatusCache.set(cacheKey, {
+          data: result.purchased,
+          timestamp: now,
+        });
 
-        if (result.success) {
-          productStatusCache.set(cacheKey, { data: result.purchased, timestamp: now });
-          setIsPurchased(result.purchased);
-        } else {
-          setError(result.message || "Failed to check purchase status");
-        }
-      } catch (err) {
-        if (cancelled) return;
-        setError("An error occurred while checking purchase status");
-        console.error(err);
-      } finally {
-        if (!cancelled) setIsLoading(false);
+        setIsPurchased(result.purchased);
+      } else {
+        setError(result.message ?? "Failed to check purchase status");
       }
-    };
-
-    void run();
-
-    return () => {
-      cancelled = true;
-    };
+    } catch (err) {
+      setError("An error occurred while checking purchase status");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   }, [session?.user?.id, productId]);
+
+  // Check if user has purchased this product
+  useEffect(() => {
+    if (session?.user?.id) {
+      checkPurchaseStatus();
+    }
+  }, [session?.user?.id, productId, checkPurchaseStatus]);
 
   const handlePurchase = async () => {
     if (!session?.user?.id) {
@@ -140,7 +136,7 @@ export function PolarProductStatus({
       if (result.success && result.url) {
         window.location.href = result.url;
       } else {
-        toast.error(result.message || "Failed to create checkout URL");
+        toast.error(result.message ?? "Failed to create checkout URL");
       }
     } catch (error) {
       console.error("Error creating checkout:", error);
@@ -152,7 +148,7 @@ export function PolarProductStatus({
 
   if (isLoading) {
     return (
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-x-2">
         <Icons.spinner className="h-4 w-4 animate-spin" />
         <span className="text-sm text-muted-foreground">{loadingText}</span>
       </div>
@@ -170,7 +166,7 @@ export function PolarProductStatus({
 
   if (isPurchased) {
     return (
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-x-2">
         <CheckCircle className="h-4 w-4 text-green-500" />
         <span className="text-sm font-medium">{successText}</span>
       </div>

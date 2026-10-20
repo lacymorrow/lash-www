@@ -6,7 +6,7 @@ import { siteConfig } from "@/config/site-config";
 
 // Augment the global namespace for TypeScript
 declare global {
-  // biome-ignore lint/suspicious/noVar: a global declaration has to use var
+  // biome-ignore lint/suspicious/noVar: required for global declaration in TypeScript ambient context
   var IS_REACT_ACT_ENVIRONMENT: boolean;
 }
 

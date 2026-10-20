@@ -87,7 +87,7 @@ export const PrivateRepoDeployButton = () => {
         }
         setStatus({
           step: "error",
-          error: result.error || "Deployment failed",
+          error: result.error ?? "Deployment failed",
           githubRepo: result.data?.githubRepo, // Keep the GitHub repo info if available
         });
 
@@ -99,7 +99,7 @@ export const PrivateRepoDeployButton = () => {
           )}`;
           window.open(importUrl, "_blank", "noopener,noreferrer");
         } else {
-          toast.error(result.error || "Deployment failed");
+          toast.error(result.error ?? "Deployment failed");
         }
       }
     } catch (error) {
@@ -172,7 +172,7 @@ export const PrivateRepoDeployButton = () => {
               </Badge>
             </div>
             <AlertDescription className="mt-2">
-              {status.message || status.error}
+              {status.message ?? status.error}
               {needsGitHubAuth && (
                 <div className="mt-3">
                   <LinkWithTransition
@@ -202,7 +202,7 @@ export const PrivateRepoDeployButton = () => {
                     size="sm"
                     onClick={() => {
                       const importUrl = `https://vercel.com/new/import?s=${encodeURIComponent(
-                        status.githubRepo?.url || ""
+                        status.githubRepo?.url ?? ""
                       )}`;
                       window.open(importUrl, "_blank", "noopener,noreferrer");
                     }}
@@ -222,11 +222,11 @@ export const PrivateRepoDeployButton = () => {
           <div className="space-y-4">
             <Separator />
             <div className="grid gap-4 md:grid-cols-2">
-              <Card>
-                <CardHeader className="pb-3">
+              <Card className="gap-0 py-0">
+                <CardHeader className="p-6 pb-3">
                   <CardTitle className="text-sm font-medium">GitHub Repository</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-6 pt-0">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">{status.githubRepo.name}</span>
                     <Button variant="ghost" size="sm" asChild>
@@ -244,11 +244,11 @@ export const PrivateRepoDeployButton = () => {
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader className="pb-3">
+              <Card className="gap-0 py-0">
+                <CardHeader className="p-6 pb-3">
                   <CardTitle className="text-sm font-medium">Vercel Project</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-6 pt-0">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Dashboard</span>
                     <Button variant="ghost" size="sm" asChild>

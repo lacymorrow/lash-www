@@ -35,12 +35,10 @@ export const routeRedirectWithCode = (
   let url: URL;
 
   if (typeof options === "string") {
-    url = new URL(destination, BASE_URL);
+    url = new URL(destination);
     url.searchParams.set(SEARCH_PARAM_KEYS.statusCode, options);
   } else {
-    // Use BASE_URL as fallback if request.url is not available
-    const baseUrl = options.request?.url || BASE_URL;
-    url = new URL(destination, baseUrl);
+    url = new URL(destination, options.request?.url);
 
     if (options?.nextUrl) {
       url.searchParams.set(SEARCH_PARAM_KEYS.nextUrl, options.nextUrl);

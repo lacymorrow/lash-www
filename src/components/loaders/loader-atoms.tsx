@@ -11,10 +11,10 @@ const loaderVariants = cva("loader", {
       lg: "w-20 h-20",
     },
     color: {
-      default: "[--loader-color:theme(colors.primary.DEFAULT)]",
-      primary: "[--loader-color:theme(colors.primary.DEFAULT)]",
-      secondary: "[--loader-color:theme(colors.secondary.DEFAULT)]",
-      muted: "[--loader-color:theme(colors.muted.DEFAULT)]",
+      default: "[--loader-color:var(--color-primary)]",
+      primary: "[--loader-color:var(--color-primary)]",
+      secondary: "[--loader-color:var(--color-secondary)]",
+      muted: "[--loader-color:var(--color-muted)]",
     },
   },
   defaultVariants: {
@@ -31,12 +31,11 @@ export interface LoaderAtomsProps
 export const LoaderAtoms = React.forwardRef<HTMLDivElement, LoaderAtomsProps>(
   ({ className, size, color, label, ...props }, ref) => {
     return (
-      // biome-ignore lint/a11y/useSemanticElements: the output element is for form results, this is a live region wrapping a spinner
+      // biome-ignore lint/a11y/useAriaPropsSupportedByRole: live region announcement on container div
       <div
         ref={ref}
-        role="status"
         aria-live="polite"
-        aria-label={label || "Loading"}
+        aria-label={label ?? "Loading"}
         className={cn("relative", className)}
         {...props}
       >
@@ -50,5 +49,4 @@ export const LoaderAtoms = React.forwardRef<HTMLDivElement, LoaderAtomsProps>(
     );
   }
 );
-
 LoaderAtoms.displayName = "LoaderAtoms";

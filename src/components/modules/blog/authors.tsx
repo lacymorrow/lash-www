@@ -1,5 +1,4 @@
 import Image from "next/image";
-import type React from "react";
 import { Link } from "@/components/primitives/link";
 import { authorUtils, type BlogAuthor } from "@/config/blog-authors";
 
@@ -24,7 +23,7 @@ export const BlogAuthors = ({ authors }: BlogAuthorsProps) => {
   if (!authors || authors.length === 0) return null;
 
   return (
-    // biome-ignore lint/a11y/useSemanticElements: an avatar stack is a labelled group, not a <fieldset>
+    // biome-ignore lint/a11y/useSemanticElements: presentational author group with explicit aria role
     <div className="relative z-0 mt-6 flex -space-x-2" role="group" aria-label="Article authors">
       {authors.map((author, i) => {
         const isNewAuthor = isBlogAuthor(author);
@@ -49,7 +48,7 @@ export const BlogAuthors = ({ authors }: BlogAuthorsProps) => {
             <Link
               key={isNewAuthor ? author.id : `legacy-${i}`}
               href={authorUrl}
-              className="rounded-full focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              className="rounded-full focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden"
               aria-label={`View ${displayName}'s profile`}
             >
               {imageElement}
@@ -59,7 +58,7 @@ export const BlogAuthors = ({ authors }: BlogAuthorsProps) => {
 
         // Legacy author or no URL
         return (
-          <div key={isNewAuthor ? author.id : `legacy-${i}`} className="focus:outline-none">
+          <div key={isNewAuthor ? author.id : `legacy-${i}`} className="focus:outline-hidden">
             {imageElement}
           </div>
         );

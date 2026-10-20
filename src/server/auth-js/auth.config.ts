@@ -4,6 +4,7 @@ import { routes } from "@/config/routes";
 import { SEARCH_PARAM_KEYS } from "@/config/search-param-keys";
 import { logger } from "@/lib/logger";
 import { providers } from "@/server/auth-js/auth-providers.config";
+import { guardResendSignIn } from "@/server/auth-js/magic-link-guard";
 import { db } from "@/server/db";
 import { users } from "@/server/db/schema";
 import { isAdmin } from "@/server/services/admin-service";
@@ -73,12 +74,23 @@ export const authOptions: NextAuthConfig = {
   // 	},
   // },
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account, profile, email }) {
       if (!user.id) return false;
 
       // Handle guest user sign-in
       if (account?.provider === "guest") {
         return true; // Always allow guest sign-in
+      }
+
+      // Magic link (Resend): Auth.js runs this callback before sendVerificationRequest,
+      // so refusing here blocks the email send. Enforces the AUTH_ALLOWED_EMAILS
+      // allowlist and per-address/per-IP rate limits.
+      if (account?.provider === "resend") {
+        const allowed = await guardResendSignIn({
+          email: user.email,
+          isVerificationRequest: email?.verificationRequest === true,
+        });
+        if (!allowed) return false;
       }
 
       /*
@@ -154,7 +166,7 @@ export const authOptions: NextAuthConfig = {
               columns: { id: true },
             });
 
-            const targetUserId = existingUser?.id || user.id;
+            const targetUserId = existingUser?.id ?? user.id;
 
             logger.info("Updating GitHub username for user", {
               targetUserId,
@@ -163,11 +175,13 @@ export const authOptions: NextAuthConfig = {
               githubUsername,
             });
 
-            // Update the user record with the GitHub username
+            // Update the user record with GitHub profile data
             await db
               ?.update(users)
               .set({
                 githubUsername,
+                name: user.name ?? githubUsername,
+                image: user.image ?? undefined,
                 updatedAt: new Date(),
               })
               .where(eq(users.id, targetUserId));
@@ -243,8 +257,8 @@ export const authOptions: NextAuthConfig = {
           await userService.ensureUserExists({
             id: user.id,
             email: user.email!,
-            name: profile.name || user.name, // Use profile name if available
-            image: profile.image || profile.picture || user.image, // Use profile image if available
+            name: profile.name ?? user.name, // Use profile name if available
+            image: profile.image ?? profile.picture ?? user.image, // Use profile image if available
           });
         } catch (error) {
           console.error("Error ensuring user exists in Shipkit database:", error);
@@ -268,7 +282,7 @@ export const authOptions: NextAuthConfig = {
       // Log the sign in activity
       return true;
     },
-    // eslint-disable-next-line @typescript-eslint/require-await -- the Auth.js callback signature is async
+    // eslint-disable-next-line @typescript-eslint/require-await -- NextAuth callback signature requires async
     async redirect({ url, baseUrl }) {
       // Handle the nextUrl parameter for redirects
       const redirectUrl = new URL(url, baseUrl);

@@ -6,7 +6,6 @@ import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import type { Heading } from "@/lib/utils/extract-headings";
-import { MobileTOCSkeleton } from "./skeleton";
 import { TableOfContents } from "./table-of-contents";
 
 interface MobileTocProps {
@@ -35,7 +34,8 @@ function MobileTocInner({ headings }: MobileTocProps) {
   }
 
   return (
-    <aside className="mb-8 xl:hidden" aria-label="Mobile table of contents">
+    // biome-ignore lint/a11y/useSemanticElements: outer collapsible container with explicit aria role
+    <div className="mb-8 xl:hidden" role="complementary" aria-label="Mobile table of contents">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
           <Button
@@ -63,7 +63,7 @@ function MobileTocInner({ headings }: MobileTocProps) {
           </div>
         </CollapsibleContent>
       </Collapsible>
-    </aside>
+    </div>
   );
 }
 
@@ -82,7 +82,7 @@ function MobileTocErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
           <button
             type="button"
             onClick={resetErrorBoundary}
-            className="text-xs text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1"
+            className="text-xs text-primary hover:underline focus:ring-2 focus:ring-ring focus:ring-offset-1 focus:outline-hidden"
           >
             Try again
           </button>

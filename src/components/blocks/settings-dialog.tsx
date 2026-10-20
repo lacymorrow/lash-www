@@ -80,10 +80,11 @@ export function SettingsDialog() {
                     {data.nav.map((item) => (
                       <SidebarMenuItem key={item.name}>
                         <SidebarMenuButton asChild isActive={item.name === "Messages & media"}>
-                          <button type="button">
+                          {/* biome-ignore lint/a11y/useValidAnchor: placeholder anchor in demo sidebar */}
+                          <a href="#">
                             <item.icon />
                             <span>{item.name}</span>
-                          </button>
+                          </a>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     ))}
@@ -93,7 +94,7 @@ export function SettingsDialog() {
             </SidebarContent>
           </Sidebar>
           <main className="flex h-[480px] flex-1 flex-col overflow-hidden">
-            <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+            <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
               <div className="flex items-center gap-2 px-4">
                 <Breadcrumb>
                   <BreadcrumbList>
@@ -109,8 +110,9 @@ export function SettingsDialog() {
               </div>
             </header>
             <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 pt-0">
-              {Array.from({ length: 10 }, (_, i) => `content-placeholder-${i}`).map((id) => (
-                <div key={id} className="aspect-video max-w-3xl rounded-xl bg-muted/50" />
+              {Array.from({ length: 10 }).map((_, i) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
+                <div key={i} className="aspect-video max-w-3xl rounded-xl bg-muted/50" />
               ))}
             </div>
           </main>

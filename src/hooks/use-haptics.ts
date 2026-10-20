@@ -67,8 +67,6 @@ export function hapticCancel(): void {
 export function useHaptics() {
   const { trigger, cancel, isSupported } = useWebHaptics();
 
-  // Publishing to the module singleton is a side effect, so it belongs in an
-  // effect rather than in the render pass.
   useEffect(() => {
     imperativeHaptics.trigger = trigger;
     imperativeHaptics.cancel = cancel;

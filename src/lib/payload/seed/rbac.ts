@@ -111,10 +111,10 @@ export async function seedRbac() {
         const rolePermissions = createdPermissions.filter((permission) => {
           const rolePerms = roleData.permissions.find((p) => p.resource === permission?.resource);
           return (
-            !!rolePerms &&
-            !!permission?.action &&
-            (rolePerms.actions.includes(permission.action) ||
-              (rolePerms.actions.includes("manage") && permission.action === "manage"))
+            rolePerms &&
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- intentional boolean OR
+            ((permission?.action && rolePerms.actions.includes(permission.action)) ||
+              (rolePerms.actions.includes("manage") && permission?.action === "manage"))
           );
         });
 
