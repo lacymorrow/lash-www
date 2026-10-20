@@ -13,8 +13,9 @@ export const Pages: CollectionConfig = {
     useAsTitle: "title",
     defaultColumns: ["title", "slug", "publishedAt"],
     preview: (doc) => {
-      if (typeof doc.slug !== "string" || !doc.slug) return "";
-      return `${BASE_URL}/preview/pages/${doc.slug}`;
+      if (!doc.slug) return "";
+      const slug = typeof doc.slug === "string" ? doc.slug : "";
+      return `${BASE_URL}/preview/pages/${slug}`;
     },
   },
   access: {

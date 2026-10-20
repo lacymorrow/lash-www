@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from "node:crypto";
 import { and, eq, isNull } from "drizzle-orm";
 import { siteConfig } from "@/config/site-config";
 import { db } from "@/server/db";
@@ -93,9 +93,9 @@ export class ApiKeyService {
         ?.insert(apiKeys)
         .values({
           key,
-          userId: userId || null,
-          name: name || null,
-          description: description || null,
+          userId: userId ?? null,
+          name: name ?? null,
+          description: description ?? null,
           expiresAt,
           createdAt: new Date(),
           updatedAt: new Date(),

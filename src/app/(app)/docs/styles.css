@@ -1,4 +1,6 @@
 /* Documentation Content Styles */
+@reference "../../../styles/theme.css";
+
 .docs-content {
   @apply prose prose-slate dark:prose-invert max-w-none;
 }

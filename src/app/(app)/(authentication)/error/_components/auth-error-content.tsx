@@ -113,7 +113,7 @@ export const AuthErrorContent = () => {
   // Customize message for OAuthAccountNotLinked with provider hint
   let message = config.message;
   if (error === AuthError.OAuthAccountNotLinked && provider) {
-    const providerName = providerNames[provider] || provider;
+    const providerName = providerNames[provider] ?? provider;
     message = `This email is already associated with an account. Please sign in with ${providerName} instead.`;
   }
 

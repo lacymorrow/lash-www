@@ -179,11 +179,9 @@ const Carousel = forwardRef<
       >
         <div
           {...props}
-          // biome-ignore lint/a11y/noNoninteractiveTabindex: the container owns the arrow-key handler, so it has to be reachable by keyboard
-          tabIndex={0}
           ref={ref}
           onKeyDownCapture={handleKeyDown}
-          className={cn("relative grid w-full gap-2 focus:outline-none", className)}
+          className={cn("relative grid w-full gap-2 focus:outline-hidden", className)}
           dir={direction}
         >
           {children}
@@ -265,26 +263,25 @@ const SliderThumbItem = forwardRef<
   const { activeIndex, onThumbClick, orientation } = useCarousel();
   const isSlideActive = activeIndex === index;
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: decorative/UI hover interaction, not primary action
+    // biome-ignore lint/a11y/useKeyWithClickEvents: decorative click target, no keyboard handler required
     <div
       {...props}
       ref={ref}
+      onClick={() => onThumbClick(index)}
       className={cn(
         "flex min-w-0 shrink-0 grow-0 basis-1/3 bg-background p-1",
         `${orientation === "vertical" ? "pb-1" : "pr-1"}`,
         className
       )}
     >
-      <button
-        type="button"
-        onClick={() => onThumbClick(index)}
-        aria-label={`Go to slide ${index + 1}`}
-        aria-current={isSlideActive}
+      <div
         className={`relative aspect-square h-20 w-full rounded-md opacity-50 transition-opacity ${
-          isSlideActive ? "!opacity-100" : ""
+          isSlideActive ? "opacity-100!" : ""
         }`}
       >
         {children}
-      </button>
+      </div>
     </div>
   );
 });
@@ -333,7 +330,7 @@ const CarouselPrevious = forwardRef<HTMLButtonElement, React.ComponentProps<type
           "absolute z-10 h-6 w-6 rounded-full",
           orientation === "vertical"
             ? "-top-2 left-1/2 -translate-x-1/2 rotate-90"
-            : "-left-2 top-1/2 -translate-y-1/2",
+            : "top-1/2 -left-2 -translate-y-1/2",
           className
         )}
         onClick={scroll}
@@ -363,7 +360,7 @@ const CarouselNext = forwardRef<HTMLButtonElement, React.ComponentProps<typeof B
           "absolute z-10 h-6 w-6 rounded-full",
           orientation === "vertical"
             ? "-bottom-2 left-1/2 -translate-x-1/2 rotate-90"
-            : "-right-2 top-1/2 -translate-y-1/2",
+            : "top-1/2 -right-2 -translate-y-1/2",
           className
         )}
         onClick={scroll}

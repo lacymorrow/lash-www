@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth/use-session";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Icons } from "@/components/assets/icons";
@@ -49,8 +49,7 @@ export const GitHubConnectButton = ({ className }: { className?: string }) => {
   // Prefill input with current username when opening dialog
   useEffect(() => {
     if (dialogOpen) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- the prop seeds an editable input; resetting it on change needs a key on the parent
-      setUsernameInput(githubUsername || "");
+      setUsernameInput(githubUsername ?? "");
     }
   }, [dialogOpen, githubUsername]);
 

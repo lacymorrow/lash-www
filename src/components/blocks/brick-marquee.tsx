@@ -10,6 +10,14 @@ const links = [
   { name: "cloud0.dev", href: "https://cloud0.dev" },
   { name: "junebug.ai", href: "https://junebug.ai" },
   { name: "thneed.ai", href: "https://thneed.ai" },
+  { name: "vibe.rehab", href: "https://vibe.rehab" },
+  { name: "cliphub.fyi", href: "https://cliphub.fyi" },
+  { name: "flit.my", href: "https://flit.my" },
+  { name: "buildandserve.com", href: "https://buildandserve.com" },
+  { name: "coderev.dev", href: "https://coderev.dev" },
+  { name: "hitchhikersgalaxy.guide", href: "https://hitchhikersgalaxy.guide" },
+  { name: "resume.lacy.sh", href: "https://resume.lacy.sh" },
+  { name: "lash.lacy.sh", href: "https://lash.lacy.sh" },
   { name: "lacy.sh", href: "https://lacy.sh" },
   { name: "lacy.is", href: "https://lacy.is" },
   { name: "lacymorrow.com", href: "https://lacymorrow.com" },
@@ -200,7 +208,7 @@ export function BrickMarquee() {
         <label
           ref={barRef}
           htmlFor="bar-toggle"
-          className={`bar bg-primary [mask-image:linear-gradient(to_right,transparent,white_7%)] ${isNearby ? "nearby" : ""} ${isExpanded ? "expanded" : ""}`}
+          className={`bar bg-primary mask-[linear-gradient(to_right,transparent,white_7%)] ${isNearby ? "nearby" : ""} ${isExpanded ? "expanded" : ""}`}
         >
           {/* Marquee container */}
           <div className={`marquee-container ${isExpanded ? "visible" : ""}`}>
@@ -213,7 +221,7 @@ export function BrickMarquee() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:scale-120 mx-2 inline-block transform text-primary-foreground transition-transform duration-300 ease-in-out hover:text-primary-foreground/80"
+                  className="mx-2 inline-block transform text-primary-foreground transition-transform duration-300 ease-in-out hover:scale-120 hover:text-primary-foreground/80"
                   style={{ textShadow: "0 1px 2px rgba(0,0,0,0.2)" }}
                 >
                   <span>{link.name}</span>

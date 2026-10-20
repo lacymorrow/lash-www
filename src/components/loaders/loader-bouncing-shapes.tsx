@@ -19,12 +19,10 @@ export const LoaderBouncingShapes = () => {
 
   useEffect(() => {
     const shapes = shapesRef.current.filter(Boolean);
-
     const intervals: ReturnType<typeof setInterval>[] = [];
-    const timeouts: ReturnType<typeof setTimeout>[] = [];
 
-    for (const shape of shapes) {
-      if (!shape) continue;
+    shapes.forEach((shape, _index) => {
+      if (!shape) return;
 
       const interval = setInterval(() => {
         const classList = shape.classList;
@@ -40,40 +38,36 @@ export const LoaderBouncingShapes = () => {
           ["--bounce-variance", `${Math.random() * 20 - 10}vh`],
           ["--base_scale", `${Math.random() * 6 + 4}vh`],
           ["--rotation", `${Math.random() * 180 - 90}deg`],
-          ["--color", COLORS[Math.floor(Math.random() * COLORS.length)] || ""],
+          ["--color", COLORS[Math.floor(Math.random() * COLORS.length)] ?? ""],
         ];
 
-        for (const [property, value] of styles) {
+        styles.forEach(([property, value]) => {
           if (value && property) shape.style.setProperty(property, value);
-        }
+        });
 
         // Animate
         if (!classList.contains("bounce-up")) {
           classList.add("bounce-up");
         }
         classList.replace("bounce-down", "bounce-up");
-        timeouts.push(
-          setTimeout(() => {
-            classList.replace("bounce-up", "bounce-down");
-          }, 400)
-        );
+        setTimeout(() => {
+          classList.replace("bounce-up", "bounce-down");
+        }, 400);
       }, 740);
 
       intervals.push(interval);
-    }
+    });
 
     return () => {
-      for (const interval of intervals) {
+      intervals.forEach((interval) => {
         clearInterval(interval);
-      }
-      for (const timeout of timeouts) {
-        clearTimeout(timeout);
-      }
+      });
     };
   }, []);
 
   return (
     <>
+      {/* eslint-disable-next-line react/no-unknown-property -- styled-jsx attributes */}
       <style jsx global>{`
         :root {
           --base_scale: 5vh;
@@ -153,19 +147,18 @@ export const LoaderBouncingShapes = () => {
         }
       `}</style>
       <div className="loader">
-        {Array.from({ length: 3 }, (_, i) => ({ id: `shape-${i}`, index: i })).map(
-          ({ id, index }) => (
-            <div
-              key={id}
-              ref={(el) => {
-                if (el) {
-                  shapesRef.current[index] = el;
-                }
-              }}
-              className="shape"
-            />
-          )
-        )}
+        {[...Array(3)].map((_, i) => (
+          <div
+            // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
+            key={i}
+            ref={(el) => {
+              if (el) {
+                shapesRef.current[i] = el;
+              }
+            }}
+            className="shape"
+          />
+        ))}
       </div>
     </>
   );

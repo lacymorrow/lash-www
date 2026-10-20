@@ -35,10 +35,11 @@ export function NavWorkspaces({
             <Collapsible key={workspace.name}>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <button type="button">
+                  {/* biome-ignore lint/a11y/useValidAnchor: placeholder anchor in demo sidebar */}
+                  <a href="#">
                     <span>{workspace.emoji}</span>
                     <span>{workspace.name}</span>
-                  </button>
+                  </a>
                 </SidebarMenuButton>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuAction
@@ -56,10 +57,11 @@ export function NavWorkspaces({
                     {workspace.pages.map((page) => (
                       <SidebarMenuSubItem key={page.name}>
                         <SidebarMenuSubButton asChild>
-                          <button type="button">
+                          {/* biome-ignore lint/a11y/useValidAnchor: placeholder anchor in demo sidebar */}
+                          <a href="#">
                             <span>{page.emoji}</span>
                             <span>{page.name}</span>
-                          </button>
+                          </a>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}

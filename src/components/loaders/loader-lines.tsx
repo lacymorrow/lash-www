@@ -96,13 +96,15 @@ export const LoaderLines = ({
       {...props}
     >
       <div className="loader-inner">
-        {Array.from({ length: 5 }, (_, i) => `loader-line-${i}`).map((id) => (
-          <div key={id} className="loader-line-wrap">
+        {[...Array(5)].map((_, i) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
+          <div key={i} className="loader-line-wrap">
             <div className="loader-line" />
           </div>
         ))}
       </div>
 
+      {/* eslint-disable-next-line react/no-unknown-property -- styled-jsx attributes */}
       <style jsx>{`
         .loader {
           position: relative;

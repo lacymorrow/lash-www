@@ -41,6 +41,7 @@ export async function getStaticProps() {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function getStaticProps() {
   return {
     props: {

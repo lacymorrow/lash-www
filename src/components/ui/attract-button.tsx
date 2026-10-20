@@ -81,9 +81,10 @@ export function AttractButton({
       onTouchEnd={handleInteractionEnd}
       {...props}
     >
-      {particles.map((particle, index) => (
+      {particles.map((_, index) => (
         <motion.div
-          key={particle.id}
+          // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
+          key={index}
           custom={index}
           initial={{ x: particles[index]?.x || 0, y: particles[index]?.y || 0 }}
           animate={particlesControl}

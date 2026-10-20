@@ -8,8 +8,6 @@ import type {
   StripeCheckoutOptions,
   StripeCustomer,
   StripeOrder,
-  StripePaymentData,
-  StripeSubscription,
   StripeWebhookEvent,
 } from "@/types/stripe";
 
@@ -429,7 +427,7 @@ export const getAllStripeOrders = async (): Promise<StripeOrder[]> => {
             // Try to get product name from the product
             if (price.product) {
               const product = await stripe.products.retrieve(price.product as string);
-              productName = product.name || price.nickname || "Subscription";
+              productName = product.name ?? price.nickname ?? "Subscription";
             } else if (price.nickname) {
               productName = price.nickname;
             }
@@ -641,7 +639,7 @@ export const verifyStripeWebhookSignature = (
       return false;
     }
 
-    stripe.webhooks.constructEvent(payload, signature, secret || env.STRIPE_WEBHOOK_SECRET!);
+    stripe.webhooks.constructEvent(payload, signature, secret ?? env.STRIPE_WEBHOOK_SECRET!);
     return true;
   } catch (error) {
     logger.error("Stripe webhook signature verification failed:", error);

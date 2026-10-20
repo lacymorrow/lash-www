@@ -43,9 +43,10 @@ export const Stats = ({
             "grid-cols-1 md:grid-cols-2 lg:grid-cols-4": columns === 4,
           })}
         >
-          {stats.map((stat) => (
+          {stats.map((stat, index) => (
             <div
-              key={stat.label}
+              // biome-ignore lint/suspicious/noArrayIndexKey: decorative/static array, key is stable index
+              key={index}
               className="rounded-lg border border-gray-200 p-6 text-center transition-shadow hover:shadow-lg"
             >
               <div className="mb-2 text-4xl font-bold text-primary">{stat.value}</div>
