@@ -81,6 +81,23 @@ export const defaultMetadata: Metadata = {
 
 export const metadata: Metadata = defaultMetadata;
 
+/* Metadata for a `not-found.tsx` boundary.
+ *
+ * Next.js injects its own `<meta name="robots" content="noindex" />` on every
+ * response that 404s, and that directive is correct. The root layout's
+ * `defaultMetadata` still resolves onto the not-found branch though, so a
+ * boundary that exports nothing inherits `index, follow` and ships a second,
+ * contradictory robots tag (plus a matching `googlebot` one). Clearing
+ * `robots` drops both and leaves the framework's noindex as the only one.
+ *
+ * Every `not-found.tsx` in the app should re-export this. Verify with:
+ *   curl -s http://localhost:3000/no-such-page \
+ *     | grep -o 'name="robots" content="[^"]*"'
+ */
+export const notFoundMetadata: Metadata = {
+  robots: null,
+};
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
