@@ -42,8 +42,18 @@ jobs:
       # next-env.d.ts and .next/types are gitignored; without them tsc can't
       # resolve image imports (*.png/*.jpg) or typed routes. `next typegen`
       # generates both in a few seconds without building the app.
+      #
+      # LAC-5732: typegen loads next.config.ts with NODE_ENV=production, and
+      # `env: { ...getDerivedSecrets() }` there makes src/config/secrets.ts
+      # refuse to derive secrets from the public BASE_URL. Vercel has the real
+      # APP_SECRET, so deploys were fine; only Actions lacked it, and main had
+      # no green typecheck for a week. A per-run throwaway value satisfies the
+      # guard: this job generates types and never serves a request or signs a
+      # session, so the value is worthless the moment the runner exits. Keep it
+      # inline and generated. Do not store a repo secret, do not commit a fixed
+      # placeholder, and do not weaken the guard in src/.
       - name: Generate Next.js types
-        run: bun x next typegen
+        run: APP_SECRET=$(openssl rand -hex 32) bun x next typegen
 
       - name: Typecheck
         run: bun run typecheck
