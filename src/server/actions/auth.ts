@@ -1,7 +1,6 @@
 "use server";
 
 import { z } from "zod";
-import { createServerAction } from "zsa";
 import { BASE_URL } from "@/config/base-url";
 import { STATUS_CODES } from "@/config/status-codes";
 import { env } from "@/env";
@@ -33,26 +32,31 @@ export const signInWithOAuthAction = async ({
   return await AuthService.signInWithOAuth(providerId, options);
 };
 
-export const signInAction = createServerAction()
-  .input(signInActionSchema)
-  .handler(async ({ input }) => {
-    if (isBetterAuthActive()) {
-      await betterAuthCredentials.signIn({
-        email: input.email,
-        password: input.password,
-        redirect: input.redirect ?? true,
-        redirectTo: input.redirectTo,
-      });
-      return null;
-    }
-    await AuthService.signInWithCredentials({
-      email: input.email,
-      password: input.password,
-      redirect: input.redirect,
-      redirectTo: input.redirectTo,
+/**
+ * First validation message, for actions that report a single error string.
+ */
+const firstIssueMessage = (error: z.ZodError) => error.issues[0]?.message ?? "Invalid input data";
+
+export const signInAction = async (input: z.infer<typeof signInActionSchema>) => {
+  const parsed = signInActionSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, error: firstIssueMessage(parsed.error) };
+  }
+
+  const { email, password, redirect, redirectTo } = parsed.data;
+
+  if (isBetterAuthActive()) {
+    await betterAuthCredentials.signIn({
+      email,
+      password,
+      redirect: redirect ?? true,
+      redirectTo,
     });
-    return null;
-  });
+    return { ok: true };
+  }
+  await AuthService.signInWithCredentials({ email, password, redirect, redirectTo });
+  return { ok: true };
+};
 
 const CredentialsSchema = z.object({
   email: z.string().email(),
@@ -164,40 +168,46 @@ export const signOutAction = async (options?: AuthOptions) => {
   return await AuthService.signOut(options);
 };
 
-export const forgotPasswordAction = createServerAction()
-  .input(forgotPasswordSchema)
-  .handler(async ({ input }) => {
-    try {
-      if (isBetterAuthActive()) {
-        await betterAuthCredentials.forgotPassword(input.email);
-        return { ok: true };
-      }
-      await AuthService.forgotPassword(input.email);
-      return { ok: true };
-    } catch (error) {
-      console.error("Error in forgotPasswordAction:", error);
-      return {
-        ok: false,
-        error: error instanceof Error ? error.message : STATUS_CODES.AUTH_ERROR.message,
-      };
-    }
-  });
+export const forgotPasswordAction = async (input: z.infer<typeof forgotPasswordSchema>) => {
+  const parsed = forgotPasswordSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, error: firstIssueMessage(parsed.error) };
+  }
 
-export const resetPasswordAction = createServerAction()
-  .input(resetPasswordSchema)
-  .handler(async ({ input }) => {
-    try {
-      if (isBetterAuthActive()) {
-        await betterAuthCredentials.resetPassword(input.token, input.password);
-        return { ok: true };
-      }
-      await AuthService.resetPassword(input.token, input.password);
+  try {
+    if (isBetterAuthActive()) {
+      await betterAuthCredentials.forgotPassword(parsed.data.email);
       return { ok: true };
-    } catch (error) {
-      console.error("Error in resetPasswordAction:", error);
-      return {
-        ok: false,
-        error: error instanceof Error ? error.message : STATUS_CODES.AUTH_ERROR.message,
-      };
     }
-  });
+    await AuthService.forgotPassword(parsed.data.email);
+    return { ok: true };
+  } catch (error) {
+    console.error("Error in forgotPasswordAction:", error);
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : STATUS_CODES.AUTH_ERROR.message,
+    };
+  }
+};
+
+export const resetPasswordAction = async (input: z.infer<typeof resetPasswordSchema>) => {
+  const parsed = resetPasswordSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, error: firstIssueMessage(parsed.error) };
+  }
+
+  try {
+    if (isBetterAuthActive()) {
+      await betterAuthCredentials.resetPassword(parsed.data.token, parsed.data.password);
+      return { ok: true };
+    }
+    await AuthService.resetPassword(parsed.data.token, parsed.data.password);
+    return { ok: true };
+  } catch (error) {
+    console.error("Error in resetPasswordAction:", error);
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : STATUS_CODES.AUTH_ERROR.message,
+    };
+  }
+};

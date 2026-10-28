@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { requiredError } from "@/lib/schemas/required-error";
 
 /**
  * GitHub reserved names that cannot be used as repository names
@@ -59,7 +60,7 @@ const DANGEROUS_PATTERNS = [
  * - Must be between 1 and 100 characters
  */
 const projectNameValidation = z
-  .string({ required_error: "Project name is required" })
+  .string(requiredError("Project name is required"))
   .min(1, { message: "Project name is required" })
   .max(100, { message: "Project name must be between 1 and 100 characters" })
   .trim()
@@ -121,7 +122,7 @@ export function validateProjectName(projectName: string): {
     if (error instanceof z.ZodError) {
       return {
         isValid: false,
-        error: error.errors[0]?.message ?? "Invalid project name",
+        error: error.issues[0]?.message ?? "Invalid project name",
       };
     }
     return {
