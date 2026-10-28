@@ -262,7 +262,8 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: FILE_UPLOAD_MAX_SIZE,
     },
-    webVitalsAttribution: ["CLS", "LCP", "TTFB", "FCP", "FID"],
+    // next 16.4 dropped "FID" from this union; INP is its successor metric.
+    webVitalsAttribution: ["CLS", "LCP", "TTFB", "FCP", "INP"],
 
     // Optimized prefetching
     optimisticClientCache: true,
