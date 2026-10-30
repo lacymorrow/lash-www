@@ -11,14 +11,19 @@ export interface ActionState {
   [key: string]: any;
 }
 
+/**
+ * First message per field. Built from `issues` rather than the zod 3
+ * `formErrors.fieldErrors` getter, which zod 4 removed.
+ */
 const parseFormErrors = (errors: z.ZodError) => {
-  const formErrors = Object.entries(errors.formErrors.fieldErrors).reduce(
-    (acc, [key, value]) => {
-      acc[key] = { message: value?.[0] ?? "" };
-      return acc;
-    },
-    {} as Record<string, { message: string }>
-  );
+  const formErrors: Record<string, { message: string }> = {};
+  for (const issue of errors.issues) {
+    const field = issue.path[0];
+    if (typeof field !== "string" || field in formErrors) {
+      continue;
+    }
+    formErrors[field] = { message: issue.message };
+  }
   return formErrors;
 };
 
@@ -59,7 +64,7 @@ export function validatedActionWithUser<S extends z.ZodType<any, any>, T>(
 
     const result = schema.safeParse(Object.fromEntries(formData));
     if (!result.success) {
-      return { error: result?.error?.errors[0]?.message } as T;
+      return { error: result?.error?.issues[0]?.message } as T;
     }
 
     return action(result.data, formData, session.user);

@@ -1,11 +1,12 @@
 import { z } from "zod";
+import { requiredError } from "@/lib/schemas/required-error";
 import { REGEX_PATTERNS } from "@/lib/utils/regex-patterns";
 
 export const userSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
 
   email: z.string().email("Please enter a valid email address."),
-  password: z.string({ required_error: "Password is required" }).min(6, {
+  password: z.string(requiredError("Password is required")).min(6, {
     message: "Password must be at least 6 characters.",
   }),
 
