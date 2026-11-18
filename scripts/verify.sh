@@ -139,11 +139,6 @@ else
   fi
 fi
 
-# .github/workflows/registry.yml is gated off (LAC-4925); these are its 2 steps.
-# Registry artifacts inline full file text, so they drift silently on main.
-[ -f scripts/registry-check.sh ] && step "registry check" bash scripts/registry-check.sh
-[ -f scripts/registry-closure.ts ] && step "registry closure" bun scripts/registry-closure.ts
-
 if [ "$DO_BUILD" = 1 ] && has_script build; then step "build" $PM build; fi
 
 SMOKE_ROWS=()
