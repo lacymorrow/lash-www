@@ -135,7 +135,48 @@ else
     # row reporting zero bytes scanned. Say "nothing to scan" instead of "pass".
     SKIPPED+=("secret scan: no commits on this branch vs \`origin/main\`, nothing to scan")
   else
-    step "secret scan" gitleaks detect --no-banner --redact --log-opts "$BASE..HEAD"
+    # `gitleaks detect` is the deprecated sibling of the `gitleaks protect`
+    # LAC-7261 took out of the hook. On 8.30.1 both are hidden from
+    # `gitleaks --help` and survive only as undocumented back-compat.
+    # `gitleaks git` replaces both (v8.19.0+) and takes `--log-opts` in exactly
+    # this form, which is what .github/workflows/gitleaks.yml already calls.
+    # See LAC-7275.
+    #
+    # `--exit-code 2` moves a finding off exit 1, so any OTHER non-zero means
+    # the scan did not run: a gitleaks too old for the `git` subcommand, an
+    # unreadable .gitleaks.toml, a revision range git cannot walk. `step` knows
+    # only pass and FAIL, and a FAIL row here reads as "there is a secret in
+    # your diff" -- the exact misdiagnosis LAC-7261 fixed in the hook. So this
+    # step is spelled out instead of going through `step`, to reach the NOT RUN
+    # channel this script already has, which verify-pr.sh reports as `error`
+    # rather than `failure`.
+    [ -d "$LOGDIR" ] || LOGDIR="$(new_logdir)"
+    SCAN_LOG="$LOGDIR/secret_scan.log"
+    if : > "$SCAN_LOG" 2> /dev/null; then
+      SCAN_START=$(date +%s)
+      SCAN_STATUS=0
+      RAN_COUNT=$((RAN_COUNT + 1))
+      gitleaks git --no-banner --redact --exit-code 2 --log-opts "$BASE..HEAD" \
+        > "$SCAN_LOG" 2>&1 || SCAN_STATUS=$?
+      SCAN_SECS=$(( $(date +%s) - SCAN_START ))
+      case "$SCAN_STATUS" in
+        0) RESULTS+=("| secret scan | pass | ${SCAN_SECS}s |") ;;
+        2) RESULTS+=("| secret scan | **FAIL** | ${SCAN_SECS}s | see $SCAN_LOG |"); FAILED=1 ;;
+        *)
+           # >128 is a signal (143=SIGTERM, 130=SIGINT), which is neither a
+           # finding nor a broken tool, so do not send the reader to `brew`.
+           if [ "$SCAN_STATUS" -gt 128 ]; then
+             SCAN_WHY="killed by signal $((SCAN_STATUS - 128)) before it reached a verdict, so NOTHING was scanned"
+           else
+             SCAN_WHY="gitleaks exited $SCAN_STATUS without reaching a verdict: a tool or config failure, NOT a finding in your diff. Try \`brew upgrade gitleaks\`"
+           fi
+           RESULTS+=("| secret scan | **NOT RUN** | ${SCAN_SECS}s | $SCAN_WHY. See $SCAN_LOG |")
+           INFRA_FAIL=1 ;;
+      esac
+    else
+      RESULTS+=("| secret scan | **NOT RUN** | 0s | cannot write a log to \`$LOGDIR\`, so NOTHING was scanned |")
+      INFRA_FAIL=1
+    fi
   fi
 fi
 
